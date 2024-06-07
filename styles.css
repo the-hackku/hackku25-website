@@ -4,8 +4,9 @@ body {
   justify-content: center;
   align-items: center;
   height: 95vh;
-
   font-family: "Roboto", sans-serif;
+  opacity: 0;
+  transition: opacity 0.5s ease-in 0.5s;
 }
 
 #mlh-trust-badge {

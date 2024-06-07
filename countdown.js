@@ -1,3 +1,7 @@
+window.addEventListener("load", () => {
+  document.body.style.opacity = 1;
+});
+
 // Set the date we're counting down to
 var countDownDate = new Date("Apr 18, 2025 00:00:00").getTime();
 
