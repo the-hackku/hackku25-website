@@ -3,8 +3,9 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 95vh;
 
-  height: 100vh;
+  font-family: "Roboto", sans-serif;
 }
 
 #mlh-trust-badge {
@@ -19,19 +20,11 @@ body {
 }
 
 a {
-  color: #e1b000;
+  color: #f7b92a;
   text-decoration: none;
-  padding-bottom: 3px;
+  margin-bottom: 10px;
 }
 
 a:hover {
-  font-weight: bold;
-}
-
-h1 {
-  &:nth-child(5) {
-    .highlight {
-      color: red;
-    }
-  }
+  text-decoration: underline;
 }
