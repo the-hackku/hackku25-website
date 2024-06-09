@@ -9,6 +9,21 @@ body {
   transition: opacity 0.5s ease-in 0.5s;
 }
 
+#navigation-bar{
+  position: fixed;
+  top: -5px;
+  width: 100%;
+  background-color: white;
+  text-align: center;
+  padding: 10px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+
+.nav-link{
+  font-size: 25px;
+  padding: 20px;
+}
+
 #mlh-trust-badge {
   position: fixed;
   top: -5px;
