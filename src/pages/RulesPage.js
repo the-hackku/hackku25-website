@@ -1,15 +1,18 @@
 import React from "react";
+import RulesList from "../components/RulesList";
 
 const RulesPage = () => {
+  const rules = [
+    "Be respectful",
+    "Have fun",
+    "Be creative",
+    "Don't break the law",
+  ];
+
   return (
     <div className="home-page">
       <h2>Rules</h2>
-      <ul>
-        <li>Be respectful</li>
-        <li>Have fun</li>
-        <li>Be creative</li>
-        <li>Don't break the law</li>
-      </ul>
+      <RulesList rules={rules} />
     </div>
   );
 };

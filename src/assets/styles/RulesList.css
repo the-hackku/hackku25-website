@@ -1,0 +1,9 @@
+.rules-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.rule-item {
+  margin-bottom: 10px;
+  font-weight: bold;
+}
