@@ -1,0 +1,12 @@
+.faq-dropdown {
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+.faq-question {
+  font-weight: bold;
+}
+
+.faq-answer {
+  margin-top: 5px;
+}
