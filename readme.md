@@ -7,9 +7,7 @@ This is a simple React application.
 ## Getting Started
 
 Follow the instructions below to set up and run the application on your local machine.
-/**
  * If you do not have npm installed, do so from [here](https://nodejs.org/en/download/package-manager).
- */
 
 ### Installation
 
