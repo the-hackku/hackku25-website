@@ -1,13 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import "../assets/styles/FaqDropdown.css";
 
-const FaqDropdown = ({ question, answer }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
-
+const FaqDropdown = ({ question, answer, isOpen, toggleDropdown }) => {
   return (
     <div className="faq-dropdown">
       <h3 onClick={toggleDropdown} className="faq-question">
