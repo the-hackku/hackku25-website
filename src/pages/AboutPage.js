@@ -3,10 +3,30 @@ import Organizer from "../components/Organizer";
 import "../assets/styles/AboutPage.css";
 
 const organizers = [
-  { name: "Andrew Huang", imageName: "andrew.jpeg", role: "Tech Lead" },
-  { name: "Will Whitehead", imageName: "will.jpeg", role: "Tech Lead" },
-  { name: "james hurd", imageName: "james.jpeg", role: "President / CEO" },
-  { name: "Joshua Lee", imageName: "joshua.jpeg", role: "Vice President" },
+  {
+    name: "Andrew Huang",
+    imageName: "andrew.jpeg",
+    role: "Tech Lead",
+    link: "https://andrewhuang.dev",
+  },
+  {
+    name: "Will Whitehead",
+    imageName: "will.jpeg",
+    role: "Tech Lead",
+    link: "https://www.linkedin.com/in/willwhitehead122/",
+  },
+  {
+    name: "james hurd",
+    imageName: "james.jpeg",
+    role: "President / CEO",
+    link: "https://jameshurd.dev",
+  },
+  {
+    name: "Joshua Lee",
+    imageName: "joshua.jpeg",
+    role: "Vice President",
+    link: "https://joshualee.dev",
+  },
 ];
 
 const AboutPage = () => {
@@ -26,6 +46,7 @@ const AboutPage = () => {
             name={organizer.name}
             imageName={organizer.imageName}
             role={organizer.role}
+            link={organizer.link}
           />
         ))}
       </div>
