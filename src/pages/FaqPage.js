@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import FaqDropdown from "../components/FaqDropdown";
 
 const FaqPage = () => {
+  const [openIndex, setOpenIndex] = useState(null);
+
   const faqs = [
     {
       question: "What is HackKU?",
@@ -25,11 +27,21 @@ const FaqPage = () => {
     },
   ];
 
+  const toggleDropdown = (index) => {
+    setOpenIndex(openIndex === index ? null : index);
+  };
+
   return (
     <div className="home-page">
       <h2>FAQ</h2>
       {faqs.map((faq, index) => (
-        <FaqDropdown key={index} question={faq.question} answer={faq.answer} />
+        <FaqDropdown
+          key={index}
+          question={faq.question}
+          answer={faq.answer}
+          isOpen={openIndex === index}
+          toggleDropdown={() => toggleDropdown(index)}
+        />
       ))}
     </div>
   );
