@@ -1,0 +1,21 @@
+.organizer {
+  text-align: center;
+  margin: 20px;
+}
+
+.organizer-image {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.organizer-name {
+  margin-top: 10px;
+  font-size: 1.2em;
+}
+
+.organizer-role {
+  font-size: 1em;
+  color: #666;
+}
