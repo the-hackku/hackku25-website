@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <h1>Welcome to the Hackathon!</h1>
+    <p>Welcome to our hackathon event!</p>
+
+    {% if session.get('user_id') %}
+    <a href="{{ url_for('main.user_profile') }}">Profile</a>
+    <a href="{{ url_for('main.logout') }}">Logout</a>
+    {% if session.get('user_role') == 'admin' %}
+    <a href="{{ url_for('admin.dashboard') }}">Admin Dashboard</a>
+    {% endif %} {% else %}
+    <a href="{{ url_for('main.login') }}">Login</a>
+    {% endif %}
+  </body>
+</html>

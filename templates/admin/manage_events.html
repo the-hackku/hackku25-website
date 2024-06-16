@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manage Events</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+        background-color: #f4f4f9;
+      }
+      h1,
+      h2 {
+        color: #333;
+      }
+      form {
+        margin-bottom: 20px;
+      }
+      input[type="text"] {
+        padding: 10px;
+        margin-right: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+      button {
+        padding: 10px 15px;
+        background-color: #007bff;
+        border: none;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        padding: 10px;
+        border: 1px solid #ccc;
+        text-align: left;
+      }
+      th {
+        background-color: #007bff;
+        color: white;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Manage Events</h1>
+    <h2>Create Event</h2>
+    <form method="post" action="{{ url_for('admin.create_event') }}">
+      <label for="name">Event Name</label>
+      <input type="text" id="name" name="name" required />
+      <button type="submit">Create Event</button>
+    </form>
+
+    <h2>Existing Events</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for event in events %}
+        <tr>
+          <td>{{ event.id }}</td>
+          <td>{{ event.name }}</td>
+          <td>
+            <form
+              method="post"
+              action="{{ url_for('admin.delete_event', event_id=event.id) }}"
+              style="display: inline"
+            >
+              <button type="submit">Delete</button>
+            </form>
+            <a href="{{ url_for('admin.event_stats', event_id=event.id) }}">
+              <button type="button">View Check-Ins</button>
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </body>
+</html>
