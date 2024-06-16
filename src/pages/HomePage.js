@@ -1,5 +1,6 @@
 import React from "react";
 import Countdown from "../components/Countdown";
+import "../assets/styles/HomePage.css";
 
 const HomePage = () => {
   const eventDate = "2025-04-18T18:00:00";

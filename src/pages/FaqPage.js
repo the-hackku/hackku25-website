@@ -32,7 +32,7 @@ const FaqPage = () => {
   };
 
   return (
-    <div className="home-page">
+    <div className="faq-page">
       <h2>FAQ</h2>
       {faqs.map((faq, index) => (
         <FaqDropdown

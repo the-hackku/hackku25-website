@@ -16,7 +16,7 @@ const SchedulePage = () => {
   ];
 
   return (
-    <div className="home-page">
+    <div className="schedule-page">
       <h2>Schedule</h2>
       <p>This is the schedule page of HackKU.</p>
       <Schedule schedule={schedule} />

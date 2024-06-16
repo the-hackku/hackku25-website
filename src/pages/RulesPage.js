@@ -10,7 +10,7 @@ const RulesPage = () => {
   ];
 
   return (
-    <div className="home-page">
+    <div className="rules-page">
       <h2>Rules</h2>
       <RulesList rules={rules} />
     </div>
