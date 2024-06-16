@@ -7,12 +7,14 @@ import About from "./pages/AboutPage";
 import Faq from "./pages/FaqPage";
 import RulesPage from "./pages/RulesPage";
 import SchedulePage from "./pages/SchedulePage";
+import MLHBanner from "./components/MLHBanner";
 
 const App = () => {
   return (
     <Router>
       <div className="App">
         <main>
+          <MLHBanner />
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<About />} />

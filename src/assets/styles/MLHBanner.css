@@ -1,0 +1,10 @@
+#mlh-trust-badge {
+  position: fixed;
+  top: -5px;
+  right: 5%;
+  transition: transform 0.2s;
+}
+
+#mlh-trust-badge:hover {
+  transform: translateY(10px) scale(1.1);
+}
