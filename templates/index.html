@@ -1,3 +1,6 @@
+{% extends "base.html" %} {% block title %}Scan User{% endblock %} {% block
+content %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -12,14 +15,7 @@
   <body>
     <h1>Welcome to the Hackathon!</h1>
     <p>Welcome to our hackathon event!</p>
-
-    {% if session.get('user_id') %}
-    <a href="{{ url_for('main.user_profile') }}">Profile</a>
-    <a href="{{ url_for('main.logout') }}">Logout</a>
-    {% if session.get('user_role') == 'admin' %}
-    <a href="{{ url_for('admin.dashboard') }}">Admin Dashboard</a>
-    {% endif %} {% else %}
-    <a href="{{ url_for('main.login') }}">Login</a>
-    {% endif %}
   </body>
 </html>
+
+{% endblock %}

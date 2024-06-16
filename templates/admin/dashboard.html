@@ -1,3 +1,5 @@
+{% extends "base.html" %} {% block title %}Admin Dashboard{% endblock %} {%
+block content %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -8,13 +10,19 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
     />
+    <style></style>
   </head>
   <body>
-    <h1>Admin Dashboard</h1>
-    <ul>
-      <li><a href="{{ url_for('admin.manage_users') }}">Manage Users</a></li>
-      <li><a href="{{ url_for('admin.manage_events') }}">Manage Events</a></li>
-      <li><a href="{{ url_for('admin.scan') }}">Scan In User</a></li>
-    </ul>
+    <div class="container">
+      <h1>Admin Dashboard</h1>
+      <ul>
+        <li><a href="{{ url_for('admin.manage_users') }}">Manage Users</a></li>
+        <li>
+          <a href="{{ url_for('admin.manage_events') }}">Manage Events</a>
+        </li>
+        <li><a href="{{ url_for('admin.scan') }}">Scan In User</a></li>
+      </ul>
+    </div>
   </body>
 </html>
+{% endblock %}

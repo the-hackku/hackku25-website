@@ -1,3 +1,6 @@
+{% extends "base.html" %} {% block title %}Scan User{% endblock %} {% block
+content %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -15,6 +18,7 @@
     <p>Role: {{ user.role }}</p>
     <h2>QR Code</h2>
     <img src="{{ url_for('main.qr_code', user_id=user.id) }}" alt="QR Code" />
-    <p><a href="{{ url_for('main.logout') }}">Logout</a></p>
   </body>
 </html>
+
+{% endblock %}

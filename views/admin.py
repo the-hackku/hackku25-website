@@ -145,7 +145,7 @@ def scan():
         if user and event:
             existing_check_in = CheckIn.query.filter_by(user_id=user.id, event_id=event.id).first()
             if existing_check_in:
-                return jsonify(success=False, message=f'User {user.username} has already been checked into event {event.name}.')
+                return jsonify(success=False, message=f'User {user.username} has already been checked into event {event.name}.', user_name=user.username)
             
             check_in = CheckIn(user_id=user.id, event_id=event.id, scanned_by=scanner_id)
             db.session.add(check_in)
