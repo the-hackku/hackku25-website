@@ -25,36 +25,12 @@ Activate the virtual environment using the following commands:
 
 ## 2. Install Flask and Other Dependencies
 
-Ensure you have a `requirements.txt` file listing all your dependencies. If you don't have one, create it by running:
-
-```bash
-pip freeze > requirements.txt
-```
-
 ### Install Dependencies
 
 Install the dependencies listed in `requirements.txt`:
 
 ```bash
 pip install -r requirements.txt
-```
-
-## 3. Set Up Environment Variables
-
-Set the necessary environment variables for Flask.
-
-### On Windows:
-
-```bash
-set FLASK_APP=app.py
-set FLASK_ENV=development
-```
-
-### On macOS and Linux:
-
-```bash
-export FLASK_APP=app.py
-export FLASK_ENV=development
 ```
 
 ## 5. Start the Flask Application
@@ -95,8 +71,5 @@ project/
 │   ├── success.mp3
 │   ├── error.mp3
 └── migrations/
-```
-
-```
 
 ```
