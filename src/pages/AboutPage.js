@@ -6,13 +6,13 @@ const organizers = [
   {
     name: "Andrew Huang",
     imageName: "andrew.jpeg",
-    role: "Tech Lead",
+    role: "Tech",
     link: "https://andrewhuang.dev",
   },
   {
     name: "Will Whitehead",
     imageName: "will.jpeg",
-    role: "Tech Lead",
+    role: "Tech",
     link: "https://www.linkedin.com/in/willwhitehead122/",
   },
   {
