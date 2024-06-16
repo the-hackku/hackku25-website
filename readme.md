@@ -8,8 +8,6 @@ First, create a virtual environment to isolate your project's dependencies.
 python3 -m venv venv
 ```
 
-````
-
 ### Activating the Virtual Environment
 
 Activate the virtual environment using the following commands:
@@ -98,4 +96,7 @@ project/
 │   ├── error.mp3
 └── migrations/
 ```
-````
+
+```
+
+```
