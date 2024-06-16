@@ -56,7 +56,6 @@
     </style>
   </head>
   <body>
-    {% if not 'login' in request.path and not 'register' in request.path %}
     <header>
       <nav>
         <ul>
@@ -71,7 +70,15 @@
         </ul>
       </nav>
     </header>
-    {% endif %}
+    <!-- MLH TRUST BANNER -->
+    <a href="https://mlh.io/seasons/2025/events" target="_blank"
+      ><img
+        id="mlh-trust-badge"
+        src="./static/mlh-banner.svg"
+        alt=""
+        height="15%"
+    /></a>
+    <!-- END OF MLH TRUST BANNER -->
     <main>{% block content %}{% endblock %}</main>
   </body>
 </html>

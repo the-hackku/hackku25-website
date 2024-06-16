@@ -13,6 +13,18 @@ h1 {
   color: #333;
 }
 
+#mlh-trust-badge {
+  position: fixed;
+  top: -5px;
+  right: 5%;
+  transition: transform 0.2s;
+  z-index: 10000;
+}
+
+#mlh-trust-badge:hover {
+  transform: translateY(10px) scale(1.1);
+}
+
 form {
   display: flex;
   flex-direction: column;
