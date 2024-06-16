@@ -1,7 +1,7 @@
 import React from "react";
 import "../assets/styles/MLHBanner.css";
 
-const MLHBanner = ({ rules }) => {
+const MLHBanner = () => {
   return (
     <a href="https://mlh.io/seasons/2025/events">
       <img
