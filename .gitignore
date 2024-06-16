@@ -2,5 +2,7 @@ __pycache__
 
 venv
 
+static/resumes
+
 
 instance/users.db

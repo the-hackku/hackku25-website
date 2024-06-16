@@ -6,11 +6,35 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
 }
 
 h1 {
   color: #333;
+}
+
+a {
+  color: #282c34;
+  text-decoration: none;
+  margin-bottom: 10px;
+  position: relative;
+}
+
+a::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: #f7b92a;
+  transform-origin: bottom right;
+  transition: transform 0.25s ease-out;
+}
+
+a:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
 
 #mlh-trust-badge {
@@ -25,14 +49,180 @@ h1 {
   transform: translateY(10px) scale(1.1);
 }
 
+.dashboard-menu {
+  list-style-type: none;
+  padding: 0;
+}
+
+.dashboard-menu li {
+  margin: 10px 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+}
+
+h1 {
+  color: #333;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th,
+td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+}
+
+button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.dashboard-menu li a {
+  display: block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.dashboard-menu li a:hover {
+  background-color: #0056b3;
+}
+
+nav {
+  background-color: #0000000e;
+  padding: 10px 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+nav ul li {
+  margin: 0 10px;
+}
+
+nav ul li a:hover {
+  text-decoration: none;
+}
+
+main {
+  padding: 20px;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
 form {
   display: flex;
   flex-direction: column;
   width: 300px;
 }
 
+/* Main CSS file (e.g., static/style.css) */
+
+.status.pending {
+  background-color: rgb(255, 221, 0);
+  color: black;
+}
+
+.application-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.status.accepted {
+  background-color: green;
+  color: white;
+}
+
+.status.rejected {
+  background-color: red;
+  color: white;
+}
+
+/* Optional: Add some padding for better readability */
+.status {
+  padding: 5px;
+  border-radius: 4px;
+}
+
 label {
   margin-top: 10px;
+}
+
+#event-selection-form {
+  margin-bottom: 20px;
+}
+
+#feedback {
+  display: none;
+  padding: 10px;
+  margin-top: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+}
+
+#feedback.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+#feedback.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+#history {
+  margin-top: 20px;
+  width: 80%;
+  max-width: 400px;
+  border-collapse: collapse;
+}
+
+#history th,
+#history td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+audio {
+  display: none;
 }
 
 input {
@@ -43,24 +233,111 @@ input {
   border-radius: 4px;
 }
 
-button {
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-  background-color: #5cb85c;
-  color: white;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #4cae4c;
-}
-
-a {
-  color: #5cb85c;
+a:hover {
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
+#event-selection-form {
+  margin-bottom: 20px;
+}
+
+#feedback {
+  display: none;
+  padding: 10px;
+  margin-top: 20px;
+  border-radius: 5px;
+  text-align: center;
+  font-weight: bold;
+}
+
+#feedback.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+#feedback.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+#history {
+  margin-top: 20px;
+  width: 80%;
+  max-width: 400px;
+  border-collapse: collapse;
+}
+
+#history th,
+#history td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: left;
+}
+
+audio {
+  display: none;
+}
+
+/* To-do list styling */
+.todo {
+  background-color: #f8d7da;
+  padding: 20px;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.todo h2 {
+  margin-top: 0;
+  color: #721c24;
+}
+
+.todo ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.todo ul li {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.apply-btn {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 18px;
+  transition: background-color 0.3s;
+}
+
+.apply-btn:hover {
+  background-color: #0056b3;
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.alert-success {
+  color: #155724;
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.flash-messages {
+  margin-top: 20px;
 }

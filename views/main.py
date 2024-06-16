@@ -1,6 +1,7 @@
+# views/main.py
 from flask import Blueprint, render_template, redirect, url_for, request, session, flash, send_file
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, User
+from models import db, User, Application
 from functools import wraps
 
 main_bp = Blueprint('main', __name__)
@@ -17,7 +18,9 @@ def login_required(f):
 @main_bp.route('/')
 @login_required
 def index():
-    return render_template('index.html')
+    user_id = session['user_id']
+    application = Application.query.filter_by(user_id=user_id).first()
+    return render_template('index.html', application=application)
 
 @main_bp.route('/about')
 @login_required
@@ -27,26 +30,34 @@ def about():
 @main_bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        identifier = request.form['identifier']
         password = request.form['password']
-        user = User.query.filter_by(username=username).first()
-        if user and check_password_hash(user.password, password):
-            session['user_id'] = user.id
-            session['user_role'] = user.role
-            flash('Login successful', 'success')
-            return redirect(url_for('main.index'))
+        user = User.query.filter((User.email == identifier) | (User.username == identifier)).first()
+        
+        if user:
+            if check_password_hash(user.password, password):
+                session['user_id'] = user.id
+                session['user_role'] = user.role
+                flash('Login successful', 'success')
+                return redirect(url_for('main.index'))
+            else:
+                flash('Incorrect password. Please try again.', 'danger')
         else:
-            flash('Login failed. Check your username and/or password', 'danger')
+            flash('Account not found. Please check your identifier.', 'danger')
+            
     return render_template('login.html')
+
+
 
 @main_bp.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
-        role = request.form.get('role', 'user')  # Default role is 'user'
+        role = request.form.get('role', 'hacker')  # Default role is 'user'
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
-        new_user = User(username=username, password=hashed_password, role=role)
+        new_user = User(username=username, email=email,  password=hashed_password, role=role)
         db.session.add(new_user)
         db.session.commit()
         session['user_id'] = new_user.id
@@ -76,3 +87,14 @@ def qr_code(user_id):
     user = User.query.get_or_404(user_id)
     qr_code_image = user.generate_qr_code()
     return send_file(qr_code_image, mimetype='image/png')
+
+
+@main_bp.route('/download_resume/<int:application_id>')
+@login_required
+def download_resume(application_id):
+    application = Application.query.get_or_404(application_id)
+    if application.resume:
+        return send_file(f'static/{application.resume}', as_attachment=True)
+    else:
+        flash('No resume found for this application.', 'danger')
+        return redirect(url_for('main.index'))

@@ -1,0 +1,34 @@
+<!-- templates/admin/view_application.html -->
+{% extends "base.html" %}
+
+{% block title %}View Application{% endblock %}
+
+{% block content %}
+<h1>View Application</h1>
+<p><strong>Full Name:</strong> {{ application.full_name }}</p>
+<p><strong>Email:</strong> {{ application.user.email }}</p>
+<p><strong>School:</strong> {{ application.school }}</p>
+<p><strong>Major:</strong> {{ application.major }}</p>
+<p><strong>Level of Study:</strong> {{ application.level_of_study }}</p>
+<p><strong>Year of Study:</strong> {{ application.year_of_study }}</p>
+<p><strong>Hackathons Attended:</strong> {{ application.hackathons_attended }}</p>
+<p><strong>Skills:</strong> {{ application.skills }}</p>
+<p><strong>Project Ideas:</strong> {{ application.project_ideas }}</p>
+<p><strong>Motivation:</strong> {{ application.motivation }}</p>
+{% if application.resume %}
+<p><strong>Resume:</strong> <a href="{{ url_for('main.download_resume', application_id=application.id) }}">Download</a></p>
+{% endif %}
+<p><strong>LinkedIn:</strong> <a target="_blank" href="{{ application.linkedin }}">View LinkedIn</a></p>
+<p><strong>GitHub:</strong> <a target="_blank" href="{{ application.github }}">View GitHub</a></p>
+<p><strong>Portfolio:</strong> <a target="_blank" href="{{ application.portfolio }}">View Portfolio</a></p>
+
+<form method="post" action="{{ url_for('admin.update_application_status', application_id=application.id) }}">
+  <label for="status">Application Status:</label>
+  <select id="status" name="status">
+    <option value="Pending" {% if application.application_status == 'Pending' %}selected{% endif %}>Pending</option>
+    <option value="Accepted" {% if application.application_status == 'Accepted' %}selected{% endif %}>Accepted</option>
+    <option value="Rejected" {% if application.application_status == 'Rejected' %}selected{% endif %}>Rejected</option>
+  </select>
+  <button type="submit">Update Status</button>
+</form>
+{% endblock %}

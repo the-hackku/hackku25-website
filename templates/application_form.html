@@ -1,0 +1,120 @@
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+    rel="stylesheet"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+</head>
+
+{% extends "base.html" %} {% block title %}Application Form{% endblock %} {%
+block content %}
+<h1>Hackathon Application Form</h1>
+<form method="post" enctype="multipart/form-data" class="application-form">
+  <label for="full_name">Full Name:</label>
+  <input type="text" id="full_name" name="full_name" required />
+
+  <label for="school">School/University:</label>
+  <select id="school" name="school" required>
+    <option value="University of Kansas">University of Kansas</option>
+    <option value="Kansas State University">Kansas State University</option>
+    <option value="University of Missouri">University of Missouri</option>
+    <option value="Missouri State University">Missouri State University</option>
+    <option value="University of Nebraska-Lincoln">
+      University of Nebraska-Lincoln
+    </option>
+    <option value="University of Iowa">University of Iowa</option>
+    <option value="Iowa State University">Iowa State University</option>
+    <option value="University of Oklahoma">University of Oklahoma</option>
+    <option value="Oklahoma State University">Oklahoma State University</option>
+    <option value="University of Arkansas">University of Arkansas</option>
+    <option value="Johnson County Community College">
+      Johnson County Community College
+    </option>
+  </select>
+
+  <label for="major">Major/Field of Study:</label>
+  <select id="major" name="major" required>
+    <option value="Computer Science">Computer Science</option>
+    <option value="Electrical Engineering">Electrical Engineering</option>
+    <option value="Mechanical Engineering">Mechanical Engineering</option>
+    <option value="Biology">Biology</option>
+    <option value="Physics">Physics</option>
+    <!-- Add more options as needed -->
+  </select>
+
+  <label for="level_of_study">Level of Study:</label>
+  <select id="level_of_study" name="level_of_study" required>
+    <option value="undergraduate">Undergraduate</option>
+    <option value="graduate">Graduate</option>
+    <option value="phd">Ph.D.</option>
+  </select>
+
+  <label for="year_of_study">Year of Study:</label>
+  <select id="year_of_study" name="year_of_study" required>
+    <option value="Freshman">Freshman</option>
+    <option value="Sophomore">Sophomore</option>
+    <option value="Junior">Junior</option>
+    <option value="Senior">Senior</option>
+  </select>
+
+  <label for="hackathons_attended">Previous Hackathons Attended:</label>
+  <input
+    type="number"
+    id="hackathons_attended"
+    name="hackathons_attended"
+    required
+  />
+
+  <label for="skills">Skills and Technologies:</label>
+  <textarea id="skills" name="skills"></textarea>
+
+  <label for="project_ideas">Project Ideas or Interests:</label>
+  <textarea id="project_ideas" name="project_ideas"></textarea>
+
+  <label for="motivation">Why do you want to attend this hackathon?</label>
+  <textarea id="motivation" name="motivation"></textarea>
+
+  <label for="resume">Resume/CV:</label>
+  <input type="file" id="resume" name="resume" />
+
+  <label for="linkedin">LinkedIn Profile:</label>
+  <input type="url" id="linkedin" name="linkedin" />
+
+  <label for="github">GitHub Profile:</label>
+  <input type="url" id="github" name="github" />
+
+  <label for="portfolio">Other Portfolio Links:</label>
+  <input type="url" id="portfolio" name="portfolio" />
+
+  <button type="submit">Submit Application</button>
+</form>
+
+<script>
+  $(document).ready(function () {
+    $("#school").select2({
+      placeholder: "Select your school",
+      tags: true,
+      allowClear: true,
+    });
+    $("#major").select2({
+      placeholder: "Select your major",
+      tags: true,
+      allowClear: true,
+    });
+    $("#level_of_study").select2({
+      placeholder: "Select your level of study",
+      tags: true,
+      allowClear: true,
+    });
+    $("#year_of_study").select2({
+      placeholder: "Select your year of study",
+      tags: true,
+      allowClear: true,
+    });
+  });
+</script>
+{% endblock %}

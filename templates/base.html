@@ -8,77 +8,29 @@
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
     />
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f4f4f9;
-        padding-top: 60px; /* Adjust based on header height */
-      }
-
-      header {
-        background-color: #333;
-        color: white;
-        padding: 10px 0;
-        text-align: center;
-        width: 100%;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 1000;
-      }
-
-      nav ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      nav ul li {
-        display: inline;
-        margin: 0 10px;
-      }
-
-      nav ul li a {
-        color: white;
-        text-decoration: none;
-        font-weight: bold;
-      }
-
-      nav ul li a:hover {
-        text-decoration: underline;
-      }
-
-      main {
-        padding: 20px;
-      }
-    </style>
   </head>
+  <nav>
+    <ul>
+      <li><a href="{{ url_for('main.index') }}">Home</a></li>
+      <li><a href="{{ url_for('main.user_profile') }}">Profile</a></li>
+      {% if session.get('user_role') == 'admin' %}
+      <li>
+        <a href="{{ url_for('admin.dashboard') }}">Admin Dashboard</a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
   <body>
-    <header>
-      <nav>
-        <ul>
-          <li><a href="{{ url_for('main.index') }}">Home</a></li>
-          <li><a href="{{ url_for('main.user_profile') }}">Profile</a></li>
-          {% if session.get('user_role') == 'admin' %}
-          <li>
-            <a href="{{ url_for('admin.dashboard') }}">Admin Dashboard</a>
-          </li>
-          {% endif %}
-          <li><a href="{{ url_for('main.logout') }}">Logout</a></li>
-        </ul>
-      </nav>
-    </header>
     <!-- MLH TRUST BANNER -->
     <a href="https://mlh.io/seasons/2025/events" target="_blank"
       ><img
         id="mlh-trust-badge"
-        src="./static/mlh-banner.svg"
+        src="{{ url_for('static', filename='mlh-banner.svg') }}"
         alt=""
-        height="15%"
+        height="20%"
     /></a>
     <!-- END OF MLH TRUST BANNER -->
+
     <main>{% block content %}{% endblock %}</main>
   </body>
 </html>

@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 db = SQLAlchemy()
 migrate = Migrate()
 
+
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = 'your_secret_key'
@@ -18,8 +19,10 @@ def create_app():
 
     from views.main import main_bp
     from views.admin import admin_bp
+    from views.application import application_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(admin_bp, url_prefix='/admin')
+    app.register_blueprint(application_bp, url_prefix='/application')
 
     return app

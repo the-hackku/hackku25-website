@@ -1,0 +1,41 @@
+<!-- templates/admin/review_applications.html -->
+{% extends "base.html" %} {% block title %}Review Applications{% endblock %} {%
+block content %}
+<h1>Review Applications</h1>
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Full Name</th>
+      <th>Email</th>
+      <th>Status</th>
+      <th>Reviewed By</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for application in applications %}
+    <tr>
+      <td>{{ application.id }}</td>
+      <td>{{ application.full_name }}</td>
+      <td>{{ application.user.email }}</td>
+      <td
+        class="status {% if application.application_status == 'Pending' %}pending{% elif application.application_status == 'Accepted' %}accepted{% elif application.application_status == 'Rejected' %}rejected{% endif %}"
+      >
+        {{ application.application_status }}
+      </td>
+      <td>
+        {{ application.reviewer.username if application.reviewer else 'Not
+        reviewed' }}
+      </td>
+      <td>
+        <a
+          href="{{ url_for('admin.view_application', application_id=application.id) }}"
+          >View</a
+        >
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

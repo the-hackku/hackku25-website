@@ -1,28 +1,20 @@
 {% extends "base.html" %} {% block title %}Admin Dashboard{% endblock %} {%
 block content %}
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
-    <style></style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Admin Dashboard</h1>
-      <ul>
-        <li><a href="{{ url_for('admin.manage_users') }}">Manage Users</a></li>
-        <li>
-          <a href="{{ url_for('admin.manage_events') }}">Manage Events</a>
-        </li>
-        <li><a href="{{ url_for('admin.scan') }}">Scan In User</a></li>
-      </ul>
-    </div>
-  </body>
-</html>
+<div class="container">
+  <h1>Admin Dashboard</h1>
+  <ul class="dashboard-menu">
+    <li>
+      <a href="{{ url_for('admin.manage_users') }}">Manage Users</a>
+    </li>
+    <li>
+      <a href="{{ url_for('admin.manage_events') }}">Manage Events</a>
+    </li>
+    <li><a href="{{ url_for('admin.scan') }}">Scan In User</a></li>
+    <li>
+      <a href="{{ url_for('admin.review_applications') }}"
+        >Review Applications</a
+      >
+    </li>
+  </ul>
+</div>
 {% endblock %}

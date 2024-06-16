@@ -4,9 +4,10 @@ import io
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(150), nullable=False, unique=True)
+    email = db.Column(db.String(150), nullable=False, unique=True)
+    username = db.Column(db.String(150), nullable=True, unique=True)
     password = db.Column(db.String(150), nullable=False)
-    role = db.Column(db.String(50), nullable=False, default='user')
+    role = db.Column(db.String(50), nullable=False, default='hacker')
 
     def generate_qr_code(self):
         qr = qrcode.QRCode(
@@ -24,11 +25,32 @@ class User(db.Model):
         img.save(buf)
         buf.seek(0)
         return buf
+    
+class Application(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    full_name = db.Column(db.String(150), nullable=False)
+    school = db.Column(db.String(150), nullable=False)
+    major = db.Column(db.String(150), nullable=False)
+    level_of_study = db.Column(db.String(50), nullable=False)
+    year_of_study = db.Column(db.String(50), nullable=False)
+    hackathons_attended = db.Column(db.Integer, nullable=False)
+    skills = db.Column(db.Text, nullable=True)
+    project_ideas = db.Column(db.Text, nullable=True)
+    motivation = db.Column(db.Text, nullable=True)
+    resume = db.Column(db.String(150), nullable=True)
+    linkedin = db.Column(db.String(150), nullable=True)
+    github = db.Column(db.String(150), nullable=True)
+    portfolio = db.Column(db.String(150), nullable=True)
+    application_status = db.Column(db.String(50), nullable=False, default='Pending')
+    reviewed_by = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
+    user = db.relationship('User', foreign_keys=[user_id], backref=db.backref('application', uselist=False))
+    reviewer = db.relationship('User', foreign_keys=[reviewed_by])
+
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), nullable=False)
-
 
 class CheckIn(db.Model):
     id = db.Column(db.Integer, primary_key=True)

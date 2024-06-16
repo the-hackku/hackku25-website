@@ -1,24 +1,11 @@
 {% extends "base.html" %} {% block title %}Profile{% endblock %} {% block
 content %}
-
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profile</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
-  </head>
-  <body>
-    <h1>User Profile</h1>
-    <p>Username: {{ user.username }}</p>
-    <p>Role: {{ user.role }}</p>
-    <h2>QR Code</h2>
-    <img src="{{ url_for('main.qr_code', user_id=user.id) }}" alt="QR Code" />
-  </body>
-</html>
+<h1>User Profile</h1>
+<p>Username: {{ user.username }}</p>
+<p>Preferred Email: {{ user.email }}</p>
+<p>Role: {{ user.role }}</p>
+<h2>Your QR Code</h2>
+<img src="{{ url_for('main.qr_code', user_id=user.id) }}" alt="QR Code" />
+<p><a href="{{ url_for('main.logout') }}">Sign Out</a></p>
 
 {% endblock %}

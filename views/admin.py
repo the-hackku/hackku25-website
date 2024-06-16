@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, request, session, flash, jsonify
 from functools import wraps
-from models import db, User, Event, CheckIn
+from models import db, User, Event, CheckIn, Application
 from werkzeug.security import generate_password_hash
 import logging
 
@@ -40,10 +40,13 @@ def admin():
 @admin_required
 def delete_user(user_id):
     user = User.query.get_or_404(user_id)
+    if user.applications:
+        flash('Cannot delete user with existing applications.', 'danger')
+        return redirect(url_for('admin.manage_users'))
     db.session.delete(user)
     db.session.commit()
     flash('User has been deleted.', 'success')
-    return redirect(url_for('admin.admin'))
+    return redirect(url_for('admin.manage_users'))
 
 @admin_bp.route('/edit/<int:user_id>', methods=['GET', 'POST'])
 @admin_required
@@ -156,6 +159,30 @@ def scan():
     else:
         events = Event.query.all()
         return render_template('scan.html', events=events)
+    
+
+@admin_bp.route('/review_applications')
+@admin_required
+def review_applications():
+    applications = Application.query.order_by(Application.application_status, Application.id).all()
+    return render_template('admin/review_applications.html', applications=applications)
+
+@admin_bp.route('/view_application/<int:application_id>')
+@admin_required
+def view_application(application_id):
+    application = Application.query.get_or_404(application_id)
+    return render_template('admin/view_application.html', application=application)
+
+@admin_bp.route('/update_application_status/<int:application_id>', methods=['POST'])
+@admin_required
+def update_application_status(application_id):
+    application = Application.query.get_or_404(application_id)
+    status = request.form['status']
+    application.application_status = status
+    application.reviewed_by = session.get('user_id')
+    db.session.commit()
+    flash('Application status updated successfully.', 'success')
+    return redirect(url_for('admin.review_applications'))
 
 
 

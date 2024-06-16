@@ -1,21 +1,24 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
-
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
-  </head>
-  <body>
-    <h1>Welcome to the Hackathon!</h1>
-    <p>Welcome to our hackathon event!</p>
-  </body>
-</html>
-
-{% endblock %}
+<h1>HackKU25 Hacker Portal</h1>
+<p>Welcome to the HackKU Hacker portal!</p>
+{% if application %}
+<p
+  class="status {% if application.application_status == 'Pending' %}pending{% elif application.application_status == 'Accepted' %}accepted{% elif application.application_status == 'Rejected' %}rejected{% endif %}"
+>
+  Your application status: {{ application.application_status }}
+</p>
+{% else %}
+<div class="todo">
+  <h2>To-Do List</h2>
+  <ul>
+    <li>
+      <strong>1. Apply for HackKU 2025</strong> - Click the link below to start
+      your application.
+    </li>
+  </ul>
+  <a class="apply-btn" href="{{ url_for('application.apply') }}"
+    >Fill out Application</a
+  >
+</div>
+{% endif %} {% endblock %}
