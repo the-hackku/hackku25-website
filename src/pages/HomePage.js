@@ -8,8 +8,9 @@ const HomePage = () => {
   return (
     <div className="home-page">
       <h2>HackKU 2025</h2>
-      <p>This is the home page of HackKU.</p>
       <Countdown endDate={eventDate} />
+      <p>until HackKU</p>
+      <p>04/18 - 04/20</p>
     </div>
   );
 };
