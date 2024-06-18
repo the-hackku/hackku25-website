@@ -1,5 +1,6 @@
 import React from "react";
 import RulesList from "../components/RulesList";
+import CodeOfConduct from "../components/CodeOfConduct";
 
 const RulesPage = () => {
   const rules = [
@@ -13,6 +14,7 @@ const RulesPage = () => {
     <div className="rules-page">
       <h2>Rules</h2>
       <RulesList rules={rules} />
+      <CodeOfConduct/>
     </div>
   );
 };
