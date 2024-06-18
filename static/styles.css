@@ -122,3 +122,135 @@ a:hover::after {
 #rules-title{
   margin-top: 100px;
 }
+
+/*This is for mobile devices*/
+@media (max-width: 768px){
+
+  :root {
+    --primary-color: #f7b92a;
+    --background-color: rgb(255, 255, 255);
+  }
+  
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 95vh;
+    font-family: "Roboto", sans-serif;
+    opacity: 0;
+    transition: opacity 0.5s ease-in 0.5s;
+    background-image: url("bg.webp");
+    background-size: contain;
+    height: auto;
+    color: rgb(255, 255, 255);
+    overflow-y: auto;
+    overflow-x: hidden
+  }
+  
+  #mlh-trust-badge {
+    position: fixed;
+    top: -5px;
+    right: 5%;
+    transition: transform 0.2s;
+  }
+  
+  #countdown {
+    font-size: 1rem;
+    margin: 0;
+    color: var(--primary-color);
+  }
+  
+  #mlh-trust-badge:hover {
+    transform: translateY(10px) scale(1.1);
+  }
+  
+  a {
+    color: var(--primary-color);
+    text-decoration: none;
+    margin-bottom: 10px;
+    position: relative;
+  }
+  
+  a::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    transform: scaleX(0);
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: var(--primary-color);
+    transform-origin: bottom right;
+    transition: transform 0.25s ease-out;
+  }
+  
+  a:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+  }
+  
+  .footer-nav {
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+  }
+  
+  .footer-nav a {
+    margin: 0 15px;
+    text-decoration: none;
+  }
+  
+  #navigation-bar {
+    position: fixed;
+    top: -5px;
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    padding: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .nav-link {
+    font-size: 25px;
+    padding: 20px;
+  }
+  
+  .code-item{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+  
+  #warning-box{
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  
+  .code-title{
+    margin-top: 0px;
+    margin-bottom: 0px;
+  }
+  
+  .code-list{
+    margin-bottom: 0px;
+    margin-top: 0px;
+  }
+  
+  .code-paragraph{
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  #photo-title{
+    margin-top: 30px;
+  }
+  
+  #rules-title{
+    margin-top: 100px;
+  }
+}
