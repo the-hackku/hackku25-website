@@ -156,7 +156,7 @@ a:hover::after {
   }
   
   #countdown {
-    font-size: 1rem;
+    font-size: 2rem;
     margin: 0;
     color: var(--primary-color);
   }
@@ -201,6 +201,7 @@ a:hover::after {
   
   .footer-nav a {
     margin: 0 15px;
+    margin-top: 50px;
     text-decoration: none;
   }
   
@@ -251,6 +252,6 @@ a:hover::after {
   }
   
   #rules-title{
-    margin-top: 100px;
+    margin-top: 0px;
   }
 }
