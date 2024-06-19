@@ -205,16 +205,6 @@ a:hover::after {
     text-decoration: none;
   }
   
-  #navigation-bar {
-    position: fixed;
-    top: -5px;
-    width: 100%;
-    background-color: white;
-    text-align: center;
-    padding: 10px;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-  }
-  
   .nav-link {
     font-size: 25px;
     padding: 20px;
@@ -233,7 +223,8 @@ a:hover::after {
   }
   
   .code-title{
-    position: top;
+    position: fixed;
+    top: 0px;
     margin-top: 0px;
     margin-bottom: 0px;
   }
