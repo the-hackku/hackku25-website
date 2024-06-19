@@ -144,9 +144,7 @@ a:hover::after {
     background-size: cover;
     background-position: center;
     color: rgb(255, 255, 255);
-    overflow-y: auto;
-    overflow-x: hidden;
-    font-size: 10px;
+    font-size: 11px;
   }
   
   #mlh-trust-badge {
