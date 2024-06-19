@@ -141,11 +141,11 @@ a:hover::after {
     opacity: 0;
     transition: opacity 0.5s ease-in 0.5s;
     background-image: url("bg.webp");
-    background-size: contain;
+    background-size: cover;
     background-position: center;
     color: rgb(255, 255, 255);
     overflow-y: auto;
-    overflow-x: hidden
+    overflow-x: hidden;
   }
   
   #mlh-trust-badge {
@@ -233,6 +233,7 @@ a:hover::after {
   }
   
   .code-title{
+    position: top;
     margin-top: 0px;
     margin-bottom: 0px;
   }
