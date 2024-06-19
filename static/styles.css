@@ -146,6 +146,7 @@ a:hover::after {
     color: rgb(255, 255, 255);
     overflow-y: auto;
     overflow-x: hidden;
+    font-size: 10px;
   }
   
   #mlh-trust-badge {
@@ -223,8 +224,6 @@ a:hover::after {
   }
   
   .code-title{
-    position: fixed;
-    top: 0px;
     margin-top: 0px;
     margin-bottom: 0px;
   }
