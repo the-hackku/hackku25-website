@@ -70,7 +70,7 @@ body {
 }
 
 .seats {
-  width: 170vh;
+  width: 100vh;
   position: absolute;
   bottom: 0;
   will-change: transform; /* Optimize the animation performance */
@@ -193,6 +193,7 @@ a:hover::after {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    height: 100vh;
   }
 
   .coming-soon {
@@ -213,12 +214,14 @@ a:hover::after {
     font-size: 0.9em;
     margin: 0;
   }
-  .seats {
-    display: none;
-  }
 
   .event-date {
     font-size: 0.75em;
+  }
+
+  .seats {
+    width: 55vh;
+    padding-bottom: 10vh;
   }
 
   .footer-nav {
