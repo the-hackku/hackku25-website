@@ -136,7 +136,8 @@ a:hover::after {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 95vh;
+    height: 100vh;
+    width: 100%;
     font-family: "Roboto", sans-serif;
     opacity: 0;
     transition: opacity 0.5s ease-in 0.5s;
@@ -146,6 +147,7 @@ a:hover::after {
     overflow-y: hidden;
     overflow-x: hidden;
     background-repeat: no-repeat;
+    box-sizing: border-box;
     color: rgb(255, 255, 255);
     font-size: 11px;
   }
