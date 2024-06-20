@@ -23,6 +23,8 @@ body {
   background-image: url("bg.webp");
   background-size: cover;
   background-repeat: no-repeat;
+  overflow: hidden;
+  background-attachment: fixed;
   color: rgb(255, 255, 255);
 }
 
