@@ -22,6 +22,9 @@ const Footer = () => {
           <li>
             <Link to="/schedule">Schedule</Link>
           </li>
+          <li>
+            <Link to="/">myHackKU</Link>
+          </li>
         </ul>
       </nav>
     </footer>

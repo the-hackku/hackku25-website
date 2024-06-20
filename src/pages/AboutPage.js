@@ -19,13 +19,31 @@ const organizers = [
     name: "james hurd",
     imageName: "james.jpeg",
     role: "President / CEO",
-    link: "https://jameshurd.dev",
+    link: "https://www.linkedin.com/in/jameshurd2718/",
   },
   {
     name: "Joshua Lee",
     imageName: "joshua.jpeg",
     role: "Vice President",
-    link: "https://joshualee.dev",
+    link: "https://www.linkedin.com/in/joshualee128/",
+  },
+  {
+    name: "Anh Hoang",
+    imageName: "anh.jpeg",
+    role: "Organizer",
+    link: "https://www.linkedin.com/in/anh-hoang-54a4b1291/",
+  },
+  {
+    name: "Ky Le",
+    imageName: "placeholder.png",
+    role: "Organizer",
+    link: "Organizer",
+  },
+  {
+    name: "Trent Gould",
+    imageName: "trent.jpeg",
+    role: "Organizer",
+    link: "https://www.linkedin.com/in/trent-gould/",
   },
 ];
 
@@ -38,7 +56,8 @@ const AboutPage = () => {
         software and hardware projects. It provides an excellent opportunity for
         students to learn, innovate, and network with like-minded individuals.
       </p>
-      <h2>Organizers</h2>
+      <h2>Meet the team!</h2>
+      <p>Meet the team of organizers who work hard to make HackKU a reality.</p>
       <div className="organizers-grid">
         {organizers.map((organizer, index) => (
           <Organizer
