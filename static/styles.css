@@ -69,7 +69,7 @@ body {
 }
 
 .logo-img {
-  padding-top: 150px;
+  padding-top: 200px;
   width: 20%;
 }
 
@@ -170,23 +170,13 @@ a:hover::after {
 /*This is for mobile devices*/
 @media (max-width: 768px) {
   body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    width: 100%;
-    font-family: "Roboto", sans-serif;
-    opacity: 0;
-    transition: opacity 0.5s ease-in 0.5s;
-    background-image: url("/static/assets/web_background.png");
-    background-size: cover;
-    background-position: center;
-    overflow: hidden;
-    background-repeat: no-repeat;
-    box-sizing: border-box;
-    color: rgb(255, 255, 255);
-    font-size: 11px;
+    height: 100%;
+  }
+
+  .logo-img {
+    padding-top: 150px;
+    width: 50%;
+    padding-bottom: 50px;
   }
 
   #mlh-trust-badge {
@@ -197,7 +187,7 @@ a:hover::after {
   }
 
   #countdown {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     margin: 0;
     color: var(--primary-color);
   }
