@@ -145,6 +145,7 @@ a:hover::after {
     background-position: center;
     overflow-y: hidden;
     overflow-x: hidden;
+    background-repeat: no-repeat;
     color: rgb(255, 255, 255);
     font-size: 11px;
   }
