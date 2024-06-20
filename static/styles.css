@@ -1,46 +1,80 @@
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 :root {
-  --primary-color: #f7b92a;
+  --primary-color: #000000;
   --background-color: rgb(255, 255, 255);
 }
 
 /*adds Jackpot font to be used*/
-@font-face{
-  font-family: 'Jackpot';
-  src: url('../fonts/Jackpot.ttf') format('truetype');
+@font-face {
+  font-family: "Jackpot";
+  src: url("../fonts/Jackpot.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 body {
+  font-family: "Jackpot", sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   height: 100vh;
-  font-family: "Roboto", sans-serif;
   opacity: 0;
   transition: opacity 0.5s ease-in 0.5s;
-  background-image: url("bg.webp");
+  background-image: url("/static/assets/web_background.png");
   background-size: cover;
   background-repeat: no-repeat;
-  color: rgb(255, 255, 255);
+  background-position: center; /* Center the image */
 }
 
 #mlh-trust-badge {
   position: fixed;
   right: 5%;
   transition: transform 0.2s;
+  top: -5px;
+  z-index: 1000;
+  height: 20%;
 }
 
 #countdown {
-  font-family: "Roboto", sans-serif;
-  font-size: 5rem;
+  font-size: 3rem;
   margin: 0;
   color: var(--primary-color);
 }
 
+.seats {
+  position: absolute;
+  bottom: 0;
+  will-change: transform; /* Optimize the animation performance */
+  overflow: hidden; /* Prevent overflow issues */
+  animation: seats 1s infinite alternate;
+}
+
+@keyframes seats {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-5px);
+  }
+}
+
 #mlh-trust-badge:hover {
   transform: translateY(10px) scale(1.1);
+}
+
+.logo-img {
+  padding-top: 150px;
+  width: 20%;
+}
+
+.coming-soon {
+  width: 20%;
 }
 
 a {
@@ -71,10 +105,11 @@ a:hover::after {
 .footer-nav {
   color: #fff;
   text-align: center;
-  padding: 20px 0;
+  padding: 10px 0;
   position: fixed;
   width: 100%;
   bottom: 0;
+  background-color: white;
 }
 
 .footer-nav a {
@@ -97,49 +132,43 @@ a:hover::after {
   padding: 20px;
 }
 
-.code-item{
+.code-item {
   margin-top: 10px;
   margin-bottom: 10px;
   margin-left: 100px;
   margin-right: 100px;
 }
 
-#warning-box{
+#warning-box {
   margin-top: 0px;
   margin-bottom: 0px;
 }
 
-.code-title{
+.code-title {
   margin-top: 0px;
   margin-bottom: 0px;
 }
 
-.code-list{
+.code-list {
   margin-bottom: 0px;
   margin-top: 0px;
 }
 
-.code-paragraph{
+.code-paragraph {
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
-#photo-title{
+#photo-title {
   margin-top: 30px;
 }
 
-#rules-title{
+#rules-title {
   margin-top: 100px;
 }
 
 /*This is for mobile devices*/
-@media (max-width: 768px){
-
-  :root {
-    --primary-color: #f7b92a;
-    --background-color: rgb(255, 255, 255);
-  }
-  
+@media (max-width: 768px) {
   body {
     display: flex;
     flex-direction: column;
@@ -150,7 +179,7 @@ a:hover::after {
     font-family: "Roboto", sans-serif;
     opacity: 0;
     transition: opacity 0.5s ease-in 0.5s;
-    background-image: url("bg.webp");
+    background-image: url("/static/assets/web_background.png");
     background-size: cover;
     background-position: center;
     overflow: hidden;
@@ -159,101 +188,52 @@ a:hover::after {
     color: rgb(255, 255, 255);
     font-size: 11px;
   }
-  
+
   #mlh-trust-badge {
     position: fixed;
     top: -5px;
     right: 5%;
     transition: transform 0.2s;
   }
-  
+
   #countdown {
-    font-size: 2rem;
+    font-size: 1.5rem;
     margin: 0;
     color: var(--primary-color);
   }
-  
-  #mlh-trust-badge:hover {
-    transform: translateY(10px) scale(1.1);
-  }
-  
-  a {
-    color: var(--primary-color);
-    text-decoration: none;
-    margin-bottom: 10px;
-    position: relative;
-  }
-  
-  a::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    transform: scaleX(0);
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: var(--primary-color);
-    transform-origin: bottom right;
-    transition: transform 0.25s ease-out;
-  }
-  
-  a:hover::after {
-    transform: scaleX(1);
-    transform-origin: bottom left;
-  }
-  
-  .footer-nav {
-    color: #fff;
-    text-align: center;
-    padding: 20px 0;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
-  }
-  
-  .footer-nav a {
-    margin: 0 15px;
-    margin-top: 50px;
-    text-decoration: none;
-  }
-  
-  .nav-link {
-    font-size: 25px;
-    padding: 20px;
-  }
-  
-  .code-item{
+
+  .code-item {
     margin-top: 10px;
     margin-bottom: 10px;
     margin-left: 0px;
     margin-right: 0px;
   }
-  
-  #warning-box{
+
+  #warning-box {
     margin-top: 0px;
     margin-bottom: 0px;
   }
-  
-  .code-title{
+
+  .code-title {
     margin-top: 0px;
     margin-bottom: 0px;
   }
-  
-  .code-list{
+
+  .code-list {
     margin-bottom: 0px;
     margin-top: 0px;
   }
-  
-  .code-paragraph{
+
+  .code-paragraph {
     margin-top: 10px;
     margin-bottom: 10px;
   }
-  
-  #photo-title{
+
+  #photo-title {
     margin-top: 30px;
   }
-  
-  #rules-title{
+
+  #rules-title {
     margin-top: -50px;
   }
 }
