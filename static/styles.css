@@ -142,7 +142,7 @@ a:hover::after {
     transition: opacity 0.5s ease-in 0.5s;
     background-image: url("bg.webp");
     background-size: cover;
-    background-position: center;
+    background-position: top;
     color: rgb(255, 255, 255);
     font-size: 11px;
   }
