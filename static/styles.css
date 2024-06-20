@@ -144,8 +144,7 @@ a:hover::after {
     background-image: url("bg.webp");
     background-size: cover;
     background-position: center;
-    overflow-y: hidden;
-    overflow-x: hidden;
+    overflow: hidden;
     background-repeat: no-repeat;
     box-sizing: border-box;
     color: rgb(255, 255, 255);
