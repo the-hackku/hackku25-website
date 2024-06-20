@@ -10,7 +10,7 @@
   --background-color: rgb(255, 255, 255);
 }
 
-/*adds Jackpot font to be used*/
+/* Adds Jackpot font to be used */
 @font-face {
   font-family: "Jackpot";
   src: url("../fonts/Jackpot.ttf") format("truetype");
@@ -21,15 +21,14 @@
 body {
   font-family: "Jackpot", sans-serif;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
   height: 100vh;
-  opacity: 0;
-  transition: opacity 0.5s ease-in 0.5s;
+  margin: 0;
   background-image: url("/static/assets/web_background.png");
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center; /* Center the image */
+  background-position: center;
 }
 
 #mlh-trust-badge {
@@ -41,25 +40,37 @@ body {
   height: 20%;
 }
 
-#countdown {
-  font-size: 2em;
-  margin: 0;
-  color: var(--primary-color);
-}
-
-#index-content{
+#main-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 25vh;
-  width: 50vw;
+  height: 100%;
+  width: 100%;
+  padding-top: 30vh;
 }
 
-.index-text{
+#countdown {
+  font-size: 3em;
+  margin: 0;
+}
+
+.coming-soon {
+  font-size: 2em;
+}
+
+#index-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.index-text {
   font-size: 1em;
 }
 
 .seats {
+  width: 170vh;
   position: absolute;
   bottom: 0;
   will-change: transform; /* Optimize the animation performance */
@@ -81,11 +92,6 @@ body {
 }
 
 .logo-img {
-  padding-top: 200px;
-  width: 20%;
-}
-
-.coming-soon {
   width: 20%;
 }
 
@@ -179,32 +185,47 @@ a:hover::after {
   margin-top: 100px;
 }
 
-/*This is for mobile devices*/
+/* This is for mobile devices */
 @media (max-width: 768px) {
   body {
-    height: 100%;
+    background-image: url("/static/assets/web_background_mobile.png");
+    font-size: 7vw;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+
+  .coming-soon {
+    font-size: 1em;
   }
 
   .logo-img {
-    padding-top: 150px;
-    width: 50%;
-    padding-bottom: 50px;
+    width: 70%;
   }
 
   #mlh-trust-badge {
     position: fixed;
-    top: -5px;
-    right: 5%;
-    transition: transform 0.2s;
+    transform: translateX(5%);
+    height: 15%;
   }
 
   #countdown {
-    font-size: 1.3rem;
+    font-size: 0.9em;
     margin: 0;
-    color: var(--primary-color);
+  }
+  .seats {
+    display: none;
   }
 
-  .code-item {
+  .event-date {
+    font-size: 0.75em;
+  }
+
+  .footer-nav {
+    font-size: 0.75em;
+  }
+
+  /* .code-item {
     margin-top: 10px;
     margin-bottom: 10px;
     margin-left: 0px;
@@ -237,5 +258,5 @@ a:hover::after {
 
   #rules-title {
     margin-top: -50px;
-  }
+  } */
 }
