@@ -222,7 +222,7 @@ a:hover::after {
 
   .seats {
     width: 55vh;
-    padding-bottom: 10vh;
+    padding-bottom: 0;
   }
 
   .footer-nav {
