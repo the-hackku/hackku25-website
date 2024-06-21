@@ -219,6 +219,11 @@ a:hover::after {
     font-size: 0.75em;
   }
 
+  #countdown {
+    font-size: 1em;
+    margin: 0;
+  }
+
   .seats {
     width: 55vh;
     padding-bottom: 10vh;
