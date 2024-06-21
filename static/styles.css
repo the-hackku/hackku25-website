@@ -222,11 +222,11 @@ a:hover::after {
 
   .seats {
     width: 55vh;
-    padding-bottom: 0;
+    padding-bottom: 5vh;
   }
 
   .footer-nav {
-    font-size: 0.75em;
+    font-size: 0.2em;
   }
 
   /* .code-item {
