@@ -202,7 +202,7 @@ a:hover::after {
   }
 
   .logo-img {
-    width: 70%;
+    width: 40%;
   }
 
   #mlh-trust-badge {
@@ -212,7 +212,7 @@ a:hover::after {
   }
 
   #countdown {
-    font-size: 0.7em;
+    font-size: 0.75em;
     margin: 0;
   }
 
