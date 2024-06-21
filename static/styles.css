@@ -212,17 +212,12 @@ a:hover::after {
   }
 
   #countdown {
-    font-size: 0.9em;
+    font-size: 0.7em;
     margin: 0;
   }
 
   .event-date {
     font-size: 0.75em;
-  }
-
-  #countdown {
-    font-size: 1em;
-    margin: 0;
   }
 
   .seats {
