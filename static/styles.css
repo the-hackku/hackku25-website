@@ -226,7 +226,12 @@ a:hover::after {
   }
 
   .footer-nav {
-    font-size: 0.2em;
+    font-size: 0.35em;
+  }
+
+  .footer-nav a {
+    margin: 0 5px;
+    text-decoration: none;
   }
 
   /* .code-item {
