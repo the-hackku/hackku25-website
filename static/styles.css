@@ -72,22 +72,9 @@ body {
 .seats {
   width: 100vh;
   position: absolute;
-  bottom: 0;
+  bottom: 2%;
   will-change: transform; /* Optimize the animation performance */
   overflow: hidden;
-  animation: breathe 2.5s infinite ease-in-out;
-}
-
-@keyframes breathe {
-  0% {
-    transform: translateY(-5px);
-  }
-  50% {
-    transform: translateY(5px);
-  }
-  100% {
-    transform: translateY(-5px);
-  }
 }
 
 #mlh-trust-badge:hover {
@@ -224,6 +211,7 @@ a:hover::after {
 
   .seats {
     width: 100vw;
+    bottom: 5%;
   }
 
   .footer-nav {
