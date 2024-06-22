@@ -6,6 +6,13 @@ body {
   align-items: center;
   align-self: center;
   width: 50%;
-  margin: 0 auto; /* Add this line */
+  margin: 0 auto;
   padding-bottom: 5%;
+}
+
+/* This is for mobile devices */
+@media (max-width: 768px) {
+  body {
+    width: 90%;
+  }
 }
