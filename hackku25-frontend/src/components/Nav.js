@@ -163,6 +163,25 @@ const Nav = () => {
         </Group>
       </Container>
       <Divider />
+      <a
+        href="https://mlh.io/seasons/2025/events"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          zIndex: 1000,
+          position: "absolute",
+          right: "5%",
+        }}
+      >
+        <img
+          src="/images/mlh_banner.svg"
+          alt="MLH Banner"
+          style={{
+            width: "75px",
+            transition: "transform 0.3s ease",
+          }}
+        />
+      </a>
       <Modal
         size={"sm"}
         opened={opened}

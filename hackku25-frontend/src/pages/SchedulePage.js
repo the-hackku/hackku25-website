@@ -115,6 +115,7 @@ const SchedulePage = () => {
                       position="apart"
                       onClick={() => toggleOpen(date, index)}
                       style={{ cursor: "pointer" }}
+                      spacing="xs"
                     >
                       <Text weight={500}>{event.title}</Text>
                       {opened[key] ? (

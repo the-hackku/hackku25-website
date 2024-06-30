@@ -37,10 +37,13 @@ const AboutPage = () => {
       </Paper>
 
       <Paper shadow="sm" p="lg" withBorder mt="xl">
-        <Text align="center" size="xl" weight={700} mb="xl">
+        <Text align="center" size="xl" weight={700} my={10}>
           Meet the Organizers
         </Text>
-        <SimpleGrid cols={4} spacing="lg">
+        <Text align="center" c="dimmed" my={10}>
+          The team behind {hackathonInfo.name}
+        </Text>
+        <SimpleGrid cols={5} spacing="lg">
           {organizers.map((organizer, index) => (
             <a
               key={organizer.name}
@@ -82,10 +85,13 @@ const AboutPage = () => {
       </Paper>
 
       <Paper shadow="sm" p="lg" withBorder mt="xl">
-        <Text align="center" size="xl" weight={700} mb="xl">
+        <Text align="center" size="xl" weight={700} my={10}>
           Past Hackathons
         </Text>
-        <SimpleGrid cols={4} spacing="lg">
+        <Text align="center" c="dimmed" my={10}>
+          See what hackers have built in the past!
+        </Text>
+        <SimpleGrid cols={5} spacing="lg">
           {hackathonInfo.previousEvents.map((event, index) => (
             <a
               key={event.year}
