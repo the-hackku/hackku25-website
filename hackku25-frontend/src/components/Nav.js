@@ -168,9 +168,8 @@ const Nav = () => {
         target="_blank"
         rel="noopener noreferrer"
         style={{
-          zIndex: 1000,
           position: "absolute",
-          right: "5%",
+          right: "2.5%",
         }}
       >
         <img

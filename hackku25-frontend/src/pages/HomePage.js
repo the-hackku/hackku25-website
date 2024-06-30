@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useUser } from "../context/UserContext";
-import { Container, Text, Paper } from "@mantine/core";
+import { Container, Text, Paper, SimpleGrid } from "@mantine/core";
 import { nprogress } from "@mantine/nprogress";
+import { hackathonInfo } from "../data/hackathonData";
+import CountUp from "react-countup";
 
 const Home = () => {
   const { fetchUserData, user } = useUser();
@@ -63,6 +65,24 @@ const Home = () => {
         ) : (
           <Text align="center">Please sign in to access the portal.</Text>
         )}
+      </Paper>
+      <Paper shadow="sm" p="lg" withBorder mt="xl">
+        <SimpleGrid cols={4} spacing="lg" align="center">
+          {hackathonInfo.stats.map((stat, index) => (
+            <Paper key={index} shadow="sm" padding="lg" withBorder>
+              <Text align="center" size="xl" weight={700}>
+                <CountUp
+                  end={stat.value}
+                  prefix={stat.prefix || ""}
+                  duration={3}
+                />
+              </Text>
+              <Text align="center" size="md" c="dimmed">
+                {stat.label}
+              </Text>
+            </Paper>
+          ))}
+        </SimpleGrid>
       </Paper>
 
       <Paper withBorder shadow="md" p={30} radius="md" mt="xl">

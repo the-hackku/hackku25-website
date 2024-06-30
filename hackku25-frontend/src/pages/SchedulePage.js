@@ -76,7 +76,7 @@ const SchedulePage = () => {
   };
 
   return (
-    <Container size="sm" my={40}>
+    <Container my={40}>
       <Paper withBorder shadow="md" p={30} radius="md">
         <Text
           style={{ fontSize: "2rem" }}

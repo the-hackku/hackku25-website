@@ -28,4 +28,10 @@ export const hackathonInfo = {
       alt: "HackKU23",
     },
   ],
+  stats: [
+    { label: "Hours", value: 36 },
+    { label: "Hackers", value: 500 },
+    { label: "Tracks", value: 15 },
+    { label: "In Prizes", value: 25000, prefix: "$" },
+  ],
 };
