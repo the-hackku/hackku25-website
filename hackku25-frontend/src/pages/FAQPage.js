@@ -1,29 +1,39 @@
 import React from "react";
-import { Container, Text, Paper } from "@mantine/core";
-import { Accordion } from '@mantine/core';
+import { Container, Text, Paper, Accordion } from "@mantine/core";
 import { questions } from "../data/faqData";
 
-const item = questions.map((item) => (
-    <Accordion.Item key={item.question} value={item.question}>
-      <Accordion.Control icon={item.emoji}>{item.question}</Accordion.Control>
-      <Accordion.Panel>{item.answer}</Accordion.Panel>
-    </Accordion.Item>
-));
-
 const FAQPage = () => {
+  const faqItems = questions.map((item) => (
+    <Accordion.Item key={item.question} value={item.question}>
+      <Accordion.Control>
+        <Text
+          style={{
+            fontWeight: 700,
+          }}
+        >
+          {item.question}
+        </Text>
+      </Accordion.Control>
+      <Accordion.Panel>
+        <Text>{item.answer}</Text>
+      </Accordion.Panel>
+    </Accordion.Item>
+  ));
 
   return (
-    <Container size="xs" my={40}>
+    <Container my={40}>
       <Paper shadow="sm" p="lg" withBorder>
-        <Text align="center" size="xl" weight={700}>
-          FAQ
+        <Text
+          style={{ fontSize: "2rem" }}
+          align="center"
+          mb="lg"
+          variant="gradient"
+          gradient={{ from: "red", to: "indigo", deg: 149 }}
+        >
+          Frequently Asked Questions
         </Text>
+        <Accordion defaultValue={questions[0]?.question}>{faqItems}</Accordion>
       </Paper>
-
-      <Accordion defaultQuestion="Apples">
-      {item}
-      </Accordion>
-      
     </Container>
   );
 };

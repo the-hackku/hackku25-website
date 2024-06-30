@@ -23,6 +23,7 @@ import {
   IconScan,
 } from "@tabler/icons-react";
 import logout from "../utils/logout"; // Import the logout function
+import { hackathonInfo } from "../data/hackathonInfo";
 
 const Nav = () => {
   const { user, setUser, loading } = useUser();
@@ -50,15 +51,8 @@ const Nav = () => {
       <Container size="lg" py="md">
         <Group justify="space-between">
           <Group>
-            <Anchor
-              style={{
-                fontWeight: 700,
-              }}
-              component={Link}
-              to="/"
-              size="lg"
-            >
-              HackKU25
+            <Anchor component={Link} to="/" size="lg">
+              {hackathonInfo.name}
             </Anchor>
             <Anchor component={Link} to="/schedule">
               Schedule
@@ -67,7 +61,7 @@ const Nav = () => {
               About
             </Anchor>
             <Anchor component={Link} to="/faq">
-              FAQ
+              FAQs
             </Anchor>
           </Group>
 
@@ -142,7 +136,7 @@ const Nav = () => {
                     }
                     onClick={openLoginModal} // Change to openLoginModal
                   >
-                    Login
+                    Log in
                   </Menu.Item>
                   <Menu.Item
                     leftSection={

@@ -8,7 +8,7 @@ import {
   Image,
   Group,
 } from "@mantine/core";
-import { hackathonInfo } from "../data/hackathonData";
+import { hackathonInfo } from "../data/hackathonInfo";
 import { organizers } from "../data/organizers";
 
 const cardStyle = {
@@ -28,8 +28,14 @@ const AboutPage = () => {
   return (
     <Container my={40}>
       <Paper shadow="sm" p="lg" withBorder>
-        <Text align="center" size="xl" weight={700}>
-          About {hackathonInfo.name}
+        <Text
+          style={{ fontSize: "2rem" }}
+          align="center"
+          mb="lg"
+          variant="gradient"
+          gradient={{ from: "red", to: "indigo", deg: 149 }}
+        >
+          About HackKU25
         </Text>
         <Text align="center" size="md" mt="md">
           {hackathonInfo.description}
@@ -54,7 +60,7 @@ const AboutPage = () => {
             >
               <Card
                 shadow="sm"
-                padding="lg"
+                padding="sm"
                 radius="md"
                 withBorder
                 style={
@@ -73,7 +79,7 @@ const AboutPage = () => {
                   />
                 </Card.Section>
                 <Group position="apart" mt="md" mb="xs">
-                  <Text weight={500}>{organizer.name}</Text>
+                  <Text>{organizer.name}</Text>
                 </Group>
                 <Text size="sm" c="dimmed">
                   {organizer.role}

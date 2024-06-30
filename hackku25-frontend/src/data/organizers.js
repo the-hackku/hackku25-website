@@ -16,7 +16,7 @@ export const organizers = [
   {
     name: "James Hurd",
     imageName: "james.jpeg",
-    role: "President / CEO",
+    role: "President",
     link: "https://www.linkedin.com/in/jameshurd2718/",
   },
   {

@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from "react";
 import { useUser } from "../context/UserContext";
 import { Container, Text, Paper, SimpleGrid } from "@mantine/core";
 import { nprogress } from "@mantine/nprogress";
-import { hackathonInfo } from "../data/hackathonData";
+import { hackathonInfo } from "../data/hackathonInfo";
 import CountUp from "react-countup";
 
 const Home = () => {
@@ -47,24 +47,18 @@ const Home = () => {
 
   return (
     <Container size="xs" my={40}>
-      <Paper withBorder shadow="md" p={30} radius="md">
+      <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
         <Text
-          style={{ fontSize: "2rem" }} // You can use '3rem', '4rem', etc.
+          style={{ fontSize: "3rem" }}
           align="center"
-          mb="lg"
           variant="gradient"
           gradient={{ from: "red", to: "indigo", deg: 149 }}
         >
-          myHackKU Portal
+          {countdown}
         </Text>
-
-        {user ? (
-          <>
-            <Text align="center">Hi, {user?.username}!</Text>
-          </>
-        ) : (
-          <Text align="center">Please sign in to access the portal.</Text>
-        )}
+        <Text align="center" c="dimmed">
+          until {hackathonInfo.name}
+        </Text>
       </Paper>
       <Paper shadow="sm" p="lg" withBorder mt="xl">
         <SimpleGrid cols={4} spacing="lg" align="center">
@@ -83,17 +77,6 @@ const Home = () => {
             </Paper>
           ))}
         </SimpleGrid>
-      </Paper>
-
-      <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
-        <Text
-          style={{ fontSize: "3rem" }}
-          align="center"
-          variant="gradient"
-          gradient={{ from: "red", to: "indigo", deg: 149 }}
-        >
-          {countdown}
-        </Text>
       </Paper>
     </Container>
   );
