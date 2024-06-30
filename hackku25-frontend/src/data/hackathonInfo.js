@@ -27,6 +27,12 @@ export const hackathonInfo = {
       image: "images/past_hackathons/23.png",
       alt: "HackKU23",
     },
+    {
+      year: "2024",
+      link: "https://hackku-2024.devpost.com/",
+      image: "images/past_hackathons/24.jpg",
+      alt: "HackKU23",
+    },
   ],
   stats: [
     { label: "Hours", value: 36 },
@@ -40,12 +46,14 @@ export const hackathonInfo = {
       start: new Date("2025-04-18T10:00:00"),
       end: new Date("2025-04-18T11:00:00"),
       description: "Join us for the official opening of the hackathon.",
+      location: "Main Hall",
     },
     {
       title: "Workshop 1",
       start: new Date("2025-04-18T12:00:00"),
       end: new Date("2025-04-18T14:00:00"),
       description: "Learn the basics of web development in this workshop.",
+      location: "Room 101",
     },
     {
       title: "Hackathon Start",
@@ -53,6 +61,7 @@ export const hackathonInfo = {
       end: new Date("2025-04-18T16:00:00"),
       description:
         "The hackathon officially begins. Start working on your projects!",
+      location: "Main Hall",
     },
     {
       title: "Keynote Speech",
@@ -60,24 +69,28 @@ export const hackathonInfo = {
       end: new Date("2025-04-19T10:00:00"),
       description:
         "Listen to our keynote speaker talk about the future of technology.",
+      location: "Auditorium",
     },
     {
       title: "Workshop 2",
       start: new Date("2025-04-19T11:00:00"),
       end: new Date("2025-04-19T13:00:00"),
       description: "Advanced topics in web development.",
+      location: "Room 102",
     },
     {
       title: "Project Submissions",
       start: new Date("2025-04-20T10:00:00"),
       end: new Date("2025-04-20T12:00:00"),
       description: "Submit your projects for evaluation.",
+      location: "Submission Desk",
     },
     {
       title: "Closing Ceremony",
       start: new Date("2025-04-20T13:00:00"),
       end: new Date("2025-04-20T14:00:00"),
       description: "Join us for the closing ceremony and awards.",
+      location: "Main Hall",
     },
   ],
 };

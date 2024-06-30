@@ -1,9 +1,21 @@
-import React from "react";
-import { Container, Text, Paper, Accordion } from "@mantine/core";
+import React, { useState } from "react";
+import { Container, Text, Paper, Accordion, TextInput } from "@mantine/core";
 import { questions } from "../data/faqData";
 
 const FAQPage = () => {
-  const faqItems = questions.map((item) => (
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredQuestions = questions.filter(
+    (item) =>
+      item.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.answer.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const faqItems = filteredQuestions.map((item) => (
     <Accordion.Item key={item.question} value={item.question}>
       <Accordion.Control>
         <Text
@@ -15,7 +27,13 @@ const FAQPage = () => {
         </Text>
       </Accordion.Control>
       <Accordion.Panel>
-        <Text>{item.answer}</Text>
+        <Text
+          style={{
+            paddingLeft: 20,
+          }}
+        >
+          {item.answer}
+        </Text>
       </Accordion.Panel>
     </Accordion.Item>
   ));
@@ -32,6 +50,12 @@ const FAQPage = () => {
         >
           Frequently Asked Questions
         </Text>
+        <TextInput
+          placeholder="Search questions and answers..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          mb="lg"
+        />
         <Accordion defaultValue={questions[0]?.question}>{faqItems}</Accordion>
       </Paper>
     </Container>

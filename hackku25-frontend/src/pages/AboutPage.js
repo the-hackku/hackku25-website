@@ -108,7 +108,7 @@ const AboutPage = () => {
             >
               <Card
                 shadow="sm"
-                padding="lg"
+                padding="xs"
                 radius="md"
                 withBorder
                 style={

@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import {
@@ -54,11 +54,11 @@ const Nav = () => {
             <Anchor component={Link} to="/" size="lg">
               {hackathonInfo.name}
             </Anchor>
-            <Anchor component={Link} to="/schedule">
-              Schedule
-            </Anchor>
             <Anchor component={Link} to="/about">
               About
+            </Anchor>
+            <Anchor component={Link} to="/schedule">
+              Schedule
             </Anchor>
             <Anchor component={Link} to="/faq">
               FAQs
