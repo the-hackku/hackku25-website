@@ -1,0 +1,7 @@
+/* Add this to your CSS file */
+.mantine-DateTimePicker-calendarHeader button {
+  width: 40px; /* Adjust width as needed */
+  height: 40px; /* Adjust height as needed */
+  padding: 0; /* Adjust padding as needed */
+  font-size: 14px; /* Adjust font size as needed */
+}
