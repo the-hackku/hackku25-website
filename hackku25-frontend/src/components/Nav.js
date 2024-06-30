@@ -45,10 +45,6 @@ const Nav = () => {
     open();
   };
 
-  if (loading) {
-    return null;
-  }
-
   return (
     <>
       <Container size="lg" py="md">
@@ -66,6 +62,9 @@ const Nav = () => {
             </Anchor>
             <Anchor component={Link} to="/schedule">
               Schedule
+            </Anchor>
+            <Anchor component={Link} to="/about">
+              About
             </Anchor>
           </Group>
 

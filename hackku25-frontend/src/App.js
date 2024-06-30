@@ -14,6 +14,7 @@ import EventDetail from "./pages/admin/EventDetail";
 import NotFound from "./pages/NotFound";
 import { Helmet } from "react-helmet";
 import SchedulePage from "./pages/SchedulePage";
+import AboutPage from "./pages/AboutPage";
 
 const App = () => {
   return (
@@ -39,6 +40,7 @@ const MainLayout = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/schedule" element={<SchedulePage />} />
+        <Route path="/about" element={<AboutPage />} />
 
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/admin/events/:eventId" element={<EventDetail />} />
