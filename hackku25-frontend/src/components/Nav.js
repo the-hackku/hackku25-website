@@ -66,6 +66,9 @@ const Nav = () => {
             <Anchor component={Link} to="/about">
               About
             </Anchor>
+            <Anchor component={Link} to="/faq">
+              FAQ
+            </Anchor>
           </Group>
 
           <Group>
