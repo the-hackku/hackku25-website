@@ -12,6 +12,8 @@ import {
   Burger,
   Drawer,
   Stack,
+  Menu,
+  rem,
 } from "@mantine/core";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import PopupAuth from "./PopupAuth";
@@ -99,34 +101,87 @@ const Nav = () => {
             <Burger opened={drawerOpened} onClick={openDrawer} size="sm" />
           ) : (
             <>
-              <Anchor component={Link} to="/account">
-                Account
-              </Anchor>
-              {user ? (
-                <>
-                  <Anchor component={Link} to="/profile">
-                    Profile
-                  </Anchor>
-                  {user.role === "admin" && (
-                    <>
-                      <Anchor component={Link} to="/admin">
-                        Admin Panel
-                      </Anchor>
-                      <Anchor component={Link} to="/admin/scanner">
-                        QR Scanner
-                      </Anchor>
-                    </>
-                  )}
-                  <Anchor color="red" onClick={handleLogout}>
-                    Logout
-                  </Anchor>
-                </>
-              ) : (
-                <>
-                  <Anchor onClick={openLoginModal}>Log in</Anchor>
-                  <Anchor onClick={openRegisterModal}>Register</Anchor>
-                </>
-              )}
+              <Menu width={200} trigger="click-hover">
+                <Menu.Target>
+                  <Anchor>Account</Anchor>
+                </Menu.Target>
+                {user ? (
+                  <Menu.Dropdown>
+                    <Menu.Label>My Account</Menu.Label>
+                    <Menu.Item
+                      leftSection={
+                        <IconUser style={{ width: rem(14), height: rem(14) }} />
+                      }
+                      component={Link}
+                      to="/profile"
+                    >
+                      Profile
+                    </Menu.Item>
+                    {user.role === "admin" && (
+                      <>
+                        <Menu.Divider />
+                        <Menu.Label>Admin</Menu.Label>
+                        <Menu.Item
+                          leftSection={
+                            <IconSettings
+                              style={{ width: rem(14), height: rem(14) }}
+                            />
+                          }
+                          component={Link}
+                          to="/admin"
+                        >
+                          Admin Panel
+                        </Menu.Item>
+                        <Menu.Item
+                          leftSection={
+                            <IconScan
+                              style={{ width: rem(14), height: rem(14) }}
+                            />
+                          }
+                          component={Link}
+                          to="/admin/scanner"
+                        >
+                          QR Scanner
+                        </Menu.Item>
+                      </>
+                    )}
+                    <Menu.Divider />
+                    <Menu.Item
+                      color="red"
+                      leftSection={
+                        <IconLogout
+                          style={{ width: rem(14), height: rem(14) }}
+                        />
+                      }
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                ) : (
+                  <Menu.Dropdown>
+                    <Menu.Label>Not Logged in</Menu.Label>
+                    <Menu.Item
+                      leftSection={
+                        <IconUser style={{ width: rem(14), height: rem(14) }} />
+                      }
+                      onClick={openLoginModal}
+                    >
+                      Log in
+                    </Menu.Item>
+                    <Menu.Item
+                      leftSection={
+                        <IconUserPlus
+                          style={{ width: rem(14), height: rem(14) }}
+                        />
+                      }
+                      onClick={openRegisterModal}
+                    >
+                      Register
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                )}
+              </Menu>
               <Tooltip label="Toggle Theme" withArrow>
                 <ActionIcon
                   onClick={toggleColorScheme}
