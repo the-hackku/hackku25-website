@@ -103,7 +103,7 @@ const Nav = () => {
             <>
               <Menu width={200} trigger="click-hover">
                 <Menu.Target>
-                  <Anchor>Account</Anchor>
+                  <Anchor>My Account</Anchor>
                 </Menu.Target>
                 {user ? (
                   <Menu.Dropdown>
@@ -275,6 +275,7 @@ const Nav = () => {
               <Anchor onClick={openRegisterModal}>Register</Anchor>
             </>
           )}
+          <Divider my="sm" />
           <Anchor onClick={toggleColorScheme}>
             {currentColorScheme === "dark"
               ? "Toggle Light Mode"

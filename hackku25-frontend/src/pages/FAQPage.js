@@ -1,9 +1,18 @@
 import React, { useState } from "react";
-import { Container, Text, Paper, Accordion, TextInput } from "@mantine/core";
+import {
+  Container,
+  Text,
+  Paper,
+  Accordion,
+  TextInput,
+  SimpleGrid,
+} from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { questions } from "../data/faqData";
 
 const FAQPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -18,22 +27,10 @@ const FAQPage = () => {
   const faqItems = filteredQuestions.map((item) => (
     <Accordion.Item key={item.question} value={item.question}>
       <Accordion.Control>
-        <Text
-          style={{
-            fontWeight: 700,
-          }}
-        >
-          {item.question}
-        </Text>
+        <Text style={{ fontWeight: 600 }}>{item.question}</Text>
       </Accordion.Control>
       <Accordion.Panel>
-        <Text
-          style={{
-            paddingLeft: 20,
-          }}
-        >
-          {item.answer}
-        </Text>
+        <Text style={{ paddingLeft: 20 }}>{item.answer}</Text>
       </Accordion.Panel>
     </Accordion.Item>
   ));
@@ -56,7 +53,22 @@ const FAQPage = () => {
           onChange={handleSearchChange}
           mb="lg"
         />
-        <Accordion defaultValue={questions[0]?.question}>{faqItems}</Accordion>
+        {isMobile ? (
+          <Accordion>{faqItems}</Accordion>
+        ) : (
+          <SimpleGrid cols={2} spacing="lg" mb="lg">
+            <Accordion>
+              {faqItems.slice(0, Math.ceil(faqItems.length / 2))}
+            </Accordion>
+            <Accordion>
+              {faqItems.slice(Math.ceil(faqItems.length / 2))}
+            </Accordion>
+          </SimpleGrid>
+        )}
+        <Text align="center" mt="lg" style={{ fontSize: "1rem" }}>
+          Question not answered here? Email us at{" "}
+          <a href="mailto:help@hackku.org">help@hackku.org</a>
+        </Text>
       </Paper>
     </Container>
   );

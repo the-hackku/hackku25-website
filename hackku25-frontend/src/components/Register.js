@@ -16,6 +16,7 @@ import {
 import { useForm } from "@mantine/form";
 import { nprogress } from "@mantine/nprogress";
 import ErrorAlert from "./ErrorAlert";
+import { notifications } from "@mantine/notifications";
 
 function getStrength(password) {
   return password.length ** 2.5;
@@ -98,6 +99,10 @@ const Register = ({ onSuccess, setLoading }) => {
       setUser({ token: loginResponse.data.access_token });
       navigate("/login");
       onSuccess();
+      notifications.show({
+        title: "Success!",
+        message: "You are now signed in!",
+      });
     } catch (err) {
       const errorResponse = err.response
         ? err.response.data

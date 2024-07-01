@@ -7,6 +7,7 @@ import { TextInput, PasswordInput, Button, Title, Space } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { nprogress } from "@mantine/nprogress";
 import ErrorAlert from "./ErrorAlert";
+import { notifications } from "@mantine/notifications";
 
 const Login = ({ onSuccess = null, setLoading }) => {
   const [error, setError] = useState(null);
@@ -46,6 +47,10 @@ const Login = ({ onSuccess = null, setLoading }) => {
       setUser({ token: response.data.access_token }); // Store only token
       if (onSuccess) {
         onSuccess(); // Call onSuccess callback if provided
+        notifications.show({
+          title: "Success!",
+          message: "You are now signed in!",
+        });
       }
       navigate("/"); // Redirect to home page
     } catch (err) {

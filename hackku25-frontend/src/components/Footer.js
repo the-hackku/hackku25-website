@@ -19,7 +19,7 @@ const Footer = () => {
       <Container size="lg" py="md" px="lg">
         <Center>
           <Group position="apart">
-            <Text size="sm">©2024 HackKU. All rights reserved.</Text>
+            <Text size="sm">Made by your HackKU Team</Text>
             <Group spacing="xs">
               <Tooltip label="Join Discord" withArrow>
                 <ActionIcon
