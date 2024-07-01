@@ -7,30 +7,37 @@ import {
   Anchor,
   Modal,
   Divider,
-  Menu,
-  Button,
-  rem,
   Tooltip,
+  ActionIcon,
+  Burger,
+  Drawer,
+  Stack,
 } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import PopupAuth from "./PopupAuth";
-import ColorToggle from "./ColorToggle";
 import {
   IconSettings,
   IconLogout,
   IconUser,
   IconUserPlus,
   IconScan,
+  IconSun,
+  IconMoon,
 } from "@tabler/icons-react";
 import logout from "../utils/logout"; // Import the logout function
 import { hackathonInfo } from "../data/hackathonInfo";
+import { useColorSchemeToggle } from "../utils/colorSchemeToggle";
 
 const Nav = () => {
   const { user, setUser, loading } = useUser();
   const [opened, { open, close }] = useDisclosure(false);
   const [authType, setAuthType] = useState("login"); // Add authType state
+  const { toggleColorScheme, currentColorScheme } = useColorSchemeToggle();
+  const [drawerOpened, { open: openDrawer, close: closeDrawer }] =
+    useDisclosure(false);
 
   const navigate = useNavigate();
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const handleLogout = () => {
     logout(setUser, navigate);
@@ -39,21 +46,40 @@ const Nav = () => {
   const openLoginModal = () => {
     setAuthType("login");
     open();
+    closeDrawer();
   };
 
   const openRegisterModal = () => {
     setAuthType("register");
     open();
+    closeDrawer();
   };
 
   return (
     <>
-      <Container size="lg" py="md">
-        <Group justify="space-between">
-          <Group>
-            <Anchor component={Link} to="/" size="lg">
-              {hackathonInfo.name}
-            </Anchor>
+      <Container
+        size="lg"
+        py="md"
+        px="lg"
+        style={{
+          width: isMobile ? "100vw" : "80%",
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Anchor
+          component={Link}
+          to="/"
+          size="lg"
+          style={{
+            fontWeight: "bold",
+          }}
+        >
+          {hackathonInfo.name}
+        </Anchor>
+        {!isMobile && (
+          <Group spacing="xs">
             <Anchor component={Link} to="/about">
               About
             </Anchor>
@@ -63,121 +89,144 @@ const Nav = () => {
             <Anchor component={Link} to="/faq">
               FAQs
             </Anchor>
+            <Anchor component={Link} to="/rules">
+              Rules
+            </Anchor>
           </Group>
-
-          <Group>
-            <Menu shadow="md" width={200} trigger="click-hover">
-              <Menu.Target>
-                <Button variant="subtle">
-                  {
-                    // If user is logged in, show their name, otherwise show "Account"
-                    user ? user.username : "Log in"
-                  }
-                </Button>
-              </Menu.Target>
-
+        )}
+        <Group spacing="xs">
+          {isMobile ? (
+            <Burger opened={drawerOpened} onClick={openDrawer} size="sm" />
+          ) : (
+            <>
+              <Anchor component={Link} to="/account">
+                Account
+              </Anchor>
               {user ? (
-                <Menu.Dropdown>
-                  <Menu.Label>My Account</Menu.Label>
-                  <Menu.Item
-                    leftSection={
-                      <IconUser style={{ width: rem(14), height: rem(14) }} />
-                    }
-                    component={Link}
-                    to="/profile"
-                  >
+                <>
+                  <Anchor component={Link} to="/profile">
                     Profile
-                  </Menu.Item>
+                  </Anchor>
                   {user.role === "admin" && (
                     <>
-                      <Menu.Divider />
-                      <Menu.Label>Admin</Menu.Label>
-                      <Menu.Item
-                        leftSection={
-                          <IconSettings
-                            style={{ width: rem(14), height: rem(14) }}
-                          />
-                        }
-                        component={Link}
-                        to="/admin"
-                      >
+                      <Anchor component={Link} to="/admin">
                         Admin Panel
-                      </Menu.Item>
-                      <Menu.Item
-                        leftSection={
-                          <IconScan
-                            style={{ width: rem(14), height: rem(14) }}
-                          />
-                        }
-                        component={Link}
-                        to="/admin/scanner"
-                      >
+                      </Anchor>
+                      <Anchor component={Link} to="/admin/scanner">
                         QR Scanner
-                      </Menu.Item>
+                      </Anchor>
                     </>
                   )}
-                  <Menu.Divider />
-                  <Menu.Item
-                    color="red"
-                    leftSection={
-                      <IconLogout style={{ width: rem(14), height: rem(14) }} />
-                    }
-                    onClick={handleLogout}
-                  >
+                  <Anchor color="red" onClick={handleLogout}>
                     Logout
-                  </Menu.Item>
-                </Menu.Dropdown>
+                  </Anchor>
+                </>
               ) : (
-                <Menu.Dropdown>
-                  <Menu.Label>Not Logged in</Menu.Label>
-                  <Menu.Item
-                    leftSection={
-                      <IconUser style={{ width: rem(14), height: rem(14) }} />
-                    }
-                    onClick={openLoginModal} // Change to openLoginModal
-                  >
-                    Log in
-                  </Menu.Item>
-                  <Menu.Item
-                    leftSection={
-                      <IconUserPlus
-                        style={{ width: rem(14), height: rem(14) }}
-                      />
-                    }
-                    onClick={openRegisterModal} // Change to openRegisterModal
-                  >
-                    Register
-                  </Menu.Item>
-                </Menu.Dropdown>
+                <>
+                  <Anchor onClick={openLoginModal}>Log in</Anchor>
+                  <Anchor onClick={openRegisterModal}>Register</Anchor>
+                </>
               )}
-            </Menu>
-            <Tooltip label="Toggle Theme" withArrow>
-              <div>
-                <ColorToggle />
-              </div>
-            </Tooltip>
-          </Group>
+              <Tooltip label="Toggle Theme" withArrow>
+                <ActionIcon
+                  onClick={toggleColorScheme}
+                  size={30}
+                  variant="subtle"
+                >
+                  {currentColorScheme === "dark" ? <IconSun /> : <IconMoon />}
+                </ActionIcon>
+              </Tooltip>
+            </>
+          )}
         </Group>
       </Container>
       <Divider />
-      <a
-        href="https://mlh.io/seasons/2025/events"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          position: "absolute",
-          right: "2.5%",
-        }}
-      >
-        <img
-          src="/images/mlh_banner.svg"
-          alt="MLH Banner"
+      {!isMobile && (
+        <a
+          href="https://mlh.io/seasons/2025/events"
+          target="_blank"
+          rel="noopener noreferrer"
           style={{
-            width: "75px",
-            transition: "transform 0.3s ease",
+            position: "fixed",
+            right: "2.5%",
           }}
-        />
-      </a>
+        >
+          <img
+            src="/images/mlh_banner.svg"
+            alt="MLH Banner"
+            style={{
+              width: "75px",
+              transition: "transform 0.3s ease",
+            }}
+          />
+        </a>
+      )}
+      <Drawer
+        opened={drawerOpened}
+        onClose={closeDrawer}
+        position="right"
+        radius="lg"
+        padding="md"
+        size="xs"
+        title="Menu"
+      >
+        <Stack spacing="xs">
+          <Anchor component={Link} to="/about" onClick={closeDrawer}>
+            About
+          </Anchor>
+          <Anchor component={Link} to="/schedule" onClick={closeDrawer}>
+            Schedule
+          </Anchor>
+          <Anchor component={Link} to="/faq" onClick={closeDrawer}>
+            FAQs
+          </Anchor>
+          <Anchor component={Link} to="/rules" onClick={closeDrawer}>
+            Rules
+          </Anchor>
+          <Divider my="sm" />
+          {user ? (
+            <>
+              <Anchor component={Link} to="/profile" onClick={closeDrawer}>
+                Profile
+              </Anchor>
+              {user.role === "admin" && (
+                <>
+                  <Anchor component={Link} to="/admin" onClick={closeDrawer}>
+                    Admin Panel
+                  </Anchor>
+                  <Anchor
+                    component={Link}
+                    to="/admin/scanner"
+                    onClick={closeDrawer}
+                  >
+                    QR Scanner
+                  </Anchor>
+                </>
+              )}
+              <Divider my="sm" />
+              <Anchor
+                c="red"
+                onClick={() => {
+                  handleLogout();
+                  closeDrawer();
+                }}
+              >
+                Logout
+              </Anchor>
+            </>
+          ) : (
+            <>
+              <Anchor onClick={openLoginModal}>Log in</Anchor>
+              <Anchor onClick={openRegisterModal}>Register</Anchor>
+            </>
+          )}
+          <Anchor onClick={toggleColorScheme}>
+            {currentColorScheme === "dark"
+              ? "Toggle Light Mode"
+              : "Toggle Dark Mode"}
+          </Anchor>
+        </Stack>
+      </Drawer>
       <Modal
         size={"sm"}
         opened={opened}

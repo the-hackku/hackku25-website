@@ -2,6 +2,9 @@ export const hackathonInfo = {
   name: "HackKU25",
   description:
     "HackKU is the annual 36-hour hackathon hosted at the University of Kansas, where students have the opportunity to innovate new ideas, discover different paths, and push the boundaries of technology. Work with teams of up to four people to create unique solutions to real-world problems. No experience necessary!",
+  discord: "https://discord.gg/AJXm3k6xWq",
+  instagram: "https://www.instagram.com/thehackku/",
+
   previousEvents: [
     {
       year: "2020",

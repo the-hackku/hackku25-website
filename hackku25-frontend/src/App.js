@@ -16,6 +16,8 @@ import { Helmet } from "react-helmet";
 import SchedulePage from "./pages/SchedulePage";
 import AboutPage from "./pages/AboutPage";
 import FAQPage from "./pages/FAQPage";
+import Footer from "./components/Footer";
+import RulesPage from "./pages/RulesPage";
 
 const App = () => {
   return (
@@ -33,26 +35,29 @@ const MainLayout = () => {
   const hideNavRoutes = ["/login", "/register"];
 
   return (
-    <div>
+    <>
       {!hideNavRoutes.includes(location.pathname) && <Nav />}
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/schedule" element={<SchedulePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/faq" element={<FAQPage />} />
+      <main style={{ flex: "1" }}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/schedule" element={<SchedulePage />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/faq" element={<FAQPage />} />
+          <Route path="/rules" element={<RulesPage />} />
 
-        <Route path="/admin" element={<AdminPanel />} />
-        <Route path="/admin/events/:eventId" element={<EventDetail />} />
-        <Route path="/admin/users" element={<UsersPage />} />
-        <Route path="/admin/events" element={<EventsPage />} />
-        <Route path="/admin/scanner" element={<AdminScanner />} />
-
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </div>
+          <Route path="/admin" element={<AdminPanel />} />
+          <Route path="/admin/events/:eventId" element={<EventDetail />} />
+          <Route path="/admin/users" element={<UsersPage />} />
+          <Route path="/admin/events" element={<EventsPage />} />
+          <Route path="/admin/scanner" element={<AdminScanner />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </main>
+      <Footer />
+    </>
   );
 };
 

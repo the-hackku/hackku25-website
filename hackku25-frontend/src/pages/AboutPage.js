@@ -8,6 +8,7 @@ import {
   Image,
   Group,
 } from "@mantine/core";
+import { useMediaQuery } from "@mantine/hooks";
 import { hackathonInfo } from "../data/hackathonInfo";
 import { organizers } from "../data/organizers";
 
@@ -24,6 +25,18 @@ const hoverStyle = {
 
 const AboutPage = () => {
   const [hovered, setHovered] = useState(null);
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
+  const isExtraSmallScreen = useMediaQuery("(max-width: 480px)");
+
+  const getGridColumns = () => {
+    if (isExtraSmallScreen) {
+      return 2;
+    } else if (isSmallScreen) {
+      return 3;
+    } else {
+      return 5;
+    }
+  };
 
   return (
     <Container my={40}>
@@ -49,7 +62,7 @@ const AboutPage = () => {
         <Text align="center" c="dimmed" my={10}>
           The team behind {hackathonInfo.name}
         </Text>
-        <SimpleGrid cols={5} spacing="lg">
+        <SimpleGrid cols={getGridColumns()} spacing="lg">
           {organizers.map((organizer, index) => (
             <a
               key={organizer.name}
@@ -97,7 +110,7 @@ const AboutPage = () => {
         <Text align="center" c="dimmed" my={10}>
           See what hackers have built in the past!
         </Text>
-        <SimpleGrid cols={5} spacing="lg">
+        <SimpleGrid cols={getGridColumns()} spacing="lg">
           {hackathonInfo.previousEvents.map((event, index) => (
             <a
               key={event.year}

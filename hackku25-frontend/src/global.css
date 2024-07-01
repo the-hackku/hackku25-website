@@ -5,3 +5,15 @@
   padding: 0; /* Adjust padding as needed */
   font-size: 14px; /* Adjust font size as needed */
 }
+
+html,
+body,
+#root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1;
+}
