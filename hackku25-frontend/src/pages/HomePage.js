@@ -15,11 +15,13 @@ import { nprogress } from "@mantine/nprogress";
 import { hackathonInfo } from "../data/hackathonInfo";
 import CountUp from "react-countup";
 import PopupAuth from "../components/PopupAuth";
+import { useMediaQuery } from "@mantine/hooks";
 
 const Home = () => {
   const { fetchUserData, user } = useUser();
   const [countdown, setCountdown] = useState("");
   const [opened, setOpened] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 768px)");
 
   const targetDate = useMemo(
     () => new Date("2025-04-18T00:00:00").getTime(),
@@ -92,7 +94,7 @@ const Home = () => {
           </Modal>
         </Center>
       </Paper>
-      <SimpleGrid cols={4} spacing="lg" align="center" py={40}>
+      <SimpleGrid cols={isMobile ? 2 : 4} spacing="lg" align="center" py={40}>
         {hackathonInfo.stats.map((stat, index) => (
           <Paper key={index} shadow="sm" p="md" withBorder radius="md">
             <Text
