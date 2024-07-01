@@ -2,18 +2,6 @@
 
 export const organizers = [
   {
-    name: "Andrew Huang",
-    imageName: "andrew.jpeg",
-    role: "Tech",
-    link: "https://andrewhuang.dev",
-  },
-  {
-    name: "Will Whitehead",
-    imageName: "will.jpeg",
-    role: "Tech",
-    link: "https://www.linkedin.com/in/willwhitehead122/",
-  },
-  {
     name: "James Hurd",
     imageName: "james.jpeg",
     role: "President",
@@ -25,6 +13,19 @@ export const organizers = [
     role: "Vice President",
     link: "https://www.linkedin.com/in/joshualee128/",
   },
+  {
+    name: "Will Whitehead",
+    imageName: "will.jpeg",
+    role: "Development",
+    link: "https://www.linkedin.com/in/willwhitehead122/",
+  },
+  {
+    name: "Andrew Huang",
+    imageName: "andrew.jpeg",
+    role: "Development",
+    link: "https://andrewhuang.dev",
+  },
+
   {
     name: "Anh Hoang",
     imageName: "anh.jpeg",

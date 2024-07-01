@@ -1,13 +1,25 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { useUser } from "../context/UserContext";
-import { Container, Text, Paper, SimpleGrid } from "@mantine/core";
+import {
+  Container,
+  Text,
+  Paper,
+  SimpleGrid,
+  Button,
+  Title,
+  Center,
+  Anchor,
+  Modal,
+} from "@mantine/core";
 import { nprogress } from "@mantine/nprogress";
 import { hackathonInfo } from "../data/hackathonInfo";
 import CountUp from "react-countup";
+import PopupAuth from "../components/PopupAuth";
 
 const Home = () => {
   const { fetchUserData, user } = useUser();
   const [countdown, setCountdown] = useState("");
+  const [opened, setOpened] = useState(false);
 
   const targetDate = useMemo(
     () => new Date("2025-04-18T00:00:00").getTime(),
@@ -45,9 +57,12 @@ const Home = () => {
     return () => clearInterval(interval);
   }, [targetDate]);
 
+  const openModal = () => setOpened(true);
+  const closeModal = () => setOpened(false);
+
   return (
-    <Container size="xs" my={40}>
-      <Paper withBorder shadow="md" p={30} radius="md" mt="xl">
+    <Container my={40}>
+      <Paper withBorder shadow="sm" p={30} radius="md" mt="xl" align="center">
         <Text
           style={{ fontSize: "3rem" }}
           align="center"
@@ -56,28 +71,49 @@ const Home = () => {
         >
           {countdown}
         </Text>
-        <Text align="center" c="dimmed">
-          until {hackathonInfo.name}
+        <Text align="center" c="dimmed" size="lg" mb="md">
+          until the most <b>epic</b> hackathon of the year
         </Text>
+        <Center>
+          <Button size="md" radius="md" onClick={openModal}>
+            Register Now!
+          </Button>
+          <Modal
+            size={"sm"}
+            opened={opened}
+            onClose={closeModal}
+            transitionProps={{
+              transition: "pop",
+            }}
+          >
+            <Container size="sm">
+              <PopupAuth onSuccess={closeModal} initialAuth={"register"} />
+            </Container>
+          </Modal>
+        </Center>
       </Paper>
-      <Paper shadow="sm" p="lg" withBorder mt="xl">
-        <SimpleGrid cols={4} spacing="lg" align="center">
-          {hackathonInfo.stats.map((stat, index) => (
-            <Paper key={index} shadow="sm" padding="lg" withBorder>
-              <Text align="center" size="xl" weight={700}>
-                <CountUp
-                  end={stat.value}
-                  prefix={stat.prefix || ""}
-                  duration={3}
-                />
-              </Text>
-              <Text align="center" size="md" c="dimmed">
-                {stat.label}
-              </Text>
-            </Paper>
-          ))}
-        </SimpleGrid>
-      </Paper>
+      <SimpleGrid cols={4} spacing="lg" align="center" py={40}>
+        {hackathonInfo.stats.map((stat, index) => (
+          <Paper key={index} shadow="sm" p="md" withBorder radius="md">
+            <Text
+              align="center"
+              style={{
+                fontSize: "2rem",
+              }}
+              weight={700}
+            >
+              <CountUp
+                end={stat.value}
+                prefix={stat.prefix || ""}
+                duration={3}
+              />
+            </Text>
+            <Text align="center" size="md" c="dimmed">
+              {stat.label}
+            </Text>
+          </Paper>
+        ))}
+      </SimpleGrid>
     </Container>
   );
 };

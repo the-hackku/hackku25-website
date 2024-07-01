@@ -6,9 +6,11 @@ import {
   Accordion,
   TextInput,
   SimpleGrid,
+  Anchor,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { questions } from "../data/faqData";
+import { hackathonInfo } from "../data/hackathonInfo";
 
 const FAQPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -66,8 +68,10 @@ const FAQPage = () => {
           </SimpleGrid>
         )}
         <Text align="center" mt="lg" style={{ fontSize: "1rem" }}>
-          Question not answered here? Email us at{" "}
-          <a href="mailto:help@hackku.org">help@hackku.org</a>
+          Can't find the answer you're looking for? Ask us on{" "}
+          <Anchor href={hackathonInfo.discord} target="_blank">
+            Discord!
+          </Anchor>
         </Text>
       </Paper>
     </Container>

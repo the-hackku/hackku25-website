@@ -1,6 +1,18 @@
 import React, { useState } from "react";
-import { Container, Paper, Text, Group, Collapse } from "@mantine/core";
-import { IconChevronUp, IconChevronDown, IconClock } from "@tabler/icons-react";
+import {
+  Container,
+  Paper,
+  Text,
+  Group,
+  Collapse,
+  TextInput,
+} from "@mantine/core";
+import {
+  IconChevronUp,
+  IconChevronDown,
+  IconClock,
+  IconMapPin,
+} from "@tabler/icons-react";
 import moment from "moment";
 import { hackathonInfo } from "../data/hackathonInfo";
 
@@ -20,6 +32,7 @@ const groupEventsByDate = (events) => {
 const SchedulePage = () => {
   const groupedEvents = groupEventsByDate(events);
   const [opened, setOpened] = useState({});
+  const [searchQuery, setSearchQuery] = useState("");
 
   const toggleOpen = (date, index) => {
     const key = `${date}-${index}`;
@@ -29,25 +42,53 @@ const SchedulePage = () => {
     }));
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
+
+  const filteredEvents = Object.keys(groupedEvents).reduce((acc, date) => {
+    const filtered = groupedEvents[date].filter(
+      (event) =>
+        event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        event.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    if (filtered.length > 0) {
+      acc[date] = filtered;
+    }
+    return acc;
+  }, {});
+
   return (
     <Container my={40}>
       <Paper shadow="sm" p="lg" withBorder>
         <Text
           style={{ fontSize: "2rem" }}
           align="center"
-          mb="lg"
+          mb="md"
           variant="gradient"
           gradient={{ from: "red", to: "indigo", deg: 149 }}
         >
           Events Schedule
         </Text>
-        {Object.keys(groupedEvents).map((date) => (
+        <TextInput
+          placeholder="Search events..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          mb="lg"
+        />
+        {Object.keys(filteredEvents).map((date) => (
           <div key={date}>
             <Paper withBorder shadow="xs" p={20} radius="md" my={20}>
-              <Text weight={700} size="lg" mb="sm">
+              <Text
+                style={{
+                  fontWeight: 600,
+                }}
+                size="lg"
+                mb="sm"
+              >
                 {moment(date).format("dddd, MMMM Do")}
               </Text>
-              {groupedEvents[date].map((event, index) => {
+              {filteredEvents[date].map((event, index) => {
                 const key = `${date}-${index}`;
                 return (
                   <Paper
@@ -66,10 +107,9 @@ const SchedulePage = () => {
                     }}
                   >
                     <Group
-                      position="apart"
                       onClick={() => toggleOpen(date, index)}
                       style={{ cursor: "pointer" }}
-                      spacing="xs"
+                      gap="2"
                     >
                       <Text weight={500}>{event.title}</Text>
                       {opened[key] ? (
@@ -78,12 +118,16 @@ const SchedulePage = () => {
                         <IconChevronDown size={16} />
                       )}
                     </Group>
-                    <Text c="dimmed" style={{ marginTop: "5px" }}>
-                      <IconClock size={13} />{" "}
-                      {moment(event.start).format("h:mm a")} -{" "}
-                      {moment(event.end).format("h:mm a")}
-                    </Text>
-                    <Text c="dimmed" style={{ marginTop: "5px" }}>
+                    <Text c="dimmed">
+                      <IconClock size={13} />
+                      {moment(event.start).format("h:mma")} -{" "}
+                      {moment(event.end).format("h:mma")}
+                      <IconMapPin
+                        size={13}
+                        style={{
+                          marginLeft: 10,
+                        }}
+                      />
                       {event.location}
                     </Text>
                     <Collapse in={opened[key]}>

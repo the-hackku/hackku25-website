@@ -99,7 +99,7 @@ export const questions = [
   {
     question: "How can I stay updated about HackKU?",
     answer:
-      "You can follow us on social media and sign up for our newsletter to stay updated on the latest news and announcements.",
+      "You can follow us on social media to stay updated on the latest news and announcements.",
   },
   {
     question: "Do you offer travel reimbursement?",

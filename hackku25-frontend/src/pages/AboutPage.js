@@ -7,6 +7,7 @@ import {
   Card,
   Image,
   Group,
+  Divider,
 } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { hackathonInfo } from "../data/hackathonInfo";
@@ -44,24 +45,25 @@ const AboutPage = () => {
         <Text
           style={{ fontSize: "2rem" }}
           align="center"
-          mb="lg"
+          mb="sm"
           variant="gradient"
           gradient={{ from: "red", to: "indigo", deg: 149 }}
         >
           About HackKU25
         </Text>
-        <Text align="center" size="md" mt="md">
+        <Text align="center" size="md">
           {hackathonInfo.description}
         </Text>
       </Paper>
 
       <Paper shadow="sm" p="lg" withBorder mt="xl">
-        <Text align="center" size="xl" weight={700} my={10}>
+        <Text align="center" size="xl" weight={700}>
           Meet the Organizers
         </Text>
         <Text align="center" c="dimmed" my={10}>
           The team behind {hackathonInfo.name}
         </Text>
+        <Divider my="md" />
         <SimpleGrid cols={getGridColumns()} spacing="lg">
           {organizers.map((organizer, index) => (
             <a
@@ -91,7 +93,7 @@ const AboutPage = () => {
                     alt={organizer.name}
                   />
                 </Card.Section>
-                <Group position="apart" mt="md" mb="xs">
+                <Group position="apart" mt="sm">
                   <Text>{organizer.name}</Text>
                 </Group>
                 <Text size="sm" c="dimmed">
@@ -104,12 +106,13 @@ const AboutPage = () => {
       </Paper>
 
       <Paper shadow="sm" p="lg" withBorder mt="xl">
-        <Text align="center" size="xl" weight={700} my={10}>
+        <Text align="center" size="xl" weight={700}>
           Past Hackathons
         </Text>
         <Text align="center" c="dimmed" my={10}>
           See what hackers have built in the past!
         </Text>
+        <Divider my="md" />
         <SimpleGrid cols={getGridColumns()} spacing="lg">
           {hackathonInfo.previousEvents.map((event, index) => (
             <a

@@ -16,7 +16,6 @@ const RulesPage = () => {
         <Text
           style={{ fontSize: "2rem" }}
           align="center"
-          mb="lg"
           variant="gradient"
           gradient={{ from: "red", to: "indigo", deg: 149 }}
         >
@@ -85,15 +84,14 @@ const RulesPage = () => {
           </List.Item>
         </List>
         <Divider my="md" />
-        <Title
-          order={2}
+        <Text
+          style={{ fontSize: "2rem" }}
           align="center"
-          mb="md"
           variant="gradient"
-          gradient={{ from: "red", to: "orange" }}
+          gradient={{ from: "red", to: "indigo", deg: 149 }}
         >
           Photo Release
-        </Title>
+        </Text>
 
         <Text align="center">
           By attending or participating in any HackKU event, you hereby grant

@@ -26,7 +26,7 @@ import {
   IconSun,
   IconMoon,
 } from "@tabler/icons-react";
-import logout from "../utils/logout"; // Import the logout function
+import logout from "../utils/logout";
 import { hackathonInfo } from "../data/hackathonInfo";
 import { useColorSchemeToggle } from "../utils/colorSchemeToggle";
 
