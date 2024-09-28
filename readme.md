@@ -40,7 +40,6 @@ The **HackKU Management System** helps manage hackathon logistics, from particip
      ```
      DATABASE_URL="your-database-url"
      EMAIL_SERVER="smtp://username:password@mailserver.com:587"
-     EMAIL_FROM="hackku <no-reply@tickget.app>"
      ```
 
 4. **Initialize the database with Prisma**:
