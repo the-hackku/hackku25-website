@@ -10,14 +10,11 @@ The **HackKU Management System** helps manage hackathon logistics, from particip
 - **QR Code Check-Ins**: Participants receive QR codes to check into events.
 - **Admin Dashboard**: Full control over users, events, and check-in stats.
 - **Real-time Tracking**: Track attendance and check-ins in real time.
-- **Google Sheets Backup**: Export data to Google Sheets for safe storage.
-- **Notifications**: Email notifications for sign-in and event details.
 
 ## Tech Stack
 
-- **Frontend**: Next.js, React, TypeScript, Tailwind CSS, ShadcnUI
-- **Backend**: Next.js API Routes, Prisma, PostgreSQL
-- **Email**: Nodemailer
+- **Frontend**: Next.js, React, TypeScript, Tailwind CSS, shadcn/ui
+- **Backend**: Next.js App Router, Prisma, PostgreSQL, NodeMailer
 - **Deployment**: Vercel
 
 ## Setup & Installation
