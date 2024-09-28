@@ -11,15 +11,14 @@ The **HackKU Management System** helps manage hackathon logistics, from particip
 - **Admin Dashboard**: Full control over users, events, and check-in stats.
 - **Real-time Tracking**: Track attendance and check-ins in real time.
 - **Google Sheets Backup**: Export data to Google Sheets for safe storage.
-- **Payment Integration**: Stripe support for payments and payouts.
 - **Notifications**: Email notifications for sign-in and event details.
 
 ## Tech Stack
 
-- **Frontend**: Next.js, React, TypeScript, Tailwind CSS
+- **Frontend**: Next.js, React, TypeScript, Tailwind CSS, ShadcnUI
 - **Backend**: Next.js API Routes, Prisma, PostgreSQL
-- **Email & Payments**: Nodemailer, Stripe
-- **Deployment**: Vercel (Frontend), Render (Backend)
+- **Email**: Nodemailer
+- **Deployment**: Vercel
 
 ## Setup & Installation
 
