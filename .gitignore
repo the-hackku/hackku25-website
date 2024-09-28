@@ -20,7 +20,6 @@ prisma/migrations
 env.local
 .env
 .env.local
-next.config.mjs
 
 # next.js
 /.next/
@@ -46,6 +45,5 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
 
 dev.db is still included
