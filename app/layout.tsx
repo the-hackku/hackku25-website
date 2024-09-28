@@ -23,7 +23,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "myHackKU",
+  title: "HackKU 25",
   description: "HackKU Portal",
 };
 

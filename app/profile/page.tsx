@@ -8,7 +8,6 @@ import Link from "next/link";
 import {
   IconMail,
   IconUser,
-  IconAlertCircle,
   IconCalendar,
   IconHelpCircle,
 } from "@tabler/icons-react";
@@ -36,7 +35,7 @@ function formatDate(dateString: string) {
   });
 }
 
-export default async function Component() {
+export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
 
   if (!session) {

@@ -3,10 +3,9 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/prisma";
 import { RegistrationForm } from "@/components/forms/RegistrationForm";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { Info, CheckCircle } from "lucide-react";
+import { Info } from "lucide-react";
 
 export default async function RegisterPage() {
   const session = await getServerSession(authOptions);
@@ -45,5 +44,9 @@ export default async function RegisterPage() {
   }
 
   // If not registered, show the registration form
-  return <RegistrationForm />;
+  return (
+    <div className="mb-10">
+      <RegistrationForm />
+    </div>
+  );
 }

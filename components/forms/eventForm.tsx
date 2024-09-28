@@ -13,47 +13,56 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { TimeInput } from "../customui/TimeInput";
 import { createEvent } from "@/app/actions/admin";
-import { revalidatePath } from "next/cache";
+import { useRouter } from "next/navigation";
 
-// Define schema using Zod
+// Define schema using Zod for date selection
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Event name must be at least 2 characters.",
   }),
-  date: z.date({
-    required_error: "Please provide a valid date",
-  }),
+  date: z.enum(["2024-04-04", "2024-04-05", "2024-04-06"], {
+    required_error: "Please select a valid date.",
+  }), // Restrict date to April 4th, 5th, or 6th
+  time: z.string().optional(),
   location: z.string().optional(),
 });
 
 export function EventForm() {
+  const router = useRouter();
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      date: new Date(),
+      date: "2024-04-04",
+      time: "12:00",
       location: "",
     },
   });
 
   const onSubmit = async (data: {
     name: string;
-    date: Date;
+    date: string;
+    time: string;
     location: string;
   }) => {
     try {
-      await createEvent({ ...data, date: data.date.toISOString() });
+      const [year, month, day] = data.date.split("-").map(Number);
+      const eventDateTime = new Date(year, month - 1, day);
+      const [hours, minutes] = data.time.split(":").map(Number);
+      eventDateTime.setHours(hours || 0, minutes || 0);
+
+      await createEvent({
+        name: data.name,
+        date: eventDateTime.toISOString(),
+        location: data.location,
+      });
+
       form.reset();
-      revalidatePath("/admin/events");
+      router.refresh();
     } catch (error) {
       console.error("Failed to create event:", error);
     }
@@ -61,71 +70,118 @@ export function EventForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        {/* Event Name */}
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Event Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter event name" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <div className="border rounded-lg p-3 grid grid-cols-2 gap-4 mt-8">
+          <h2 className="col-span-2 text-lg font-semibold mb-2">
+            Create New Event
+          </h2>
 
-        {/* Event Date */}
-        <FormField
-          control={form.control}
-          name="date"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Event Date</FormLabel>
-              <FormControl>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="outline" className="w-full">
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {field.value ? format(field.value, "PPP") : "Pick a date"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent align="start" className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          {/* Event Name */}
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Event Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter event name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        {/* Location (Optional) */}
-        <FormField
-          control={form.control}
-          name="location"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Location (Optional)</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter location" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          {/* Location (Optional) */}
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Location</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter location" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Group 2: Date & Time */}
+
+          <h2 className="col-span-2 text-lg font-semibold mb-2">Date & Time</h2>
+
+          {/* Event Date Selection using Radio Group */}
+          <FormField
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Event Date</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    className="flex space-x-2"
+                  >
+                    <FormItem className="flex items-center space-x-1">
+                      <FormControl>
+                        <RadioGroupItem value="2024-04-04" id="friday" />
+                      </FormControl>
+                      <FormLabel htmlFor="friday" className="text-sm">
+                        April 4th
+                      </FormLabel>
+                    </FormItem>
+
+                    <FormItem className="flex items-center space-x-1">
+                      <FormControl>
+                        <RadioGroupItem value="2024-04-05" id="saturday" />
+                      </FormControl>
+                      <FormLabel htmlFor="saturday" className="text-sm">
+                        April 5th
+                      </FormLabel>
+                    </FormItem>
+
+                    <FormItem className="flex items-center space-x-1">
+                      <FormControl>
+                        <RadioGroupItem value="2024-04-06" id="sunday" />
+                      </FormControl>
+                      <FormLabel htmlFor="sunday" className="text-sm">
+                        April 6th
+                      </FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          {/* Event Time */}
+          <FormField
+            control={form.control}
+            name="time"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm">Event Time</FormLabel>
+                <FormControl>
+                  <TimeInput value={field.value} onChange={field.onChange} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
 
         {/* Submit Button */}
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          Add Event
-        </Button>
+        <div className="flex justify-end">
+          <Button
+            size="sm"
+            type="submit"
+            disabled={form.formState.isSubmitting}
+          >
+            Add Event
+          </Button>
+        </div>
       </form>
     </Form>
   );
