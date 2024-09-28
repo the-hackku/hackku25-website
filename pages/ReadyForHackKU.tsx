@@ -76,23 +76,6 @@ export default function ChecklistPage() {
         </CardContent>
       </Card>
       {/* Display congratulatory message when all tasks are completed */}
-      {completedTasks === tasks.length && (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4 }}
-          className="w-full"
-        >
-          <Card className="shadow-lg">
-            <CardContent className="flex items-center justify-center space-x-2">
-              <CheckCircle className="text-green-500" size={24} />
-              <span className="text-lg font-medium text-green-600">
-                All tasks completed! You’re ready for HackKU 2025.
-              </span>
-            </CardContent>
-          </Card>
-        </motion.div>
-      )}
     </div>
   );
 }

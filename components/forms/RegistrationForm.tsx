@@ -188,7 +188,7 @@ export function RegistrationForm() {
       localStorage.removeItem(LOCAL_STORAGE_KEY);
       form.reset();
       toast.success("Registration successful!");
-      router.push("/");
+      router.refresh();
     } catch (error) {
       console.error("Failed to register:", error);
       toast.error("Registration failed, please try again.");

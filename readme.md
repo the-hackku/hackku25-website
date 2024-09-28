@@ -61,6 +61,8 @@ The **HackKU Management System** helps manage hackathon logistics, from particip
 
 7. Visit `http://localhost:3000` in your browser to access the application.
 
+Use `npx prisma studio` to view the database
+
 ## Usage
 
 - **Register**: Participants sign up, providing their details.

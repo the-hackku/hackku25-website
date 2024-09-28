@@ -38,7 +38,7 @@ export default function RegisterAlert({ isRegistered }: RegisterAlertProps) {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="mb-4 w-full max-w-4xl mx-auto rounded-lg border border-red-200 bg-red-50 text-red-700 shadow-md"
+        className="mb-4 w-full max-w-4xl mx-auto rounded-lg  bg-red-50 text-red-700 shadow-md"
       >
         <Alert variant="destructive" className="rounded-lg">
           <div className="flex items-center space-x-3">
