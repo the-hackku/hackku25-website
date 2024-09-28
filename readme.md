@@ -1,8 +1,7 @@
----
-
 # **HackKU Management System**
 
 ## Overview
+
 The **HackKU Management System** helps manage hackathon logistics, from participant registration to event check-ins. It provides organizers and admins with tools to easily manage users, events, and real-time attendance through a simple web interface.
 
 ## Features
@@ -48,5 +47,3 @@ The **HackKU Management System** helps manage hackathon logistics, from particip
 - **Check-In**: Use QR codes to check into events.
 - **Admin Panel**: Manage users, events, and monitor live attendance.
 - **Export Data**: Export event and user data to Google Sheets for backup.
-
----
