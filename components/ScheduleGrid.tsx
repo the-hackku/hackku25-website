@@ -9,8 +9,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"; // Ensure you have a Popover component
-import { Button } from "./ui/button";
 import { Checkbox } from "./ui/checkbox";
+import { motion } from "framer-motion";
 
 type ScheduleGridProps = {
   schedule: {
@@ -286,9 +286,17 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
       </div>
 
       {/* Right Section: Event Details */}
+      {/* Right Section: Event Details */}
       <div className="p-4">
         {selectedEvent ? (
-          <div className="p-4 bg-white rounded-lg shadow-sm border">
+          <motion.div
+            key={selectedEvent.id} // Use the event id as a key for the animation
+            initial={{ opacity: 0, y: -20 }} // Initial state
+            animate={{ opacity: 1, y: 0 }} // Animate to this state
+            exit={{ opacity: 0, y: 20 }} // Exit state
+            transition={{ duration: 0.3 }} // Transition duration
+            className="p-4 bg-white rounded-lg shadow-sm border"
+          >
             <h2 className="text-xl font-bold flex justify-between">
               {selectedEvent.name}
               <span onClick={() => toggleFavorite(selectedEvent.id)}>
@@ -309,7 +317,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
             <p className="mt-4">
               {selectedEvent.description || "No description available."}
             </p>
-          </div>
+          </motion.div>
         ) : (
           <p className="text-center text-gray-500">
             Select an event to view details

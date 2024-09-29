@@ -6,7 +6,13 @@ import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { IconBrandDiscord } from "@tabler/icons-react";
+import {
+  IconBrandDiscord,
+  IconHome,
+  IconCalendar,
+  IconQuestionMark,
+  IconUserPlus,
+} from "@tabler/icons-react"; // Import the icons
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "next-auth/react";
 
@@ -51,7 +57,6 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
       className={`sticky top-0 left-0 right-0 z-50 transition-all duration-150 ${
         isScrolled ? "shadow-none border-none" : ""
       }`}
-      style={{ borderBottom: "none", boxShadow: "none" }}
     >
       {/* Main Header Container */}
       <div className="container mx-auto max-w-7xl">
@@ -86,20 +91,31 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
             transition={{ type: "spring", damping: 25, stiffness: 100 }}
           >
             <Tabs defaultValue={currentTab} value={currentTab}>
-              <TabsList className="space-x-4">
+              <TabsList className="space-x-0">
+                {" "}
+                {/* Adjust spacing */}
                 <TabsTrigger value="home" asChild>
-                  <Link href="/" className="text-lg font-medium">
-                    Home
+                  <Link
+                    href="/"
+                    className="flex items-center text-lg font-medium"
+                  >
+                    <IconHome size={20} className="mr-2" /> Home
                   </Link>
                 </TabsTrigger>
                 <TabsTrigger value="schedule" asChild>
-                  <Link href="/schedule" className="text-lg font-medium">
-                    Schedule
+                  <Link
+                    href="/schedule"
+                    className="flex items-center text-lg font-medium"
+                  >
+                    <IconCalendar size={20} className="mr-2" /> Schedule
                   </Link>
                 </TabsTrigger>
                 <TabsTrigger value="faq" asChild>
-                  <Link href="/faq" className="text-lg font-medium">
-                    FAQ
+                  <Link
+                    href="/faq"
+                    className="flex items-center text-lg font-medium"
+                  >
+                    <IconQuestionMark size={20} className="mr-2" /> FAQ
                   </Link>
                 </TabsTrigger>
                 {/* Conditionally render Register link based on isRegistered */}
@@ -107,9 +123,9 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
                   <TabsTrigger value="register" asChild>
                     <Link
                       href={isAuthenticated ? "/register" : "/signin"}
-                      className="text-lg font-medium"
+                      className="flex items-center text-lg font-medium"
                     >
-                      Register
+                      <IconUserPlus size={20} className="mr-2" /> Register
                     </Link>
                   </TabsTrigger>
                 )}
