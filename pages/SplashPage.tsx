@@ -1,13 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  AnimatePresence,
-} from "framer-motion";
-import { ChevronDown, Clock, Calendar, Users, Lightbulb } from "lucide-react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { ChevronDown, Trophy } from "lucide-react"; // Use necessary icons
 import Link from "next/link";
 
 export default function Component() {
@@ -17,6 +12,7 @@ export default function Component() {
     hours: 0,
     minutes: 0,
     seconds: 0,
+    milliseconds: 0,
   });
 
   useEffect(() => {
@@ -28,9 +24,10 @@ export default function Component() {
       const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
       const minutes = Math.floor((difference / 1000 / 60) % 60);
       const seconds = Math.floor((difference / 1000) % 60);
+      const milliseconds = Math.floor(difference % 1000);
 
-      setTimeRemaining({ days, hours, minutes, seconds });
-    }, 1000);
+      setTimeRemaining({ days, hours, minutes, seconds, milliseconds });
+    }, 1);
 
     return () => clearInterval(timer);
   }, []);
@@ -40,9 +37,12 @@ export default function Component() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
-    <div className="w-full min-h-screen overflow-x-hidden overflow-y-auto bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white">
+    <div className="w-full min-h-screen overflow-x-hidden overflow-y-auto bg-gradient-to-br from-black via-indigo-900 to-purple-900 text-white">
       {/* Header Section */}
-      <section className="relative w-full h-screen flex items-center justify-center overflow-hidden">
+      <section
+        id="header"
+        className="relative w-full flex items-center justify-center overflow-hidden py-40"
+      >
         <motion.div
           style={{ scale, opacity }}
           className="text-center max-w-4xl space-y-6 z-10"
@@ -51,7 +51,7 @@ export default function Component() {
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="text-7xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600"
+            className="text-7xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-600"
           >
             HackKU 2025
           </motion.h1>
@@ -61,7 +61,7 @@ export default function Component() {
             transition={{ duration: 0.7, delay: 0.2 }}
             className="text-2xl text-gray-300"
           >
-            Innovate. Create. Compete.
+            Forge Your Legacy. Seize the Magic.
           </motion.p>
           <motion.div
             initial={{ opacity: 0 }}
@@ -71,7 +71,11 @@ export default function Component() {
           >
             {Object.entries(timeRemaining).map(([unit, value]) => (
               <div key={unit} className="flex flex-col items-center">
-                <span className="text-5xl">{value}</span>
+                <span className="text-5xl">
+                  {value
+                    .toString()
+                    .padStart(unit === "milliseconds" ? 3 : 2, "0")}
+                </span>
                 <span className="text-sm uppercase text-gray-400">{unit}</span>
               </div>
             ))}
@@ -86,31 +90,44 @@ export default function Component() {
             repeat: Infinity,
             repeatType: "reverse",
           }}
-          className="absolute bottom-10"
+          className="absolute bottom-10 cursor-pointer"
+          onClick={() => {
+            const questsElement = document.getElementById("what-is-it");
+            if (questsElement) {
+              questsElement.scrollIntoView({ behavior: "smooth" });
+            }
+          }}
         >
           <ChevronDown size={40} className="text-gray-400" />
         </motion.div>
       </section>
 
-      {/* What to Expect Section */}
+      {/* What Is It Section */}
       <Section
-        icon={<Lightbulb className="w-12 h-12 mb-4 text-yellow-400" />}
-        title="What to Expect at HackKU"
-        description="Embark on a 36-hour journey of innovation, collaboration, and creation. From coding challenges to hardware hacks, prepare for an unforgettable weekend of tech exploration and breakthrough ideas."
+        id="what-is-it"
+        title="What is HackKU?"
+        description="HackKU is an immersive hackathon experience where creators, innovators, and tech enthusiasts come together to build solutions, learn, and grow. It's a platform for aspiring hackers to showcase their skills and creativity."
       />
 
-      {/* Important Dates & Times Section */}
+      {/* Stats Section */}
       <Section
-        icon={<Calendar className="w-12 h-12 mb-4 text-green-400" />}
-        title="Important Dates & Times"
-        description="Mark your calendars! HackKU 2025 kicks off on April 4th at 8:00 AM sharp. Early check-in starts at 7:30 AM - be there to claim your exclusive hackathon swag and prime hacking spot!"
+        id="stats"
+        title="Event Statistics"
+        description="Join us for an exhilarating weekend filled with coding, collaboration, and creativity. Over 500 participants, 36 hours of hacking, and countless innovations await you!"
       />
 
-      {/* Resources Section */}
+      {/* Tracks Section */}
       <Section
-        icon={<Users className="w-12 h-12 mb-4 text-blue-400" />}
-        title="Resources at Your Fingertips"
-        description="Access a wealth of support including expert mentors, cutting-edge workshops, and state-of-the-art hardware labs. Whether you're a coding novice or a tech wizard, we've got the tools to elevate your project to the next level."
+        id="tracks"
+        title="Event Tracks"
+        description="Whether you're a beginner or a seasoned pro, we have tracks for everyone! Explore topics ranging from web development to machine learning and everything in between."
+      />
+
+      {/* Sponsors Section */}
+      <Section
+        id="sponsors"
+        title="Our Sponsors"
+        description="We are grateful to our sponsors for supporting innovation and creativity. Their contributions make HackKU 2025 possible!"
       />
 
       {/* Final Call to Action Section */}
@@ -121,20 +138,20 @@ export default function Component() {
           transition={{ duration: 0.6 }}
           className="max-w-2xl text-center"
         >
-          <h2 className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
-            Ready to Hack the Future?
+          <h2 className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-600">
+            Ready to Embark on Your Quest?
           </h2>
           <p className="text-xl text-gray-300 mb-8">
-            The countdown has begun. Gather your team, fuel your creativity, and
-            prepare to push the boundaries of innovation at HackKU 2025!
+            The countdown has begun. Gather your companions, wield your
+            creativity, and prepare to forge your legacy at HackKU 2025!
           </p>
           <Link href="signin">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-full text-lg shadow-lg hover:shadow-xl transition duration-300"
+              className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold rounded-full text-lg shadow-lg hover:shadow-xl transition duration-300"
             >
-              Register Now
+              Join the Quest
             </motion.button>
           </Link>
         </motion.div>
@@ -144,22 +161,24 @@ export default function Component() {
 }
 
 interface SectionProps {
-  icon: React.ReactNode;
+  id: string;
   title: string;
   description: string;
 }
 
-function Section({ icon, title, description }: SectionProps) {
+function Section({ id, title, description }: SectionProps) {
   return (
-    <section className="w-full py-24 flex items-center justify-center bg-transparent">
+    <section
+      id={id}
+      className="w-full py-24 flex items-center justify-center bg-transparent"
+    >
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="max-w-2xl text-center"
       >
-        {icon}
-        <h2 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-600">
+        <h2 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-600">
           {title}
         </h2>
         <p className="text-xl text-gray-300">{description}</p>

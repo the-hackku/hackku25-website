@@ -3,7 +3,14 @@ import React, { useState, useEffect, useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import { CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { IconHeart, IconHeartFilled } from "@tabler/icons-react"; // Updated icons
+import { IconFilter, IconHeart, IconHeartFilled } from "@tabler/icons-react"; // Updated icons
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"; // Ensure you have a Popover component
+import { Button } from "./ui/button";
+import { Checkbox } from "./ui/checkbox";
 
 type ScheduleGridProps = {
   schedule: {
@@ -123,18 +130,18 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   );
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 h-screen overflow-hidden p-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden p-4">
       {/* Left Section: Schedule Grid */}
       <div
         ref={scheduleGridRef}
         className="overflow-x-auto border-r border-gray-300 p-4 h-full"
       >
         {/* Container for Tabs and Heart Icon */}
-        <div className="flex justify-center items-center mb-4 space-x-4">
+        <div className="flex justify-between items-center mb-4 space-x-4">
           {/* Tabs to select the day */}
           <Tabs value={selectedDay} onValueChange={handleDayChange}>
             <TabsList>
-              <TabsTrigger value="All">All</TabsTrigger>
+              <TabsTrigger value="All">All Days</TabsTrigger>
               {days.map((date) => (
                 <TabsTrigger key={date} value={date}>
                   {new Date(date).toLocaleDateString(undefined, {
@@ -146,18 +153,36 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
               ))}
             </TabsList>
           </Tabs>
-          {/* Heart Icon to Filter Favorites */}
-          <button
-            className="p-2 border rounded-md cursor-pointer"
-            onClick={() => setShowFavoritesOnly((prev) => !prev)}
-            title="Show Favorites"
-          >
-            {showFavoritesOnly ? (
-              <IconHeartFilled className="text-red-400" />
-            ) : (
-              <IconHeart className="text-gray-400" />
-            )}
-          </button>
+
+          {/* Popover for Filters */}
+          <Popover>
+            <PopoverTrigger>
+              <div className="flex items-center cursor-pointer p-2 border rounded-lg shadow-sm">
+                <IconFilter size={16} className="mr-2" />
+                Filters
+              </div>
+            </PopoverTrigger>
+            <PopoverContent className="p-4 bg-white shadow-lg rounded-md w-60">
+              <h3 className="text-lg font-bold mb-3">Filter Options</h3>
+              <div className="flex items-center mb-2">
+                <Checkbox
+                  id="favorites-only" // Give an ID to the checkbox for the label
+                  checked={showFavoritesOnly}
+                  onCheckedChange={(checked) =>
+                    setShowFavoritesOnly(checked === true)
+                  }
+                  className="mr-2"
+                />
+                <label
+                  htmlFor="favorites-only"
+                  className="text-sm cursor-pointer"
+                >
+                  Show Favorites Only
+                </label>
+              </div>
+              {/* Add other filter options here as needed */}
+            </PopoverContent>
+          </Popover>
         </div>
 
         {/* Schedule Grid Table */}
@@ -263,7 +288,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
       {/* Right Section: Event Details */}
       <div className="p-4">
         {selectedEvent ? (
-          <div className="p-4 bg-white rounded-lg shadow-md border">
+          <div className="p-4 bg-white rounded-lg shadow-sm border">
             <h2 className="text-xl font-bold flex justify-between">
               {selectedEvent.name}
               <span onClick={() => toggleFavorite(selectedEvent.id)}>

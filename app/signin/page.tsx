@@ -1,11 +1,12 @@
 "use client";
 
-import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { signIn, useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { toast } from "sonner"; // Import toast from sonner
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 
 // Create a simple form type
@@ -16,7 +17,10 @@ interface SignInForm {
 const SignInPage = () => {
   const [emailSent, setEmailSent] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null); // Add error state for manual error handling
+  const [error, setError] = useState<string | null>(null);
+
+  // Next.js router
+  const router = useRouter();
 
   // React Hook Form setup
   const {
@@ -26,12 +30,22 @@ const SignInPage = () => {
     watch,
   } = useForm<SignInForm>();
 
-  const email = watch("email"); // Access email value for success message
+  const email = watch("email");
+
+  // Get session status and user data from next-auth
+  const { data: session, status } = useSession();
+
+  // Check if the user is authenticated and redirect to /profile
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.push("/profile");
+    }
+  }, [status, router]);
 
   // New handleSubmit logic
   const onSubmit = async (data: SignInForm) => {
-    setError(null); // Reset error state before submission
-    setLoading(true); // Set loading state
+    setError(null);
+    setLoading(true);
     try {
       const result = await signIn("email", {
         email: data.email,
@@ -40,7 +54,6 @@ const SignInPage = () => {
       });
 
       if (result?.error) {
-        // Set error and display error toast
         setError(
           "An error occurred while sending the email. Please try again."
         );
@@ -48,7 +61,6 @@ const SignInPage = () => {
           "An error occurred while sending the email. Please try again."
         );
       } else {
-        // Success, show success toast
         setEmailSent(true);
         toast.success("Magic link has been sent! Check your email.");
       }
@@ -56,9 +68,14 @@ const SignInPage = () => {
       setError("An unexpected error occurred.");
       toast.error("An unexpected error occurred.");
     } finally {
-      setLoading(false); // Reset loading state after submission
+      setLoading(false);
     }
   };
+
+  // Show a loading state while checking authentication
+  if (status === "loading") {
+    return <div className="text-center mt-8">Loading...</div>;
+  }
 
   return (
     <div className="container max-w-md mx-auto py-8">
@@ -102,9 +119,7 @@ const SignInPage = () => {
                 {loading ? "Sending..." : "Sign In with Email"}
               </Button>
             </form>
-            {error && (
-              <p className="text-red-500 text-center mt-4">{error}</p> // Display error if present
-            )}
+            {error && <p className="text-red-500 text-center mt-4">{error}</p>}
           </CardContent>
         </Card>
       ) : (

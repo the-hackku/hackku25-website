@@ -97,7 +97,7 @@ export default async function ProfilePage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* QR Code Card */}
                   {qrCodeData && (
-                    <Card className="shadow-lg relative overflow-hidden">
+                    <Card className="shadow-sm relative overflow-hidden">
                       {!participant && (
                         <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm z-10">
                           <div className="bg-black/60 text-white px-2 py-2 rounded-md">
@@ -150,7 +150,7 @@ export default async function ProfilePage() {
                   )}
 
                   {/* User Info */}
-                  <Card className="shadow-lg">
+                  <Card className="shadow-sm">
                     <CardHeader>
                       <CardTitle className="text-xl font-semibold">
                         Hacker Information

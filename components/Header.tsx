@@ -1,6 +1,5 @@
 "use client";
 
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -9,8 +8,9 @@ import { Button } from "./ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { IconBrandDiscord } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSession } from "next-auth/react";
 
-const Header = () => {
+const Header = ({ isRegistered }: { isRegistered: boolean }) => {
   const { data: session, status } = useSession();
   const isAuthenticated = status === "authenticated";
   const isAdmin = session?.user?.role === "ADMIN";
@@ -30,11 +30,7 @@ const Header = () => {
   // Track scroll event
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      setIsScrolled(window.scrollY > 20);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -45,17 +41,17 @@ const Header = () => {
 
   return (
     <motion.header
-      initial={{ backgroundColor: "rgba(255, 255, 255, 0.8)" }}
+      initial={{ backgroundColor: "rgba(255, 255, 255, 1)" }}
       animate={{
         backgroundColor: isScrolled
           ? "rgba(255, 255, 255, 0)"
-          : "rgba(255, 255, 255, 0.8)",
+          : "rgba(255, 255, 255, 1)",
       }}
-      transition={{ duration: 0.15 }} // Shortened the animation duration
-      className={`sticky top-0 z-50 transition-all duration-150 ${
+      transition={{ duration: 0.15 }}
+      className={`sticky top-0 left-0 right-0 z-50 transition-all duration-150 ${
         isScrolled ? "shadow-none border-none" : ""
       }`}
-      style={{ borderBottom: "none", boxShadow: "none" }} // Remove border and shadow explicitly
+      style={{ borderBottom: "none", boxShadow: "none" }}
     >
       {/* Main Header Container */}
       <div className="container mx-auto max-w-7xl">
@@ -68,7 +64,7 @@ const Header = () => {
                 initial={{ opacity: 1, x: 0 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -100 }}
-                transition={{ duration: 0.3 }} // Adjusted the exit animation duration
+                transition={{ duration: 0.3 }}
               >
                 <Link href="/">
                   <Image
@@ -106,14 +102,17 @@ const Header = () => {
                     FAQ
                   </Link>
                 </TabsTrigger>
-                <TabsTrigger value="register" asChild>
-                  <Link
-                    href={isAuthenticated ? "/register" : "/signin"}
-                    className="text-lg font-medium"
-                  >
-                    Register
-                  </Link>
-                </TabsTrigger>
+                {/* Conditionally render Register link based on isRegistered */}
+                {!isRegistered && (
+                  <TabsTrigger value="register" asChild>
+                    <Link
+                      href={isAuthenticated ? "/register" : "/signin"}
+                      className="text-lg font-medium"
+                    >
+                      Register
+                    </Link>
+                  </TabsTrigger>
+                )}
               </TabsList>
             </Tabs>
           </motion.div>
@@ -126,7 +125,7 @@ const Header = () => {
                 initial={{ opacity: 1, x: 0 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 100 }}
-                transition={{ duration: 0.3 }} // Adjusted the exit animation duration
+                transition={{ duration: 0.3 }}
               >
                 {/* Admin Button */}
                 {isAdmin && (

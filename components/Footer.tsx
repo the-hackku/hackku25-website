@@ -16,24 +16,28 @@ export default function Footer() {
         <div className="flex space-x-4">
           <Link
             href="https://discord.com/invite/AJXm3k6xWq"
+            target="_blank"
             className="text-gray-400 hover:text-blue-400 transition-colors"
           >
             <IconBrandDiscord size={20} />
           </Link>
           <Link
-            href="https://instagram.com"
+            href="https://www.instagram.com/thehackku/"
+            target="_blank"
             className="text-gray-400 hover:text-pink-600 transition-colors"
           >
             <IconBrandInstagram size={20} />
           </Link>
           <Link
-            href="https://linkedin.com"
+            href="https://www.linkedin.com/company/hackku/about/"
+            target="_blank"
             className="text-gray-400 hover:text-blue-700 transition-colors"
           >
             <IconBrandLinkedin size={20} />
           </Link>
           <Link
-            href="https://github.com"
+            href="https://github.com/the-hackku/hackku25-website"
+            target="_blank"
             className="text-gray-400 hover:text-gray-900 transition-colors"
           >
             <IconBrandGithub size={20} />
