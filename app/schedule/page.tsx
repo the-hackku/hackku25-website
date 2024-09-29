@@ -9,12 +9,13 @@ async function getEvents(): Promise<Event[]> {
     select: {
       id: true,
       name: true,
-      date: true,
       location: true,
+      startDate: true,
+      endDate: true,
       createdAt: true,
       updatedAt: true,
+      description: true,
     },
-    orderBy: { date: "asc" },
   });
 
   return events;
@@ -23,10 +24,12 @@ async function getEvents(): Promise<Event[]> {
 export default async function SchedulePage() {
   const events = await getEvents();
 
-  // Convert date to string
+  // Convert date to string and include it in the formatted events
   const formattedEvents = events.map((event) => ({
     ...event,
-    date: event.date.toISOString(),
+    startDate: event.startDate.toISOString(),
+    endDate: event.endDate.toISOString(),
+    description: event.description ?? undefined, // Ensure description is string or undefined
   }));
 
   return (

@@ -180,7 +180,7 @@ export function RegistrationForm() {
       saveData.cancel();
       debouncedSave.cancel();
     };
-  }, [form.watch, form]);
+  }, [form.watch, form, saveData, debouncedSave]);
 
   const onSubmit = async (data: RegistrationData) => {
     try {

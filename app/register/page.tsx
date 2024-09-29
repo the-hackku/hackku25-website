@@ -29,7 +29,7 @@ export default async function RegisterPage() {
       <div className="container mx-auto max-w-md p-6">
         <Alert className="mb-4">
           <Info className="h-5 w-5 text-blue-600" />
-          <AlertTitle>You're already registered!</AlertTitle>
+          <AlertTitle>You&apos;re already registered!</AlertTitle>
           <AlertDescription>
             Thank you for registering for HackKU 2025. You can view your
             application{" "}

@@ -3,11 +3,13 @@
 import { prisma } from "@/prisma";
 import { isAdmin } from "@/middlewares/isAdmin";
 
-// Type for the Event data used in creating or updating events
+// Type for the Event data used in creating or updating events// Type for the Event data used in creating or updating events
 interface EventData {
+  startDate: string; // Use separate startDate field
+  endDate: string; // Use separate endDate field
   name: string;
-  date: string; // Store as string and convert to Date
   location?: string;
+  description?: string;
 }
 
 // CRUD operations for the admin dashboard
@@ -33,7 +35,8 @@ export async function getEvents() {
     select: {
       id: true, // Return ID if needed for frontend actions
       name: true,
-      date: true, // Return the date so the frontend can display the event details
+      startDate: true, // Return the event date
+      endDate: true, // Return the end
       location: true, // Include location if necessary
     },
   });
@@ -68,14 +71,16 @@ export async function createEvent(data: EventData) {
   return await prisma.event.create({
     data: {
       name: data.name,
-      date: new Date(data.date), // Convert string to Date object
+      startDate: new Date(data.startDate), // Use startDate field
+      endDate: new Date(data.endDate), // Use endDate field
       location: data.location || null,
     },
     select: {
-      id: true, // Include id for frontend reference
-      name: true, // Return the event name after creation
-      date: true, // Return the event date
-      location: true, // Return the location
+      id: true,
+      name: true,
+      startDate: true,
+      endDate: true,
+      location: true,
     },
   });
 }
@@ -88,13 +93,15 @@ export async function updateEvent(eventId: string, data: EventData) {
     where: { id: eventId },
     data: {
       name: data.name,
-      date: new Date(data.date), // Convert string to Date object
+      startDate: new Date(data.startDate), // Convert string to Date object
+      endDate: new Date(data.endDate), // Set end date to the same as start date for now
       location: data.location || null,
     },
     select: {
       id: true, // Include id for frontend reference
       name: true, // Return the updated event name
-      date: true, // Return the updated date
+      startDate: true, // Return the updated event date
+      endDate: true, // Return the updated
       location: true, // Return the updated location
     },
   });

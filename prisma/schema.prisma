@@ -85,8 +85,10 @@ model Authenticator {
 model Event {
   id                     String          @id @default(cuid())
   name                   String
-  date                   DateTime
+  startDate              DateTime
+  endDate                DateTime
   location               String?
+  description            String?
   checkins               Checkin[]
   scans                  Scan[]
 

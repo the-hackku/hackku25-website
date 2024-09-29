@@ -74,7 +74,7 @@ export default async function ProfilePage() {
       : "N/A";
 
     return (
-      <div className="container mx-auto p-4 max-w-4xl space-y-6 pb-16">
+      <div className="container mx-auto p-4 max-w-4xl space-y-6">
         <Card className="shadow-lg">
           <CardHeader className="p-6">
             <CardTitle className="text-3xl font-bold text-center p-0">

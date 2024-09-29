@@ -18,16 +18,23 @@ import { TimeInput } from "../customui/TimeInput";
 import { createEvent } from "@/app/actions/admin";
 import { useRouter } from "next/navigation";
 
-// Define schema using Zod for date selection
+// Define schema using Zod with coercion for the duration
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Event name must be at least 2 characters.",
   }),
-  date: z.enum(["2024-04-04", "2024-04-05", "2024-04-06"], {
+  date: z.enum(["2025-04-04", "2025-04-05", "2025-04-06"], {
     required_error: "Please select a valid date.",
-  }), // Restrict date to April 4th, 5th, or 6th
-  time: z.string().optional(),
+  }),
+  startTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
+    message: "Invalid time format. Use HH:MM.",
+  }),
+  duration: z.coerce
+    .number()
+    .min(0.5, { message: "Minimum duration is 0.5 hours." })
+    .max(12, { message: "Maximum duration is 12 hours." }),
   location: z.string().optional(),
+  description: z.string().optional(),
 });
 
 export function EventForm() {
@@ -37,30 +44,38 @@ export function EventForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      date: "2024-04-04",
-      time: "12:00",
+      date: "2025-04-04",
+      startTime: "12:00",
+      duration: 1.5, // Default to 1.5 hours (90 minutes)
       location: "",
+      description: "",
     },
   });
 
   const onSubmit = async (data: {
     name: string;
     date: string;
-    time: string;
+    startTime: string;
+    duration: number;
     location: string;
+    description: string;
   }) => {
     try {
-      const [year, month, day] = data.date.split("-").map(Number);
-      const eventDateTime = new Date(year, month - 1, day);
-      const [hours, minutes] = data.time.split(":").map(Number);
-      eventDateTime.setHours(hours || 0, minutes || 0);
+      // Construct start DateTime object from date and time
+      const eventStart = createDateTime(data.date, data.startTime);
 
+      // Calculate end DateTime based on the duration
+      const eventEnd = calculateEndTime(eventStart, data.duration);
+
+      // Call backend API to create the event
       await createEvent({
         name: data.name,
-        date: eventDateTime.toISOString(),
+        startDate: eventStart.toISOString(),
+        endDate: eventEnd.toISOString(),
         location: data.location,
       });
 
+      // Reset the form and refresh the page
       form.reset();
       router.refresh();
     } catch (error) {
@@ -68,121 +83,174 @@ export function EventForm() {
     }
   };
 
+  // Helper function to construct a full DateTime object from a date and time string
+  const createDateTime = (date: string, time: string) => {
+    const [year, month, day] = date.split("-").map(Number);
+    const [hours, minutes] = time.split(":").map(Number);
+
+    // Create a new Date object with specified year, month, day, hours, and minutes
+    return new Date(year, month - 1, day, hours, minutes);
+  };
+
+  // Helper function to calculate end time based on start time and duration
+  const calculateEndTime = (startDateTime: Date, durationInHours: number) => {
+    const endDateTime = new Date(startDateTime);
+    // Calculate duration in minutes
+    const durationInMinutes = Math.round(durationInHours * 60);
+    // Set the end time by adding the duration in minutes
+    endDateTime.setMinutes(endDateTime.getMinutes() + durationInMinutes);
+    return endDateTime;
+  };
+
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <div className="border rounded-lg p-3 grid grid-cols-2 gap-4 mt-8">
-          <h2 className="col-span-2 text-lg font-semibold mb-2">
-            Create New Event
-          </h2>
+    <div className="flex justify-center">
+      <div className="w-full max-w-xl p-6 bg-white rounded-lg shadow-sm border m-8">
+        <h2 className="text-lg font-semibold mb-4 text-center">
+          Create New Event
+        </h2>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <div className="grid gap-4">
+              {/* Event Name */}
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Event Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter event name" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          {/* Event Name */}
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm">Event Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter event name" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              {/* Location */}
+              <FormField
+                control={form.control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Location</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter location" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          {/* Location (Optional) */}
-          <FormField
-            control={form.control}
-            name="location"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm">Location</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter location" />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+              {/* Event Description */}
+              <FormField
+                control={form.control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Description</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Describe the event" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
-          {/* Group 2: Date & Time */}
+            {/* Date & Time */}
+            <div className="grid gap-4">
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Event Date</FormLabel>
+                    <FormControl>
+                      <RadioGroup
+                        value={field.value}
+                        onValueChange={field.onChange}
+                        className="flex space-x-4"
+                      >
+                        <FormItem>
+                          <FormControl>
+                            <RadioGroupItem value="2025-04-04" id="friday" />
+                          </FormControl>
+                          <FormLabel htmlFor="friday" className="text-sm">
+                            Friday, 4th
+                          </FormLabel>
+                        </FormItem>
+                        <FormItem>
+                          <FormControl>
+                            <RadioGroupItem value="2025-04-05" id="saturday" />
+                          </FormControl>
+                          <FormLabel htmlFor="saturday" className="text-sm">
+                            Saturday, 5th
+                          </FormLabel>
+                        </FormItem>
+                        <FormItem>
+                          <FormControl>
+                            <RadioGroupItem value="2025-04-06" id="sunday" />
+                          </FormControl>
+                          <FormLabel htmlFor="sunday" className="text-sm">
+                            Sunday, 6th
+                          </FormLabel>
+                        </FormItem>
+                      </RadioGroup>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-          <h2 className="col-span-2 text-lg font-semibold mb-2">Date & Time</h2>
-
-          {/* Event Date Selection using Radio Group */}
-          <FormField
-            control={form.control}
-            name="date"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm">Event Date</FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    value={field.value}
-                    onValueChange={field.onChange}
-                    className="flex space-x-2"
-                  >
-                    <FormItem className="flex items-center space-x-1">
+              {/* Event Start Time and Duration */}
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="startTime"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Start Time</FormLabel>
                       <FormControl>
-                        <RadioGroupItem value="2024-04-04" id="friday" />
+                        <TimeInput
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
                       </FormControl>
-                      <FormLabel htmlFor="friday" className="text-sm">
-                        April 4th
-                      </FormLabel>
+                      <FormMessage />
                     </FormItem>
+                  )}
+                />
 
-                    <FormItem className="flex items-center space-x-1">
+                <FormField
+                  control={form.control}
+                  name="duration"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Duration (Hours)</FormLabel>
                       <FormControl>
-                        <RadioGroupItem value="2024-04-05" id="saturday" />
+                        <Input
+                          type="number"
+                          step="0.5"
+                          placeholder="Enter duration in hours"
+                          {...field}
+                        />
                       </FormControl>
-                      <FormLabel htmlFor="saturday" className="text-sm">
-                        April 5th
-                      </FormLabel>
+                      <FormMessage />
                     </FormItem>
+                  )}
+                />
+              </div>
+            </div>
 
-                    <FormItem className="flex items-center space-x-1">
-                      <FormControl>
-                        <RadioGroupItem value="2024-04-06" id="sunday" />
-                      </FormControl>
-                      <FormLabel htmlFor="sunday" className="text-sm">
-                        April 6th
-                      </FormLabel>
-                    </FormItem>
-                  </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          {/* Event Time */}
-          <FormField
-            control={form.control}
-            name="time"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-sm">Event Time</FormLabel>
-                <FormControl>
-                  <TimeInput value={field.value} onChange={field.onChange} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-
-        {/* Submit Button */}
-        <div className="flex justify-end">
-          <Button
-            size="sm"
-            type="submit"
-            disabled={form.formState.isSubmitting}
-          >
-            Add Event
-          </Button>
-        </div>
-      </form>
-    </Form>
+            {/* Submit Button */}
+            <div className="flex justify-end pt-4">
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                Add Event
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </div>
   );
 }
