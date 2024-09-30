@@ -3,7 +3,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import { CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { IconFilter, IconHeart, IconHeartFilled } from "@tabler/icons-react";
+import {
+  IconFilter,
+  IconHeart,
+  IconHeartFilled,
+  IconMapPin,
+} from "@tabler/icons-react";
 import {
   Popover,
   PopoverContent,
@@ -268,7 +273,10 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                 )}
                               </span>
                             </CardTitle>
-                            <p className="text-xs">{event.location || "TBA"}</p>
+                            <div className="text-xs flex items-center">
+                              <IconMapPin size={12} className="mr-1" />
+                              {event.location || "TBA"}
+                            </div>
                             {event.name.toLowerCase().includes("ceremony") && (
                               <Badge className="mt-1" variant="outline">
                                 Main Event
@@ -311,7 +319,10 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                 selectedEvent.endDate
               )}
             </p>
-            <p className="mt-2">{selectedEvent.location || "TBA"}</p>
+            <div className="flex items-center mt-2">
+              <IconMapPin size={20} className="text-gray-400 mr-2" />
+              <span>{selectedEvent.location || "TBA"}</span>
+            </div>
             <p className="mt-4">
               {selectedEvent.description || "No description available."}
             </p>
