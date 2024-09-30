@@ -90,7 +90,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
     if (days.length > 0 && selectedDay === "") {
       setSelectedDay(days[0]);
     }
-  }, [days]);
+  }, [days, selectedDay]);
 
   // Handle changing day tabs
   const handleDayChange = (day: string) => {
@@ -130,11 +130,11 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   );
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden p-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden p-4 h-2/5">
       {/* Left Section: Schedule Grid */}
       <div
         ref={scheduleGridRef}
-        className="overflow-x-auto border-r border-gray-300 p-4 h-full"
+        className="overflow-x-auto border-r border-gray-300 p-4"
       >
         {/* Container for Tabs and Heart Icon */}
         <div className="flex justify-between items-center mb-4 space-x-4">

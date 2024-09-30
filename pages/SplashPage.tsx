@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ChevronDown, Trophy } from "lucide-react"; // Use necessary icons
+import { ChevronDown } from "lucide-react"; // Use necessary icons
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Component() {
   const eventDate = new Date("2025-04-04T08:00:00");
@@ -14,6 +15,9 @@ export default function Component() {
     seconds: 0,
     milliseconds: 0,
   });
+
+  const [prizeAmount, setPrizeAmount] = useState(0);
+  const totalPrize = 10000; // Total prize amount
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -30,6 +34,20 @@ export default function Component() {
     }, 1);
 
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const countUp = setInterval(() => {
+      setPrizeAmount((prev) => {
+        if (prev < totalPrize) {
+          return Math.min(prev + 100 / prev, totalPrize); // Increase by 100 each interval until totalPrize is reached
+        }
+        clearInterval(countUp);
+        return prev;
+      });
+    }, 50); // Adjust the speed of the count up here
+
+    return () => clearInterval(countUp);
   }, []);
 
   const { scrollYProgress } = useScroll();
@@ -116,19 +134,29 @@ export default function Component() {
         description="Join us for an exhilarating weekend filled with coding, collaboration, and creativity. Over 500 participants, 36 hours of hacking, and countless innovations await you!"
       />
 
+      {/* Prize Money Section */}
+      <section className="relative w-full py-24 flex items-center justify-center bg-transparent">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="max-w-2xl text-center"
+        >
+          <h2 className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-600">
+            Total Prize Money:{" "}
+            <span className="text-yellow-500">${prizeAmount}</span>
+          </h2>
+          <p className="text-xl text-gray-300 mb-8">
+            Compete for a chance to win amazing prizes!
+          </p>
+        </motion.div>
+      </section>
+
       {/* Tracks Section */}
-      <Section
-        id="tracks"
-        title="Event Tracks"
-        description="Whether you're a beginner or a seasoned pro, we have tracks for everyone! Explore topics ranging from web development to machine learning and everything in between."
-      />
+      <TracksSection />
 
       {/* Sponsors Section */}
-      <Section
-        id="sponsors"
-        title="Our Sponsors"
-        description="We are grateful to our sponsors for supporting innovation and creativity. Their contributions make HackKU 2025 possible!"
-      />
+      <SponsorsSection />
 
       {/* Final Call to Action Section */}
       <section className="relative w-full py-24 flex items-center justify-center bg-transparent">
@@ -183,6 +211,69 @@ function Section({ id, title, description }: SectionProps) {
         </h2>
         <p className="text-xl text-gray-300">{description}</p>
       </motion.div>
+    </section>
+  );
+}
+
+function TracksSection() {
+  const tracks = [
+    { id: 1, name: "Web Development", description: "Build amazing websites!" },
+    { id: 2, name: "Machine Learning", description: "Dive into AI!" },
+    { id: 3, name: "Mobile Apps", description: "Create mobile experiences." },
+    { id: 4, name: "Game Development", description: "Develop fun games." },
+  ];
+
+  return (
+    <section
+      id="tracks"
+      className="w-full py-24 flex flex-col items-center bg-transparent"
+    >
+      <h2 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-600">
+        Event Tracks
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {tracks.map((track) => (
+          <div
+            key={track.id}
+            className="border p-4 rounded-lg bg-white text-black"
+          >
+            <h3 className="text-lg font-bold">{track.name}</h3>
+            <p>{track.description}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function SponsorsSection() {
+  const sponsors = [
+    { id: 1, name: "Company A", logo: "/images/company-a.png" },
+    { id: 2, name: "Company B", logo: "/images/company-b.png" },
+    { id: 3, name: "Company C", logo: "/images/company-c.png" },
+    { id: 4, name: "Company D", logo: "/images/company-d.png" },
+  ];
+
+  return (
+    <section
+      id="sponsors"
+      className="w-full py-24 flex flex-col items-center bg-transparent"
+    >
+      <h2 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-600">
+        Our Sponsors
+      </h2>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        {sponsors.map((sponsor) => (
+          <div key={sponsor.id} className="flex justify-center">
+            <Image
+              src={sponsor.logo}
+              alt={sponsor.name}
+              width={150}
+              height={50}
+            />
+          </div>
+        ))}
+      </div>
     </section>
   );
 }
