@@ -3,12 +3,12 @@ import React, { useState, useEffect, useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import { CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { IconFilter, IconHeart, IconHeartFilled } from "@tabler/icons-react"; // Updated icons
+import { IconFilter, IconHeart, IconHeartFilled } from "@tabler/icons-react";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"; // Ensure you have a Popover component
+} from "@/components/ui/popover";
 import { Checkbox } from "./ui/checkbox";
 import { motion } from "framer-motion";
 
