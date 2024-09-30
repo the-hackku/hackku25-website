@@ -40,7 +40,7 @@ export default function Component() {
     const countUp = setInterval(() => {
       setPrizeAmount((prev) => {
         if (prev < totalPrize) {
-          return Math.min(prev + 100 / prev, totalPrize); // Increase by 100 each interval until totalPrize is reached
+          return Math.min(prev + 100 / prev, totalPrize);
         }
         clearInterval(countUp);
         return prev;
