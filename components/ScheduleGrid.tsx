@@ -285,8 +285,6 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
         )}
       </div>
 
-      {/* Right Section: Event Details */}
-      {/* Right Section: Event Details */}
       <div className="p-4">
         {selectedEvent ? (
           <motion.div

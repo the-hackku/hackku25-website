@@ -2,12 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ChevronDown } from "lucide-react"; // Use necessary icons
+import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function Component() {
-  const eventDate = new Date("2025-04-04T08:00:00");
   const [timeRemaining, setTimeRemaining] = useState({
     days: 0,
     hours: 0,
@@ -20,6 +19,7 @@ export default function Component() {
   const totalPrize = 10000; // Total prize amount
 
   useEffect(() => {
+    const eventDate = new Date("2025-04-04T08:00:00");
     const timer = setInterval(() => {
       const now = new Date();
       const difference = eventDate.getTime() - now.getTime();
@@ -45,7 +45,7 @@ export default function Component() {
         clearInterval(countUp);
         return prev;
       });
-    }, 50); // Adjust the speed of the count up here
+    }, 50);
 
     return () => clearInterval(countUp);
   }, []);
