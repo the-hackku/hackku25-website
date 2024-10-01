@@ -78,6 +78,7 @@ export function EventForm() {
       // Reset the form and refresh the page
       form.reset();
       router.refresh();
+      console.log("hi");
     } catch (error) {
       console.error("Failed to create event:", error);
     }
