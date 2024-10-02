@@ -256,6 +256,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                               height: `${
                                 getRowSpan(event.startDate, event.endDate) * 2
                               }rem`,
+                              zIndex: getRowIndex(event.startDate),
                             }}
                           >
                             <CardTitle className="text-sm font-bold flex justify-between">
@@ -267,9 +268,12 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                 }}
                               >
                                 {favorites[event.id] ? (
-                                  <IconHeartFilled className="text-red-400" />
+                                  <IconHeartFilled
+                                    className="text-red-400"
+                                    size={18}
+                                  />
                                 ) : (
-                                  <IconHeart className="text-white" />
+                                  <IconHeart className="text-white" size={18} />
                                 )}
                               </span>
                             </CardTitle>
