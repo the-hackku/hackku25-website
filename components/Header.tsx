@@ -188,24 +188,6 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
           </div>
         </div>
       </motion.header>
-
-      {/* Banner Section */}
-      {isScrolled && (
-        <div className="fixed top-0 right-20 z-40">
-          <Link
-            href="https://mlh.io/seasons/2025/events"
-            className="transition-transform duration-300 transform hover:scale-110"
-          >
-            <Image
-              src="/images/mlh-badge.svg"
-              alt="MLH Badge"
-              width={75}
-              height={300} // Adjust height as needed
-              className="transition-transform duration-300 transform hover:scale-110"
-            />
-          </Link>
-        </div>
-      )}
     </>
   );
 };

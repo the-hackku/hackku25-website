@@ -98,6 +98,32 @@ export default function Component() {
               </div>
             ))}
           </motion.div>
+          {/* Event Dates */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.8 }}
+            className="mt-6 text-xl text-gray-300"
+          >
+            April 4th - April 6th, 2025
+          </motion.p>
+          {/* Register Now Button */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 1 }}
+            className="mt-8"
+          >
+            <Link href="/register">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold rounded-full text-lg shadow-lg hover:shadow-xl transition duration-300"
+              >
+                Register Now
+              </motion.button>
+            </Link>
+          </motion.div>
         </motion.div>
         <motion.div
           animate={{

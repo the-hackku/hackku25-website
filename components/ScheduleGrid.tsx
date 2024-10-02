@@ -289,7 +289,11 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                         .map((event) => (
                           <div
                             key={event.id}
-                            onClick={() => setSelectedEvent(event)}
+                            onClick={() =>
+                              setSelectedEvent(
+                                selectedEvent?.id === event.id ? null : event
+                              )
+                            }
                             className={`absolute inset-0 ${
                               selectedEvent?.id === event.id
                                 ? "bg-blue-500 text-white"
@@ -387,14 +391,14 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
               </div>
             </motion.div>
           ) : (
-            <motion.p
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="text-center text-gray-500"
             >
               Select an event to view details
-            </motion.p>
+            </motion.div>
           )}
         </AnimatePresence>
       </div>
