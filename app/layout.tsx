@@ -25,6 +25,9 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "HackKU 25",
   description: "HackKU Portal",
+  icons: {
+    icon: "/images/duck2.png",
+  },
 };
 
 export default async function RootLayout({

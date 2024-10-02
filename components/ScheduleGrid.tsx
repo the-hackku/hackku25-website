@@ -8,6 +8,7 @@ import {
   IconHeart,
   IconHeartFilled,
   IconMapPin,
+  IconChevronDown,
 } from "@tabler/icons-react";
 import {
   Popover,
@@ -30,17 +31,27 @@ type ScheduleGridProps = {
 
 // Helper function to map slot index to a readable time format (e.g., "7:00 AM", "7:30 AM", etc.)
 const formatTime = (index: number) => {
-  const hour = Math.floor(index / 2) + 7;
+  const hour = Math.floor(index / 2) + 7; // Calculate hour starting from 7 AM
   const minutes = index % 2 === 0 ? "00" : "30";
-  const period = hour < 12 ? "AM" : "PM";
-  return `${hour > 12 ? hour - 12 : hour}:${minutes} ${period}`;
+  const adjustedHour = hour % 24; // Ensure hour stays within 24-hour format
+
+  // Convert 24-hour format to 12-hour format, handling 12 AM and 12 PM correctly
+  const displayHour =
+    adjustedHour === 0
+      ? 12
+      : adjustedHour > 12
+      ? adjustedHour - 12
+      : adjustedHour;
+  const period = adjustedHour >= 12 && adjustedHour < 24 ? "PM" : "AM";
+
+  return `${displayHour}:${minutes} ${period}`;
 };
 
 // Calculate the start row for the event based on its start time
 const getRowIndex = (dateString: string) => {
   const date = new Date(dateString);
-  const hours = date.getUTCHours() - 7;
-  const minutes = date.getUTCMinutes();
+  const hours = date.getHours() - 7; // Use local hours instead of UTC hours
+  const minutes = date.getMinutes(); // Use local minutes instead of UTC minutes
   return hours * 2 + (minutes >= 30 ? 1 : 0);
 };
 
@@ -78,6 +89,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const scheduleGridRef = useRef<HTMLDivElement | null>(null);
+  const [hasScrolled, setHasScrolled] = useState(false);
 
   // Group events by date
   const groupedEvents = schedule.reduce((acc, event) => {
@@ -96,6 +108,19 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
       setSelectedDay(days[0]);
     }
   }, [days, selectedDay]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (scheduleGridRef.current && scheduleGridRef.current.scrollTop > 10) {
+        setHasScrolled(true);
+      }
+    };
+    const div = scheduleGridRef.current;
+    if (div) {
+      div.addEventListener("scroll", handleScroll);
+      return () => div.removeEventListener("scroll", handleScroll);
+    }
+  }, []);
 
   // Handle changing day tabs
   const handleDayChange = (day: string) => {
@@ -139,8 +164,25 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
       {/* Left Section: Schedule Grid */}
       <div
         ref={scheduleGridRef}
-        className="overflow-x-auto border-r border-gray-300 p-4"
+        className="overflow-y-scroll h-[500px] border-r border-gray-300 p-4 relative"
       >
+        {!hasScrolled && (
+          <motion.div
+            className="absolute left-1/2 -translate-x-1/2 bottom-4"
+            initial={{ y: 0 }}
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 1 }}
+            style={{ zIndex: 10 }}
+            onMouseEnter={() =>
+              scheduleGridRef.current?.scrollTo({
+                top: scheduleGridRef.current?.scrollHeight / 5,
+                behavior: "smooth",
+              })
+            }
+          >
+            <IconChevronDown size={36} />
+          </motion.div>
+        )}
         {/* Container for Tabs and Heart Icon */}
         <div className="flex justify-between items-center mb-4 space-x-4">
           {/* Tabs to select the day */}
@@ -247,7 +289,11 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                           <div
                             key={event.id}
                             onClick={() => setSelectedEvent(event)}
-                            className="absolute inset-0 bg-gray-400 text-white rounded-md shadow-md p-1 overflow-hidden cursor-pointer"
+                            className={`absolute inset-0 ${
+                              selectedEvent?.id === event.id
+                                ? "bg-blue-500 text-white"
+                                : "bg-gray-400 text-white"
+                            } rounded-md shadow-md p-1 overflow-hidden cursor-pointer`}
                             style={{
                               gridRow: `span ${getRowSpan(
                                 event.startDate,
@@ -268,12 +314,9 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                 }}
                               >
                                 {favorites[event.id] ? (
-                                  <IconHeartFilled
-                                    className="text-red-400"
-                                    size={18}
-                                  />
+                                  <IconHeartFilled className="text-red-400" />
                                 ) : (
-                                  <IconHeart className="text-white" size={18} />
+                                  <IconHeart className="text-white" />
                                 )}
                               </span>
                             </CardTitle>

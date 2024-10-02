@@ -75,12 +75,19 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
                   transition={{ duration: 0.3 }}
                 >
                   <Link href="/">
-                    <Image
-                      src="/images/duck2.png"
-                      width={50}
-                      height={50}
-                      alt="HackKU Logo"
-                    />
+                    <motion.div
+                      whileHover={{
+                        scale: 1.1,
+                        rotate: [0, -5, 5, -5, 5, -5, 5, 0],
+                      }}
+                    >
+                      <Image
+                        src="/images/duck2.png"
+                        width={50}
+                        height={50}
+                        alt="HackKU Logo"
+                      />
+                    </motion.div>
                   </Link>
                 </motion.div>
               )}
