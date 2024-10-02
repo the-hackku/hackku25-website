@@ -9,6 +9,8 @@ import {
   IconHeartFilled,
   IconMapPin,
   IconChevronDown,
+  IconX,
+  IconListDetails,
 } from "@tabler/icons-react";
 import {
   Popover,
@@ -16,7 +18,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Checkbox } from "./ui/checkbox";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 type ScheduleGridProps = {
   schedule: {
@@ -213,7 +215,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
               <h3 className="text-lg font-bold mb-3">Filter Options</h3>
               <div className="flex items-center mb-2">
                 <Checkbox
-                  id="favorites-only" // Give an ID to the checkbox for the label
+                  id="favorites-only"
                   checked={showFavoritesOnly}
                   onCheckedChange={(checked) =>
                     setShowFavoritesOnly(checked === true)
@@ -227,7 +229,6 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                   Show Favorites Only
                 </label>
               </div>
-              {/* Add other filter options here as needed */}
             </PopoverContent>
           </Popover>
         </div>
@@ -340,45 +341,62 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
         )}
       </div>
 
-      <div className="p-4">
-        {selectedEvent ? (
-          <motion.div
-            key={selectedEvent.id} // Use the event id as a key for the animation
-            initial={{ opacity: 0, y: -20 }} // Initial state
-            animate={{ opacity: 1, y: 0 }} // Animate to this state
-            exit={{ opacity: 0, y: 20 }} // Exit state
-            transition={{ duration: 0.3 }} // Transition duration
-            className="p-4 bg-white rounded-lg shadow-sm border"
-          >
-            <h2 className="text-xl font-bold flex justify-between">
-              {selectedEvent.name}
-              <span onClick={() => toggleFavorite(selectedEvent.id)}>
-                {favorites[selectedEvent.id] ? (
-                  <IconHeartFilled className="text-red-400 cursor-pointer" />
-                ) : (
-                  <IconHeart className="text-gray-400 cursor-pointer" />
+      {/* Right Section: Event Details */}
+      <div className="p-4 relative">
+        <AnimatePresence>
+          {selectedEvent ? (
+            <motion.div
+              key={selectedEvent.id}
+              initial={{ opacity: 0, x: 300 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 300 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              className="p-4 bg-white rounded-lg shadow-sm border absolute inset-0"
+            >
+              <h2 className="text-xl font-bold flex justify-between">
+                {selectedEvent.name}
+                <span
+                  onClick={() => toggleFavorite(selectedEvent.id)}
+                  className="flex"
+                >
+                  {favorites[selectedEvent.id] ? (
+                    <IconHeartFilled className="text-red-400 cursor-pointer" />
+                  ) : (
+                    <IconHeart className="text-gray-400 cursor-pointer" />
+                  )}
+                  <IconX
+                    className=" cursor-pointer ml-2"
+                    onClick={() => setSelectedEvent(null)}
+                  />
+                </span>
+              </h2>
+              <p className="text-sm text-gray-500">
+                {formatEventTimeRange(
+                  selectedEvent.startDate,
+                  selectedEvent.endDate
                 )}
-              </span>
-            </h2>
-            <p className="text-sm text-gray-500">
-              {formatEventTimeRange(
-                selectedEvent.startDate,
-                selectedEvent.endDate
-              )}
-            </p>
-            <div className="flex items-center mt-2">
-              <IconMapPin size={20} className="text-gray-400 mr-2" />
-              <span>{selectedEvent.location || "TBA"}</span>
-            </div>
-            <p className="mt-4">
-              {selectedEvent.description || "No description available."}
-            </p>
-          </motion.div>
-        ) : (
-          <p className="text-center text-gray-500">
-            Select an event to view details
-          </p>
-        )}
+              </p>
+              <hr className="my-2" />
+              <div className="flex items-center mt-2">
+                <IconMapPin size={20} className="text-gray-400 mr-2" />
+                <span>{selectedEvent.location || "TBA"}</span>
+              </div>
+              <div className="flex items-center mt-2">
+                <IconListDetails size={20} className="text-gray-400 mr-2" />
+                {selectedEvent.description || "No description available."}
+              </div>
+            </motion.div>
+          ) : (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="text-center text-gray-500"
+            >
+              Select an event to view details
+            </motion.p>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
