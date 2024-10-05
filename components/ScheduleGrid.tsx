@@ -393,21 +393,26 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
               <div>
                 <h2 className="text-xl font-bold flex justify-between">
                   {selectedEvent.name}
-                  <span
-                    onClick={() => toggleFavorite(selectedEvent.id)}
-                    className="flex"
-                  >
-                    {favorites[selectedEvent.id] ? (
-                      <IconHeartFilled className="text-red-400 cursor-pointer" />
-                    ) : (
-                      <IconHeart className="text-gray-400 cursor-pointer" />
-                    )}
-                    <IconX
-                      className=" cursor-pointer ml-2"
+                  <span className="flex items-center">
+                    {/* Favorite Toggle */}
+                    <span onClick={() => toggleFavorite(selectedEvent.id)}>
+                      {favorites[selectedEvent.id] ? (
+                        <IconHeartFilled className="text-red-400 cursor-pointer" />
+                      ) : (
+                        <IconHeart className="text-gray-400 cursor-pointer" />
+                      )}
+                    </span>
+
+                    {/* Close Button */}
+                    <span
                       onClick={() => setSelectedEvent(null)}
-                    />
+                      className="ml-4 cursor-pointer"
+                    >
+                      <IconX className="text-gray-400" />
+                    </span>
                   </span>
                 </h2>
+
                 <p className="text-sm text-gray-500">
                   {formatEventTimeRange(
                     selectedEvent.startDate,
