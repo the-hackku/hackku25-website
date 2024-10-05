@@ -124,6 +124,31 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
     }
   }, []);
 
+  // Helper function to get the next event based on the current event
+  // Helper function to get the next event based on the current event
+  const getNextEvent = (
+    currentEvent: ScheduleGridProps["schedule"][0] | null
+  ) => {
+    if (!currentEvent) return null;
+    const currentIndex = filteredEvents.findIndex(
+      (event) => event.id === currentEvent.id
+    );
+    return currentIndex >= 0 && currentIndex < filteredEvents.length - 1
+      ? filteredEvents[currentIndex + 1]
+      : null;
+  };
+
+  // Helper function to get the previous event based on the current event
+  const getPreviousEvent = (
+    currentEvent: ScheduleGridProps["schedule"][0] | null
+  ) => {
+    if (!currentEvent) return null;
+    const currentIndex = filteredEvents.findIndex(
+      (event) => event.id === currentEvent.id
+    );
+    return currentIndex > 0 ? filteredEvents[currentIndex - 1] : null;
+  };
+
   // Handle changing day tabs
   const handleDayChange = (day: string) => {
     setSelectedDay(day);
@@ -137,10 +162,17 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
 
   const allEvents = days.flatMap((day) => groupedEvents[day]);
 
-  // Filter events to show only favorites if `showFavoritesOnly` is true
   const filteredEvents = showFavoritesOnly
-    ? allEvents.filter((event) => favorites[event.id])
-    : allEvents;
+    ? allEvents
+        .filter((event) => favorites[event.id])
+        .sort(
+          (a, b) =>
+            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+        ) // Sort by start date
+    : allEvents.sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+      ); // Sort by start date
 
   const filteredGroupedEvents = filteredEvents.reduce((acc, event) => {
     const eventDate = new Date(event.startDate).toLocaleDateString("en-US", {
@@ -355,39 +387,71 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 300 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="p-4 bg-white rounded-lg shadow-sm border absolute inset-0"
+              className="p-4 bg-white rounded-lg shadow-sm border absolute inset-0 flex flex-col justify-between"
             >
-              <h2 className="text-xl font-bold flex justify-between">
-                {selectedEvent.name}
-                <span
-                  onClick={() => toggleFavorite(selectedEvent.id)}
-                  className="flex"
-                >
-                  {favorites[selectedEvent.id] ? (
-                    <IconHeartFilled className="text-red-400 cursor-pointer" />
-                  ) : (
-                    <IconHeart className="text-gray-400 cursor-pointer" />
+              {/* Top Section: Event Details */}
+              <div>
+                <h2 className="text-xl font-bold flex justify-between">
+                  {selectedEvent.name}
+                  <span
+                    onClick={() => toggleFavorite(selectedEvent.id)}
+                    className="flex"
+                  >
+                    {favorites[selectedEvent.id] ? (
+                      <IconHeartFilled className="text-red-400 cursor-pointer" />
+                    ) : (
+                      <IconHeart className="text-gray-400 cursor-pointer" />
+                    )}
+                    <IconX
+                      className=" cursor-pointer ml-2"
+                      onClick={() => setSelectedEvent(null)}
+                    />
+                  </span>
+                </h2>
+                <p className="text-sm text-gray-500">
+                  {formatEventTimeRange(
+                    selectedEvent.startDate,
+                    selectedEvent.endDate
                   )}
-                  <IconX
-                    className=" cursor-pointer ml-2"
-                    onClick={() => setSelectedEvent(null)}
-                  />
-                </span>
-              </h2>
-              <p className="text-sm text-gray-500">
-                {formatEventTimeRange(
-                  selectedEvent.startDate,
-                  selectedEvent.endDate
-                )}
-              </p>
-              <hr className="my-2" />
-              <div className="flex items-center mt-2">
-                <IconMapPin size={20} className="text-gray-400 mr-2" />
-                <span>{selectedEvent.location || "TBA"}</span>
+                </p>
+                <hr className="my-2" />
+                <div className="flex items-center mt-2">
+                  <IconMapPin size={20} className="text-gray-400 mr-2" />
+                  <span>{selectedEvent.location || "TBA"}</span>
+                </div>
+                <div className="flex items-center mt-2">
+                  <IconListDetails size={20} className="text-gray-400 mr-2" />
+                  {selectedEvent.description || "No description available."}
+                </div>
               </div>
-              <div className="flex items-center mt-2">
-                <IconListDetails size={20} className="text-gray-400 mr-2" />
-                {selectedEvent.description || "No description available."}
+
+              {/* Bottom Section: Pagination Buttons */}
+              <div className="flex justify-between items-center mt-6 pt-4 border-t">
+                {/* Left Button: Previous Event */}
+                {getPreviousEvent(selectedEvent) ? (
+                  <button
+                    onClick={() =>
+                      setSelectedEvent(getPreviousEvent(selectedEvent))
+                    }
+                    className="text-gray-600 hover:text-gray-900 focus:outline-none"
+                  >
+                    &larr; Previous
+                  </button>
+                ) : (
+                  <span /> // Spacer element to maintain alignment
+                )}
+
+                {/* Right Button: Next Event */}
+                {getNextEvent(selectedEvent) && (
+                  <button
+                    onClick={() =>
+                      setSelectedEvent(getNextEvent(selectedEvent))
+                    }
+                    className="text-gray-600 hover:text-gray-900 focus:outline-none"
+                  >
+                    Next &rarr;
+                  </button>
+                )}
               </div>
             </motion.div>
           ) : (

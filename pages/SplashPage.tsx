@@ -149,7 +149,7 @@ export default function Component() {
       {/* What Is It Section */}
       <Section
         id="what-is-it"
-        title="What is HackKU?"
+        title="What is a Hackathon??"
         description="HackKU is an immersive hackathon experience where creators, innovators, and tech enthusiasts come together to build solutions, learn, and grow. It's a platform for aspiring hackers to showcase their skills and creativity."
       />
 

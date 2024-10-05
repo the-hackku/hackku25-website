@@ -10,6 +10,7 @@ import { getServerSession } from "next-auth";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import Providers from "@/providers/ProgressBarProvider";
+import DuckLoader from "@/components/DuckLoader";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -48,14 +49,16 @@ export default async function RootLayout({
         >
           <NextAuthProvider session={session}>
             <Providers>
-              <div className="flex flex-col min-h-screen">
-                <HeaderWrapper />
-                <main className="flex-grow">
-                  <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
-                </main>
-                <Footer />
-                <Toaster />
-              </div>
+              <DuckLoader>
+                <div className="flex flex-col min-h-screen">
+                  <HeaderWrapper />
+                  <main className="flex-grow">
+                    <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
+                  </main>
+                  <Footer />
+                  <Toaster />
+                </div>
+              </DuckLoader>
             </Providers>
           </NextAuthProvider>
         </ThemeProvider>
