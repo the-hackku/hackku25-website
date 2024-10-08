@@ -7,13 +7,18 @@ import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  IconBrandDiscord,
   IconCalendar,
-  IconQuestionMark,
-  IconUserPlus,
+  IconCalendarFilled,
   IconAward,
+  IconAwardFilled,
   IconHome2,
-} from "@tabler/icons-react"; // Import the icons
+  IconUser,
+  IconHomeFilled,
+  IconZoomQuestion,
+  IconZoomQuestionFilled,
+  IconUserFilled,
+  IconUserStar,
+} from "@tabler/icons-react"; // Import the icons, both regular and filled variants
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "next-auth/react";
 
@@ -31,6 +36,7 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
     "/faq": "faq",
     "/tracks": "tracks",
     "/register": "register",
+    "/profile": "profile",
   };
 
   const currentTab = pathname ? tabValueMapping[pathname] : ""; // Get the current tab value, or empty if not found
@@ -107,7 +113,12 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
                       href="/"
                       className="flex items-center text-lg font-medium"
                     >
-                      <IconHome2 size={20} className="mr-2" /> Home
+                      {currentTab === "home" ? (
+                        <IconHomeFilled size={20} className="mr-2" />
+                      ) : (
+                        <IconHome2 size={20} className="mr-2" />
+                      )}
+                      Home
                     </Link>
                   </TabsTrigger>
                   <TabsTrigger value="schedule" asChild>
@@ -115,7 +126,12 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
                       href="/schedule"
                       className="flex items-center text-lg font-medium"
                     >
-                      <IconCalendar size={20} className="mr-2" /> Schedule
+                      {currentTab === "schedule" ? (
+                        <IconCalendarFilled size={20} className="mr-2" />
+                      ) : (
+                        <IconCalendar size={20} className="mr-2" />
+                      )}
+                      Schedule
                     </Link>
                   </TabsTrigger>
                   <TabsTrigger value="tracks" asChild>
@@ -123,7 +139,12 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
                       href="/tracks"
                       className="flex items-center text-lg font-medium"
                     >
-                      <IconAward size={20} className="mr-2" /> Tracks
+                      {currentTab === "tracks" ? (
+                        <IconAwardFilled size={20} className="mr-2" />
+                      ) : (
+                        <IconAward size={20} className="mr-2" />
+                      )}
+                      Tracks
                     </Link>
                   </TabsTrigger>
                   <TabsTrigger value="faq" asChild>
@@ -131,17 +152,26 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
                       href="/faq"
                       className="flex items-center text-lg font-medium"
                     >
-                      <IconQuestionMark size={20} className="mr-2" /> FAQ
+                      {currentTab === "faq" ? (
+                        <IconZoomQuestionFilled size={20} className="mr-2" />
+                      ) : (
+                        <IconZoomQuestion size={20} className="mr-2" />
+                      )}
+                      FAQ
                     </Link>
                   </TabsTrigger>
-                  {/* Conditionally render Register link based on isRegistered */}
                   {!isRegistered && (
                     <TabsTrigger value="register" asChild>
                       <Link
                         href={isAuthenticated ? "/register" : "/signin"}
                         className="flex items-center text-lg font-medium"
                       >
-                        <IconUserPlus size={20} className="mr-2" /> Register
+                        {currentTab === "register" ? (
+                          <IconUserFilled size={20} className="mr-2" />
+                        ) : (
+                          <IconUser size={20} className="mr-2" />
+                        )}
+                        Register
                       </Link>
                     </TabsTrigger>
                   )}
@@ -163,23 +193,19 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
                   {isAdmin && (
                     <Link href="/admin">
                       <Button variant="outline" className="text-sm">
-                        Admin
+                        <IconUserStar size={20} />
                       </Button>
                     </Link>
                   )}
-                  {/* Regular Discord Button */}
-                  <Link
-                    href="https://discord.com/invite/AJXm3k6xWq"
-                    target="_blank"
-                  >
-                    <Button variant="outline" className="text-sm">
-                      <IconBrandDiscord size={20} />
-                    </Button>
-                  </Link>
                   {/* Profile or Sign In Button */}
                   <Link href={isAuthenticated ? "/profile" : "/signin"}>
                     <Button variant="outline" className="text-sm">
-                      {isAuthenticated ? "Profile" : "Sign In"}
+                      {currentTab === "profile" ? (
+                        <IconUserFilled size={20} className="mr-1" />
+                      ) : (
+                        <IconUser size={20} className="mr-1" />
+                      )}
+                      {isAuthenticated ? "Account" : "Sign In"}
                     </Button>
                   </Link>
                 </motion.div>
