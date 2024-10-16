@@ -15,9 +15,6 @@ export default function Component() {
     milliseconds: 0,
   });
 
-  const [prizeAmount, setPrizeAmount] = useState(0);
-  const totalPrize = 10000; // Total prize amount
-
   useEffect(() => {
     const eventDate = new Date("2025-04-04T08:00:00");
     const timer = setInterval(() => {
@@ -34,20 +31,6 @@ export default function Component() {
     }, 1);
 
     return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    const countUp = setInterval(() => {
-      setPrizeAmount((prev) => {
-        if (prev < totalPrize) {
-          return Math.min(prev + 100 / prev, totalPrize);
-        }
-        clearInterval(countUp);
-        return prev;
-      });
-    }, 50);
-
-    return () => clearInterval(countUp);
   }, []);
 
   const { scrollYProgress } = useScroll();
@@ -73,14 +56,6 @@ export default function Component() {
           >
             HackKU 2025
           </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-2xl text-gray-300"
-          >
-            Forge Your Legacy. Seize the Magic.
-          </motion.p>
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -103,7 +78,7 @@ export default function Component() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.8 }}
-            className="mt-6 text-xl text-gray-300"
+            className="text-lg text-gray-300"
           >
             April 4th - April 6th, 2025
           </motion.p>
@@ -159,24 +134,6 @@ export default function Component() {
         title="Event Statistics"
         description="Join us for an exhilarating weekend filled with coding, collaboration, and creativity. Over 500 participants, 36 hours of hacking, and countless innovations await you!"
       />
-
-      {/* Prize Money Section */}
-      <section className="relative w-full py-24 flex items-center justify-center bg-transparent">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="max-w-2xl text-center"
-        >
-          <h2 className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-600">
-            Total Prize Money:{" "}
-            <span className="text-yellow-500">${prizeAmount}</span>
-          </h2>
-          <p className="text-xl text-gray-300 mb-8">
-            Compete for a chance to win amazing prizes!
-          </p>
-        </motion.div>
-      </section>
 
       {/* Tracks Section */}
       <TracksSection />

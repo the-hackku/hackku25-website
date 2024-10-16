@@ -147,7 +147,7 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
                       Tracks
                     </Link>
                   </TabsTrigger>
-                  <TabsTrigger value="faq" asChild>
+                  {/* <TabsTrigger value="faq" asChild>
                     <Link
                       href="/faq"
                       className="flex items-center text-lg font-medium"
@@ -159,7 +159,7 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
                       )}
                       FAQ
                     </Link>
-                  </TabsTrigger>
+                  </TabsTrigger> */}
                   {!isRegistered && (
                     <TabsTrigger value="register" asChild>
                       <Link

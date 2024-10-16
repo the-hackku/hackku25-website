@@ -20,14 +20,24 @@ const DuckLoader = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="relative">
       <AnimatePresence>
-        {isMounted &&
-          isLoading && ( // Only render the loader when mounted
+        {isMounted && isLoading && (
+          <>
+            {/* Background Fade-Out Effect */}
             <motion.div
-              className="fixed inset-0 bg-black flex items-center justify-center z-50"
+              className="fixed inset-0 bg-white z-40" // Background layer with z-index lower than the loader image
               initial={{ opacity: 1 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.5 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+            />
+
+            {/* Loader Animation */}
+            <motion.div
+              className="fixed inset-0 flex items-center justify-center z-50" // Loader container with higher z-index
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
             >
               <motion.img
                 src="/images/duck2.png"
@@ -36,17 +46,18 @@ const DuckLoader = ({ children }: { children: React.ReactNode }) => {
                 initial={{ rotate: 0 }}
                 animate={{ rotate: 360 }}
                 transition={{
-                  type: "spring", // Use a spring animation type
-                  stiffness: 50, // Control the spring tightness
-                  damping: 8, // Control the amount of bounce
-                  mass: 0.5, // Mass affects how bouncy it feels
-                  duration: 0.8, // Animation duration
-                  repeat: Infinity, // Loop the animation infinitely
-                  repeatType: "loop", // Loop type
+                  type: "spring",
+                  stiffness: 50,
+                  damping: 8,
+                  mass: 0.5,
+                  duration: 0.8,
+                  repeat: Infinity,
+                  repeatType: "loop",
                 }}
               />
             </motion.div>
-          )}
+          </>
+        )}
       </AnimatePresence>
       {/* Render the children once loading is complete */}
       {!isLoading && <div className="relative z-0">{children}</div>}
