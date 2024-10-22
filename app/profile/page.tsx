@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { prisma } from "@/prisma";
 import QrCodeComponent from "@/components/UserQRCode";
+import XPBar from "@/components/XPBar";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -82,6 +83,7 @@ export default async function ProfilePage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
+            <XPBar xpDouble={5} />
             <Tabs defaultValue="profileInfo" className="w-full">
               <div className="flex justify-center mb-6">
                 <TabsList>
