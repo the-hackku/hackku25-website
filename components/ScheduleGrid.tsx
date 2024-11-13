@@ -90,6 +90,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const [selectedDay, setSelectedDay] = useState("All");
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [showFoodOnly, setShowFoodOnly] = useState(false);
   const scheduleGridRef = useRef<HTMLDivElement | null>(null);
   const [hasScrolled, setHasScrolled] = useState(false);
 
@@ -259,6 +260,19 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                   className="text-sm cursor-pointer"
                 >
                   Show Favorites Only
+                </label>
+              </div>
+              <div className="flex items-center mb-2">
+                <Checkbox
+                  id="food-only"
+                  checked={showFoodOnly}
+                  onCheckedChange={(checked) =>
+                    setShowFoodOnly(checked === true)
+                  }
+                  className="mr-2"
+                />
+                <label htmlFor="food-only" className="text-sm cursor-pointer">
+                  Show Food only 🍔
                 </label>
               </div>
             </PopoverContent>

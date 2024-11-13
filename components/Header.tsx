@@ -14,8 +14,6 @@ import {
   IconHome2,
   IconUser,
   IconHomeFilled,
-  IconZoomQuestion,
-  IconZoomQuestionFilled,
   IconUserFilled,
   IconUserStar,
 } from "@tabler/icons-react"; // Import the icons, both regular and filled variants
@@ -56,12 +54,7 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
   return (
     <>
       <motion.header
-        initial={{ backgroundColor: "rgba(255, 255, 255, 1)" }}
-        animate={{
-          backgroundColor: isScrolled
-            ? "rgba(255, 255, 255, 0)"
-            : "rgba(255, 255, 255, 1)",
-        }}
+        initial={{ backgroundColor: "rgba(255, 255, 255, 0)" }}
         transition={{ duration: 0.15 }}
         className={`sticky top-0 left-0 right-0 z-50 transition-all duration-150 ${
           isScrolled ? "shadow-none border-none" : ""
@@ -147,19 +140,7 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
                       Tracks
                     </Link>
                   </TabsTrigger>
-                  {/* <TabsTrigger value="faq" asChild>
-                    <Link
-                      href="/faq"
-                      className="flex items-center text-lg font-medium"
-                    >
-                      {currentTab === "faq" ? (
-                        <IconZoomQuestionFilled size={20} className="mr-2" />
-                      ) : (
-                        <IconZoomQuestion size={20} className="mr-2" />
-                      )}
-                      FAQ
-                    </Link>
-                  </TabsTrigger> */}
+
                   {!isRegistered && (
                     <TabsTrigger value="register" asChild>
                       <Link

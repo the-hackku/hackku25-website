@@ -3,7 +3,7 @@ import RegisterAlert from "./RegisterAlert";
 import Header from "./Header";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { prisma } from "@/prisma"; // Import the prisma client
+import { prisma } from "@/prisma";
 
 // This is a server component
 export default async function HeaderWrapper() {
@@ -13,7 +13,7 @@ export default async function HeaderWrapper() {
   if (!session?.user?.email) {
     return (
       <>
-        <Header isRegistered={false} /> {/* Pass isRegistered as false */}
+        <Header isRegistered={false} />
       </>
     );
   }
@@ -25,12 +25,12 @@ export default async function HeaderWrapper() {
   });
 
   // Extract user data and check if registration is complete
-  const participant = user?.ParticipantInfo || null;
-  const isRegistered = !!participant; // `isRegistered` is true if `ParticipantInfo` exists
+  const participant = user?.ParticipantInfo;
+  const isRegistered = !!participant;
 
   return (
     <>
-      <Header isRegistered={isRegistered} /> {/* Pass isRegistered to Header */}
+      <Header isRegistered={isRegistered} />
       <RegisterAlert isRegistered={isRegistered} />
     </>
   );

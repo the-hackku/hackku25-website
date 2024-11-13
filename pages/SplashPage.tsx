@@ -1,38 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function Component() {
-  const [timeRemaining, setTimeRemaining] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-    milliseconds: 0,
-  });
-
-  useEffect(() => {
-    const eventDate = new Date("2025-04-04T08:00:00");
-    const timer = setInterval(() => {
-      const now = new Date();
-      const difference = eventDate.getTime() - now.getTime();
-
-      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((difference / 1000 / 60) % 60);
-      const seconds = Math.floor((difference / 1000) % 60);
-      const milliseconds = Math.floor(difference % 1000);
-
-      setTimeRemaining({ days, hours, minutes, seconds, milliseconds });
-    }, 1);
-
-    return () => clearInterval(timer);
-  }, []);
-
   const { scrollYProgress } = useScroll();
   const scale = useTransform(scrollYProgress, [0, 1], [1, 1.3]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
@@ -46,33 +19,8 @@ export default function Component() {
       >
         <motion.div
           style={{ scale, opacity }}
-          className="text-center max-w-4xl space-y-6 z-10"
+          className="text-center max-w-4xl z-10"
         >
-          <motion.h1
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="text-7xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-600"
-          >
-            HackKU 2025
-          </motion.h1>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="flex justify-center space-x-4 text-4xl font-bold"
-          >
-            {Object.entries(timeRemaining).map(([unit, value]) => (
-              <div key={unit} className="flex flex-col items-center">
-                <span className="text-5xl">
-                  {value
-                    .toString()
-                    .padStart(unit === "milliseconds" ? 3 : 2, "0")}
-                </span>
-                <span className="text-sm uppercase text-gray-400">{unit}</span>
-              </div>
-            ))}
-          </motion.div>
           {/* Event Dates */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -80,20 +28,39 @@ export default function Component() {
             transition={{ duration: 0.7, delay: 0.8 }}
             className="text-lg text-gray-300"
           >
-            April 4th - April 6th, 2025
+            April 4th - 6th, 2025
           </motion.p>
+
+          <motion.h1
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            className="text-7xl font-extrabold"
+          >
+            HackKU25
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 1 }}
+            className="text-lg text-gray-300 py-4"
+          >
+            The University of Kansas
+          </motion.p>
+
           {/* Register Now Button */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 1 }}
-            className="mt-8"
+            className="mt-2"
           >
             <Link href="/register">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold rounded-full text-lg shadow-lg hover:shadow-xl transition duration-300"
+                className="px-6 py-3 bg-yellow-500 hover:shadow-xl rounded-full text-lg shadow-lg text-black"
               >
                 Register Now
               </motion.button>
