@@ -33,7 +33,7 @@ const SignInPage = () => {
   const email = watch("email");
 
   // Get session status and user data from next-auth
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   // Check if the user is authenticated and redirect to /profile
   useEffect(() => {
@@ -89,8 +89,8 @@ const SignInPage = () => {
           <CardContent>
             {/* Introductory Message */}
             <p className="text-center text-gray-600 mb-6">
-              Enter your email address to sign in or create an account. We'll
-              email you a magic link to sign in.
+              Enter your email address to sign in or create an account.
+              We&apos;ll email you a magic link to sign in.
             </p>
 
             {/* Sign In Form */}
