@@ -94,7 +94,7 @@ export default function HomePage() {
     {
       name: "Tyler Anderson",
       role: "Tech Team",
-      image: "/images/team/tyler.jpeg",
+      image: "/images/team/tyler.webp",
       linkedin: "https://www.linkedin.com/in/andrew-l-huang/",
     },
   ];
@@ -174,7 +174,7 @@ export default function HomePage() {
       {/* About Section */}
       <section
         id="what-is-it"
-        className="w-full py-44 flex items-center justify-center bg-white"
+        className="w-full py-44 flex items-center justify-center bg-[#F0E9DF]"
       >
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -223,7 +223,7 @@ export default function HomePage() {
       {/* Sponsors Section */}
       <section
         id="sponsors"
-        className="w-full py-44 flex flex-col items-center justify-center bg-green-700"
+        className="w-full py-44 flex flex-col items-center justify-center bg-[#019757]"
       >
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -277,7 +277,7 @@ export default function HomePage() {
       {/* Meet the Team Section */}
       <section
         id="meet-the-team"
-        className="w-full py-44 flex flex-col items-center justify-center bg-gray-900"
+        className="w-full py-44 flex flex-col items-center justify-center bg-[#037EC1]"
       >
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -308,30 +308,20 @@ export default function HomePage() {
                 whileHover={{ scale: 1.05 }}
                 className="w-40 h-40 mb-4"
               >
-                {member.linkedin ? (
-                  <a
-                    href={member.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${member.name}'s LinkedIn`}
-                  >
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      width={160}
-                      height={160}
-                      className="rounded-full object-cover shadow-lg cursor-pointer"
-                    />
-                  </a>
-                ) : (
+                <a
+                  href={member.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${member.name}'s LinkedIn`}
+                >
                   <Image
                     src={member.image}
                     alt={member.name}
                     width={160}
                     height={160}
-                    className="rounded-full object-cover shadow-lg"
+                    className="rounded-md object-cover shadow-lg cursor-pointer"
                   />
-                )}
+                </a>
               </motion.div>
               <h3 className="text-xl font-semibold text-white">
                 {member.name}
