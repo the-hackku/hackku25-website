@@ -206,20 +206,9 @@ export function RegistrationForm() {
       <CardHeader>
         <div className="flex justify-between items-center">
           <CardTitle className="text-center text-xl py-4">
-            HackKU 2025 Registration{" "}
-            <span className="text-sm text-gray-500">
-              {saving
-                ? `Saving...` // Show 'Saving...' if in progress
-                : lastSaved
-                ? `Saved at ${new Date(lastSaved).toLocaleTimeString([], {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    hour12: true,
-                  })}`
-                : "Not saved"}
-            </span>
+            HackKU25 Registration
           </CardTitle>
-          <span className="text-sm font-medium">{progress}% Completed</span>
+          <span className="text-sm font-medium">{progress}% Complete</span>
         </div>
         <Progress value={progress} className="w-full h-2" />
       </CardHeader>
