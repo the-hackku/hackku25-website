@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "./ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -16,7 +16,7 @@ import {
   IconHomeFilled,
   IconUserFilled,
   IconUserStar,
-} from "@tabler/icons-react"; // Import the icons, both regular and filled variants
+} from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "next-auth/react";
 
@@ -28,16 +28,28 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
   const pathname = usePathname();
 
   // Determine the active tab based on the current path
-  const tabValueMapping: { [key: string]: string } = {
-    "/": "home",
-    "/schedule": "schedule",
-    "/faq": "faq",
-    "/tracks": "tracks",
-    "/register": "register",
-    "/profile": "profile",
-  };
+  const tabValueMapping: { [key: string]: string } = useMemo(
+    () => ({
+      "/": "home",
+      "/schedule": "schedule",
+      "/faq": "faq",
+      "/tracks": "tracks",
+      "/register": "register",
+      "/signin": "register", // Map /signin to the "register" tab
+      "/profile": "profile",
+    }),
+    []
+  );
 
-  const currentTab = pathname ? tabValueMapping[pathname] : ""; // Get the current tab value, or empty if not found
+  // Set current tab based on pathname
+  const [currentTab, setCurrentTab] = useState(
+    pathname ? tabValueMapping[pathname] || "" : ""
+  );
+
+  // Update current tab whenever pathname changes
+  useEffect(() => {
+    setCurrentTab(pathname ? tabValueMapping[pathname] || "" : "");
+  }, [pathname, tabValueMapping]);
 
   // Track scroll event
   useEffect(() => {
