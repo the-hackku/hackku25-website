@@ -288,7 +288,7 @@ export default function HomePage() {
           <h2 className="text-7xl font-bold mb-4 text-white font-dfvn">
             Meet the Team
           </h2>
-          <p className="text-2xl text-gray-300">
+          <p className="text-2xl text-white">
             The passionate individuals driving HackKU25 forward. Our team is
             dedicated to creating an unforgettable hackathon experience for all
             participants.
