@@ -18,7 +18,7 @@ export default function RegisterAlert({ isRegistered }: RegisterAlertProps) {
 
   return (
     <motion.div
-      className="fixed bottom-0 w-full px-4 pb-4"
+      className="fixed bottom-0 w-full px-4 pb-4 z-50"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
