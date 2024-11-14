@@ -2,7 +2,7 @@
 
 import { prisma } from "@/prisma";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"; // Import the NextAuth config
+import { authOptions } from "@/lib/authoptions";
 
 export async function validateQrCode(scannedCode: string, eventId: string) {
   // Fetch the user's session

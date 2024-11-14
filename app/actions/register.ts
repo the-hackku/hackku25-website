@@ -1,7 +1,7 @@
 "use server";
 
 import { PrismaClient } from "@prisma/client";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authoptions";
 import { getServerSession } from "next-auth";
 import { RegistrationData } from "./schemas"; // Import the type from the new file
 

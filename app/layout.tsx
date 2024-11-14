@@ -5,7 +5,7 @@ import NextAuthProvider from "@/providers/NextAuthProvider";
 import HeaderWrapper from "@/components/HeaderWrapper";
 import Footer from "@/components/Footer";
 import ClientLayoutWrapper from "@/providers/ClientLayoutWrapper";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authoptions";
 import { getServerSession } from "next-auth";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";

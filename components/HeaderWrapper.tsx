@@ -2,7 +2,7 @@
 import RegisterAlert from "./RegisterAlert";
 import Header from "./Header";
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authoptions";
 import { prisma } from "@/prisma";
 
 // This is a server component

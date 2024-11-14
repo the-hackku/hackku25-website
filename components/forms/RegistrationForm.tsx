@@ -559,7 +559,6 @@ export function RegistrationForm() {
               options={[
                 { label: "United States", value: "United States" },
                 { label: "Canada", value: "Canada" },
-                { label: "India", value: "India" },
               ]}
               allowCustomInput
               closeOnSelect

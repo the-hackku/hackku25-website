@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/authoptions";
 import { prisma } from "@/prisma";
 import QrCodeComponent from "@/components/UserQRCode";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
