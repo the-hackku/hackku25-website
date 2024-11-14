@@ -20,7 +20,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "next-auth/react";
 
-const Header = ({ isRegistered }: { isRegistered: boolean }) => {
+const Header = () => {
   const { data: session, status } = useSession();
   const isAuthenticated = status === "authenticated";
   const isAdmin = session?.user?.role === "ADMIN";
@@ -34,8 +34,6 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
       "/schedule": "schedule",
       "/faq": "faq",
       "/tracks": "tracks",
-      "/register": "register",
-      "/signin": "register", // Map /signin to the "register" tab
       "/profile": "profile",
     }),
     []
@@ -78,7 +76,7 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
             <AnimatePresence>
               {!isScrolled && (
                 <motion.div
-                  key="logo" // Add unique key
+                  key="logo"
                   className="w-1/3 flex items-center"
                   initial={{ opacity: 0, x: -100 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -152,22 +150,6 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
                       Tracks
                     </Link>
                   </TabsTrigger>
-
-                  {!isRegistered && (
-                    <TabsTrigger value="register" asChild>
-                      <Link
-                        href={isAuthenticated ? "/register" : "/signin"}
-                        className="flex items-center text-lg font-medium"
-                      >
-                        {currentTab === "register" ? (
-                          <IconUserFilled size={20} className="mr-2" />
-                        ) : (
-                          <IconUser size={20} className="mr-2" />
-                        )}
-                        Register
-                      </Link>
-                    </TabsTrigger>
-                  )}
                 </TabsList>
               </Tabs>
             </motion.div>
@@ -194,12 +176,18 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
                   {/* Profile or Sign In Button */}
                   <Link href={isAuthenticated ? "/profile" : "/signin"}>
                     <Button variant="outline" className="text-sm">
-                      {currentTab === "profile" ? (
-                        <IconUserFilled size={20} className="mr-1" />
-                      ) : (
-                        <IconUser size={20} className="mr-1" />
+                      {isAuthenticated && (
+                        <>
+                          {currentTab === "profile" ? (
+                            <IconUserFilled size={20} className="mr-1" />
+                          ) : (
+                            <IconUser size={20} className="mr-1" />
+                          )}
+                        </>
                       )}
-                      {isAuthenticated ? "Account" : "Sign In"}
+                      {isAuthenticated
+                        ? "Account"
+                        : "Sign In or Create Account"}
                     </Button>
                   </Link>
                 </motion.div>

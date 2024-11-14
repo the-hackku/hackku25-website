@@ -13,7 +13,7 @@ export default async function HeaderWrapper() {
   if (!session?.user?.email) {
     return (
       <>
-        <Header isRegistered={false} />
+        <Header />
       </>
     );
   }
@@ -31,7 +31,7 @@ export default async function HeaderWrapper() {
   return (
     <>
       <RegisterAlert isRegistered={isRegistered} />
-      <Header isRegistered={isRegistered} />
+      <Header />
     </>
   );
 }

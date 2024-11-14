@@ -116,7 +116,7 @@ const SignInPage = () => {
               </div>
 
               <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? "Sending..." : "Sign In with Email"}
+                {loading ? "Sending..." : "Send Magic Link"}
               </Button>
             </form>
             {error && <p className="text-red-500 text-center mt-4">{error}</p>}
