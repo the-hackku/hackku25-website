@@ -181,10 +181,10 @@ export default function HomePage() {
             learn, and grow. It&apos;s a platform for aspiring hackers to
             showcase their skills and creativity.
           </p>
-          <h2 className="text-lg md:text-xl mt-8 mb-6 text-center text-gray-800">
-            Check out our previous events
+          <h2 className="text-lg md:text-xl mt-12 mb-4 text-center text-gray-800">
+            Check out our previous events:
           </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8 md:gap-16 px-4 md:px-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 sm:gap-24 md:gap-52 px-4 md:px-8">
             {previousEvents.map((event) => (
               <motion.div
                 key={event.name}
@@ -211,9 +211,7 @@ export default function HomePage() {
                     />
                   </a>
                 </motion.div>
-                <h3 className="text-lg md:text-xl font-semibold text-black">
-                  {event.name}
-                </h3>
+                <h3 className="text-lg md:text-xl text-black">{event.name}</h3>
               </motion.div>
             ))}
           </div>
