@@ -18,7 +18,7 @@ export default function RegisterAlert({ isRegistered }: RegisterAlertProps) {
 
   return (
     <motion.div
-      className="w-full mt-4 px-4"
+      className="fixed bottom-0 w-full px-4 pb-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -37,7 +37,7 @@ export default function RegisterAlert({ isRegistered }: RegisterAlertProps) {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="mb-4 w-full max-w-4xl mx-auto rounded-lg  bg-red-50 text-red-700 shadow-md"
+        className="w-full max-w-4xl mx-auto rounded-lg bg-red-50 text-red-700 shadow-md"
       >
         <Alert variant="destructive" className="rounded-lg">
           <div className="flex items-center space-x-3">

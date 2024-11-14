@@ -49,9 +49,7 @@ export default function Footer() {
           <p className="text-sm text-gray-500">
             © {new Date().getFullYear()} HackKU. All rights reserved.
           </p>
-          <p className="text-sm text-gray-500">
-            Designed by the HackKU Team. LFK
-          </p>
+          <p className="text-sm text-gray-500">Designed by the HackKU Team</p>
         </div>
       </div>
     </footer>

@@ -12,7 +12,7 @@ export const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
       server: process.env.EMAIL_SERVER,
-      from: "HackKU <verify@hackku.org>",
+      from: "HackKU <auth@hackku.org>",
       sendVerificationRequest: async ({ identifier, url, provider }) => {
         const { host } = new URL(url);
         try {
