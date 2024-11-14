@@ -54,7 +54,6 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
   return (
     <>
       <motion.header
-        initial={{ backgroundColor: "rgba(255, 255, 255, 0)" }}
         transition={{ duration: 0.15 }}
         className={`sticky top-0 left-0 right-0 z-50 transition-all duration-150 ${
           isScrolled ? "shadow-none border-none" : ""
@@ -67,8 +66,9 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
             <AnimatePresence>
               {!isScrolled && (
                 <motion.div
+                  key="logo" // Add unique key
                   className="w-1/3 flex items-center"
-                  initial={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, x: -100 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -100 }}
                   transition={{ duration: 0.3 }}
@@ -164,8 +164,9 @@ const Header = ({ isRegistered }: { isRegistered: boolean }) => {
             <AnimatePresence>
               {!isScrolled && (
                 <motion.div
+                  key="right-elements" // Add unique key
                   className="w-1/3 flex justify-end space-x-4"
-                  initial={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, x: 100 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 100 }}
                   transition={{ duration: 0.3 }}

@@ -10,6 +10,14 @@ body {
   background-color: hsl(var(--background));
 }
 
+/* custom font */
+@font-face {
+  font-family: "DFVN GLD Display Black";
+  src: url("/fonts/DFVN_GLD.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

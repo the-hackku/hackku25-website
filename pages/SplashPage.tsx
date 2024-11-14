@@ -1,15 +1,11 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function Component() {
-  const { scrollYProgress } = useScroll();
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.3]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-
   return (
     <div className="w-full min-h-screen overflow-x-hidden overflow-y-auto bg-gradient-to-br from-black via-indigo-900 to-purple-900 text-white">
       {/* Header Section */}
@@ -17,10 +13,7 @@ export default function Component() {
         id="header"
         className="relative w-full flex items-center justify-center overflow-hidden py-40"
       >
-        <motion.div
-          style={{ scale, opacity }}
-          className="text-center max-w-4xl z-10"
-        >
+        <motion.div className="text-center max-w-4xl z-10">
           {/* Event Dates */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -35,7 +28,7 @@ export default function Component() {
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="text-7xl font-extrabold"
+            className="text-7xl font-dfvn font-extrabold"
           >
             HackKU25
           </motion.h1>
@@ -44,7 +37,7 @@ export default function Component() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 1 }}
-            className="text-lg text-gray-300 py-4"
+            className="text-lg text-gray-300"
           >
             The University of Kansas
           </motion.p>
@@ -54,7 +47,7 @@ export default function Component() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 1 }}
-            className="mt-2"
+            className="mt-4"
           >
             <Link href="/register">
               <motion.button

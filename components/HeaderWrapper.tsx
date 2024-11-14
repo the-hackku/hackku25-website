@@ -30,8 +30,8 @@ export default async function HeaderWrapper() {
 
   return (
     <>
-      <Header isRegistered={isRegistered} />
       <RegisterAlert isRegistered={isRegistered} />
+      <Header isRegistered={isRegistered} />
     </>
   );
 }
