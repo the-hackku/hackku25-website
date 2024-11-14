@@ -45,9 +45,9 @@ export default function RegisterAlert({ isRegistered }: RegisterAlertProps) {
                 Incomplete Registration
               </AlertTitle>
               <AlertDescription className="mt-1 text-sm">
-                Your registration is incomplete. Please complete it{" "}
+                Please complete your registration{" "}
                 <u>
-                  <Link href="/register" className="text-red-700 underline">
+                  <Link href="/register" className="underline">
                     here
                   </Link>
                 </u>
