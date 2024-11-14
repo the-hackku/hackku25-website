@@ -100,33 +100,6 @@ export default function Component() {
 
       {/* Sponsors Section */}
       <SponsorsSection />
-
-      {/* Final Call to Action Section */}
-      <section className="relative w-full py-24 flex items-center justify-center bg-transparent">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="max-w-2xl text-center"
-        >
-          <h2 className="text-4xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-600">
-            Ready to Embark on Your Quest?
-          </h2>
-          <p className="text-xl text-gray-300 mb-8">
-            The countdown has begun. Gather your companions, wield your
-            creativity, and prepare to forge your legacy at HackKU 2025!
-          </p>
-          <Link href="signin">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-8 py-3 bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold rounded-full text-lg shadow-lg hover:shadow-xl transition duration-300"
-            >
-              Join the Quest
-            </motion.button>
-          </Link>
-        </motion.div>
-      </section>
     </div>
   );
 }
@@ -191,10 +164,9 @@ function TracksSection() {
 
 function SponsorsSection() {
   const sponsors = [
-    { id: 1, name: "Company A", logo: "/images/company-a.png" },
-    { id: 2, name: "Company B", logo: "/images/company-b.png" },
-    { id: 3, name: "Company C", logo: "/images/company-c.png" },
-    { id: 4, name: "Company D", logo: "/images/company-d.png" },
+    { id: 1, name: "Tradebot", logo: "/images/sponsors/tradebot.webp" },
+    { id: 2, name: "Patient Safety", logo: "/images/sponsors/patient.gif" },
+    { id: 3, name: "Security Benefit", logo: "/images/sponsors/security.jpg" },
   ];
 
   return (
@@ -211,8 +183,8 @@ function SponsorsSection() {
             <Image
               src={sponsor.logo}
               alt={sponsor.name}
-              width={150}
-              height={50}
+              width={200}
+              height={100}
             />
           </div>
         ))}
