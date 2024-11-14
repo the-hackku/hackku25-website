@@ -28,7 +28,7 @@ const Header = () => {
   const pathname = usePathname();
 
   // Determine the active tab based on the current path
-  const tabValueMapping: { [key: string]: string } = useMemo(
+  const tabValueMapping = useMemo(
     () => ({
       "/": "home",
       "/schedule": "schedule",
@@ -41,12 +41,18 @@ const Header = () => {
 
   // Set current tab based on pathname
   const [currentTab, setCurrentTab] = useState(
-    pathname ? tabValueMapping[pathname] || "" : ""
+    pathname
+      ? tabValueMapping[pathname as keyof typeof tabValueMapping] || ""
+      : ""
   );
 
   // Update current tab whenever pathname changes
   useEffect(() => {
-    setCurrentTab(pathname ? tabValueMapping[pathname] || "" : "");
+    setCurrentTab(
+      pathname
+        ? tabValueMapping[pathname as keyof typeof tabValueMapping] || ""
+        : ""
+    );
   }, [pathname, tabValueMapping]);
 
   // Track scroll event
@@ -65,9 +71,7 @@ const Header = () => {
     <>
       <motion.header
         transition={{ duration: 0.15 }}
-        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-150 ${
-          isScrolled ? "shadow-none border-none" : ""
-        }`}
+        className="sticky top-0 left-0 right-0 z-50 transition-all duration-300"
       >
         {/* Main Header Container */}
         <div className="container mx-auto max-w-7xl">
@@ -158,7 +162,7 @@ const Header = () => {
             <AnimatePresence>
               {!isScrolled && (
                 <motion.div
-                  key="right-elements" // Add unique key
+                  key="right-elements"
                   className="w-1/3 flex justify-end space-x-4"
                   initial={{ opacity: 0, x: 100 }}
                   animate={{ opacity: 1, x: 0 }}
