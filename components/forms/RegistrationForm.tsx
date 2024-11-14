@@ -49,9 +49,9 @@ const predefinedSchools = [
 
 export function RegistrationForm() {
   const [showChaperoneFields, setShowChaperoneFields] = useState(false);
-  const [lastSaved, setLastSaved] = useState<string | null>(null);
+  const [, setLastSaved] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
-  const [saving, setSaving] = useState(false); // Track if currently saving
+  const [, setSaving] = useState(false); // Track if currently saving
 
   const LOCAL_STORAGE_KEY = "registrationFormData";
   const SAVE_INTERVAL_MS = 1000; // Save every 1 second
