@@ -74,6 +74,13 @@ const Header = () => {
 
   return (
     <>
+      {/* REMOVE THIS WHEN DONE WITH BETA! */}
+      <div className="bg-yellow-300 text-center py-2 px-4">
+        <span>
+          <b>Notice</b> - This is a beta version. Any data submitted will be{" "}
+          <u>deleted</u>.
+        </span>
+      </div>
       <motion.header
         transition={{ duration: 0.15 }}
         className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 overflow-hidden ${
