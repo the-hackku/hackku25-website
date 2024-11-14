@@ -7,11 +7,11 @@ import Image from "next/image";
 
 export default function Component() {
   return (
-    <div className="w-full min-h-screen overflow-x-hidden overflow-y-auto bg-gradient-to-br from-black via-indigo-900 to-purple-900 text-white">
+    <div className="w-full min-h-screen overflow-x-hidden overflow-y-auto bg-gradient-to-br from-black via-indigo-900 to-purple-900 text-white font-agency">
       {/* Header Section */}
       <section
         id="header"
-        className="relative w-full flex items-center justify-center overflow-hidden py-40"
+        className="relative w-full flex items-center justify-center overflow-hidden py-40 "
       >
         <motion.div className="text-center max-w-4xl z-10">
           {/* Event Dates */}
@@ -19,16 +19,16 @@ export default function Component() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.8 }}
-            className="text-lg text-gray-300"
+            className="text-lg text-gray-300 font-agency"
           >
-            April 4th - 6th, 2025
+            APRIL 4th - 6th, 2025
           </motion.p>
 
           <motion.h1
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="text-7xl font-dfvn font-extrabold"
+            className="text-8xl font-dfvn font-extrabold"
           >
             HackKU25
           </motion.h1>
@@ -37,9 +37,9 @@ export default function Component() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 1 }}
-            className="text-lg text-gray-300"
+            className="text-lg text-gray-300 font-agency"
           >
-            The University of Kansas
+            THE UNIVERSITY OF KANSAS
           </motion.p>
 
           {/* Register Now Button */}
@@ -122,7 +122,7 @@ function Section({ id, title, description }: SectionProps) {
         transition={{ duration: 0.6 }}
         className="max-w-2xl text-center"
       >
-        <h2 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-600">
+        <h2 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-600 font-dfvn">
           {title}
         </h2>
         <p className="text-xl text-gray-300">{description}</p>

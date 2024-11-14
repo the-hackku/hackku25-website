@@ -58,6 +58,7 @@ const config: Config = {
       },
       fontFamily: {
         dfvn: ["DFVN GLD Display Black", "sans-serif"],
+        agency: ["AGENCYR", "sans-serif"],
       },
     },
   },

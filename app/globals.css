@@ -18,6 +18,13 @@ body {
   font-style: normal;
 }
 
+@font-face {
+  font-family: "AGENCYR";
+  src: url("/fonts/AGENCYR.TTF") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
