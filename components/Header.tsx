@@ -16,9 +16,16 @@ import {
   IconHomeFilled,
   IconUserFilled,
   IconUserStar,
+  IconMenu2,
 } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSession } from "next-auth/react";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 const Header = () => {
   const { data: session, status } = useSession();
@@ -26,6 +33,9 @@ const Header = () => {
   const isAdmin = session?.user?.role === "ADMIN";
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+
+  // Check if the screen width is desktop
+  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 1024;
 
   // Determine the active tab based on the current path
   const tabValueMapping = useMemo(
@@ -57,34 +67,30 @@ const Header = () => {
 
   // Track scroll event
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <>
       <motion.header
         transition={{ duration: 0.15 }}
-        className="sticky top-0 left-0 right-0 z-50 transition-all duration-300"
+        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 overflow-hidden ${
+          isDesktop ? (isScrolled ? "bg-transparent" : "bg-white") : "bg-white"
+        }`}
       >
-        {/* Main Header Container */}
-        <div className="container mx-auto max-w-7xl">
+        <div className="container mx-auto max-w-7xl overflow-hidden">
           <div className="flex items-center justify-between py-4">
             {/* Left Side - Logo */}
             <AnimatePresence>
-              {!isScrolled && (
+              {(!isScrolled || !isDesktop) && (
                 <motion.div
                   key="logo"
                   className="w-1/3 flex items-center"
-                  initial={{ opacity: 0, x: -100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -100 }}
+                  initial={isDesktop ? { opacity: 0, x: -100 } : {}}
+                  animate={isDesktop ? { opacity: 1, x: 0 } : {}}
+                  exit={isDesktop ? { opacity: 0, x: -100 } : {}}
                   transition={{ duration: 0.3 }}
                 >
                   <Link href="/">
@@ -106,11 +112,49 @@ const Header = () => {
               )}
             </AnimatePresence>
 
-            {/* Center - Navigation Links using Tabs */}
+            {/* Mobile Burger Menu */}
+            <header className="lg:hidden">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline">
+                    <IconMenu2 size={24} />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right">
+                  <nav className="flex flex-col space-y-4 p-4">
+                    <Link href="/" passHref>
+                      <SheetClose asChild>
+                        <a>Home</a>
+                      </SheetClose>
+                    </Link>
+                    <Link href="/schedule" passHref>
+                      <SheetClose asChild>
+                        <a>Schedule</a>
+                      </SheetClose>
+                    </Link>
+                    <Link href="/tracks" passHref>
+                      <SheetClose asChild>
+                        <a>Tracks</a>
+                      </SheetClose>
+                    </Link>
+                    <Link
+                      href={isAuthenticated ? "/profile" : "/signin"}
+                      passHref
+                    >
+                      <SheetClose asChild>
+                        <a>{isAuthenticated ? "Account" : "Sign In"}</a>
+                      </SheetClose>
+                    </Link>
+                  </nav>
+                </SheetContent>
+              </Sheet>
+            </header>
+
+            {/* Center - Navigation Links using Tabs (for larger screens) */}
             <motion.div
-              className="flex justify-center"
+              className="hidden lg:flex justify-center flex-1"
               initial={{ flex: 1, scale: 1 }}
-              animate={{ scale: isScrolled ? 1.25 : 1, flex: 1 }}
+              animate={isDesktop && isScrolled ? { scale: 1.25 } : { scale: 1 }}
               transition={{ type: "spring", damping: 25, stiffness: 100 }}
             >
               <Tabs defaultValue={currentTab} value={currentTab}>
@@ -160,13 +204,13 @@ const Header = () => {
 
             {/* Right Side - Admin & Profile Buttons */}
             <AnimatePresence>
-              {!isScrolled && (
+              {(!isScrolled || !isDesktop) && (
                 <motion.div
                   key="right-elements"
-                  className="w-1/3 flex justify-end space-x-4"
-                  initial={{ opacity: 0, x: 100 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 100 }}
+                  className="hidden lg:flex w-1/3 justify-end space-x-4"
+                  initial={isDesktop ? { opacity: 0, x: 100 } : {}}
+                  animate={isDesktop ? { opacity: 1, x: 0 } : {}}
+                  exit={isDesktop ? { opacity: 0, x: 100 } : {}}
                   transition={{ duration: 0.3 }}
                 >
                   {/* Admin Button */}

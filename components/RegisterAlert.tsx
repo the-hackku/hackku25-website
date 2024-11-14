@@ -5,20 +5,18 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { IconAlertCircle } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 
-// Define prop types for RegisterAlert
 interface RegisterAlertProps {
   isRegistered: boolean;
 }
 
 export default function RegisterAlert({ isRegistered }: RegisterAlertProps) {
-  // Show the alert if the user is not registered
   if (isRegistered) {
     return null;
   }
 
   return (
     <motion.div
-      className="fixed bottom-0 w-full px-4 pb-4 z-50"
+      className="fixed bottom-0 right-0 w-full max-w-sm px-4 pb-4 z-50" // Adjust width and alignment
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
@@ -37,7 +35,7 @@ export default function RegisterAlert({ isRegistered }: RegisterAlertProps) {
           repeat: Infinity,
           ease: "easeInOut",
         }}
-        className="w-full max-w-4xl mx-auto rounded-lg bg-red-50 text-red-700 shadow-md"
+        className="rounded-lg bg-red-50 text-red-700 shadow-md"
       >
         <Alert variant="destructive" className="rounded-lg">
           <div className="flex items-center space-x-3">
