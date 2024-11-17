@@ -12,14 +12,11 @@ import {
   IconAward,
   IconAwardFilled,
   IconHome2,
-  IconUser,
   IconHomeFilled,
-  IconUserFilled,
   IconUserStar,
   IconMenu2,
 } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSession } from "next-auth/react";
 import {
   Sheet,
   SheetClose,
@@ -27,10 +24,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-const Header = () => {
-  const { data: session, status } = useSession();
-  const isAuthenticated = status === "authenticated";
-  const isAdmin = session?.user?.role === "ADMIN";
+const Header = ({ isAdmin }: { isAdmin: boolean }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
 
@@ -74,7 +68,6 @@ const Header = () => {
 
   return (
     <>
-      {/* REMOVE THIS WHEN DONE WITH BETA! */}
       <div className="bg-yellow-300 text-center py-2 px-4">
         <span>
           <b>Notice</b> - This is a beta version. Any data submitted will be{" "}
@@ -144,12 +137,9 @@ const Header = () => {
                         <a>Tracks</a>
                       </SheetClose>
                     </Link>
-                    <Link
-                      href={isAuthenticated ? "/profile" : "/signin"}
-                      passHref
-                    >
+                    <Link href="/profile" passHref>
                       <SheetClose asChild>
-                        <a>{isAuthenticated ? "Account" : "Sign In"}</a>
+                        <a>Profile</a>
                       </SheetClose>
                     </Link>
                   </nav>
@@ -228,21 +218,10 @@ const Header = () => {
                       </Button>
                     </Link>
                   )}
-                  {/* Profile or Sign In Button */}
-                  <Link href={isAuthenticated ? "/profile" : "/signin"}>
+                  {/* Profile Button */}
+                  <Link href="/profile">
                     <Button variant="outline" className="text-sm">
-                      {isAuthenticated && (
-                        <>
-                          {currentTab === "profile" ? (
-                            <IconUserFilled size={20} className="mr-1" />
-                          ) : (
-                            <IconUser size={20} className="mr-1" />
-                          )}
-                        </>
-                      )}
-                      {isAuthenticated
-                        ? "Account"
-                        : "Sign In or Create Account"}
+                      Profile
                     </Button>
                   </Link>
                 </motion.div>

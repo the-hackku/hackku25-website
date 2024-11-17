@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async session({ session, user }: { session: Session; user: User }) {
       if (session.user) {
-        session.user.role = (user as User & { role?: string }).role || "user";
+        session.user.role = (user as User & { role?: string }).role || "HACKER";
         session.user.id = user.id;
       }
       return session;

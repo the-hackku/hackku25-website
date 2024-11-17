@@ -8,7 +8,6 @@ import {
   IconHeart,
   IconHeartFilled,
   IconMapPin,
-  IconChevronDown,
   IconX,
   IconListDetails,
 } from "@tabler/icons-react";
@@ -90,9 +89,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const [selectedDay, setSelectedDay] = useState("All");
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-  const [showFoodOnly, setShowFoodOnly] = useState(false);
   const scheduleGridRef = useRef<HTMLDivElement | null>(null);
-  const [hasScrolled, setHasScrolled] = useState(false);
 
   // Group events by date
   const groupedEvents = schedule.reduce((acc, event) => {
@@ -112,20 +109,6 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
     }
   }, [days, selectedDay]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (scheduleGridRef.current && scheduleGridRef.current.scrollTop > 10) {
-        setHasScrolled(true);
-      }
-    };
-    const div = scheduleGridRef.current;
-    if (div) {
-      div.addEventListener("scroll", handleScroll);
-      return () => div.removeEventListener("scroll", handleScroll);
-    }
-  }, []);
-
-  // Helper function to get the next event based on the current event
   // Helper function to get the next event based on the current event
   const getNextEvent = (
     currentEvent: ScheduleGridProps["schedule"][0] | null
@@ -201,23 +184,6 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
         ref={scheduleGridRef}
         className="overflow-y-scroll h-[500px] border-r border-gray-300 p-4 relative"
       >
-        {!hasScrolled && (
-          <motion.div
-            className="absolute left-1/2 -translate-x-1/2 bottom-4"
-            initial={{ y: 0 }}
-            animate={{ y: [0, 10, 0] }}
-            transition={{ repeat: Infinity, duration: 1 }}
-            style={{ zIndex: 10 }}
-            onMouseEnter={() =>
-              scheduleGridRef.current?.scrollTo({
-                top: scheduleGridRef.current?.scrollHeight / 5,
-                behavior: "smooth",
-              })
-            }
-          >
-            <IconChevronDown size={36} />
-          </motion.div>
-        )}
         {/* Container for Tabs and Heart Icon */}
         <div className="flex justify-between items-center mb-4 space-x-4">
           {/* Tabs to select the day */}
@@ -260,19 +226,6 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                   className="text-sm cursor-pointer"
                 >
                   Show Favorites Only
-                </label>
-              </div>
-              <div className="flex items-center mb-2">
-                <Checkbox
-                  id="food-only"
-                  checked={showFoodOnly}
-                  onCheckedChange={(checked) =>
-                    setShowFoodOnly(checked === true)
-                  }
-                  className="mr-2"
-                />
-                <label htmlFor="food-only" className="text-sm cursor-pointer">
-                  Show Food only 🍔
                 </label>
               </div>
             </PopoverContent>

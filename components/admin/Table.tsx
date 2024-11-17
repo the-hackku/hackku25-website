@@ -6,10 +6,8 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
-  getPaginationRowModel,
+  getFilteredRowModel,
   SortingState,
-  ColumnFiltersState,
-  RowSelectionState,
 } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -38,27 +37,38 @@ export default function TableComponent<T>({
   columns,
 }: TableComponentProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [rowSelection, setRowSelection] = useState<RowSelectionState>({});
+  const [globalFilter, setGlobalFilter] = useState<string>("");
+
   const table = useReactTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
     state: {
       sorting,
-      columnFilters,
-      rowSelection,
+      globalFilter,
     },
     onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    onRowSelectionChange: setRowSelection,
+    onGlobalFilterChange: setGlobalFilter,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    globalFilterFn: (row, columnId, filterValue) => {
+      const rowValues = Object.values(row.original as Record<string, unknown>)
+        .map((value) => String(value).toLowerCase())
+        .join(" ");
+      return rowValues.includes(filterValue.toLowerCase());
+    },
   });
 
   return (
     <div>
       {/* Filter Input */}
       <div className="flex items-center py-4">
+        <Input
+          placeholder="Search..."
+          value={globalFilter}
+          onChange={(e) => setGlobalFilter(e.target.value)}
+          className="max-w-sm"
+        />
+
         {/* Dropdown for column visibility */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -70,21 +80,22 @@ export default function TableComponent<T>({
             {table
               .getAllColumns()
               .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                );
-              })}
+              .map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                >
+                  {column.id}
+                </DropdownMenuCheckboxItem>
+              ))}
           </DropdownMenuContent>
         </DropdownMenu>
+      </div>
+
+      {/* Result Count */}
+      <div className="py-2">
+        <span>{table.getFilteredRowModel().rows.length} result(s) found.</span>
       </div>
 
       {/* Data Table */}
@@ -107,12 +118,9 @@ export default function TableComponent<T>({
             ))}
           </TableHeader>
           <TableBody>
-            {table.getRowModel().rows.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
+            {table.getFilteredRowModel().rows.length ? (
+              table.getFilteredRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
                       {flexRender(

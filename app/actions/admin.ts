@@ -16,13 +16,15 @@ interface EventData {
 
 // Fetch all users and return their names and emails
 export async function getUsers() {
-  await isAdmin(); // Ensure only admins can access
+  await isAdmin(); // Only allow admins to access this data
 
   return await prisma.user.findMany({
     select: {
+      id: true,
       name: true,
-      email: true, // Return the email along with the name
-      role: true, // Add role if needed on frontend
+      email: true,
+      role: true,
+      ParticipantInfo: true, // Fetch all fields from ParticipantInfo
     },
   });
 }
