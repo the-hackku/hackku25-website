@@ -9,7 +9,7 @@ import {
   IconHeartFilled,
   IconMapPin,
   IconX,
-  IconListDetails,
+  IconInfoCircle,
 } from "@tabler/icons-react";
 import {
   Popover,
@@ -182,10 +182,10 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
       {/* Left Section: Schedule Grid */}
       <div
         ref={scheduleGridRef}
-        className="overflow-y-scroll h-[500px] border-r border-gray-300 p-4 relative"
+        className="overflow-y-scroll h-[500px] border-r border-gray-300 relative"
       >
         {/* Container for Tabs and Heart Icon */}
-        <div className="flex justify-between items-center mb-4 space-x-4">
+        <div className="flex justify-between items-center mb-4 space-x-4 bg-white sticky top-0 z-50 p-2">
           {/* Tabs to select the day */}
           <Tabs value={selectedDay} onValueChange={handleDayChange}>
             <TabsList>
@@ -391,10 +391,12 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                   <IconMapPin size={20} className="text-gray-400 mr-2" />
                   <span>{selectedEvent.location || "TBA"}</span>
                 </div>
-                <div className="flex items-center mt-2">
-                  <IconListDetails size={20} className="text-gray-400 mr-2" />
-                  {selectedEvent.description || "No description available."}
-                </div>
+                {selectedEvent.description && (
+                  <div className="flex items-center mt-2">
+                    <IconInfoCircle size={20} className="text-gray-400 mr-2" />
+                    {selectedEvent.description}
+                  </div>
+                )}
               </div>
 
               {/* Bottom Section: Pagination Buttons */}

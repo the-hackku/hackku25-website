@@ -16,12 +16,22 @@ import {
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
   const [participantColumns, setParticipantColumns] = useState<
-    ColumnDef<any>[]
+    ColumnDef<Record<string, unknown>>[]
   >([]);
 
   useEffect(() => {
     async function fetchUsers() {
-      const data = await getUsers();
+      const rawData = await getUsers();
+      const data: User[] = rawData.map((user) => ({
+        ...user,
+        ParticipantInfo: user.ParticipantInfo
+          ? {
+              ...user.ParticipantInfo,
+              createdAt: user.ParticipantInfo.createdAt.toISOString(),
+              updatedAt: user.ParticipantInfo.updatedAt.toISOString(),
+            }
+          : null,
+      }));
       setUsers(data);
 
       // Generate dynamic columns for ParticipantInfo
@@ -41,43 +51,42 @@ export default function UsersPage() {
         allKeys.add("email");
 
         // Create columns dynamically for ParticipantInfo
-        const dynamicParticipantColumns: ColumnDef<any>[] = Array.from(
-          allKeys
-        ).map((key) => ({
-          header: key.replace(/([A-Z])/g, " $1"), // Convert camelCase to readable headers
-          accessorFn: (row) => {
-            const value = row[key];
-            if (value === null || value === undefined) return "N/A";
-            if (typeof value === "object") return JSON.stringify(value);
-            return value;
-          },
-          cell: ({ row }) => {
-            const value = row.original[key];
-            const displayValue =
-              value === null || value === undefined
-                ? "N/A"
-                : typeof value === "object"
-                ? JSON.stringify(value)
-                : value;
+        const dynamicParticipantColumns: ColumnDef<Record<string, unknown>>[] =
+          Array.from(allKeys).map((key) => ({
+            header: key.replace(/([A-Z])/g, " $1"), // Convert camelCase to readable headers
+            accessorFn: (row) => {
+              const value = row[key];
+              if (value === null || value === undefined) return "N/A";
+              if (typeof value === "object") return JSON.stringify(value);
+              return value;
+            },
+            cell: ({ row }) => {
+              const value = row.original[key];
+              const displayValue =
+                value === null || value === undefined
+                  ? "N/A"
+                  : typeof value === "object"
+                  ? JSON.stringify(value)
+                  : value;
 
-            return (
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger>
-                    <span className="truncate block max-w-[150px] overflow-hidden text-ellipsis">
-                      {displayValue}
-                    </span>
-                  </TooltipTrigger>
-                  {displayValue !== "N/A" && (
-                    <TooltipContent>
-                      {typeof displayValue === "string" && displayValue}
-                    </TooltipContent>
-                  )}
-                </Tooltip>
-              </TooltipProvider>
-            );
-          },
-        }));
+              return (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <span className="truncate block max-w-[150px] overflow-hidden text-ellipsis">
+                        {String(displayValue)}
+                      </span>
+                    </TooltipTrigger>
+                    {displayValue !== "N/A" && (
+                      <TooltipContent>
+                        {typeof displayValue === "string" && displayValue}
+                      </TooltipContent>
+                    )}
+                  </Tooltip>
+                </TooltipProvider>
+              );
+            },
+          }));
 
         setParticipantColumns(dynamicParticipantColumns);
       }
@@ -99,13 +108,15 @@ export default function UsersPage() {
 
       <h1 className="text-2xl font-bold mt-8 mb-4">Participant Info</h1>
       <TableComponent
-        data={users
-          .map((user) =>
-            user.ParticipantInfo
-              ? { ...user.ParticipantInfo, email: user.email }
-              : null
-          )
-          .filter(Boolean)}
+        data={
+          users
+            .map((user) =>
+              user.ParticipantInfo
+                ? { ...user.ParticipantInfo, email: user.email }
+                : null
+            )
+            .filter(Boolean) as Record<string, unknown>[]
+        }
         columns={participantColumns}
       />
     </div>

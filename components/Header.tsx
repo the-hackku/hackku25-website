@@ -9,12 +9,12 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   IconCalendar,
   IconCalendarFilled,
-  IconAward,
-  IconAwardFilled,
   IconHome2,
   IconHomeFilled,
   IconUserStar,
   IconMenu2,
+  IconInfoCircle,
+  IconInfoCircleFilled,
 } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -37,7 +37,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
       "/": "home",
       "/schedule": "schedule",
       "/faq": "faq",
-      "/tracks": "tracks",
+      "/info": "info",
       "/profile": "profile",
     }),
     []
@@ -68,7 +68,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
 
   return (
     <>
-      <div className="bg-yellow-300 text-center py-2 px-4">
+      <div className="bg-yellow-300 text-center py-1 px-4">
         <span>
           <b>Notice</b> - This is a beta version. Any data submitted will be{" "}
           <u>deleted</u>.
@@ -132,9 +132,9 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                         <a>Schedule</a>
                       </SheetClose>
                     </Link>
-                    <Link href="/tracks" passHref>
+                    <Link href="/info" passHref>
                       <SheetClose asChild>
-                        <a>Tracks</a>
+                        <a>Event Info</a>
                       </SheetClose>
                     </Link>
                     <Link href="/profile" passHref>
@@ -182,17 +182,17 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                       Schedule
                     </Link>
                   </TabsTrigger>
-                  <TabsTrigger value="tracks" asChild>
+                  <TabsTrigger value="info" asChild>
                     <Link
-                      href="/tracks"
+                      href="/info"
                       className="flex items-center text-lg font-medium"
                     >
-                      {currentTab === "tracks" ? (
-                        <IconAwardFilled size={20} className="mr-2" />
+                      {currentTab === "info" ? (
+                        <IconInfoCircleFilled size={20} className="mr-2" />
                       ) : (
-                        <IconAward size={20} className="mr-2" />
+                        <IconInfoCircle size={20} className="mr-2" />
                       )}
-                      Tracks
+                      More Info
                     </Link>
                   </TabsTrigger>
                 </TabsList>
@@ -221,7 +221,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                   {/* Profile Button */}
                   <Link href="/profile">
                     <Button variant="outline" className="text-sm">
-                      Profile
+                      My Profile
                     </Button>
                   </Link>
                 </motion.div>

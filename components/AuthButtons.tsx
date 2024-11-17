@@ -12,7 +12,7 @@ export default function AuthButtons({ isAuthenticated }: AuthButtonsProps) {
   return (
     <div className="auth-container">
       {isAuthenticated ? (
-        <button className="button text-red-400" onClick={() => signOut()}>
+        <button className="button " onClick={() => signOut()}>
           Sign out
         </button>
       ) : (

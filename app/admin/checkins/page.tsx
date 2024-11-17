@@ -24,7 +24,6 @@ export default async function CheckinsPage() {
   }));
 
   const checkinColumns: ColumnDef<ProcessedCheckin>[] = [
-    { header: "User Name", accessorKey: "user.name" }, // Access the nested user name
     { header: "User Email", accessorKey: "user.email" }, // Access the nested
     { header: "Event Name", accessorKey: "event.name" }, // Access the nested event name
     { header: "Check-in Time", accessorKey: "createdAt" }, // Access the formatted check-in time

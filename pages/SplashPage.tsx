@@ -176,11 +176,12 @@ export default function HomePage() {
             What is HackKU?
           </h2>
           <p className="text-lg md:text-2xl text-black">
-            HackKU is an immersive hackathon experience where creators,
-            innovators, and tech enthusiasts come together to build solutions,
-            learn, and grow. It&apos;s a platform for aspiring hackers to
-            showcase their skills and creativity.
+            HackKU is a 36-hour event where students come together to build
+            innovative projects and compete for exciting prizes. Participants
+            can attend workshops, network with sponsors, and explore new
+            technologies, all while meeting new people and having fun!
           </p>
+
           <h2 className="text-lg md:text-xl mt-12 mb-4 text-center text-gray-800">
             Check out our previous events:
           </h2>
@@ -229,7 +230,7 @@ export default function HomePage() {
           transition={{ duration: 0.6 }}
           className="max-w-2xl text-center mb-8 md:mb-12 px-4 md:px-0"
         >
-          <h2 className="text-5xl md:text-7xl font-bold mb-4 text-white font-dfvn">
+          <h2 className="text-5xl md:text-7xl font-bold mb-2 text-white font-dfvn">
             Our Sponsors
           </h2>
           <p className="text-lg md:text-2xl text-white">
@@ -239,7 +240,7 @@ export default function HomePage() {
         </motion.div>
         {sponsorTiers.map((tier) => (
           <div key={tier} className="w-full py-6 md:py-10">
-            <h3 className="text-2xl md:text-3xl font-semibold mb-6 text-center text-white font-dfvn">
+            <h3 className="text-4xl md:text-5xl font-semibold mb-6 text-center text-white font-dfvn">
               {tier} Tier
             </h3>
             <div className="flex flex-wrap justify-center gap-4 md:gap-8">

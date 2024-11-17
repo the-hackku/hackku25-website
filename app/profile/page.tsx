@@ -10,6 +10,7 @@ import {
   IconUser,
   IconCalendar,
   IconHelpCircle,
+  IconLogout,
 } from "@tabler/icons-react";
 import {
   Card,
@@ -170,7 +171,11 @@ export default async function ProfilePage() {
                           <IconCalendar className="text-primary" size={20} />
                           <p>Hacker Since: {accountCreationDate}</p>
                         </div>
-                        <AuthButtons isAuthenticated />
+                        <hr className="my-4 border-gray-200" />
+                        <div className="flex items-center space-x-2">
+                          <IconLogout className="text-primary" size={20} />
+                          <AuthButtons isAuthenticated />
+                        </div>
                       </div>
                     </CardContent>
                   </Card>

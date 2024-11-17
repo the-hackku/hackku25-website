@@ -73,8 +73,9 @@ export async function createEvent(data: EventData) {
   return await prisma.event.create({
     data: {
       name: data.name,
-      startDate: new Date(data.startDate), // Use startDate field
-      endDate: new Date(data.endDate), // Use endDate field
+      // Prisma interprets ISO strings as UTC by default
+      startDate: new Date(data.startDate),
+      endDate: new Date(data.endDate),
       location: data.location || null,
     },
     select: {
