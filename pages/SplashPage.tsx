@@ -4,11 +4,32 @@ import { motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
+import Confetti from "react-dom-confetti";
 
 export default function HomePage() {
   const scrollToSection = (id: string) => {
     const target = document.getElementById(id);
     target?.scrollIntoView({ behavior: "smooth" });
+  };
+  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const [confettiActive, setConfettiActive] = useState(false);
+
+  const triggerConfetti = () => {
+    setConfettiActive(true);
+    setTimeout(() => setConfettiActive(false), 1000); // Reset after 1 second
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const { clientX, clientY, currentTarget } = e;
+    const { width, height, left, top } = currentTarget.getBoundingClientRect();
+    const x = ((clientX - left) / width - 0.5) * 10; // Adjust tilt sensitivity
+    const y = ((clientY - top) / height - 0.5) * 20; // Adjust tilt sensitivity
+    setTilt({ x, y });
+  };
+
+  const resetTilt = () => {
+    setTilt({ x: 0, y: 0 });
   };
 
   const sponsorTiers = ["Kila", "Mega"];
@@ -95,9 +116,16 @@ export default function HomePage() {
       <section
         id="header"
         className="relative w-full flex items-center justify-center overflow-hidden pb-40 pt-32 md:pb-60 md:pt-48"
+        onMouseMove={handleMouseMove}
+        onMouseLeave={resetTilt}
       >
-        <motion.div className="text-center max-w-4xl z-10 px-4 md:px-0">
-          {/* Event Dates */}
+        <motion.div
+          className="text-center max-w-4xl z-10 px-4 md:px-0"
+          style={{
+            transform: `perspective(1000px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)`,
+          }}
+          transition={{ duration: 0.2 }}
+        >
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -106,7 +134,6 @@ export default function HomePage() {
           >
             APRIL 4th - 6th, 2025
           </motion.p>
-
           {/* Event Title */}
           <motion.h1
             initial={{ opacity: 0, y: -50 }}
@@ -124,7 +151,14 @@ export default function HomePage() {
             transition={{ duration: 0.7, delay: 1 }}
             className="text-md md:text-lg text-gray-300 font-agency"
           >
-            THE UNIVERSITY OF KANSAS
+            @{" "}
+            <Link
+              href="https://maps.app.goo.gl/g2MHMwYqWsaYvLSL9"
+              target="_blank"
+              className="hover:underline"
+            >
+              THE UNIVERSITY OF KANSAS
+            </Link>
           </motion.p>
 
           {/* Register Now Button */}
@@ -132,10 +166,31 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 1.25 }}
-            className="mt-4"
+            className="mt-4 relative flex justify-center items-center"
           >
+            {/* Confetti */}
+            <div className="absolute">
+              <Confetti
+                active={confettiActive}
+                config={{
+                  angle: 90,
+                  spread: 360,
+                  startVelocity: 20,
+                  elementCount: 70,
+                  dragFriction: 0.1,
+                  duration: 1000,
+                  stagger: 1,
+                  width: "10px",
+                  height: "10px",
+                  colors: ["#f00", "#00f"],
+                }}
+              />
+            </div>
+
+            {/* Register Now Button */}
             <Link href="/register">
               <motion.button
+                onHoverStart={triggerConfetti}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-6 py-3 bg-yellow-500 hover:shadow-xl rounded-full text-lg md:text-xl shadow-lg text-black font-bold"
