@@ -114,7 +114,7 @@ export default async function ProfilePage() {
                       <CardHeader>
                         <div className="flex items-center space-x-2">
                           <CardTitle className="text-xl font-semibold">
-                            Your QR Code
+                            My HackerPass
                           </CardTitle>
                           <TooltipProvider>
                             <Tooltip>
@@ -126,7 +126,7 @@ export default async function ProfilePage() {
                               </TooltipTrigger>
                               <TooltipContent>
                                 <p>
-                                  This QR code is used for checking into the
+                                  Your HackerPass is used for checking into the
                                   hackathon and individual events.
                                 </p>
                               </TooltipContent>

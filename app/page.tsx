@@ -128,7 +128,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.8 }}
-            className="text-md md:text-lg text-gray-300 font-agency"
+            className="text-md md:text-lg text-gray-300"
           >
             APRIL 4th - 6th, 2025
           </motion.p>
@@ -137,7 +137,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="text-6xl md:text-8xl font-dfvn font-extrabold"
+            className="text-6xl md:text-8xl font-dfvn"
           >
             HackKU25
           </motion.h1>
@@ -147,7 +147,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 1 }}
-            className="text-md md:text-lg text-gray-300 font-agency"
+            className="text-md md:text-lg text-gray-300"
           >
             @{" "}
             <Link
@@ -164,14 +164,13 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 1.25 }}
-            className="mt-4 relative flex justify-center items-center"
+            className="mt-6 relative flex justify-center items-center"
           >
-            {/* Register Now Button */}
             <Link href="/register">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-yellow-500 hover:shadow-xl rounded-full text-lg md:text-xl shadow-lg text-black font-bold"
+                className="px-6 py-3 bg-yellow-500 hover:shadow-xl rounded-full text-lg md:text-2xl shadow-lg text-black font-agency"
               >
                 Register Now
               </motion.button>

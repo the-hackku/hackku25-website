@@ -138,7 +138,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                       <SheetClose asChild>
                         <span className="flex items-center text-xl">
                           <IconInfoCircle size={24} className="mr-2" />
-                          More Info
+                          HackerDoc
                         </span>
                       </SheetClose>
                     </Link>
@@ -213,7 +213,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                       ) : (
                         <IconInfoCircle size={20} className="mr-2" />
                       )}
-                      More Info
+                      HackerDoc
                     </Link>
                   </TabsTrigger>
                 </TabsList>
