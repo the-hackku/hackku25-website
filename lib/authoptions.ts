@@ -1,4 +1,3 @@
-// lib/authOptions.ts
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/prisma";
 import nodemailer from "nodemailer";
@@ -13,6 +12,7 @@ export const authOptions: NextAuthOptions = {
     EmailProvider({
       server: process.env.EMAIL_SERVER,
       from: "HackKU <auth@hackku.org>",
+      maxAge: 5 * 60, // Token expires after 5 minutes
       sendVerificationRequest: async ({ identifier, url, provider }) => {
         const { host } = new URL(url);
         try {
@@ -38,7 +38,34 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  adapter: PrismaAdapter(prisma),
+  adapter: {
+    ...PrismaAdapter(prisma),
+    async useVerificationToken({ identifier, token }) {
+      const verificationToken = await prisma.verificationToken.findUnique({
+        where: { identifier_token: { identifier, token } },
+      });
+
+      if (!verificationToken) {
+        return null; // Invalid token
+      }
+
+      // Check expiration
+      const now = new Date();
+      if (verificationToken.expires < now) {
+        await prisma.verificationToken.delete({
+          where: {
+            identifier_token: {
+              identifier: verificationToken.identifier,
+              token,
+            },
+          },
+        });
+        return null; // Token expired
+      }
+
+      return verificationToken; // Allow unlimited uses within expiration
+    },
+  },
   pages: {
     signIn: "/signin",
   },

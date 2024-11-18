@@ -248,7 +248,8 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                   {/* Profile Button */}
                   <Link href="/profile">
                     <Button variant="outline" className="text-sm">
-                      My Profile
+                      <IconUser size={20} className="mr-2" />
+                      Profile
                     </Button>
                   </Link>
                 </motion.div>
