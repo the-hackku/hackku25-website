@@ -5,31 +5,24 @@ import { prisma } from "@/prisma";
 
 // This is a server component
 export default async function HeaderWrapper() {
-  let isAdminUser = false;
-  let isRegistered = false;
-
   try {
-    // Use the isAdmin function to check admin status
-    const session = await isAdmin(); // This will throw an error if the user is not logged in
-
-    // Fetch user information from the database using Prisma
+    const session = await isAdmin(); // Get the session; throws an error if the user is not logged in
     const user = await prisma.user.findUnique({
       where: { email: session.user.email },
       include: { ParticipantInfo: true },
     });
 
-    // Extract admin status and registration information
-    isAdminUser = user?.role === "ADMIN";
-    isRegistered = !!user?.ParticipantInfo;
-  } catch (error) {
-    // If the user is not logged in or an error occurs, default values are used
-    console.error("Error in HeaderWrapper:");
-  }
+    const isAdminUser = user?.role === "ADMIN";
+    const isRegistered = Boolean(user?.ParticipantInfo);
 
-  return (
-    <>
-      <RegisterAlert isRegistered={isRegistered} />
-      <Header isAdmin={isAdminUser} />
-    </>
-  );
+    return (
+      <>
+        {!isRegistered && <RegisterAlert />}
+        <Header isAdmin={isAdminUser} />
+      </>
+    );
+  } catch {
+    // If not logged in, render the header without the alert
+    return <Header isAdmin={false} />;
+  }
 }
