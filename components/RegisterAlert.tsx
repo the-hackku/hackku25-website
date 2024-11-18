@@ -2,12 +2,16 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Alert } from "@/components/ui/alert";
-import { motion, AnimatePresence } from "framer-motion";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { IconAlertCircle, IconX } from "@tabler/icons-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function RegisterAlert() {
   const [visible, setVisible] = useState(true);
+
+  const handleClose = () => {
+    setVisible(false);
+  };
 
   return (
     <AnimatePresence>
@@ -19,29 +23,36 @@ export default function RegisterAlert() {
           exit={{ x: "100%" }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
-          <Alert variant="destructive" className="rounded-lg p-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <IconAlertCircle className="text-red-600" />
-                <div>
-                  <h4 className="font-semibold">Incomplete Registration</h4>
-                  <p>
-                    Complete your registration{" "}
-                    <Link href="/register" className="underline">
-                      here
-                    </Link>
-                    .
-                  </p>
+          <motion.div className="rounded-lg bg-red-50 text-red-700 shadow-md">
+            <Alert variant="destructive" className="rounded-lg p-3">
+              <div className="flex items-center justify-between space-x-3">
+                <div className="flex items-center space-x-3">
+                  <IconAlertCircle className="w-6 h-6 text-red-600" />
+                  <div>
+                    <AlertTitle className="font-semibold text-lg">
+                      Incomplete Registration
+                    </AlertTitle>
+                    <AlertDescription className="mt-1 text-sm">
+                      Complete your registration{" "}
+                      <u>
+                        <Link
+                          href="/register"
+                          className="underline"
+                          onClick={handleClose}
+                        >
+                          here
+                        </Link>
+                      </u>
+                      .
+                    </AlertDescription>
+                  </div>
                 </div>
+                <button onClick={handleClose} aria-label="Close alert">
+                  <IconX className="w-5 h-5 text-red-600" />
+                </button>
               </div>
-              <button
-                onClick={() => setVisible(false)}
-                aria-label="Close alert"
-              >
-                <IconX className="text-red-600" />
-              </button>
-            </div>
-          </Alert>
+            </Alert>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>

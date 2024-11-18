@@ -238,8 +238,8 @@ export default function HomePage() {
                     <Image
                       src={event.image}
                       alt={event.name}
-                      width={160}
-                      height={160}
+                      width={140}
+                      height={140}
                       className="rounded-md object-cover shadow-lg cursor-pointer"
                     />
                   </a>

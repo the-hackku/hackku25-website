@@ -117,6 +117,7 @@ export function RegistrationForm() {
         "agreeHackKUCode",
         "agreeMLHCode",
       ];
+
       const filledFields = requiredFields.reduce((count, key) => {
         const value = values[key as keyof RegistrationData];
         return value ? count + 1 : count;
@@ -126,7 +127,8 @@ export function RegistrationForm() {
         (filledFields / requiredFields.length) * 100
       );
 
-      if (calculatedProgress === 100 && form.formState.isValid) {
+      // Ensure the progress is set to 100% when the form is valid
+      if (form.formState.isValid) {
         calculatedProgress = 100;
       } else {
         calculatedProgress = Math.min(calculatedProgress, 95);
@@ -136,9 +138,12 @@ export function RegistrationForm() {
     };
 
     calculateProgress(); // Initial calculation on mount
-    const subscription = form.watch(calculateProgress);
+    const subscription = form.watch(() => {
+      calculateProgress();
+    });
+
     return () => subscription.unsubscribe();
-  }, [form]);
+  }, [form, form.formState.isValid]); // Added `form.formState.isValid` as a dependency
 
   // Load form data from localStorage on component mount
   useEffect(() => {
@@ -185,10 +190,10 @@ export function RegistrationForm() {
   const onSubmit = async (data: RegistrationData) => {
     try {
       await registerUser(data);
-      localStorage.removeItem(LOCAL_STORAGE_KEY);
-      form.reset();
+      router.push("/profile");
       toast.success("Registration successful!");
-      router.refresh();
+      form.reset();
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
     } catch (error) {
       console.error("Failed to register:", error);
       toast.error("Registration failed, please try again.");
@@ -389,7 +394,7 @@ export function RegistrationForm() {
             </div>
             {/* Divider */}
             <hr className="my-4" />
-            <h2 className="text-lg font-semibold">Educational Information</h2>
+            <h2 className="text-lg font-semibold">Education Information</h2>
             <ComboboxSelect
               name="currentSchool"
               label="Current School"
@@ -398,7 +403,6 @@ export function RegistrationForm() {
               allowCustomInput
               closeOnSelect
             />
-
             <div className="flex items-end space-x-4">
               <FormField
                 control={form.control}
@@ -463,7 +467,6 @@ export function RegistrationForm() {
                 </div>
               )}
             </div>
-
             {showChaperoneFields && (
               <>
                 <hr className="my-4" />
@@ -552,7 +555,6 @@ export function RegistrationForm() {
               allowCustomInput
               closeOnSelect
             />
-
             <div className="flex space-x-4">
               <FormField
                 control={form.control}
@@ -637,7 +639,6 @@ export function RegistrationForm() {
                 </FormItem>
               )}
             />
-
             {/* Divider */}
             <hr className="my-4" />
             {/* Agreements Section */}
@@ -721,16 +722,16 @@ export function RegistrationForm() {
                 )}
               />
             </div>
-
             {/* Submit Button */}
-
             {/* Progress bar above the submit button */}
-            <Progress value={progress} className="w-full h-2 mb-2" />
-
+            <div className="flex justify-between items-center mb-2 whitespace-nowrap">
+              <Progress value={progress} className="w-full h-2" />
+              <span className="text-sm font-medium ml-2">{progress}%</span>
+            </div>
             {/* Submit Button */}
             <Button
               type="submit"
-              disabled={form.formState.isSubmitting}
+              disabled={progress < 100 || form.formState.isSubmitting}
               className="w-full"
             >
               Register

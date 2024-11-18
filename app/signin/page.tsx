@@ -17,6 +17,7 @@ const SignInPage = () => {
   const [emailSent, setEmailSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [resendTimer, setResendTimer] = useState(60);
   const router = useRouter();
   const {
     register,
@@ -33,12 +34,25 @@ const SignInPage = () => {
     }
   }, [status, router]);
 
-  const onSubmit = async (data: SignInForm) => {
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (emailSent && resendTimer > 0) {
+      timer = setInterval(() => {
+        setResendTimer((prev) => prev - 1);
+      }, 1000);
+    }
+
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [emailSent, resendTimer]);
+
+  const sendMagicLink = async (email: string) => {
     setError(null);
     setLoading(true);
     try {
       const result = await signIn("email", {
-        email: data.email,
+        email,
         redirect: false,
         callbackUrl: "/",
       });
@@ -51,6 +65,7 @@ const SignInPage = () => {
         );
       } else {
         setEmailSent(true);
+        setResendTimer(60); // Reset the timer
         toast.success("Magic link has been sent! Check your email.");
       }
     } catch (error) {
@@ -59,6 +74,23 @@ const SignInPage = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const onSubmit = async (data: SignInForm) => {
+    await sendMagicLink(data.email);
+  };
+
+  const handleResend = async () => {
+    if (email && resendTimer === 0) {
+      await sendMagicLink(email);
+    } else {
+      setError("Please wait before resending the magic link.");
+    }
+  };
+
+  const handleChangeEmail = () => {
+    setEmailSent(false);
+    setError(null);
   };
 
   if (status === "loading") {
@@ -131,6 +163,31 @@ const SignInPage = () => {
             <p className="text-center text-gray-600 mt-2 text-sm sm:text-base">
               Please check your inbox and click the link to sign in.
             </p>
+            <div className="flex justify-center mt-6 gap-4">
+              <Button
+                onClick={handleResend}
+                className="text-sm sm:text-base"
+                disabled={loading || resendTimer > 0}
+              >
+                {loading
+                  ? "Resending..."
+                  : resendTimer > 0
+                  ? `Resend in ${resendTimer}s`
+                  : "Resend Link"}
+              </Button>
+              <Button
+                onClick={handleChangeEmail}
+                variant="outline"
+                className="text-sm sm:text-base"
+              >
+                Change Email
+              </Button>
+            </div>
+            {error && (
+              <p className="text-red-500 text-center text-xs sm:text-sm mt-4">
+                {error}
+              </p>
+            )}
           </CardContent>
         </Card>
       )}
