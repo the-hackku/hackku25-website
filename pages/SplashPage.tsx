@@ -5,7 +5,6 @@ import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { useState } from "react";
-import Confetti from "react-dom-confetti";
 
 export default function HomePage() {
   const scrollToSection = (id: string) => {
@@ -13,23 +12,20 @@ export default function HomePage() {
     target?.scrollIntoView({ behavior: "smooth" });
   };
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
-  const [confettiActive, setConfettiActive] = useState(false);
-
-  const triggerConfetti = () => {
-    setConfettiActive(true);
-    setTimeout(() => setConfettiActive(false), 1000); // Reset after 1 second
-  };
+  const [isMouseOver, setIsMouseOver] = useState(false);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const { clientX, clientY, currentTarget } = e;
     const { width, height, left, top } = currentTarget.getBoundingClientRect();
-    const x = ((clientX - left) / width - 0.5) * 10; // Adjust tilt sensitivity
-    const y = ((clientY - top) / height - 0.5) * 20; // Adjust tilt sensitivity
+    const x = ((clientX - left) / width - 0.5) * 25; // Adjust tilt sensitivity
+    const y = ((clientY - top) / height - 0.5) * -25; // Adjust tilt sensitivity
     setTilt({ x, y });
+    setIsMouseOver(true); // Mouse is inside
   };
 
   const resetTilt = () => {
     setTilt({ x: 0, y: 0 });
+    setIsMouseOver(false); // Mouse has left
   };
 
   const sponsorTiers = ["Kila", "Mega"];
@@ -123,8 +119,10 @@ export default function HomePage() {
           className="text-center max-w-4xl z-10 px-4 md:px-0"
           style={{
             transform: `perspective(1000px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)`,
+            transition: isMouseOver
+              ? "transform .1s ease-out"
+              : "transform 1s ease-out", // Apply smoothness only when mouse leaves
           }}
-          transition={{ duration: 0.2 }}
         >
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -168,29 +166,9 @@ export default function HomePage() {
             transition={{ duration: 0.7, delay: 1.25 }}
             className="mt-4 relative flex justify-center items-center"
           >
-            {/* Confetti */}
-            <div className="absolute">
-              <Confetti
-                active={confettiActive}
-                config={{
-                  angle: 90,
-                  spread: 360,
-                  startVelocity: 20,
-                  elementCount: 70,
-                  dragFriction: 0.1,
-                  duration: 1000,
-                  stagger: 1,
-                  width: "10px",
-                  height: "10px",
-                  colors: ["#f00", "#00f"],
-                }}
-              />
-            </div>
-
             {/* Register Now Button */}
             <Link href="/register">
               <motion.button
-                onHoverStart={triggerConfetti}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="px-6 py-3 bg-yellow-500 hover:shadow-xl rounded-full text-lg md:text-xl shadow-lg text-black font-bold"
@@ -232,8 +210,8 @@ export default function HomePage() {
           </h2>
           <p className="text-lg md:text-2xl text-black">
             HackKU is a 36-hour event where students come together to build
-            innovative projects and compete for exciting prizes. Participants
-            can attend workshops, network with sponsors, and explore new
+            innovative projects and compete for exciting prizes. Hackers can
+            attend workshops, network with sponsors, and explore new
             technologies, all while meeting new people and having fun!
           </p>
 
@@ -274,7 +252,6 @@ export default function HomePage() {
         </motion.div>
       </section>
 
-      {/* Sponsors Section */}
       <section
         id="sponsors"
         className="w-full py-32 md:py-44 flex flex-col items-center justify-center bg-[#019757]"
@@ -293,8 +270,18 @@ export default function HomePage() {
             event possible.
           </p>
         </motion.div>
-        {sponsorTiers.map((tier) => (
-          <div key={tier} className="w-full py-6 md:py-10">
+
+        {sponsorTiers.map((tier, index) => (
+          <motion.div
+            key={tier}
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 0.6,
+              delay: index * 0.3, // Offset start times
+            }}
+            className="w-full py-6 md:py-10"
+          >
             <h3 className="text-4xl md:text-5xl font-semibold mb-6 text-center text-white font-dfvn">
               {tier} Tier
             </h3>
@@ -322,7 +309,7 @@ export default function HomePage() {
                   </motion.a>
                 ))}
             </div>
-          </div>
+          </motion.div>
         ))}
       </section>
 

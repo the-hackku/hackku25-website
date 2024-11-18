@@ -127,8 +127,7 @@ export default async function ProfilePage() {
                               <TooltipContent>
                                 <p>
                                   This QR code is used for checking into the
-                                  hackathon and individual events. Please keep
-                                  it accessible during the event.
+                                  hackathon and individual events.
                                 </p>
                               </TooltipContent>
                             </Tooltip>

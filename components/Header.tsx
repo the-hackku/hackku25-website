@@ -15,6 +15,8 @@ import {
   IconMenu2,
   IconInfoCircle,
   IconInfoCircleFilled,
+  IconUser,
+  IconQrcode,
 } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -121,27 +123,52 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="right">
-                  <nav className="flex flex-col space-y-4 p-4">
+                  <nav className="flex flex-col space-y-4 pt-4">
                     <Link href="/" passHref>
                       <SheetClose asChild>
-                        <a>Home</a>
+                        <span className="flex items-center text-xl">
+                          <IconHome2 size={24} className="mr-2" />
+                          Home
+                        </span>
                       </SheetClose>
                     </Link>
                     <Link href="/schedule" passHref>
                       <SheetClose asChild>
-                        <a>Schedule</a>
+                        <span className="flex items-center text-xl">
+                          <IconCalendar size={24} className="mr-2" />
+                          Schedule
+                        </span>
                       </SheetClose>
                     </Link>
                     <Link href="/info" passHref>
                       <SheetClose asChild>
-                        <a>Event Info</a>
+                        <span className="flex items-center text-xl">
+                          <IconInfoCircle size={24} className="mr-2" />
+                          More Info
+                        </span>
                       </SheetClose>
                     </Link>
                     <Link href="/profile" passHref>
                       <SheetClose asChild>
-                        <a>Profile</a>
+                        <span className="flex items-center text-xl">
+                          <IconUser size={24} className="mr-2" />
+                          My Profile
+                        </span>
                       </SheetClose>
                     </Link>
+                    {isAdmin && (
+                      <>
+                        <hr className="my-4" />
+                        <Link href="/admin/scanner" passHref>
+                          <SheetClose asChild>
+                            <span className="flex items-center text-xl">
+                              <IconQrcode size={24} className="mr-2" />
+                              Admin Scanner
+                            </span>
+                          </SheetClose>
+                        </Link>
+                      </>
+                    )}
                   </nav>
                 </SheetContent>
               </Sheet>
