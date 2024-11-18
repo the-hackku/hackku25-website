@@ -17,15 +17,15 @@ export default function HomePage() {
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const { clientX, clientY, currentTarget } = e;
     const { width, height, left, top } = currentTarget.getBoundingClientRect();
-    const x = ((clientX - left) / width - 0.5) * 25; // Adjust tilt sensitivity
-    const y = ((clientY - top) / height - 0.5) * -25; // Adjust tilt sensitivity
+    const x = ((clientX - left) / width - 0.5) * 15; // Adjust tilt sensitivity
+    const y = ((clientY - top) / height - 0.5) * -15; // Adjust tilt sensitivity
     setTilt({ x, y });
-    setIsMouseOver(true); // Mouse is inside
+    setIsMouseOver(true);
   };
 
   const resetTilt = () => {
     setTilt({ x: 0, y: 0 });
-    setIsMouseOver(false); // Mouse has left
+    setIsMouseOver(false);
   };
 
   const sponsorTiers = ["Kila", "Mega"];
@@ -121,7 +121,7 @@ export default function HomePage() {
             transform: `perspective(1000px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)`,
             transition: isMouseOver
               ? "transform .1s ease-out"
-              : "transform 1s ease-out", // Apply smoothness only when mouse leaves
+              : "transform 1s ease-out",
           }}
         >
           <motion.p
