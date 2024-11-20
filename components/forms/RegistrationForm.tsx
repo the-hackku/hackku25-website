@@ -216,7 +216,7 @@ export function RegistrationForm() {
       if (form.formState.isValid) {
         calculatedProgress = 100;
       } else {
-        calculatedProgress = Math.min(calculatedProgress, 99);
+        calculatedProgress = Math.min(calculatedProgress, 100);
       }
 
       setProgress(calculatedProgress);
@@ -391,20 +391,6 @@ export function RegistrationForm() {
               closeOnSelect
             />
             <div className="flex space-x-4">
-              <FormInputField
-                name="dietaryRestrictions"
-                label="Dietary Restrictions"
-                placeholder="Enter any dietary restrictions"
-                required={isFieldRequired("dietaryRestrictions")}
-              />
-              <FormInputField
-                name="specialAccommodations"
-                label="Special Accommodations"
-                placeholder="Enter any special accommodations"
-                required={isFieldRequired("specialAccommodations")}
-              />
-            </div>
-            <div className="flex space-x-4">
               <FormSelectField<TShirtSize>
                 name="tShirtSize"
                 label="T-Shirt Size"
@@ -418,6 +404,20 @@ export function RegistrationForm() {
                 placeholder="Enter the number of previous hackathons"
                 type="number"
                 required={isFieldRequired("previousHackathons")}
+              />
+            </div>
+            <div className="flex space-x-4">
+              <FormInputField
+                name="dietaryRestrictions"
+                label="Dietary Restrictions"
+                placeholder="Enter any dietary restrictions"
+                required={isFieldRequired("dietaryRestrictions")}
+              />
+              <FormInputField
+                name="specialAccommodations"
+                label="Special Accommodations"
+                placeholder="Enter any special accommodations"
+                required={isFieldRequired("specialAccommodations")}
               />
             </div>
 

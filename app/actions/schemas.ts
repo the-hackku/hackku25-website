@@ -47,7 +47,9 @@ export const formSchema = z
     agreeMLHCode: z.boolean().refine((value) => value === true, {
       message: "You must agree to the MLH Code of Conduct.",
     }),
-    shareWithMLH: z.boolean(),
+    shareWithMLH: z.boolean().refine((value) => value === true, {
+      message: "You must agree to share your data with MLH.",
+    }),
     receiveEmails: z.boolean().optional(),
   })
   .superRefine((data, ctx) => {

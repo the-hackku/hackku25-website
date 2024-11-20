@@ -25,11 +25,11 @@ export function FormCheckboxField({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className="flex items-start space-x-3">
+        <FormItem className="flex items-center space-x-3">
           <FormControl>
             <Checkbox checked={field.value} onCheckedChange={field.onChange} />
           </FormControl>
-          <FormLabel className="leading-tight">
+          <FormLabel className="m-0">
             {label}
             {required && <span className="text-red-500">*</span>}
           </FormLabel>
