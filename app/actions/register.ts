@@ -22,6 +22,10 @@ export async function registerUser(data: RegistrationData) {
     throw new Error("User not found");
   }
 
+  // Convert age and previousHackathons to numbers
+  const age = parseInt(data.age) || 0;
+  const previousHackathons = parseInt(data.previousHackathons) || 0;
+
   // Create a ParticipantInfo record linked to the user
   await prisma.participantInfo.create({
     data: {
@@ -29,19 +33,18 @@ export async function registerUser(data: RegistrationData) {
       firstName: data.firstName,
       lastName: data.lastName,
       phoneNumber: data.phoneNumber,
-      age: data.age,
+      age: age,
       genderIdentity: data.genderIdentity || "",
       race: data.race || "",
       hispanicOrLatino: data.hispanicOrLatino || "",
-      countryOfResidence: data.countryOfResidence,
+      countryOfResidence: data.countryOfResidence || "",
       tShirtSize: data.tShirtSize,
       dietaryRestrictions: data.dietaryRestrictions || "",
       specialAccommodations: data.specialAccommodations || "",
-      isHighSchoolStudent: data.isHighSchoolStudent,
       currentSchool: data.currentSchool || "",
       levelOfStudy: data.levelOfStudy || "",
       major: data.major || "",
-      previousHackathons: data.previousHackathons || 0,
+      previousHackathons: previousHackathons,
       chaperoneFirstName: data.chaperoneFirstName || "",
       chaperoneLastName: data.chaperoneLastName || "",
       chaperoneEmail: data.chaperoneEmail || "",
@@ -50,6 +53,7 @@ export async function registerUser(data: RegistrationData) {
       agreeMLHCode: data.agreeMLHCode,
       shareWithMLH: data.shareWithMLH ?? false,
       receiveEmails: data.receiveEmails ?? false,
+      isHighSchoolStudent: data.levelOfStudy === "High School",
     },
   });
 

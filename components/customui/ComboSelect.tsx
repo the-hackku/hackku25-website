@@ -1,8 +1,9 @@
+// ComboboxSelect.tsx
 "use client";
 
 import * as React from "react";
-import { useFormContext, Controller } from "react-hook-form";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { useFormContext } from "react-hook-form";
+import { Check, ChevronsUpDown, Plus } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import {
+  FormField,
   FormItem,
   FormLabel,
   FormControl,
@@ -34,7 +36,8 @@ interface ComboboxSelectProps {
   placeholder?: string;
   options: { label: string; value: string }[];
   allowCustomInput?: boolean;
-  closeOnSelect?: boolean; // Add this prop
+  closeOnSelect?: boolean;
+  required?: boolean;
 }
 
 export function ComboboxSelect({
@@ -44,96 +47,123 @@ export function ComboboxSelect({
   placeholder = "Select...",
   options,
   allowCustomInput = false,
-  closeOnSelect = true, // Default to close on select
+  closeOnSelect = true,
+  required = false,
 }: ComboboxSelectProps) {
   const { control } = useFormContext();
-  const [isCustom, setIsCustom] = React.useState(false);
-  const [open, setOpen] = React.useState(false); // State to control popover visibility
+  const [open, setOpen] = React.useState(false);
+  const [inputValue, setInputValue] = React.useState("");
 
   return (
-    <Controller
-      name={name}
+    <FormField
       control={control}
-      render={({ field }) => (
-        <FormItem className="flex flex-col">
-          <FormLabel>{label}</FormLabel>
-          <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-              <FormControl>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  className={cn(
-                    "justify-between",
-                    !field.value && "text-muted-foreground"
-                  )}
+      name={name}
+      render={({ field }) => {
+        // Filter options based on input value
+        const filteredOptions = options.filter((option) =>
+          option.label.toLowerCase().includes(inputValue.toLowerCase())
+        );
+
+        // Check if inputValue matches any option
+        const isExistingOption = options.some(
+          (option) => option.label.toLowerCase() === inputValue.toLowerCase()
+        );
+
+        return (
+          <FormItem className="flex-1">
+            <FormLabel>
+              {label}
+              {required && <span className="text-red-500">*</span>}
+            </FormLabel>
+            <FormControl>
+              <Popover open={open} onOpenChange={setOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open}
+                    className={cn(
+                      "w-full justify-between",
+                      !field.value && "text-muted-foreground"
+                    )}
+                  >
+                    {field.value
+                      ? options.find((option) => option.value === field.value)
+                          ?.label || field.value // Show custom input value
+                      : placeholder}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className="w-full p-0"
+                  side="bottom"
+                  align="start"
+                  sideOffset={4}
                 >
-                  {field.value
-                    ? options.find((option) => option.value === field.value)
-                        ?.label || field.value // Show custom input value
-                    : placeholder}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </FormControl>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto min-w-[var(--radix-popover-trigger-width)] p-0">
-              <Command>
-                <CommandInput
-                  placeholder={`Search ${label.toLowerCase()}...`}
-                  onValueChange={(val) => {
-                    if (
-                      allowCustomInput &&
-                      val &&
-                      !options.some((o) => o.label === val)
-                    ) {
-                      setIsCustom(true);
-                      field.onChange(val); // Set custom input as value
-                    } else {
-                      setIsCustom(false);
-                    }
-                  }}
-                />
-                <CommandList>
-                  <CommandEmpty>
-                    {isCustom
-                      ? `Using ${
-                          field.value
-                            ? `"${field.value}" as custom input`
-                            : "custom input"
-                        }`
-                      : "No results found"}
-                  </CommandEmpty>
-                  <CommandGroup>
-                    {options.map((option) => (
-                      <CommandItem
-                        value={option.label}
-                        key={option.value}
-                        onSelect={() => {
-                          setIsCustom(false); // Reset custom input
-                          field.onChange(option.value);
-                          if (closeOnSelect) setOpen(false); // Close if `closeOnSelect` is true
-                        }}
-                      >
-                        <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            option.value === field.value
-                              ? "opacity-100"
-                              : "opacity-0"
-                          )}
-                        />
-                        {option.label}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </CommandList>
-              </Command>
-            </PopoverContent>
-          </Popover>
-          {description && <FormDescription>{description}</FormDescription>}
-          <FormMessage />
-        </FormItem>
-      )}
+                  <Command>
+                    <CommandInput
+                      placeholder={`Search ${label.toLowerCase()}...`}
+                      value={inputValue}
+                      onValueChange={(val) => {
+                        setInputValue(val);
+                      }}
+                    />
+                    <CommandList>
+                      {filteredOptions.length === 0 && !allowCustomInput && (
+                        <CommandEmpty>No results found.</CommandEmpty>
+                      )}
+
+                      {filteredOptions.length > 0 && (
+                        <CommandGroup>
+                          {filteredOptions.map((option) => (
+                            <CommandItem
+                              value={option.label}
+                              key={option.value}
+                              onSelect={() => {
+                                field.onChange(option.value);
+                                setInputValue("");
+                                if (closeOnSelect) setOpen(false);
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  option.value === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0"
+                                )}
+                              />
+                              {option.label}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      )}
+
+                      {allowCustomInput && inputValue && !isExistingOption && (
+                        <CommandGroup>
+                          <CommandItem
+                            value={inputValue}
+                            onSelect={() => {
+                              field.onChange(inputValue);
+                              setInputValue("");
+                              if (closeOnSelect) setOpen(false);
+                            }}
+                          >
+                            <Plus className="mr-2 h-4 w-4" />
+                            Use &quot;{inputValue}&quot;
+                          </CommandItem>
+                        </CommandGroup>
+                      )}
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </FormControl>
+            {description && <FormDescription>{description}</FormDescription>}
+            <FormMessage />
+          </FormItem>
+        );
+      }}
     />
   );
 }

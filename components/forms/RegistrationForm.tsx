@@ -1,34 +1,30 @@
+// RegistrationForm.tsx
 "use client";
 
+import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Select,
-  SelectItem,
-  SelectTrigger,
-  SelectContent,
-} from "@/components/ui/select";
-import { registerUser } from "@/app/actions/register";
-import { formSchema, RegistrationData } from "@/app/actions/schemas"; // Importing schema and type from schemas.ts
-import { ComboboxSelect } from "@/components/customui/ComboSelect";
-import debounce from "lodash/debounce"; // If using lodash for debouncing
-import throttle from "lodash/throttle";
+import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import { toast } from "sonner";
-import { Progress } from "../ui/progress";
 
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
+import { Button } from "@/components/ui/button";
+
+// Custom components
+import { FormInputField } from "../FormInputField";
+import { FormSelectField } from "../FormSelectField";
+import { FormCheckboxField } from "../FormCheckboxField";
+import { ComboboxSelect } from "@/components/customui/ComboSelect";
+
+// Schema and types
+import { RegistrationData, formSchema } from "@/app/actions/schemas";
+
+import { registerUser } from "@/app/actions/register";
+
+// Predefined options
 const predefinedSchools = [
   { label: "University of Kansas", value: "University of Kansas" },
   { label: "Kansas State University", value: "Kansas State University" },
@@ -49,151 +45,132 @@ const predefinedSchools = [
 
 export function RegistrationForm() {
   const [showChaperoneFields, setShowChaperoneFields] = useState(false);
-  const [, setLastSaved] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
-  const [, setSaving] = useState(false); // Track if currently saving
-
-  const LOCAL_STORAGE_KEY = "registrationFormData";
-  const SAVE_INTERVAL_MS = 1000; // Save every 1 second
-
   const router = useRouter();
 
-  // Initialize React Hook Form using the imported `formSchema`
   const form = useForm<RegistrationData>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
-    defaultValues: {
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
-      age: undefined,
-      genderIdentity: undefined,
-      race: "",
-      hispanicOrLatino: undefined,
-      countryOfResidence: undefined,
-      tShirtSize: undefined,
-      dietaryRestrictions: "",
-      specialAccommodations: "",
-      isHighSchoolStudent: false,
-      currentSchool: "",
-      levelOfStudy: undefined,
-      major: "",
-      previousHackathons: undefined,
-      chaperoneFirstName: "",
-      chaperoneLastName: "",
-      chaperoneEmail: "",
-      chaperonePhoneNumber: "",
-      agreeHackKUCode: false,
-      agreeMLHCode: false,
-      shareWithMLH: false,
-      receiveEmails: false,
-    },
   });
 
-  // Function to format phone number
-  const formatPhoneNumber = (value: string) => {
-    const cleaned = value.replace(/\D/g, "");
-    const match = cleaned.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
-    if (!match) return value;
-    const formatted = [
-      match[1] ? `(${match[1]}` : "",
-      match[2] ? `) ${match[2]}` : "",
-      match[3] ? `-${match[3]}` : "",
-    ].join("");
-    return formatted;
-  };
-
-  // Calculate progress and check form validity on component mount and updates
-  useEffect(() => {
-    const calculateProgress = () => {
+  // Function to check if a field is required based on the Zod schema
+  const isFieldRequired = useCallback(
+    (fieldName: keyof RegistrationData) => {
       const values = form.getValues();
-      const requiredFields = [
-        "firstName",
-        "lastName",
-        "phoneNumber",
-        "age",
-        "countryOfResidence",
-        "tShirtSize",
-        "agreeHackKUCode",
-        "agreeMLHCode",
-      ];
+      const fieldSchema = formSchema._def.schema.shape[fieldName];
 
-      const filledFields = requiredFields.reduce((count, key) => {
-        const value = values[key as keyof RegistrationData];
-        return value ? count + 1 : count;
-      }, 0);
+      // Chaperone fields are required only if levelOfStudy is "High School"
+      if (
+        [
+          "chaperoneFirstName",
+          "chaperoneLastName",
+          "chaperoneEmail",
+          "chaperonePhoneNumber",
+        ].includes(fieldName)
+      ) {
+        return values.levelOfStudy === "High School";
+      }
 
-      let calculatedProgress = Math.round(
-        (filledFields / requiredFields.length) * 100
+      return !(
+        fieldSchema instanceof z.ZodOptional ||
+        fieldSchema instanceof z.ZodDefault ||
+        fieldSchema.safeParse(undefined).success
       );
+    },
+    [form]
+  );
 
-      // Ensure the progress is set to 100% when the form is valid
-      if (form.formState.isValid) {
-        calculatedProgress = 100;
-      } else {
-        calculatedProgress = Math.min(calculatedProgress, 95);
-      }
+  // Define form fields with configurations
+  const personalInfoFields = [
+    {
+      name: "firstName" as const,
+      label: "First Name",
+      placeholder: "First name",
+      required: isFieldRequired("firstName"),
+    },
+    {
+      name: "lastName" as const,
+      label: "Last Name",
+      placeholder: "Last name",
+      required: isFieldRequired("lastName"),
+    },
+    {
+      name: "phoneNumber" as const,
+      label: "Phone Number",
+      placeholder: "Phone number",
+      required: isFieldRequired("phoneNumber"),
+    },
+    {
+      name: "age" as const,
+      label: "Age",
+      placeholder: "Age",
+      required: isFieldRequired("age"),
+      type: "number",
+    },
+  ];
 
-      setProgress(calculatedProgress);
-    };
+  // Define types for select fields
+  type GenderIdentity = NonNullable<RegistrationData["genderIdentity"]>;
+  type Race = NonNullable<RegistrationData["race"]>;
+  type HispanicOrLatino = NonNullable<RegistrationData["hispanicOrLatino"]>;
+  type TShirtSize = NonNullable<RegistrationData["tShirtSize"]>;
+  type LevelOfStudy = NonNullable<RegistrationData["levelOfStudy"]>;
 
-    calculateProgress(); // Initial calculation on mount
-    const subscription = form.watch(() => {
-      calculateProgress();
-    });
+  // Define options with correct typing
+  const genderIdentityOptions: { label: string; value: GenderIdentity }[] = [
+    { label: "Male", value: "Male" },
+    { label: "Female", value: "Female" },
+    { label: "Non-binary", value: "Non-binary" },
+    { label: "Other", value: "Other" },
+    { label: "Prefer not to Answer", value: "Prefer not to Answer" },
+  ];
 
-    return () => subscription.unsubscribe();
-  }, [form, form.formState.isValid]); // Added `form.formState.isValid` as a dependency
+  const raceOptions: { label: string; value: Race }[] = [
+    { label: "White", value: "White" },
+    { label: "Black or African American", value: "Black or African American" },
+    { label: "Asian", value: "Asian" },
+    {
+      label: "Native Hawaiian or Other Pacific Islander",
+      value: "Native Hawaiian or Other Pacific Islander",
+    },
+    {
+      label: "American Indian or Alaska Native",
+      value: "American Indian or Alaska Native",
+    },
+    { label: "Other", value: "Other" },
+    { label: "Prefer not to answer", value: "Prefer not to answer" },
+  ];
 
-  // Load form data from localStorage on component mount
-  useEffect(() => {
-    const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (savedData) {
-      const parsedData = JSON.parse(savedData);
-      if (parsedData && typeof parsedData === "object") {
-        form.reset(parsedData);
-        setLastSaved(parsedData.lastSaved || null);
-      }
-    }
-  }, [form]);
+  const hispanicOrLatinoOptions: {
+    label: string;
+    value: HispanicOrLatino;
+  }[] = [
+    { label: "Yes", value: "Yes" },
+    { label: "No", value: "No" },
+    { label: "Prefer not to answer", value: "Prefer not to answer" },
+  ];
 
-  // Save form data to localStorage every second (throttled)
-  const saveData = throttle((data) => {
-    const timestamp = new Date().toISOString();
-    localStorage.setItem(
-      LOCAL_STORAGE_KEY,
-      JSON.stringify({ ...data, lastSaved: timestamp })
-    );
-    setLastSaved(timestamp);
-  }, SAVE_INTERVAL_MS);
+  const tShirtSizeOptions: { label: string; value: TShirtSize }[] = [
+    { label: "Small", value: "S" },
+    { label: "Medium", value: "M" },
+    { label: "Large", value: "L" },
+    { label: "XL", value: "XL" },
+    { label: "XXL", value: "XXL" },
+  ];
 
-  // Debounced function to update `saving` state after 1 second delay
-  const debouncedSave = debounce(() => {
-    setSaving(false); // Show saved state
-  }, 1000);
-
-  // Watch form for changes and handle save
-  useEffect(() => {
-    const subscription = form.watch((value) => {
-      setSaving(true); // Start saving text immediately
-      saveData(value); // Save every second
-      debouncedSave(); // Set saving false 1 second after typing stops
-    });
-
-    return () => {
-      subscription.unsubscribe();
-      saveData.cancel();
-      debouncedSave.cancel();
-    };
-  }, [form.watch, form, saveData, debouncedSave]);
+  const levelOfStudyOptions: { label: string; value: LevelOfStudy }[] = [
+    { label: "Undergraduate", value: "Undergraduate" },
+    { label: "High School", value: "High School" },
+    { label: "Graduate", value: "Graduate" },
+    { label: "Other", value: "Other" },
+  ];
 
   const onSubmit = async (data: RegistrationData) => {
     try {
+      // Replace with your registration function
       await registerUser(data);
-      router.push("/profile");
       toast.success("Registration successful!");
-      form.reset();
-      localStorage.removeItem(LOCAL_STORAGE_KEY);
+      router.push("/profile");
     } catch (error) {
       console.error("Failed to register:", error);
       toast.error("Registration failed, please try again.");
@@ -205,6 +182,53 @@ export function RegistrationForm() {
     console.error("Validation errors:", errors);
     toast.error("Please correct the errors and try again.");
   };
+
+  // Calculate progress and check form validity
+  useEffect(() => {
+    const calculateProgress = () => {
+      const values = form.getValues();
+
+      const requiredFields = Object.keys(
+        formSchema._def.schema.shape
+      ) as (keyof RegistrationData)[];
+
+      const dynamicRequiredFields = requiredFields.filter((key) =>
+        isFieldRequired(key)
+      );
+
+      const filledFields = dynamicRequiredFields.reduce((count, key) => {
+        const value = values[key];
+        // Special handling for boolean fields
+        if (typeof value === "boolean") {
+          return value ? count + 1 : count;
+        } else {
+          return value !== undefined && value !== "" ? count + 1 : count;
+        }
+      }, 0);
+
+      const totalRequiredFields = dynamicRequiredFields.length;
+
+      let calculatedProgress = Math.round(
+        (filledFields / totalRequiredFields) * 100
+      );
+
+      // Ensure the progress is set to 100% when the form is valid
+      if (form.formState.isValid) {
+        calculatedProgress = 100;
+      } else {
+        calculatedProgress = Math.min(calculatedProgress, 99);
+      }
+
+      setProgress(calculatedProgress);
+    };
+
+    calculateProgress(); // Initial calculation on mount
+    const subscription = form.watch(() => {
+      calculateProgress();
+    });
+
+    return () => subscription.unsubscribe();
+  }, [form, isFieldRequired]);
 
   return (
     <Card className="max-w-3xl mx-auto mt-8">
@@ -218,7 +242,7 @@ export function RegistrationForm() {
         <Progress value={progress} className="w-full h-2" />
       </CardHeader>
       <CardContent>
-        <Form {...form}>
+        <FormProvider {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit, onError)}
             className="space-y-6"
@@ -226,247 +250,89 @@ export function RegistrationForm() {
             {/* Personal Information Section */}
             <h2 className="text-lg font-semibold">Personal Information</h2>
             <div className="flex space-x-4">
-              <FormField
-                control={form.control}
-                name="firstName"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>First Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="First name" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="lastName"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Last Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Last name" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+              {personalInfoFields.slice(0, 2).map((field) => (
+                <FormInputField key={field.name} {...field} />
+              ))}
             </div>
             <div className="flex space-x-4">
-              <FormField
-                control={form.control}
-                name="phoneNumber"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Phone Number</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Phone number"
-                        value={formatPhoneNumber(field.value)}
-                        onChange={(e) =>
-                          field.onChange(formatPhoneNumber(e.target.value))
-                        }
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
+              <FormInputField {...personalInfoFields[2]} />
+              <FormInputField {...personalInfoFields[3]} />
             </div>
+            {/* Select Fields */}
             <div className="flex space-x-4">
-              <FormField
-                control={form.control}
-                name="age"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Age</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Age"
-                        value={
-                          field.value !== undefined ? String(field.value) : ""
-                        }
-                        onChange={(e) => {
-                          const valueAsNumber = e.target.value
-                            ? parseInt(e.target.value, 10)
-                            : undefined;
-                          field.onChange(valueAsNumber);
-                        }}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
+              <FormSelectField<GenderIdentity>
                 name="genderIdentity"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Gender Identity</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={(value) =>
-                          field.onChange(value || undefined)
-                        } // Ensure `undefined` is passed when no value is selected
-                        value={field.value || ""} // Show empty string when `undefined`
-                      >
-                        <SelectTrigger className="w-full">
-                          {field.value || "Select..."}
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Male">Male</SelectItem>
-                          <SelectItem value="Female">Female</SelectItem>
-                          <SelectItem value="Non-binary">Non-binary</SelectItem>
-                          <SelectItem value="Other">Other</SelectItem>
-                          <SelectItem value="Prefer not to Answer">
-                            Prefer not to Answer
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
+                label="Gender Identity"
+                options={genderIdentityOptions}
+                required={isFieldRequired("genderIdentity")}
               />
-            </div>
-            <div className="flex space-x-4">
-              <FormField
-                control={form.control}
+              <FormSelectField<Race>
                 name="race"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Race</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value || ""}
-                      >
-                        <SelectTrigger className="w-full">
-                          {field.value || "Select..."}
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="White">White</SelectItem>
-                          <SelectItem value="Black or African American">
-                            Black or African American
-                          </SelectItem>
-                          <SelectItem value="Asian">Asian</SelectItem>
-                          <SelectItem value="Native Hawaiian or Other Pacific Islander">
-                            Native Hawaiian or Other Pacific Islander
-                          </SelectItem>
-                          <SelectItem value="American Indian or Alaska Native">
-                            American Indian or Alaska Native
-                          </SelectItem>
-                          <SelectItem value="Other">Other</SelectItem>
-                          <SelectItem value="Prefer not to answer">
-                            Prefer not to answer
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="hispanicOrLatino"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Are you Hispanic or Latino?</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={field.onChange}
-                        defaultValue={field.value || ""}
-                      >
-                        <SelectTrigger className="w-full">
-                          {field.value || "Select..."}
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Yes">Yes</SelectItem>
-                          <SelectItem value="No">No</SelectItem>
-                          <SelectItem value="Prefer not to answer">
-                            Prefer not to answer
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
+                label="Race"
+                options={raceOptions}
+                required={isFieldRequired("race")}
               />
             </div>
-            {/* Divider */}
+            <FormSelectField<HispanicOrLatino>
+              name="hispanicOrLatino"
+              label="Are you Hispanic or Latino?"
+              options={hispanicOrLatinoOptions}
+              required={isFieldRequired("hispanicOrLatino")}
+            />
+
+            {/* Education Information Section */}
             <hr className="my-4" />
             <h2 className="text-lg font-semibold">Education Information</h2>
             <ComboboxSelect
               name="currentSchool"
               label="Current School"
+              required={isFieldRequired("currentSchool")}
               placeholder="Select your school"
               options={predefinedSchools}
               allowCustomInput
               closeOnSelect
             />
-            <div className="flex items-end space-x-4">
-              <FormField
-                control={form.control}
+            <div className="flex space-x-4">
+              <FormSelectField<LevelOfStudy>
                 name="levelOfStudy"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Level of Study</FormLabel>
-                    <FormControl>
-                      <Select
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          setShowChaperoneFields(value === "High School");
-                        }}
-                        defaultValue={field.value || ""}
-                      >
-                        <SelectTrigger className="w-full">
-                          {field.value || "Select..."}
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Undergraduate">
-                            Undergraduate
-                          </SelectItem>
-                          <SelectItem value="High School">
-                            High School
-                          </SelectItem>
-
-                          <SelectItem value="Graduate">Graduate</SelectItem>
-                          <SelectItem value="Other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
+                label="Level of Study"
+                options={levelOfStudyOptions}
+                required={isFieldRequired("levelOfStudy")}
+                onChange={(value) => {
+                  form.setValue("levelOfStudy", value);
+                  setShowChaperoneFields(value === "High School");
+                }}
               />
-
               {!showChaperoneFields && (
-                <div className="flex-1">
-                  <ComboboxSelect
-                    name="major"
-                    label="Major"
-                    placeholder="Select your major"
-                    options={[
-                      { label: "Computer Science", value: "Computer Science" },
-                      {
-                        label: "Electrical Engineering",
-                        value: "Electrical Engineering",
-                      },
-                      {
-                        label: "Mechanical Engineering",
-                        value: "Mechanical Engineering",
-                      },
-                      {
-                        label: "Business Administration",
-                        value: "Business Administration",
-                      },
-                      { label: "Psychology", value: "Psychology" },
-                      { label: "Biology", value: "Biology" },
-                    ]}
-                    allowCustomInput
-                    closeOnSelect
-                  />
-                </div>
+                <ComboboxSelect
+                  name="major"
+                  label="Major"
+                  required={isFieldRequired("major")}
+                  placeholder="Select your major"
+                  options={[
+                    { label: "Computer Science", value: "Computer Science" },
+                    {
+                      label: "Electrical Engineering",
+                      value: "Electrical Engineering",
+                    },
+                    {
+                      label: "Mechanical Engineering",
+                      value: "Mechanical Engineering",
+                    },
+                    {
+                      label: "Business Administration",
+                      value: "Business Administration",
+                    },
+                    { label: "Psychology", value: "Psychology" },
+                    { label: "Biology", value: "Biology" },
+                  ]}
+                  allowCustomInput
+                  closeOnSelect
+                />
               )}
             </div>
+
+            {/* Chaperone Information */}
             {showChaperoneFields && (
               <>
                 <hr className="my-4" />
@@ -478,266 +344,173 @@ export function RegistrationForm() {
                   </p>
                 </div>
                 <div className="flex space-x-4">
-                  <FormField
-                    control={form.control}
+                  <FormInputField
                     name="chaperoneFirstName"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>Chaperone First Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Chaperone's first name"
-                            {...field}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
+                    label="Chaperone First Name"
+                    placeholder="Chaperone's first name"
+                    required={isFieldRequired("chaperoneFirstName")}
                   />
-                  <FormField
-                    control={form.control}
+                  <FormInputField
                     name="chaperoneLastName"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>Chaperone Last Name</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Chaperone's last name"
-                            {...field}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
+                    label="Chaperone Last Name"
+                    placeholder="Chaperone's last name"
+                    required={isFieldRequired("chaperoneLastName")}
                   />
                 </div>
                 <div className="flex space-x-4">
-                  <FormField
-                    control={form.control}
+                  <FormInputField
                     name="chaperoneEmail"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>Chaperone Email</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Chaperone's email" {...field} />
-                        </FormControl>
-                      </FormItem>
-                    )}
+                    label="Chaperone Email"
+                    placeholder="Chaperone's email"
+                    required={isFieldRequired("chaperoneEmail")}
                   />
-                  <FormField
-                    control={form.control}
+                  <FormInputField
                     name="chaperonePhoneNumber"
-                    render={({ field }) => (
-                      <FormItem className="flex-1">
-                        <FormLabel>Chaperone Phone Number</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Chaperone's phone number"
-                            {...field}
-                          />
-                        </FormControl>
-                      </FormItem>
-                    )}
+                    label="Chaperone Phone Number"
+                    placeholder="Chaperone's phone number"
+                    required={isFieldRequired("chaperonePhoneNumber")}
                   />
                 </div>
               </>
             )}
-            {/* Divider */}
-            <hr className="my-4" />
+
             {/* Additional Information Section */}
+            <hr className="my-4" />
             <h2 className="text-lg font-semibold">Additional Information</h2>
             <ComboboxSelect
               name="countryOfResidence"
               label="Country of Residence"
+              required={isFieldRequired("countryOfResidence")}
               placeholder="Select your country"
               options={[
                 { label: "United States", value: "United States" },
                 { label: "Canada", value: "Canada" },
+                // Add more countries as needed
               ]}
               allowCustomInput
               closeOnSelect
             />
             <div className="flex space-x-4">
-              <FormField
-                control={form.control}
+              <FormInputField
                 name="dietaryRestrictions"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>Dietary Restrictions</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter any dietary restrictions"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+                label="Dietary Restrictions"
+                placeholder="Enter any dietary restrictions"
+                required={isFieldRequired("dietaryRestrictions")}
               />
-              <FormField
-                control={form.control}
+              <FormInputField
                 name="specialAccommodations"
-                render={({ field }) => (
-                  <FormItem className="flex-1">
-                    <FormLabel>
-                      Please list any accommodations you need
-                    </FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter any special accommodations"
-                        {...field}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
+                label="Special Accommodations"
+                placeholder="Enter any special accommodations"
+                required={isFieldRequired("specialAccommodations")}
               />
             </div>
-            <FormField
-              control={form.control}
-              name="tShirtSize"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>T-Shirt Size</FormLabel>
-                  <FormControl>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value || ""}
-                    >
-                      <SelectTrigger className="w-full">
-                        {field.value || "Select..."}
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="S">Small</SelectItem>
-                        <SelectItem value="M">Medium</SelectItem>
-                        <SelectItem value="L">Large</SelectItem>
-                        <SelectItem value="XL">XL</SelectItem>
-                        <SelectItem value="XXL">XXL</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="previousHackathons"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>How many Hackathons have you attended?</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="number"
-                      placeholder="Enter the number of previous hackathons"
-                      value={
-                        field.value !== undefined ? String(field.value) : ""
-                      }
-                      onChange={(e) => {
-                        const valueAsNumber = e.target.value
-                          ? parseInt(e.target.value, 10)
-                          : undefined;
-                        field.onChange(valueAsNumber);
-                      }}
-                    />
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-            {/* Divider */}
-            <hr className="my-4" />
+            <div className="flex space-x-4">
+              <FormSelectField<TShirtSize>
+                name="tShirtSize"
+                label="T-Shirt Size"
+                options={tShirtSizeOptions}
+                required={isFieldRequired("tShirtSize")}
+              />
+
+              <FormInputField
+                name="previousHackathons"
+                label="How many Hackathons have you attended?"
+                placeholder="Enter the number of previous hackathons"
+                type="number"
+                required={isFieldRequired("previousHackathons")}
+              />
+            </div>
+
             {/* Agreements Section */}
+            <hr className="my-4" />
             <h2 className="text-lg font-semibold mb-2">Agreements</h2>
             <div className="space-y-3">
-              <FormField
-                control={form.control}
+              <FormCheckboxField
                 name="agreeHackKUCode"
-                render={({ field }) => (
-                  <FormItem className="flex items-end space-x-3">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={(checked) => field.onChange(checked)}
-                        onBlur={field.onBlur}
-                        name={field.name}
-                        ref={field.ref}
-                      />
-                    </FormControl>
-                    <FormLabel className="leading-tight">
-                      I agree to the HackKU Code of Conduct.
-                    </FormLabel>
-                  </FormItem>
-                )}
+                label={
+                  <>
+                    I agree to the{" "}
+                    <Link href="/rules" className="underline" target="_blank">
+                      HackKU Code of Conduct
+                    </Link>
+                    .
+                  </>
+                }
+                required={isFieldRequired("agreeHackKUCode")}
               />
-
-              <FormField
-                control={form.control}
+              <FormCheckboxField
                 name="agreeMLHCode"
-                render={({ field }) => (
-                  <FormItem className="flex items-end space-x-3">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={(checked) => field.onChange(checked)}
-                        onBlur={field.onBlur}
-                        name={field.name}
-                        ref={field.ref}
-                      />
-                    </FormControl>
-                    <FormLabel className="leading-tight">
-                      I agree to the MLH Code of Conduct.
-                    </FormLabel>
-                  </FormItem>
-                )}
+                label={
+                  <>
+                    I agree to the{" "}
+                    <Link
+                      href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
+                      className="underline"
+                      target="_blank"
+                    >
+                      MLH Code of Conduct
+                    </Link>
+                    .
+                  </>
+                }
+                required={isFieldRequired("agreeMLHCode")}
               />
-
-              <FormField
-                control={form.control}
+              <FormCheckboxField
                 name="shareWithMLH"
-                render={({ field }) => (
-                  <FormItem className="flex items-end space-x-3">
-                    <FormControl>
-                      <Checkbox
-                        {...field}
-                        value={field.value ? "true" : "false"}
-                      />
-                    </FormControl>
-                    <FormLabel className="leading-tight">
-                      I authorize sharing my registration with MLH.
-                    </FormLabel>
-                  </FormItem>
-                )}
+                label={
+                  <>
+                    I authorize sharing my registration information with Major
+                    League Hacking for event administration, ranking, and MLH
+                    administration in-line with the{" "}
+                    <Link
+                      href="https://github.com/MLH/mlh-policies/blob/main/privacy-policy.md"
+                      target="_blank"
+                      className="underline"
+                    >
+                      MLH Privacy Policy
+                    </Link>
+                    . I further agree to the terms of both the{" "}
+                    <Link
+                      href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md"
+                      target="_blank"
+                      className="underline"
+                    >
+                      MLH Contest Terms
+                    </Link>{" "}
+                    and the{" "}
+                    <Link
+                      href="https://github.com/MLH/mlh-policies/blob/main/privacy-policy.md"
+                      target="_blank"
+                      className="underline"
+                    >
+                      MLH Privacy Policy
+                    </Link>
+                    .
+                  </>
+                }
+                required={isFieldRequired("shareWithMLH")}
               />
-
-              <FormField
-                control={form.control}
+              <FormCheckboxField
                 name="receiveEmails"
-                render={({ field }) => (
-                  <FormItem className="flex items-end space-x-3">
-                    <FormControl>
-                      <Checkbox
-                        {...field}
-                        value={field.value ? "true" : "false"}
-                      />
-                    </FormControl>
-                    <FormLabel className="leading-tight">
-                      I agree to receive emails about opportunities from MLH.
-                    </FormLabel>
-                  </FormItem>
-                )}
+                label="I authorize MLH to send me occasional emails about relevant events, career opportunities, and community announcements."
+                required={isFieldRequired("receiveEmails")}
               />
             </div>
+
             {/* Submit Button */}
-            {/* Progress bar above the submit button */}
             <div className="flex justify-between items-center mb-2 whitespace-nowrap">
               <Progress value={progress} className="w-full h-2" />
               <span className="text-sm font-medium ml-2">{progress}%</span>
             </div>
-            {/* Submit Button */}
             <Button
               type="submit"
-              disabled={progress < 100 || form.formState.isSubmitting}
+              disabled={form.formState.isSubmitting}
               className="w-full"
             >
               Register
             </Button>
           </form>
-        </Form>
+        </FormProvider>
       </CardContent>
     </Card>
   );
