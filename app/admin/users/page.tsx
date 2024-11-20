@@ -12,6 +12,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"; // ShadCN Tooltip components
+import Link from "next/link";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -102,7 +103,10 @@ export default function UsersPage() {
   ];
 
   return (
-    <div>
+    <>
+      <div>
+        <Link href="/admin">← Back to Admin Panel</Link>
+      </div>
       <h1 className="text-2xl font-bold mb-4">Users</h1>
       <TableComponent data={users} columns={userColumns} />
 
@@ -119,6 +123,6 @@ export default function UsersPage() {
         }
         columns={participantColumns}
       />
-    </div>
+    </>
   );
 }

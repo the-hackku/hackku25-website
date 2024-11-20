@@ -1,6 +1,7 @@
 import { getCheckins } from "@/app/actions/admin";
 import TableComponent from "@/components/admin/Table";
 import { ColumnDef } from "@tanstack/react-table";
+import Link from "next/link";
 
 // Updated Checkin type definition to reflect the processed data
 interface ProcessedCheckin {
@@ -30,8 +31,11 @@ export default async function CheckinsPage() {
   ];
 
   return (
-    <div>
+    <>
+      <div>
+        <Link href="/admin">← Back to Admin Panel</Link>
+      </div>
       <TableComponent data={processedCheckins} columns={checkinColumns} />
-    </div>
+    </>
   );
 }

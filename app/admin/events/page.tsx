@@ -1,6 +1,7 @@
 import { getEvents } from "@/app/actions/admin";
 import { EventForm } from "@/components/forms/eventForm";
 import ScheduleGrid from "@/components/ScheduleGrid";
+import Link from "next/link";
 
 // Define Event type based on the structure returned by `getEvents`
 interface Event {
@@ -25,11 +26,14 @@ export default async function EventsPage() {
   }));
 
   return (
-    <div className="p-4">
+    <>
+      <div>
+        <Link href="/admin">← Back to Admin Panel</Link>
+      </div>
       <h1 className="text-2xl font-bold mb-4">Events</h1>
       <EventForm />
       {/* Render the Schedule Grid */}
       <ScheduleGrid schedule={processedEvents} />
-    </div>
+    </>
   );
 }

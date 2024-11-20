@@ -71,7 +71,6 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
   return (
     <>
       <motion.header
-        transition={{ duration: 0.15 }}
         className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 overflow-hidden px-4 ${
           isDesktop ? (isScrolled ? "bg-transparent" : "bg-white") : "bg-white"
         }`}

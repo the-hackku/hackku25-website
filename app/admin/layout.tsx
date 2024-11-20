@@ -15,5 +15,7 @@ export default async function AdminLayout({
   }
 
   // If authorized, render the children
-  return children;
+  return (
+    <div className="container mx-auto max-w-7xl px-4 py-8">{children}</div>
+  );
 }

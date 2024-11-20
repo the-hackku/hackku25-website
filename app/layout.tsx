@@ -4,7 +4,6 @@ import "./globals.css";
 import NextAuthProvider from "@/providers/NextAuthProvider";
 import HeaderWrapper from "@/components/HeaderWrapper";
 import Footer from "@/components/Footer";
-import ClientLayoutWrapper from "@/providers/ClientLayoutWrapper";
 import { authOptions } from "@/lib/authoptions";
 import { getServerSession } from "next-auth";
 import { ThemeProvider } from "@/providers/theme-provider";
@@ -50,9 +49,7 @@ export default async function RootLayout({
             <Providers>
               <div className="flex flex-col min-h-screen">
                 <HeaderWrapper />
-                <main className="flex-grow">
-                  <ClientLayoutWrapper>{children}</ClientLayoutWrapper>
-                </main>
+                <main className="flex-grow">{children}</main>
                 <Footer />
                 <Toaster />
               </div>
