@@ -70,6 +70,20 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
 
   return (
     <>
+      {/* <div className="bg-yellow-200 text-center py-1">
+        {" "}
+        🐛<b>BUG BOUNTY ACTIVATED </b>- SEND BUG SCREENSHOTS IN THE{" "}
+        <Link
+          href="https://discord.com/invite/AJXm3k6xWq"
+          target="_blank"
+          className="underline"
+        >
+          DISCORD
+        </Link>{" "}
+        TO WIN PRIZES🐛
+      </div> */}
+
+      {/* Header */}
       <motion.header
         className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 overflow-hidden px-4 ${
           isDesktop ? (isScrolled ? "bg-transparent" : "bg-white") : "bg-white"
