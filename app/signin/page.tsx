@@ -136,7 +136,7 @@ const SignInPage = () => {
 
               <Button
                 type="submit"
-                className="w-full text-sm sm:text-base"
+                className="w-full text-sm sm:text-base bg-blue-600 hover:bg-blue-700"
                 disabled={loading}
               >
                 {loading ? "Sending..." : "Send Magic Link"}

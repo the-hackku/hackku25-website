@@ -24,9 +24,13 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useSession } from "next-auth/react";
 
 const Header = ({ isAdmin }: { isAdmin: boolean }) => {
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
+  const { data: session, status } = useSession();
+
+  const isAuthenticated = status === "authenticated";
 
   // Store the previous scroll position in a ref
   const prevScrollY = useRef(0);
@@ -267,7 +271,10 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                 <TabsTrigger value="profile" asChild>
                   <Link href="/profile">
                     <IconUser size={20} className="mr-2" />
-                    Profile
+                    {
+                      // Show "Sign In" if not authenticated
+                      isAuthenticated ? "Profile" : "Sign In"
+                    }
                   </Link>
                 </TabsTrigger>
               </TabsList>
@@ -306,7 +313,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                         alt="MLH Badge"
                         width={200}
                         height={200}
-                        className="w-auto h-12 md:h-36"
+                        className="w-auto h-10 md:h-32"
                       />
                     </motion.div>
                   </Link>
