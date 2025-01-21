@@ -11,7 +11,6 @@ import {
   IconCalendarFilled,
   IconHome2,
   IconHomeFilled,
-  IconUserStar,
   IconMenu2,
   IconInfoCircle,
   IconInfoCircleFilled,
@@ -26,27 +25,23 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
-const SCROLL_THRESHOLD = 20;
-
 const Header = ({ isAdmin }: { isAdmin: boolean }) => {
-  const [isScrolled, setIsScrolled] = useState(false);
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
 
   // Store the previous scroll position in a ref
   const prevScrollY = useRef(0);
 
   const pathname = usePathname();
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 1024;
 
   // Are we on the homepage?
   const isHomePage = pathname === "/";
 
   // Track scroll direction & threshold
   useEffect(() => {
+    if (isMobile) return;
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-
-      // 1. Check if beyond threshold
-      setIsScrolled(currentScrollY > SCROLL_THRESHOLD);
 
       // 2. Determine scroll direction
       if (currentScrollY > prevScrollY.current) {
@@ -63,7 +58,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isMobile]);
 
   // Decide header position & background
   let headerPosition = "sticky";
@@ -82,6 +77,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
       "/faq": "faq",
       "/info": "info",
       "/profile": "profile",
+      "/signin": "profile",
     }),
     []
   );
@@ -112,11 +108,11 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
   return (
     <motion.header
       className={`
-        ${headerPosition} top-0 left-0 right-0 z-50
-        px-4
-        py-4
-        ${headerBackground}
-      `}
+    ${headerPosition} top-0 left-0 right-0 z-50
+    px-4
+    py-4
+    ${headerBackground}
+  `}
     >
       <div className="container mx-auto max-w-7xl">
         <div className="flex items-center justify-between">
@@ -126,9 +122,9 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
               <motion.div
                 key="logo"
                 className="w-1/3 flex items-center"
-                initial={{ opacity: 0, x: -100 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -100 }}
+                initial={{ opacity: 0, y: -100 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -100 }}
                 transition={{ duration: 0.25 }}
               >
                 <Link href="/" onClick={handleLogoClick}>
@@ -140,9 +136,10 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                   >
                     <Image
                       src="/images/branding/logo_black.png"
-                      width={50}
-                      height={50}
+                      width={75}
+                      height={75}
                       alt="HackKU Logo"
+                      className="w-auto h-12 md:h-10" // Adjust size for responsiveness
                     />
                   </motion.div>
                 </Link>
@@ -217,12 +214,10 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
             }`}
             initial={{ flex: 1, scale: 1 }}
             animate={{
-              // If scrolled AND scrolling down, scale up;
-              // otherwise (scroll up or not scrolled) scale = 1
-              scale: isScrolled && scrollDirection === "down" ? 1.25 : 1,
+              scale: scrollDirection === "down" ? 1.25 : 1,
             }}
             whileHover={{
-              scale: isScrolled && scrollDirection === "down" ? 1.3 : 1.1,
+              scale: scrollDirection === "down" ? 1.3 : 1.1,
             }}
             transition={{ duration: 0.25 }}
           >
@@ -269,6 +264,12 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                     HackerDoc
                   </Link>
                 </TabsTrigger>
+                <TabsTrigger value="profile" asChild>
+                  <Link href="/profile">
+                    <IconUser size={20} className="mr-2" />
+                    Profile
+                  </Link>
+                </TabsTrigger>
               </TabsList>
             </Tabs>
           </motion.div>
@@ -281,26 +282,35 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                 className={`hidden lg:flex w-1/3 justify-end space-x-4 ${
                   isHomePage ? "drop-shadow-lg" : "drop-shadow-sm"
                 }`}
-                initial={{ opacity: 0, x: 100 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: 100 }}
+                initial={{ opacity: 0, y: -100 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -100 }}
                 transition={{ duration: 0.25 }}
               >
-                {isAdmin && (
-                  <Link href="/admin">
-                    <Button variant="outline" className="text-sm">
-                      <IconUserStar size={20} />
-                    </Button>
+                {/* MLH Badge */}
+                <div className="absolute -top-10 z-50">
+                  <Link
+                    href="https://mlh.io/seasons/2025/events"
+                    target="_blank"
+                    passHref
+                  >
+                    <motion.div
+                      whileHover={{
+                        scale: 1.05,
+                        y: 5,
+                        transition: { duration: 0.2 },
+                      }}
+                    >
+                      <Image
+                        src="/images/mlh-badge.svg"
+                        alt="MLH Badge"
+                        width={200}
+                        height={200}
+                        className="w-auto h-12 md:h-36"
+                      />
+                    </motion.div>
                   </Link>
-                )}
-                <Link href="/profile">
-                  <motion.div whileHover={{ scale: 1.05 }}>
-                    <Button variant="outline" className="text-sm">
-                      <IconUser size={20} className="mr-2" />
-                      Profile
-                    </Button>
-                  </motion.div>
-                </Link>
+                </div>
               </motion.div>
             )}
           </AnimatePresence>
