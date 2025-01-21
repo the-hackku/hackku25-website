@@ -26,14 +26,34 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 
+const SCROLL_THRESHOLD = 20;
+
 const Header = ({ isAdmin }: { isAdmin: boolean }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
 
-  // Check if the screen width is desktop
-  const isDesktop = typeof window !== "undefined" && window.innerWidth >= 1024;
+  // Are we on the homepage?
+  const isHomePage = pathname === "/";
 
-  // Determine the active tab based on the current path
+  // Watch scroll to toggle the isScrolled state
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > SCROLL_THRESHOLD);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Decide header position & background
+  let headerPosition = "sticky";
+  let headerBackground = "bg-white"; // default for non-home pages
+
+  if (isHomePage) {
+    headerPosition = "fixed"; // Change from 'sticky' to 'fixed'
+    headerBackground = "bg-transparent"; // Keep transparent background
+  }
+
+  // Tab logic for highlighting active route
   const tabValueMapping = useMemo(
     () => ({
       "/": "home",
@@ -45,14 +65,12 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
     []
   );
 
-  // Set current tab based on pathname
   const [currentTab, setCurrentTab] = useState(
     pathname
       ? tabValueMapping[pathname as keyof typeof tabValueMapping] || ""
       : ""
   );
 
-  // Update current tab whenever pathname changes
   useEffect(() => {
     setCurrentTab(
       pathname
@@ -61,67 +79,47 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
     );
   }, [pathname, tabValueMapping]);
 
-  // Track scroll event
-  useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
   return (
     <>
-      {/* <div className="bg-yellow-200 text-center py-1">
-        {" "}
-        🐛<b>BUG BOUNTY ACTIVATED </b>- SEND BUG SCREENSHOTS IN THE{" "}
-        <Link
-          href="https://discord.com/invite/AJXm3k6xWq"
-          target="_blank"
-          className="underline"
-        >
-          DISCORD
-        </Link>{" "}
-        TO WIN PRIZES🐛
-      </div> */}
-
-      {/* Header */}
       <motion.header
-        className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 overflow-hidden px-4 ${
-          isDesktop ? (isScrolled ? "bg-transparent" : "bg-white") : "bg-white"
-        }`}
+        className={`
+          ${headerPosition} top-0 left-0 right-0 z-50
+          px-4
+          transition-colors duration-300
+          ${headerBackground}
+        `}
       >
-        <div className="container mx-auto max-w-7xl overflow-hidden">
+        <div className="container mx-auto max-w-7xl">
           <div className="flex items-center justify-between py-4">
-            {/* Left Side - Logo */}
+            {/* Logo */}
             <AnimatePresence>
-              {(!isScrolled || !isDesktop) && (
-                <motion.div
-                  key="logo"
-                  className="w-1/3 flex items-center"
-                  initial={isDesktop ? { opacity: 0, x: -100 } : {}}
-                  animate={isDesktop ? { opacity: 1, x: 0 } : {}}
-                  exit={isDesktop ? { opacity: 0, x: -100 } : {}}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Link href="/">
-                    <motion.div
-                      whileHover={{
-                        scale: 1.1,
-                        rotate: [0, -5, 5, -5, 5, -5, 5, 0],
-                      }}
-                    >
-                      <Image
-                        src="/images/duck2.png"
-                        width={50}
-                        height={50}
-                        alt="HackKU Logo"
-                      />
-                    </motion.div>
-                  </Link>
-                </motion.div>
-              )}
+              <motion.div
+                key="logo"
+                className="w-1/3 flex items-center"
+                initial={{ opacity: 0, x: -100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -100 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Link href="/">
+                  <motion.div
+                    whileHover={{
+                      scale: 1.1,
+                      rotate: [0, -5, 5, -5, 5, -5, 5, 0],
+                    }}
+                  >
+                    <Image
+                      src="/images/duck2.png"
+                      width={50}
+                      height={50}
+                      alt="HackKU Logo"
+                    />
+                  </motion.div>
+                </Link>
+              </motion.div>
             </AnimatePresence>
 
-            {/* Mobile Burger Menu */}
+            {/* Mobile Menu */}
             <header className="lg:hidden">
               <Sheet>
                 <SheetTrigger asChild>
@@ -181,11 +179,11 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
               </Sheet>
             </header>
 
-            {/* Center - Navigation Links using Tabs (for larger screens) */}
+            {/* Nav Tabs (Desktop) */}
             <motion.div
               className="hidden lg:flex justify-center flex-1"
               initial={{ flex: 1, scale: 1 }}
-              animate={isDesktop && isScrolled ? { scale: 1.25 } : { scale: 1 }}
+              animate={{ scale: isScrolled ? 1.25 : 1 }}
               transition={{ type: "spring", damping: 25, stiffness: 100 }}
             >
               <Tabs defaultValue={currentTab} value={currentTab}>
@@ -203,6 +201,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                       Home
                     </Link>
                   </TabsTrigger>
+
                   <TabsTrigger value="schedule" asChild>
                     <Link
                       href="/schedule"
@@ -216,6 +215,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                       Schedule
                     </Link>
                   </TabsTrigger>
+
                   <TabsTrigger value="info" asChild>
                     <Link
                       href="/info"
@@ -233,34 +233,30 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
               </Tabs>
             </motion.div>
 
-            {/* Right Side - Admin & Profile Buttons */}
+            {/* Right Side */}
             <AnimatePresence>
-              {(!isScrolled || !isDesktop) && (
-                <motion.div
-                  key="right-elements"
-                  className="hidden lg:flex w-1/3 justify-end space-x-4"
-                  initial={isDesktop ? { opacity: 0, x: 100 } : {}}
-                  animate={isDesktop ? { opacity: 1, x: 0 } : {}}
-                  exit={isDesktop ? { opacity: 0, x: 100 } : {}}
-                  transition={{ duration: 0.3 }}
-                >
-                  {/* Admin Button */}
-                  {isAdmin && (
-                    <Link href="/admin">
-                      <Button variant="outline" className="text-sm">
-                        <IconUserStar size={20} />
-                      </Button>
-                    </Link>
-                  )}
-                  {/* Profile Button */}
-                  <Link href="/profile">
+              <motion.div
+                key="right-elements"
+                className="hidden lg:flex w-1/3 justify-end space-x-4"
+                initial={{ opacity: 0, x: 100 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 100 }}
+                transition={{ duration: 0.3 }}
+              >
+                {isAdmin && (
+                  <Link href="/admin">
                     <Button variant="outline" className="text-sm">
-                      <IconUser size={20} className="mr-2" />
-                      Profile
+                      <IconUserStar size={20} />
                     </Button>
                   </Link>
-                </motion.div>
-              )}
+                )}
+                <Link href="/profile">
+                  <Button variant="outline" className="text-sm">
+                    <IconUser size={20} className="mr-2" />
+                    Profile
+                  </Button>
+                </Link>
+              </motion.div>
             </AnimatePresence>
           </div>
         </div>

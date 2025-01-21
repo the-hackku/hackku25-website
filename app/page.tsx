@@ -7,6 +7,7 @@ import { useState } from "react";
 import SponsorsSection from "@/components/homepage/SponsorsSection";
 import TeamSection from "@/components/homepage/TeamSection";
 import AboutSection from "@/components/homepage/AboutSection";
+import AllSvg from "@/components/homepage/svg/AllSvg";
 
 export default function HomePage() {
   const scrollToSection = (id: string) => {
@@ -100,25 +101,19 @@ export default function HomePage() {
       image: "/images/team/andrew.jpeg",
       linkedin: "https://www.linkedin.com/in/andrew-l-huang/",
     },
-    {
-      name: "Tyler Anderson",
-      role: "Tech Team",
-      image: "/images/team/tyler.webp",
-      linkedin: "https://www.linkedin.com/in/andrew-l-huang/",
-    },
   ];
 
   return (
-    <div className="w-full min-h-screen overflow-x-hidden overflow-y-auto bg-gradient-to-br from-black via-indigo-900 to-purple-900 text-white font-agency">
+    <div className="w-full min-h-screen overflow-x-hidden overflow-y-auto text-white font-agency">
       {/* Header Section */}
       <section
         id="header"
-        className="relative w-full flex items-center justify-center overflow-hidden pb-40 pt-32 md:pb-60 md:pt-48"
+        className="relative w-full flex items-center justify-start overflow-hidden pb-40 pt-32 md:pb-96 md:pt-48 px-40"
         onMouseMove={handleMouseMove}
         onMouseLeave={resetTilt}
       >
         <motion.div
-          className="text-center max-w-4xl z-10 px-4 md:px-0"
+          className="z-10 max-w-[60%] text-left"
           style={{
             transform: `perspective(1000px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)`,
             transition: isMouseOver
@@ -129,17 +124,19 @@ export default function HomePage() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.8 }}
-            className="text-md md:text-lg text-gray-300"
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-md md:text-lg "
           >
             APRIL 4th - 6th, 2025
           </motion.p>
+
           {/* Event Title */}
           <motion.h1
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="text-6xl md:text-8xl font-dfvn"
+            className="text-6xl md:text-8xl font-dfvn drop-shadow-lg"
+            style={{ textShadow: "2px 2px 0 black" }}
           >
             HackKU25
           </motion.h1>
@@ -148,8 +145,8 @@ export default function HomePage() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 1 }}
-            className="text-md md:text-lg text-gray-300"
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="text-md md:text-2xl "
           >
             @{" "}
             <Link
@@ -165,8 +162,8 @@ export default function HomePage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 1.25 }}
-            className="mt-6 relative flex justify-center items-center"
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="mt-6"
           >
             <Link href="/register">
               <motion.button
@@ -193,12 +190,15 @@ export default function HomePage() {
             Scroll to Learn More
           </p>
         </motion.div>
+
+        {/* Background SVG */}
+        <div className="absolute bottom-0 left-[32%] transform -translate-x-[32%] z-0 w-full h-full">
+          <AllSvg />
+        </div>
       </section>
 
       <AboutSection previousEvents={previousEvents} />
-
       <SponsorsSection sponsorTiers={sponsorTiers} sponsors={sponsors} />
-
       <TeamSection teamMembers={teamMembers} />
     </div>
   );
