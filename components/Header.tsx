@@ -30,7 +30,7 @@ const SCROLL_THRESHOLD = 20;
 
 const Header = ({ isAdmin }: { isAdmin: boolean }) => {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [scrollDirection, setScrollDirection] = useState<"up" | "down">("down");
+  const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
 
   // Store the previous scroll position in a ref
   const prevScrollY = useRef(0);
@@ -120,7 +120,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
     >
       <div className="container mx-auto max-w-7xl">
         <div className="flex items-center justify-between">
-          {/* Logo Section */}
+          {/* Left Section */}
           <AnimatePresence>
             {scrollDirection === "up" && (
               <motion.div
@@ -210,14 +210,21 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
             </Sheet>
           </header>
 
-          {/* Center Tabs (Desktop) */}
+          {/* Center Tabs (Always Visible) */}
           <motion.div
             className={`hidden lg:flex justify-center flex-1 ${
               isHomePage ? "drop-shadow-lg" : "drop-shadow-sm"
             }`}
             initial={{ flex: 1, scale: 1 }}
-            animate={{ scale: isScrolled ? 1.25 : 1 }}
-            transition={{ type: "spring", damping: 25, stiffness: 100 }}
+            animate={{
+              // If scrolled AND scrolling down, scale up;
+              // otherwise (scroll up or not scrolled) scale = 1
+              scale: isScrolled && scrollDirection === "down" ? 1.25 : 1,
+            }}
+            whileHover={{
+              scale: isScrolled && scrollDirection === "down" ? 1.3 : 1.1,
+            }}
+            transition={{ duration: 0.25 }}
           >
             <Tabs defaultValue={currentTab} value={currentTab}>
               <TabsList className="space-x-0">
@@ -266,7 +273,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
             </Tabs>
           </motion.div>
 
-          {/* Right Side Section */}
+          {/* Right Side */}
           <AnimatePresence>
             {scrollDirection === "up" && (
               <motion.div
@@ -287,10 +294,12 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                   </Link>
                 )}
                 <Link href="/profile">
-                  <Button variant="outline" className="text-sm">
-                    <IconUser size={20} className="mr-2" />
-                    Profile
-                  </Button>
+                  <motion.div whileHover={{ scale: 1.05 }}>
+                    <Button variant="outline" className="text-sm">
+                      <IconUser size={20} className="mr-2" />
+                      Profile
+                    </Button>
+                  </motion.div>
                 </Link>
               </motion.div>
             )}
