@@ -146,7 +146,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-md md:text-2xl "
+            className="text-md md:text-3xl "
           >
             @{" "}
             <Link
@@ -169,9 +169,9 @@ export default function HomePage() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-yellow-500 hover:shadow-xl rounded-full text-lg md:text-2xl shadow-lg text-black font-agency"
+                className="px-6 py-3 bg-yellow-500 rounded-full text-lg md:text-2xl text-black font-agency"
               >
-                Register Now
+                Register Now!
               </motion.button>
             </Link>
           </motion.div>

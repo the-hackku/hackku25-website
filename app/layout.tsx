@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   title: "HackKU25",
   description: "HackKU Portal",
   icons: {
-    icon: "/images/duck2.png",
+    icon: "/images/branding/logo_white.png",
   },
 };
 

@@ -3,7 +3,6 @@ import { authOptions } from "@/lib/authoptions";
 import { prisma } from "@/prisma";
 import QrCodeComponent from "@/components/UserQRCode";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import {
   IconMail,
@@ -12,13 +11,7 @@ import {
   IconHelpCircle,
   IconLogout,
 } from "@tabler/icons-react";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Tooltip,
   TooltipContent,
@@ -26,6 +19,7 @@ import {
 } from "@/components/ui/tooltip";
 import AuthButtons from "@/components/AuthButtons";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
+import { redirect } from "next/navigation";
 
 function formatDate(dateString: string) {
   const date = new Date(dateString);
@@ -40,23 +34,7 @@ export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    return (
-      <div className="container mx-auto p-4 max-w-md">
-        <Card>
-          <CardHeader>
-            <CardTitle>Authentication Required</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>You need to be authenticated to view this page.</p>
-          </CardContent>
-          <CardFooter>
-            <Button asChild className="w-full">
-              <Link href="/signin">Sign in</Link>
-            </Button>
-          </CardFooter>
-        </Card>
-      </div>
-    );
+    redirect("/signin");
   }
 
   try {

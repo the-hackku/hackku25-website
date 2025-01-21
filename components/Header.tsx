@@ -79,6 +79,15 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
     );
   }, [pathname, tabValueMapping]);
 
+  const handleLogoClick = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+  ) => {
+    if (isHomePage) {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
     <>
       <motion.header
@@ -101,17 +110,17 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                 exit={{ opacity: 0, x: -100 }}
                 transition={{ duration: 0.3 }}
               >
-                <Link href="/">
+                <Link href="/" onClick={handleLogoClick}>
                   <motion.div
                     whileHover={{
                       scale: 1.1,
-                      rotate: [0, -5, 5, -5, 5, -5, 5, 0],
+                      transition: { duration: 0.2 },
                     }}
                   >
                     <Image
-                      src="/images/duck2.png"
-                      width={50}
-                      height={50}
+                      src="/images/branding/logo_black.png"
+                      width={75}
+                      height={75}
                       alt="HackKU Logo"
                     />
                   </motion.div>
@@ -181,7 +190,9 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
 
             {/* Nav Tabs (Desktop) */}
             <motion.div
-              className="hidden lg:flex justify-center flex-1"
+              className={`hidden lg:flex justify-center flex-1 ${
+                isHomePage ? "drop-shadow-lg" : "drop-shadow-sm"
+              }`}
               initial={{ flex: 1, scale: 1 }}
               animate={{ scale: isScrolled ? 1.25 : 1 }}
               transition={{ type: "spring", damping: 25, stiffness: 100 }}
@@ -237,7 +248,9 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
             <AnimatePresence>
               <motion.div
                 key="right-elements"
-                className="hidden lg:flex w-1/3 justify-end space-x-4"
+                className={`hidden lg:flex w-1/3 justify-end space-x-4 ${
+                  isHomePage ? "drop-shadow-lg" : "drop-shadow-sm"
+                }`}
                 initial={{ opacity: 0, x: 100 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 100 }}
