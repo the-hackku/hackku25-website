@@ -28,7 +28,7 @@ import { useSession } from "next-auth/react";
 
 const Header = ({ isAdmin }: { isAdmin: boolean }) => {
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
-  const { data: session, status } = useSession();
+  const { status } = useSession();
 
   const isAuthenticated = status === "authenticated";
 

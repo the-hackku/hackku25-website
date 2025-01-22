@@ -601,859 +601,859 @@ const AllSvg: React.FC<SvgProps> = () => {
       </g>
       <path
         style={{ mixBlendMode: "soft-light" }}
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M2670.39 942.539L1779.99 881.64L1425.24 821.283L1370.53 770.639L1256.48 675.758L1280.18 766.55L856.439 770.639L832.227 740.957L760.195 757.437L702.238 799.149L500.006 885.941L134.22 936.194L-356.653 942.539L-364.563 2154.32H2662.51L2670.39 942.539Z"
         fill="url(#paint12_linear_103_1128)"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1005.35 714.222L1016.5 431.442L1280.51 430.72L1286.47 717.289L1005.35 714.222Z"
         fill="url(#paint13_linear_103_1128)"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1005.35 714.222L926.666 714.252L941.765 431.652L1016.5 431.442L1005.35 714.222Z"
         fill="#0D000C"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1255.94 377.941L1291.07 430.69L1320.09 439.321L999.571 440.163L1016.53 427.983L1044.63 368.047L1255.94 377.941Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M912.049 440.373L935.87 426.449C943.75 423.231 970.187 398.571 976.924 379.054L1044.63 368.227C1038.82 377.61 1022.7 423.502 1016.53 427.953L999.571 440.133L912.049 440.373Z"
         fill="#0C0010"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1306.71 439.351L1306.77 450.628L1281.32 463.71L1022.85 464.342L939.87 461.725L927.118 446.989L925.433 440.343L1007.21 440.133L1306.71 439.351Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1306.77 450.628L1011.54 450.448L1007.21 440.133L1306.71 439.351L1306.77 450.628Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M999.33 713.891L947.599 714.162L932.321 714.252C942.005 585.959 974.156 492.039 974.156 492.039C977.074 499.468 979.66 507.678 981.946 516.399C1002.34 593.868 999.3 713.891 999.3 713.891H999.33Z"
         fill="#0C0010"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M999.33 713.891L947.6 714.162C954.307 624.904 971.931 552.307 981.977 516.399C1002.37 593.868 999.33 713.891 999.33 713.891Z"
         fill="#0C0010"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1269.44 518.023H1270.56C1270.56 518.023 1272.03 497.784 1261.53 480.942L1260 481.784C1260 481.784 1249.11 494.476 1247.49 519.316L1269.44 518.023Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1270.71 518.023H1271.82C1271.82 518.023 1272.27 497.874 1261.53 480.942C1261.53 480.942 1250.38 494.475 1248.75 519.316L1270.71 518.023Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1270.71 518.384L1267.34 518.324L1250.2 518.053C1251.58 500.971 1256.69 492.13 1259.55 488.461C1260.72 486.927 1261.53 486.295 1261.53 486.295C1270.59 499.287 1270.71 518.384 1270.71 518.384Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1267.34 518.324L1250.2 518.053C1251.58 500.971 1256.69 492.13 1259.55 488.461C1266.98 500.881 1267.31 517.241 1267.31 518.354L1267.34 518.324Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1250.2 518.053V519.316L1273.75 519.286V518.023L1250.2 518.053Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1273.75 519.286L1270.71 520.459L1247.46 520.308V519.316L1250.2 518.053V519.316L1273.75 519.286Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1257.02 492.31C1257.02 492.31 1260.36 497.062 1259.01 518.023H1259.43C1259.43 518.023 1260.21 497.543 1263.52 492.28L1260.87 486.897C1260.87 486.897 1258.41 489.603 1257.05 492.28L1257.02 492.31Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1269.44 564.968H1270.56C1270.56 564.968 1272.03 544.728 1261.53 527.887L1260 528.729C1260 528.729 1249.11 541.42 1247.49 566.261L1269.44 564.968Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1270.71 564.968H1271.82C1271.82 564.968 1272.27 544.818 1261.53 527.887C1261.53 527.887 1250.38 541.42 1248.75 566.261L1270.71 564.968Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1270.71 565.328L1267.34 565.268L1250.2 564.998C1251.58 547.916 1256.69 539.074 1259.55 535.405C1260.72 533.872 1261.53 533.24 1261.53 533.24C1270.59 546.232 1270.71 565.328 1270.71 565.328Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1267.34 565.268L1250.2 564.997C1251.58 547.916 1256.69 539.074 1259.55 535.405C1266.98 547.826 1267.31 564.186 1267.31 565.298L1267.34 565.268Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1250.2 564.998V566.261L1273.75 566.231V564.968L1250.2 564.998Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1273.75 566.231L1270.71 567.403L1247.46 567.283V566.261L1250.2 564.997V566.261L1273.75 566.231Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1257.02 539.285C1257.02 539.285 1260.36 544.036 1259.01 564.998H1259.43C1259.43 564.998 1260.21 544.518 1263.52 539.255L1260.87 533.872C1260.87 533.872 1258.41 536.578 1257.05 539.255L1257.02 539.285Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1229.08 518.023H1230.19C1230.19 518.023 1231.67 497.783 1221.17 480.942L1219.64 481.784C1219.64 481.784 1208.75 494.475 1207.13 519.316L1229.08 518.023Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1230.38 518.023H1231.49C1231.49 518.023 1231.94 497.874 1221.2 480.942C1221.2 480.942 1210.04 494.475 1208.42 519.316L1230.38 518.023Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1230.38 518.384L1227.01 518.324L1209.86 518.053C1211.25 500.971 1216.36 492.13 1219.22 488.461C1220.39 486.927 1221.2 486.295 1221.2 486.295C1230.25 499.287 1230.38 518.384 1230.38 518.384Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1227.01 518.324L1209.86 518.053C1211.25 500.971 1216.36 492.13 1219.22 488.461C1226.65 500.881 1226.98 517.241 1226.98 518.354L1227.01 518.324Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1209.86 518.053V519.316L1233.41 519.286V518.023L1209.86 518.053Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1233.41 519.286L1230.38 520.459L1207.13 520.308V519.316L1209.86 518.053V519.316L1233.41 519.286Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1216.69 492.31C1216.69 492.31 1220.03 497.062 1218.68 518.023H1219.1C1219.1 518.023 1219.88 497.543 1223.19 492.28L1220.54 486.897C1220.54 486.897 1218.07 489.603 1216.72 492.28L1216.69 492.31Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1228.69 564.968H1229.8C1229.8 564.968 1231.28 544.728 1220.78 527.887L1219.25 528.729C1219.25 528.729 1208.36 541.42 1206.74 566.261L1228.69 564.968Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1229.95 564.968H1231.07C1231.07 564.968 1231.52 544.818 1220.78 527.887C1220.78 527.887 1209.62 541.42 1208 566.261L1229.95 564.968Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1229.98 565.328L1226.62 565.268L1209.47 564.998C1210.86 547.916 1215.97 539.074 1218.83 535.405C1220 533.872 1220.81 533.24 1220.81 533.24C1229.86 546.232 1229.98 565.328 1229.98 565.328Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1226.59 565.268L1209.44 564.997C1210.83 547.916 1215.94 539.074 1218.8 535.405C1226.22 547.826 1226.56 564.186 1226.56 565.298L1226.59 565.268Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1209.47 564.998V566.261L1233.02 566.231V564.968L1209.47 564.998Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1233.02 566.231L1229.98 567.403L1206.74 567.283V566.261L1209.47 564.997V566.261L1233.02 566.231Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1216.3 539.285C1216.3 539.285 1219.64 544.036 1218.29 564.998H1218.71C1218.71 564.998 1219.49 544.518 1222.8 539.255L1220.15 533.872C1220.15 533.872 1217.68 536.578 1216.33 539.255L1216.3 539.285Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1190.83 518.023H1191.94C1191.94 518.023 1193.41 497.783 1182.92 480.942L1181.38 481.784C1181.38 481.784 1170.49 494.475 1168.87 519.316L1190.83 518.023Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1192.12 518.023H1193.23C1193.23 518.023 1193.68 497.874 1182.95 480.942C1182.95 480.942 1171.79 494.475 1170.16 519.316L1192.12 518.023Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1192.12 518.384L1188.75 518.324L1171.61 518.053C1172.99 500.971 1178.1 492.13 1180.96 488.461C1182.13 486.927 1182.95 486.295 1182.95 486.295C1192 499.287 1192.12 518.384 1192.12 518.384Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1188.75 518.324L1171.61 518.053C1172.99 500.971 1178.1 492.13 1180.96 488.461C1188.39 500.881 1188.72 517.241 1188.72 518.354L1188.75 518.324Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1171.61 518.053V519.316L1195.16 519.286V518.023L1171.61 518.053Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1195.16 519.286L1192.12 520.459L1168.87 520.308V519.316L1171.61 518.053V519.316L1195.16 519.286Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1178.43 492.31C1178.43 492.31 1181.77 497.062 1180.42 518.023H1180.84C1180.84 518.023 1181.62 497.543 1184.93 492.28L1182.28 486.897C1182.28 486.897 1179.82 489.603 1178.46 492.28L1178.43 492.31Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1190.83 564.968H1191.94C1191.94 564.968 1193.41 544.728 1182.92 527.887L1181.38 528.729C1181.38 528.729 1170.49 541.42 1168.87 566.261L1190.83 564.968Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1192.12 564.968H1193.23C1193.23 564.968 1193.68 544.818 1182.95 527.887C1182.95 527.887 1171.79 541.42 1170.16 566.261L1192.12 564.968Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1192.12 565.328L1188.75 565.268L1171.61 564.998C1172.99 547.916 1178.1 539.074 1180.96 535.405C1182.13 533.872 1182.95 533.24 1182.95 533.24C1192 546.232 1192.12 565.328 1192.12 565.328Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1188.75 565.268L1171.61 564.997C1172.99 547.916 1178.1 539.074 1180.96 535.405C1188.39 547.826 1188.72 564.186 1188.72 565.298L1188.75 565.268Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1171.61 564.998V566.261L1195.16 566.231V564.968L1171.61 564.998Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1195.16 566.231L1192.12 567.403L1168.87 567.283V566.261L1171.61 564.997V566.261L1195.16 566.231Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1178.43 539.285C1178.43 539.285 1181.77 544.036 1180.42 564.998H1180.84C1180.84 564.998 1181.62 544.518 1184.93 539.255L1182.28 533.872C1182.28 533.872 1179.82 536.578 1178.46 539.255L1178.43 539.285Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1150.49 518.023H1151.61C1151.61 518.023 1153.08 497.783 1142.58 480.942L1141.05 481.784C1141.05 481.784 1130.16 494.475 1128.54 519.316L1150.49 518.023Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1151.76 518.023H1152.87C1152.87 518.023 1153.32 497.874 1142.58 480.942C1142.58 480.942 1131.42 494.475 1129.8 519.316L1151.76 518.023Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1151.79 518.384L1148.42 518.324L1131.27 518.053C1132.66 500.971 1137.77 492.13 1140.63 488.461C1141.8 486.927 1142.61 486.295 1142.61 486.295C1151.67 499.287 1151.79 518.384 1151.79 518.384Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1148.39 518.324L1131.24 518.053C1132.63 500.971 1137.74 492.13 1140.6 488.461C1148.03 500.881 1148.36 517.241 1148.36 518.354L1148.39 518.324Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1131.24 518.053L1131.27 519.316L1154.82 519.286V518.023L1131.24 518.053Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1154.82 519.286L1151.79 520.459L1128.54 520.308V519.316L1131.24 518.053L1131.27 519.316L1154.82 519.286Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1138.1 492.31C1138.1 492.31 1141.44 497.062 1140.09 518.023H1140.51C1140.51 518.023 1141.29 497.543 1144.6 492.28L1141.95 486.897C1141.95 486.897 1139.49 489.603 1138.13 492.28L1138.1 492.31Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1150.1 564.968H1151.21C1151.21 564.968 1152.69 544.728 1142.19 527.887L1140.66 528.729C1140.66 528.729 1129.77 541.42 1128.15 566.261L1150.1 564.968Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1151.37 564.968H1152.48C1152.48 564.968 1152.93 544.818 1142.19 527.887C1142.19 527.887 1131.03 541.42 1129.41 566.261L1151.37 564.968Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1151.37 565.328L1148 565.268L1130.85 564.998C1132.24 547.916 1137.35 539.074 1140.21 535.405C1141.38 533.872 1142.19 533.24 1142.19 533.24C1151.25 546.232 1151.37 565.328 1151.37 565.328Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1148 565.268L1130.85 564.997C1132.24 547.916 1137.35 539.074 1140.21 535.405C1147.64 547.826 1147.97 564.186 1147.97 565.298L1148 565.268Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1130.85 564.998V566.261L1154.43 566.231L1154.4 564.968L1130.85 564.998Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1154.43 566.231L1151.4 567.403L1128.15 567.283V566.261L1130.85 564.997V566.261L1154.43 566.231Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1137.71 539.285C1137.71 539.285 1141.05 544.036 1139.7 564.998H1140.12C1140.12 564.998 1140.9 544.518 1144.21 539.255L1141.56 533.872C1141.56 533.872 1139.09 536.578 1137.74 539.255L1137.71 539.285Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1107.63 518.023H1108.75C1108.75 518.023 1110.22 497.783 1099.72 480.942L1098.19 481.784C1098.19 481.784 1087.3 494.475 1085.68 519.316L1107.63 518.023Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1108.9 518.023H1110.01C1110.01 518.023 1110.46 497.874 1099.72 480.942C1099.72 480.942 1088.57 494.475 1086.94 519.316L1108.9 518.023Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1108.93 518.384L1105.56 518.324L1088.42 518.053C1089.8 500.971 1094.91 492.13 1097.77 488.461C1098.94 486.927 1099.75 486.295 1099.75 486.295C1108.81 499.287 1108.93 518.384 1108.93 518.384Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1105.53 518.324L1088.39 518.053C1089.77 500.971 1094.88 492.13 1097.74 488.461C1105.17 500.881 1105.5 517.241 1105.5 518.354L1105.53 518.324Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1088.39 518.053L1088.42 519.316L1111.97 519.286V518.023L1088.39 518.053Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1111.97 519.286L1108.93 520.459L1085.68 520.308V519.316L1088.39 518.053L1088.42 519.316L1111.97 519.286Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1095.24 492.31C1095.24 492.31 1098.58 497.062 1097.23 518.023H1097.65C1097.65 518.023 1098.43 497.543 1101.74 492.28L1099.09 486.897C1099.09 486.897 1096.63 489.603 1095.27 492.28L1095.24 492.31Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1107.63 564.968H1108.75C1108.75 564.968 1110.22 544.728 1099.72 527.887L1098.19 528.729C1098.19 528.729 1087.3 541.42 1085.68 566.261L1107.63 564.968Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1108.9 564.968H1110.01C1110.01 564.968 1110.46 544.818 1099.72 527.887C1099.72 527.887 1088.57 541.42 1086.94 566.261L1108.9 564.968Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1108.93 565.328L1105.56 565.268L1088.42 564.998C1089.8 547.916 1094.91 539.074 1097.77 535.405C1098.94 533.872 1099.75 533.24 1099.75 533.24C1108.81 546.232 1108.93 565.328 1108.93 565.328Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1105.53 565.268L1088.39 564.997C1089.77 547.916 1094.88 539.074 1097.74 535.405C1105.17 547.826 1105.5 564.186 1105.5 565.298L1105.53 565.268Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1088.39 564.998L1088.42 566.261L1111.97 566.231V564.968L1088.39 564.998Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1111.97 566.231L1108.93 567.403L1085.68 567.283V566.261L1088.39 564.997L1088.42 566.261L1111.97 566.231Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1095.24 539.285C1095.24 539.285 1098.58 544.036 1097.23 564.998H1097.65C1097.65 564.998 1098.43 544.518 1101.74 539.255L1099.09 533.872C1099.09 533.872 1096.63 536.578 1095.27 539.255L1095.24 539.285Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1067.3 518.023H1068.42C1068.42 518.023 1069.89 497.783 1059.39 480.942L1057.86 481.784C1057.86 481.784 1046.97 494.475 1045.35 519.316L1067.3 518.023Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1068.57 518.023H1069.68C1069.68 518.023 1070.13 497.874 1059.39 480.942C1059.39 480.942 1048.23 494.475 1046.61 519.316L1068.57 518.023Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1068.57 518.384L1065.2 518.324L1048.05 518.053C1049.44 500.971 1054.55 492.13 1057.41 488.461C1058.58 486.927 1059.39 486.295 1059.39 486.295C1068.45 499.287 1068.57 518.384 1068.57 518.384Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1065.2 518.324L1048.05 518.053C1049.44 500.971 1054.55 492.13 1057.41 488.461C1064.84 500.881 1065.17 517.241 1065.17 518.354L1065.2 518.324Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1048.05 518.053V519.316L1071.63 519.286L1071.6 518.023L1048.05 518.053Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1071.63 519.286L1068.6 520.459L1045.35 520.308V519.316L1048.05 518.053V519.316L1071.63 519.286Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1054.91 492.31C1054.91 492.31 1058.25 497.062 1056.9 518.023H1057.32C1057.32 518.023 1058.1 497.543 1061.41 492.28L1058.76 486.897C1058.76 486.897 1056.29 489.603 1054.94 492.28L1054.91 492.31Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1269.44 611.281H1270.56C1270.56 611.281 1272.03 591.041 1261.53 574.2L1260 575.042C1260 575.042 1249.11 587.733 1247.49 612.574L1269.44 611.281Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1270.71 611.281H1271.82C1271.82 611.281 1272.27 591.131 1261.53 574.2C1261.53 574.2 1250.38 587.733 1248.75 612.574L1270.71 611.281Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1270.71 611.611L1267.34 611.551L1250.2 611.28C1251.58 594.199 1256.69 585.357 1259.55 581.688C1260.72 580.155 1261.53 579.523 1261.53 579.523C1270.59 592.515 1270.71 611.611 1270.71 611.611Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1267.34 611.581L1250.2 611.31C1251.58 594.229 1256.69 585.387 1259.55 581.718C1266.98 594.139 1267.31 610.499 1267.31 611.611L1267.34 611.581Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1250.2 611.311V612.544L1273.75 612.514V611.25L1250.2 611.311Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1273.75 612.514L1270.71 613.686L1247.46 613.566V612.544L1250.2 611.311V612.544L1273.75 612.514Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1257.02 585.568C1257.02 585.568 1260.36 590.319 1259.01 611.281H1259.43C1259.43 611.281 1260.21 590.801 1263.52 585.538L1260.87 580.155C1260.87 580.155 1258.41 582.861 1257.05 585.538L1257.02 585.568Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1229.08 611.281H1230.19C1230.19 611.281 1231.67 591.041 1221.17 574.2L1219.64 575.042C1219.64 575.042 1208.75 587.733 1207.13 612.574L1229.08 611.281Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1230.38 611.281H1231.49C1231.49 611.281 1231.94 591.131 1221.2 574.2C1221.2 574.2 1210.04 587.733 1208.42 612.574L1230.38 611.281Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1230.38 611.611L1227.01 611.551L1209.86 611.28C1211.25 594.199 1216.36 585.357 1219.22 581.688C1220.39 580.155 1221.2 579.523 1221.2 579.523C1230.25 592.515 1230.38 611.611 1230.38 611.611Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1227.01 611.581L1209.86 611.31C1211.25 594.229 1216.36 585.387 1219.22 581.718C1226.65 594.139 1226.98 610.499 1226.98 611.611L1227.01 611.581Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1209.86 611.311V612.544L1233.41 612.514V611.25L1209.86 611.311Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1233.41 612.514L1230.38 613.686L1207.13 613.566V612.544L1209.86 611.311V612.544L1233.41 612.514Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1216.69 585.568C1216.69 585.568 1220.03 590.319 1218.68 611.281H1219.1C1219.1 611.281 1219.88 590.801 1223.19 585.538L1220.54 580.155C1220.54 580.155 1218.07 582.861 1216.72 585.538L1216.69 585.568Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1190.83 611.281H1191.94C1191.94 611.281 1193.41 591.041 1182.92 574.2L1181.38 575.042C1181.38 575.042 1170.49 587.733 1168.87 612.574L1190.83 611.281Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1192.12 611.281H1193.23C1193.23 611.281 1193.68 591.131 1182.95 574.2C1182.95 574.2 1171.79 587.733 1170.16 612.574L1192.12 611.281Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1192.12 611.611L1188.75 611.551L1171.61 611.28C1172.99 594.199 1178.1 585.357 1180.96 581.688C1182.13 580.155 1182.95 579.523 1182.95 579.523C1192 592.515 1192.12 611.611 1192.12 611.611Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1188.75 611.581L1171.61 611.31C1172.99 594.229 1178.1 585.387 1180.96 581.718C1188.39 594.139 1188.72 610.499 1188.72 611.611L1188.75 611.581Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1171.61 611.311V612.544L1195.16 612.514V611.25L1171.61 611.311Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1195.16 612.514L1192.12 613.686L1168.87 613.566V612.544L1171.61 611.311V612.544L1195.16 612.514Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1178.43 585.568C1178.43 585.568 1181.77 590.319 1180.42 611.281H1180.84C1180.84 611.281 1181.62 590.801 1184.93 585.538L1182.28 580.155C1182.28 580.155 1179.82 582.861 1178.46 585.538L1178.43 585.568Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1150.49 611.281H1151.61C1151.61 611.281 1153.08 591.041 1142.58 574.2L1141.05 575.042C1141.05 575.042 1130.16 587.733 1128.54 612.574L1150.49 611.281Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1151.76 611.281H1152.87C1152.87 611.281 1153.32 591.131 1142.58 574.2C1142.58 574.2 1131.42 587.733 1129.8 612.574L1151.76 611.281Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1151.79 611.611L1148.42 611.551L1131.27 611.28C1132.66 594.199 1137.77 585.357 1140.63 581.688C1141.8 580.155 1142.61 579.523 1142.61 579.523C1151.67 592.515 1151.79 611.611 1151.79 611.611Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1148.39 611.581L1131.24 611.31C1132.63 594.229 1137.74 585.387 1140.6 581.718C1148.03 594.139 1148.36 610.499 1148.36 611.611L1148.39 611.581Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1131.24 611.311L1131.27 612.544L1154.82 612.514V611.25L1131.24 611.311Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1154.82 612.514L1151.79 613.686L1128.54 613.566V612.544L1131.24 611.311L1131.27 612.544L1154.82 612.514Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1138.1 585.568C1138.1 585.568 1141.44 590.319 1140.09 611.281H1140.51C1140.51 611.281 1141.29 590.801 1144.6 585.538L1141.95 580.155C1141.95 580.155 1139.49 582.861 1138.13 585.538L1138.1 585.568Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1107.63 611.281H1108.75C1108.75 611.281 1110.22 591.041 1099.72 574.2L1098.19 575.042C1098.19 575.042 1087.3 587.733 1085.68 612.574L1107.63 611.281Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1108.9 611.281H1110.01C1110.01 611.281 1110.46 591.131 1099.72 574.2C1099.72 574.2 1088.57 587.733 1086.94 612.574L1108.9 611.281Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1108.93 611.611L1105.56 611.551L1088.42 611.28C1089.8 594.199 1094.91 585.357 1097.77 581.688C1098.94 580.155 1099.75 579.523 1099.75 579.523C1108.81 592.515 1108.93 611.611 1108.93 611.611Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1105.53 611.581L1088.39 611.31C1089.77 594.229 1094.88 585.387 1097.74 581.718C1105.17 594.139 1105.5 610.499 1105.5 611.611L1105.53 611.581Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1088.39 611.311L1088.42 612.544L1111.97 612.514V611.25L1088.39 611.311Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1111.97 612.514L1108.93 613.686L1085.68 613.566V612.544L1088.39 611.311L1088.42 612.544L1111.97 612.514Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1095.24 585.568C1095.24 585.568 1098.58 590.319 1097.23 611.281H1097.65C1097.65 611.281 1098.43 590.801 1101.74 585.538L1099.09 580.155C1099.09 580.155 1096.63 582.861 1095.27 585.538L1095.24 585.568Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1067.3 611.281H1068.42C1068.42 611.281 1069.89 591.041 1059.39 574.2L1057.86 575.042C1057.86 575.042 1046.97 587.733 1045.35 612.574L1067.3 611.281Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1068.57 611.281H1069.68C1069.68 611.281 1070.13 591.131 1059.39 574.2C1059.39 574.2 1048.23 587.733 1046.61 612.574L1068.57 611.281Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1068.57 611.611L1065.2 611.551L1048.05 611.28C1049.44 594.199 1054.55 585.357 1057.41 581.688C1058.58 580.155 1059.39 579.523 1059.39 579.523C1068.45 592.515 1068.57 611.611 1068.57 611.611Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1065.2 611.581L1048.05 611.31C1049.44 594.229 1054.55 585.387 1057.41 581.718C1064.84 594.139 1065.17 610.499 1065.17 611.611L1065.2 611.581Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1048.05 611.311V612.544L1071.63 612.514L1071.6 611.25L1048.05 611.311Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1071.63 612.514L1068.6 613.686L1045.35 613.566V612.544L1048.05 611.311V612.544L1071.63 612.514Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1054.91 585.568C1054.91 585.568 1058.25 590.319 1056.9 611.281H1057.32C1057.32 611.281 1058.1 590.801 1061.41 585.538L1058.76 580.155C1058.76 580.155 1056.29 582.861 1054.94 585.538L1054.91 585.568Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1066.91 564.968H1068.02C1068.02 564.968 1069.5 544.728 1059 527.887L1057.47 528.729C1057.47 528.729 1046.58 541.42 1044.96 566.261L1066.91 564.968Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1068.17 564.968H1069.29C1069.29 564.968 1069.74 544.818 1059 527.887C1059 527.887 1047.84 541.42 1046.22 566.261L1068.17 564.968Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1068.17 565.328L1064.81 565.268L1047.66 564.998C1049.05 547.916 1054.16 539.074 1057.02 535.405C1058.19 533.872 1059 533.24 1059 533.24C1068.05 546.232 1068.17 565.328 1068.17 565.328Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1064.81 565.268L1047.66 564.997C1049.05 547.916 1054.16 539.074 1057.02 535.405C1064.45 547.826 1064.78 564.186 1064.78 565.298L1064.81 565.268Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1047.66 564.998V566.261L1071.21 566.231V564.968L1047.66 564.998Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1071.21 566.231L1068.2 567.403L1044.93 567.283V566.261L1047.66 564.997V566.261L1071.21 566.231Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1054.52 539.285C1054.52 539.285 1057.86 544.036 1056.5 564.998H1056.93C1056.93 564.998 1057.71 544.518 1061.02 539.255L1058.37 533.872C1058.37 533.872 1055.9 536.578 1054.55 539.255L1054.52 539.285Z"
         fill="#102444"
       />
       <g style={{ mixBlendMode: "soft-light" }} opacity="0.4">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M1306.77 450.628L1281.32 463.71L1281.35 472.432L1013.44 490.506L937.584 510.535L939.87 461.725L927.118 446.989L925.433 440.343L1007.21 440.133L1011.54 450.448L1306.77 450.628Z"
           fill="#0F0023"
         />
       </g>
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1012.68 466.627C1012.68 466.627 1012.47 466.718 1012.35 466.778C1012.35 466.778 1012.56 466.688 1012.68 466.627Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M929.584 659.879L1287.91 654.466L1288.87 767.271L921.343 767.813L929.584 659.879Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1016.8 658.586L1012.68 767.271L921.343 767.813L929.584 659.879L1016.8 658.586Z"
         fill="#0D000C"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1293.78 650.045L1296.36 658.496L1287.07 664.751L1006.88 665.022L1007 649.414L1293.78 650.045Z"
         fill="#D84E4B"
       />
       <g style={{ mixBlendMode: "soft-light" }} opacity="0.4">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M1296.36 658.496L1006.94 660.15L1006.88 665.022L1287.07 664.751L1296.36 658.496Z"
           fill="#0F0023"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }} opacity="0.4">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M1296.36 658.496L1287.13 670.014L1006.52 672.72L1006.94 660.15L1296.36 658.496Z"
           fill="#0F0023"
         />
@@ -1461,32 +1461,32 @@ const AllSvg: React.FC<SvgProps> = () => {
       <path
         style={{ mixBlendMode: "soft-light" }}
         opacity="0.2"
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1280.21 767.392L1279.67 697.411L1262.05 697.351L1261.17 740.957L1256.9 749.588L1259.19 711.094L1220.63 701.471L1214.07 713.079L1214.16 739.153L1220.84 745.949V750.49L1214.22 753.678L1195.31 758.219L1193.17 732.416L1136 708.267L1108.24 715.725L1096.51 732.446L1105.08 752.325L1096.42 761.407L1096.48 739.634L1074.55 732.446L1060.23 741.919L1048.2 754.61L1048.44 761.407L1037.5 760.956L1040.59 729.679L1033.29 697.531L1030.76 739.664L1016.11 748.716L1008.41 749.618L1003.93 732.476L1006.52 658.796L997.165 658.586L987.811 713.199L972.954 738.762L957.555 752.806L953.043 748.295L950.276 725.199L944.532 729.74L935.96 746.039L921.523 754.64L903.688 749.197L902.606 768.083L1315.22 767.632L1313.72 730.491L1304.81 744.566L1288.99 746.851L1280.21 767.392Z"
         fill="url(#paint14_linear_103_1128)"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1164.36 627.43L1153.98 631.7C1153.98 631.7 1142.58 641.474 1138.55 649.684H1141.8C1141.8 649.684 1128.42 705.26 1127.39 767.572L1130.67 767.452C1130.67 767.452 1144.21 651.038 1164.36 627.43Z"
         fill="#220639"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1193.2 766.79C1193.2 766.79 1195.4 668.721 1164.36 627.43C1164.36 627.43 1134.1 671.638 1130.67 767.452L1193.2 766.79Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1137.14 767.271C1137.14 767.271 1140.93 679.607 1164.21 643.008C1164.21 643.008 1191.34 689.231 1191.55 767.452L1137.14 767.241V767.271Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1160.69 649.263C1160.69 649.263 1185.98 690.674 1186.16 766.73L1137.17 767.271C1137.17 767.271 1140.96 687.908 1160.69 649.263Z"
         fill="#0C0010"
       />
@@ -2395,193 +2395,193 @@ const AllSvg: React.FC<SvgProps> = () => {
         fill="#E2E2E2"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1207.61 294.818C1202.98 294.728 1199.13 294.487 1194.49 294.397L1183.46 298.337C1176.72 308.381 1173.47 314.486 1166.73 324.531L1158.25 328.891L1165.38 330.605L1178.73 327.989L1225.92 330.365L1221.38 335.537L1236.51 329.944L1211.7 323.929L1207.61 294.818Z"
         fill="#0C0010"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1172.33 392.015L1223.4 393.729L1221.38 334.575L1181.05 333.372L1172.33 392.015Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1172.33 392.015L1172.15 373.971L1166.34 373.61L1169.89 335.387L1181.05 333.372L1175.4 371.265"
         fill="#220639"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1172.15 337.793L1165.38 330.635L1178.73 327.989L1225.92 330.395L1221.38 335.568L1181.05 333.372L1172.15 337.793Z"
         fill="#220639"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1236.51 329.974L1223.91 323.358L1207.61 294.818L1194.49 294.427L1181.89 321.884L1178.73 327.989L1236.51 329.974Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1213.05 365.16H1214.46C1214.46 365.16 1216.42 348.68 1203.31 334.966L1201.35 335.658C1201.35 335.658 1187.55 346.003 1185.35 366.242L1213.05 365.19V365.16Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1215.13 366.182H1216.54C1216.54 366.182 1216.72 348.74 1203.31 334.966C1203.31 334.966 1189.17 346.003 1186.95 366.212H1215.13V366.182Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1214.65 366.002H1210.41L1188.81 365.22C1190.67 351.296 1197.17 344.108 1200.81 341.101C1202.31 339.868 1203.31 339.327 1203.31 339.327C1214.65 349.913 1214.68 366.002 1214.68 366.002H1214.65Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1210.41 365.942L1188.81 365.731C1190.67 351.807 1197.17 344.62 1200.81 341.612C1210.07 351.717 1210.41 365.039 1210.41 365.942Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1188.78 365.22V366.242L1217.98 367.175V366.152L1188.78 365.22Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1217.98 367.145L1214.13 368.107L1185.35 367.054V366.242L1188.78 365.22V366.242L1217.98 367.145Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1197.59 344.259C1197.59 344.259 1201.74 348.108 1199.85 365.581H1200.36C1200.36 365.581 1201.53 348.499 1205.74 344.229L1202.43 339.838C1202.43 339.838 1199.31 342.063 1197.59 344.229V344.259Z"
         fill="#102444"
       />
       <g style={{ mixBlendMode: "soft-light" }}>
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M1181.89 321.884L1222.59 323.328L1236.51 329.974L1178.73 327.989L1181.89 321.884Z"
           fill="#6C5D89"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }} opacity="0.4">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M1225.92 330.395L1221.38 335.568V336.831L1180.24 343.326L1168.96 349.281L1169.89 335.387L1165.38 330.635L1178.73 327.989L1225.92 330.395Z"
           fill="#0F0023"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }} opacity="0.8">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M1172.33 392.015L1166.34 373.61L1175 374.092L1172.33 392.015Z"
           fill="#6C2867"
         />
       </g>
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1115.21 294.247C1110.58 294.156 1106.73 293.916 1102.1 293.826L1091.06 297.765C1084.33 307.81 1081.08 313.915 1074.34 323.959L1065.86 328.32L1072.99 330.034L1086.34 327.418L1133.53 329.793L1128.99 334.966L1144.12 329.372L1119.3 323.358L1115.21 294.247Z"
         fill="#0C0010"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1079.93 391.414L1131.03 393.158L1128.99 333.974L1088.66 332.801L1079.93 391.414Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1079.93 391.414L1079.72 369.671L1074.31 369.43L1077.5 334.816L1088.66 332.801L1083.03 370.663"
         fill="#220639"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1079.75 337.222L1072.99 330.034L1086.34 327.418L1133.53 329.793L1128.99 334.966L1088.66 332.801L1079.75 337.222Z"
         fill="#220639"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1144.12 329.372L1131.52 322.786L1115.21 294.247L1102.1 293.826L1089.5 321.283L1086.34 327.418L1144.12 329.372Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1120.66 364.588H1122.07C1122.07 364.588 1124.03 348.108 1110.91 334.395L1108.96 335.086C1108.96 335.086 1095.15 345.432 1092.96 365.671L1120.66 364.618V364.588Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1122.76 365.611H1124.18C1124.18 365.611 1124.36 348.168 1110.94 334.395C1110.94 334.395 1096.81 345.432 1094.58 365.641H1122.76V365.611Z"
         fill="#D84E4B"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1122.25 365.4H1118.01L1096.42 364.618C1098.28 350.694 1104.78 343.507 1108.42 340.5C1109.92 339.267 1110.91 338.725 1110.91 338.725C1122.25 349.311 1122.28 365.4 1122.28 365.4H1122.25Z"
         fill="#102444"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1118.01 365.37L1096.42 365.16C1098.28 351.236 1104.78 344.048 1108.42 341.041C1117.68 351.146 1118.01 364.468 1118.01 365.37Z"
         fill="#8DB1CC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1096.42 364.618V365.641L1125.59 366.573V365.551L1096.42 364.618Z"
         fill="#E2D2BC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1125.59 366.573L1121.74 367.536L1092.96 366.483V365.641L1096.42 364.618V365.641L1125.59 366.573Z"
         fill="#050F14"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1105.2 343.657C1105.2 343.657 1109.35 347.507 1107.45 364.979H1107.97C1107.97 364.979 1109.14 347.898 1113.35 343.627L1110.04 339.236C1110.04 339.236 1106.91 341.462 1105.2 343.627V343.657Z"
         fill="#102444"
       />
       <g style={{ mixBlendMode: "soft-light" }}>
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M1089.5 321.283L1130.19 322.726L1144.12 329.372L1086.34 327.418L1089.5 321.283Z"
           fill="#6C5D89"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }} opacity="0.4">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M1133.53 329.793L1128.99 334.966V336.259L1087.84 342.725L1076.57 348.68L1077.5 334.816L1072.99 330.034L1086.34 327.418L1133.53 329.793Z"
           fill="#0F0023"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }} opacity="0.8">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M1079.93 391.414L1074.31 369.43L1083.24 369.31L1079.93 391.414Z"
           fill="#6C2867"
         />
@@ -2592,39 +2592,39 @@ const AllSvg: React.FC<SvgProps> = () => {
         fill="#606060"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1310.11 744.776L1328.24 749.137L1341.75 759.061H1353.63L1377.42 768.083H880.62H856.8L876.65 756.445L907.388 752.656L908.621 762.279L949.043 767.422L982.007 767.572L1000.53 756.445L1022.43 754.881L1030.55 758.58L1044.23 764.474L1135.97 763.512L1150.82 764.114L1223.76 763.753L1276.75 761.527L1310.11 744.776Z"
         fill="#E2D2BC"
       />
       <g style={{ mixBlendMode: "soft-light" }} opacity="0.4">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M1328.24 749.137L1317.69 756.084L1279.88 763.001L1341.75 759.061L1328.24 749.137Z"
           fill="#0F0023"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }} opacity="0.4">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M1353.63 759.061L1277.26 767.422L1253.8 763.241L1191.46 763.903L1160.33 767.722L1377.42 768.083L1353.63 759.061Z"
           fill="#0F0023"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }} opacity="0.4">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M1000.53 756.445L994.639 763.572H1027.63L1060.11 767.963L982.007 767.572L1000.53 756.445Z"
           fill="#0F0023"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }} opacity="0.4">
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M876.65 756.445L898.696 763.572L929.464 768.083H856.8L876.65 756.445Z"
           fill="#0F0023"
         />
@@ -2662,8 +2662,8 @@ const AllSvg: React.FC<SvgProps> = () => {
       <path
         style={{ mixBlendMode: "screen" }}
         opacity="0.78"
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1135.09 354.213C1135.09 368.739 1123.61 380.527 1109.41 380.527C1095.21 380.527 1083.72 368.739 1083.72 354.213C1083.72 339.688 1095.21 327.899 1109.41 327.899C1123.61 327.899 1135.09 339.688 1135.09 354.213Z"
         fill="url(#paint20_radial_103_1128)"
       />
@@ -2802,44 +2802,44 @@ const AllSvg: React.FC<SvgProps> = () => {
         />
       </g>
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1539.23 145.474C1539.23 145.474 1503.35 44.2766 1447.68 9.72221C1370.32 -38.305 1286.47 -1.82599 1286.47 -1.82599C1286.47 -1.82599 1204.96 -160.794 1029.14 -171.32C945.524 -176.312 935.389 -59.4466 935.389 -59.4466L815.806 -81.7912C815.806 -81.7912 579.858 -237 323.64 -237C-54.7181 -237 -233.34 13.6919 -233.34 13.6919L243.126 73.8387L263.758 102.228H693.727L686.749 66.5309L1385.6 102.228C1385.6 102.228 1313.48 197.47 1307.94 234.25L1323.73 245.708L1251.97 272.263L1311.31 271.662L1364 274.909C1364 274.909 1366.38 262.128 1358.08 250.309L1525.03 196.869C1525.03 196.869 1533.75 158.255 1522.6 136.993L1539.23 145.443V145.474Z"
         fill="#0D7EC1"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M711.562 -36.4104C711.562 -36.4104 810.663 -46.906 998.037 -13.9756L938.125 -46.0038C938.125 -46.0038 1110.34 -48.4999 1286.44 -1.79587L1249.98 -0.0215225C1249.98 -0.0215225 1415.94 39.7956 1539.2 145.534C1539.2 145.534 1498.14 122.678 1457.12 113.175C1457.12 113.175 1525.45 145.474 1526.02 191.245C1526.6 236.987 1326.68 268.384 1326.68 268.384C1326.68 268.384 1350.86 266.97 1364 275C1335.19 277.616 1255.01 284.593 1255.01 284.593L1252 272.353L1340.94 255.723C1340.94 255.723 1308.78 251.813 1308 234.341C1308 234.341 1311.55 215.966 1417.72 186.253C1417.72 186.253 1188.81 119.34 927.147 102.318C665.485 85.2967 608.461 89.3867 608.461 89.3867L693.787 102.318C693.787 102.318 388.664 111.882 263.818 102.318L298.466 87.2214L-233.28 13.7822C-233.28 13.7822 315.549 -128.946 801.219 -65.4913L711.622 -36.3201L711.562 -36.4104Z"
         fill="#E9F9FF"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1016.32 329.192L972.442 334.605L978.698 340.289C978.698 340.289 892.109 359.115 874.605 370.844C857.1 382.572 952.141 408.195 1128.36 409.368C1304.57 410.54 1384.55 394.932 1384.55 394.932L1336.66 396.075L1340.88 391.143C1340.88 391.143 1306.5 374.031 1272.45 374.061L1283.49 397.759C1283.49 397.759 1130.43 417.247 1043.06 396.346C955.69 375.415 1016.08 342.454 1016.08 342.454L1016.32 329.192Z"
         fill="#CEEDFC"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1016.05 334.605C1016.05 334.605 986.398 341.251 979.962 351.116C974.999 358.754 998.759 376.528 998.759 376.528C998.759 376.528 988.563 360.919 1016.05 342.424V334.575V334.605Z"
         fill="#009BE8"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1464.91 387.534C1464.91 387.534 1448.46 348.8 1414.8 391.624L1464.91 387.534Z"
         fill="#E9F9FF"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1216.78 -103.294C1216.78 -103.294 1379.13 -146.058 1453.09 -140.855C1527.05 -135.653 1541.48 -109.308 1541.48 -109.308C1541.48 -109.308 1716.31 -79.2049 1696.01 77.9888C1696.01 77.9888 1639.53 -0.382492 1557.57 -31.5085C1475.62 -62.6044 1412.4 -61.4315 1412.4 -61.4315C1412.4 -61.4315 1404.64 -91.144 1412.4 -102.031C1420.16 -112.917 1216.81 -103.294 1216.81 -103.294H1216.78Z"
         fill="#E9F9FF"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1695.98 77.9888C1695.98 77.9888 1625.85 -29.9446 1412.34 -61.4014L1456.43 -62.6043L1216.75 -103.294C1216.75 -103.294 1422.92 -123.683 1585.63 -78.5733C1728.86 -38.8764 1695.95 77.9888 1695.95 77.9888H1695.98Z"
         fill="#E9F9FF"
       />
@@ -2897,8 +2897,8 @@ const AllSvg: React.FC<SvgProps> = () => {
         <path
           style={{ mixBlendMode: "screen" }}
           opacity="0.5"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M985.736 889.309C993.315 894.722 993.556 907.233 986.308 917.247C979.059 927.262 967.029 930.961 959.45 925.548C951.87 920.134 951.63 907.624 958.878 897.609C966.126 887.595 978.157 883.896 985.736 889.309Z"
           fill="url(#paint25_radial_103_1128)"
         />
@@ -2911,40 +2911,40 @@ const AllSvg: React.FC<SvgProps> = () => {
         <path
           style={{ mixBlendMode: "screen" }}
           opacity="0.5"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M536.639 781.526C541.782 790.668 536.038 803.6 523.767 810.427C511.496 817.223 497.39 815.329 492.247 806.186C487.104 797.044 492.848 784.112 505.119 777.286C517.39 770.459 531.496 772.384 536.639 781.526Z"
           fill="url(#paint27_radial_103_1128)"
         />
         <path
           style={{ mixBlendMode: "screen" }}
           opacity="0.5"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M464.456 819.719C472.366 814.697 484.247 819.118 490.984 829.583C497.721 840.049 496.758 852.62 488.818 857.642C480.908 862.664 469.028 858.243 462.291 847.778C455.554 837.312 456.516 824.742 464.456 819.719Z"
           fill="url(#paint28_radial_103_1128)"
         />
         <path
           style={{ mixBlendMode: "screen" }}
           opacity="0.5"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M469.9 828.2C474.291 825.433 480.848 827.869 484.577 833.643C488.307 839.447 487.765 846.394 483.374 849.161C478.983 851.928 472.427 849.492 468.697 843.718C464.968 837.914 465.509 830.967 469.9 828.2Z"
           fill="url(#paint29_radial_103_1128)"
         />
         <path
           style={{ mixBlendMode: "screen" }}
           opacity="0.5"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M318.316 819.659C331.399 809.705 352.814 815.629 366.168 832.921C379.521 850.214 379.732 872.318 366.649 882.272C353.566 892.226 332.151 886.302 318.798 869.01C305.444 851.717 305.233 829.613 318.316 819.659Z"
           fill="url(#paint30_radial_103_1128)"
         />
         <path
           style={{ mixBlendMode: "screen" }}
           opacity="0.5"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M329.114 833.673C336.362 828.17 348.182 831.448 355.581 841.011C362.949 850.575 363.07 862.784 355.851 868.288C348.633 873.791 336.783 870.513 329.384 860.95C322.016 851.387 321.895 839.177 329.114 833.673Z"
           fill="url(#paint31_radial_103_1128)"
         />
@@ -2957,239 +2957,239 @@ const AllSvg: React.FC<SvgProps> = () => {
         <path
           style={{ mixBlendMode: "screen" }}
           opacity="0.5"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M240.239 1138.86C240.088 1133.81 262.856 1129.02 291.097 1128.18C319.339 1127.37 342.347 1130.8 342.497 1135.85C342.648 1140.93 319.88 1145.68 291.639 1146.53C263.397 1147.34 240.389 1143.91 240.239 1138.86Z"
           fill="url(#paint33_radial_103_1128)"
         />
         <path
           style={{ mixBlendMode: "screen" }}
           opacity="0.5"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M269.774 1137.99C269.713 1135.85 279.338 1133.84 291.248 1133.48C303.158 1133.11 312.903 1134.59 312.963 1136.72C313.023 1138.86 303.399 1140.87 291.489 1141.23C279.578 1141.59 269.834 1140.12 269.774 1137.99Z"
           fill="url(#paint34_radial_103_1128)"
         />
         <path
           style={{ mixBlendMode: "screen" }}
           opacity="0.5"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M263.999 1061.3C257.863 1051.34 263.698 1036.73 277.052 1028.61C290.376 1020.52 306.136 1022.02 312.271 1031.98C318.407 1041.93 312.572 1056.55 299.218 1064.67C285.894 1072.76 270.135 1071.25 263.999 1061.3Z"
           fill="url(#paint35_radial_103_1128)"
         />
         <path
           style={{ mixBlendMode: "screen" }}
           opacity="0.5"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M159.123 615.852C150.311 601.537 158.702 580.515 177.891 568.847C197.05 557.209 219.727 559.374 228.539 573.689C237.352 588.004 228.96 609.025 209.772 620.694C190.613 632.332 167.936 630.167 159.123 615.852Z"
           fill="url(#paint36_radial_103_1128)"
         />
         <path
           style={{ mixBlendMode: "screen" }}
           opacity="0.5"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M174.613 606.439C169.74 598.529 174.372 586.891 184.989 580.455C195.576 574.02 208.117 575.222 212.99 583.132C217.862 591.041 213.23 602.679 202.614 609.115C192.027 615.551 179.485 614.348 174.613 606.439Z"
           fill="url(#paint37_radial_103_1128)"
         />
         <path
           style={{ mixBlendMode: "screen" }}
           opacity="0.5"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M714.179 934.239C722.269 928.675 734.901 932.825 742.36 943.531C749.819 954.238 749.308 967.44 741.217 973.003C733.127 978.567 720.495 974.417 713.036 963.711C705.577 953.005 706.088 939.802 714.179 934.239Z"
           fill="url(#paint38_radial_103_1128)"
         />
         <path
           style={{ mixBlendMode: "screen" }}
           opacity="0.5"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M720.224 942.9C724.705 939.802 731.683 942.118 735.803 948.042C739.924 953.967 739.653 961.245 735.172 964.342C730.69 967.44 723.712 965.124 719.592 959.2C715.472 953.275 715.742 945.997 720.224 942.9Z"
           fill="url(#paint39_radial_103_1128)"
         />
       </g>
       <path
         style={{ mixBlendMode: "screen" }}
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1795.99 699.666C1795.99 699.666 1538.57 541.691 1475.22 555.855C1475.22 555.855 1417.9 603.732 1406.44 605.115C1394.98 606.499 1342.92 610.047 1332.93 604.093C1322.95 598.138 1307.07 581.418 1293.35 578.11C1279.64 574.802 1189.38 590.74 1163.12 603.913C1136.87 617.085 1071.75 646.857 1055.21 647.459C1038.67 648.06 1029.89 628.122 1017.41 623.941C1004.95 619.761 956.983 631.61 934.937 632.422C912.891 633.234 868.168 668.991 849.731 672.811C831.295 676.66 788.105 679.487 788.105 679.487L769.789 677.622C769.789 677.622 760.796 652.21 750.119 650.496C739.442 648.782 709.787 662.496 709.787 662.496C709.787 662.496 743.954 667.999 752.886 680.329C761.819 692.659 781.398 693.622 781.398 693.622C781.398 693.622 863.988 677.562 878.033 678.735C892.079 679.908 1016.74 688.058 1031 694.704C1045.26 701.35 1081.26 722.402 1094.97 725.71C1108.69 729.018 1192.81 696.869 1215.55 691.817C1238.29 686.765 1276.72 692.96 1300.69 703.907C1324.63 714.853 1381.63 751.814 1392.73 754.129C1403.82 756.445 1445.84 756.204 1445.84 756.204L1795.96 699.636L1795.99 699.666Z"
         fill="url(#paint40_radial_103_1128)"
       />
       <path
         style={{ mixBlendMode: "screen" }}
         opacity="0.36"
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M30.6982 925.126C30.6982 925.126 288.12 1083.1 351.46 1068.94C351.46 1068.94 408.785 1021.06 420.244 1019.68C431.703 1018.29 483.765 1014.75 493.75 1020.7C503.736 1026.65 519.616 1043.38 533.331 1046.68C547.045 1049.99 637.304 1034.05 663.56 1020.88C689.817 1007.71 754.932 977.935 771.474 977.334C788.015 976.733 796.798 996.671 809.279 1000.85C821.731 1005.03 869.702 993.183 891.748 992.371C913.794 991.559 958.517 955.801 976.954 951.982C995.391 948.163 1038.58 945.306 1038.58 945.306L1056.9 947.17C1056.9 947.17 1065.89 972.582 1076.57 974.297C1087.24 976.011 1116.9 962.297 1116.9 962.297C1116.9 962.297 1082.73 956.794 1073.8 944.464C1064.87 932.134 1045.29 931.171 1045.29 931.171C1045.29 931.171 962.698 947.231 948.652 946.058C934.607 944.885 809.941 936.735 795.685 930.089C781.429 923.442 745.428 902.391 731.713 899.083C717.998 895.775 633.875 927.923 611.138 932.976C588.4 938.028 549.963 931.833 525.992 920.886C502.051 909.939 445.057 872.979 433.959 870.664C422.861 868.348 380.845 868.589 380.845 868.589L30.7282 925.157L30.6982 925.126Z"
         fill="url(#paint41_radial_103_1128)"
       />
       <path
         style={{ mixBlendMode: "screen" }}
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M1233.26 382.723C1233.26 382.723 1106.25 416.826 1042.07 426.449C1042.07 426.449 981.435 470.116 969.916 470.687C958.397 471.229 906.185 471.108 896.651 464.432C887.117 457.786 872.469 439.982 859.055 435.712C845.611 431.442 754.451 440.915 727.322 452.192C700.193 463.47 633.063 488.551 616.552 487.95C600.01 487.378 592.671 466.868 580.55 461.816C568.43 456.763 519.736 465.184 497.691 464.402C475.645 463.62 428.455 496.129 409.778 498.656C391.101 501.182 347.821 500.911 347.821 500.911L329.685 497.723C329.685 497.723 322.557 471.74 312.031 469.274C301.504 466.808 270.947 478.386 270.947 478.386C270.947 478.386 304.632 486.295 312.662 499.227C320.693 512.159 340.152 514.504 340.152 514.504C340.152 514.504 423.703 504.37 437.629 506.535C451.554 508.7 575.317 525.692 589.062 533.33C602.807 540.969 637.184 564.516 650.628 568.787C664.072 573.057 750.3 546.984 773.338 543.555C796.377 540.157 834.303 549.059 857.401 561.659C880.5 574.29 934.667 615.22 945.584 618.318C956.502 621.415 978.668 609.987 978.668 609.987L1112.12 516.249L1233.29 382.663L1233.26 382.723Z"
         fill="url(#paint42_radial_103_1128)"
       />
       <path
         style={{ mixBlendMode: "screen" }}
         opacity="0.5"
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M501.871 955.922C501.871 955.922 584.28 946.689 609.814 947.11C635.349 947.561 689.185 912.827 701.727 908.466C714.299 904.105 763.864 916.947 763.864 916.947C763.864 916.947 796.738 929.547 814.001 943.802C831.235 958.057 889.793 942.088 889.793 942.088L944.381 925.788C944.381 925.788 823.385 907.323 802.242 896.106C781.098 884.888 776.707 862.273 750.902 868.017C725.066 873.761 668.523 895.234 649.786 882.061C631.048 868.889 509.661 868.589 478.051 876.708C446.441 884.828 357.686 914.902 357.686 914.902C357.686 914.902 460.998 950.148 501.901 955.862L501.871 955.922Z"
         fill="url(#paint43_radial_103_1128)"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M996.714 908.075C998.639 908.165 1000.11 909.819 999.992 911.714C999.902 913.608 998.248 915.082 996.323 914.992C994.398 914.902 992.924 913.248 993.045 911.353C993.135 909.458 994.789 907.985 996.714 908.075Z"
         fill="white"
       />
       <g style={{ mixBlendMode: "soft-light" }}>
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M495.495 739.213C497.42 739.303 498.893 740.957 498.773 742.852C498.683 744.746 497.029 746.22 495.104 746.13C493.179 746.039 491.705 744.385 491.826 742.491C491.916 740.596 493.57 739.122 495.495 739.213Z"
           fill="white"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }}>
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M470.02 792.292C471.374 792.353 472.427 793.525 472.336 794.879C472.276 796.232 471.103 797.255 469.75 797.194C468.396 797.134 467.344 795.961 467.434 794.608C467.494 793.255 468.667 792.232 470.02 792.292Z"
           fill="white"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }}>
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M440.185 809.194C441.177 809.254 441.959 810.096 441.899 811.088C441.839 812.081 440.997 812.833 440.004 812.772C439.012 812.712 438.23 811.87 438.29 810.878C438.35 809.885 439.192 809.133 440.185 809.194Z"
           fill="white"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }}>
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M482.021 734.341C482.653 734.371 483.164 734.912 483.104 735.544C483.074 736.175 482.532 736.656 481.871 736.626C481.239 736.596 480.728 736.055 480.788 735.424C480.818 734.792 481.359 734.311 482.021 734.341Z"
           fill="white"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }}>
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M468.456 799.901C469.088 799.931 469.599 800.472 469.539 801.104C469.479 801.735 468.968 802.216 468.306 802.186C467.675 802.156 467.163 801.615 467.223 800.983C467.253 800.352 467.795 799.871 468.456 799.901Z"
           fill="white"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }}>
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M495.705 800.202C496.337 800.232 496.848 800.773 496.788 801.405C496.758 802.036 496.217 802.517 495.555 802.487C494.924 802.457 494.412 801.916 494.472 801.284C494.532 800.653 495.044 800.172 495.705 800.202Z"
           fill="white"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }}>
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M489.54 785.075C490.172 785.105 490.683 785.646 490.623 786.278C490.593 786.909 490.051 787.39 489.39 787.36C488.758 787.33 488.247 786.789 488.307 786.157C488.367 785.526 488.878 785.045 489.54 785.075Z"
           fill="white"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }}>
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M471.284 779.812C471.614 779.812 471.855 780.113 471.825 780.413C471.825 780.744 471.524 780.985 471.223 780.955C470.893 780.955 470.652 780.654 470.682 780.353C470.682 780.022 470.983 779.782 471.284 779.812Z"
           fill="white"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }}>
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M480.246 788.954C480.577 788.954 480.818 789.255 480.788 789.556C480.788 789.886 480.487 790.127 480.186 790.097C479.885 790.067 479.615 789.796 479.645 789.495C479.645 789.165 479.945 788.924 480.246 788.954Z"
           fill="white"
         />
       </g>
       <g style={{ mixBlendMode: "soft-light" }}>
         <path
-          fill-rule="evenodd"
-          clip-rule="evenodd"
+          fillRule="evenodd"
+          clipRule="evenodd"
           d="M461.72 783.601C462.351 783.631 462.862 784.172 462.802 784.804C462.772 785.435 462.231 785.917 461.569 785.887C460.908 785.857 460.426 785.315 460.486 784.684C460.516 784.052 461.058 783.571 461.72 783.601Z"
           fill="white"
         />
       </g>
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M534.443 753.798C536.368 753.889 537.842 755.543 537.722 757.437C537.632 759.332 535.977 760.806 534.052 760.715C532.128 760.625 530.654 758.971 530.774 757.076C530.864 755.182 532.519 753.708 534.443 753.798Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M483.314 774.158C485.239 774.248 486.713 775.902 486.592 777.797C486.472 779.692 484.848 781.165 482.923 781.075C480.998 780.985 479.524 779.331 479.645 777.436C479.735 775.541 481.389 774.068 483.314 774.158Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M568.009 780.203C569.933 780.293 571.407 781.947 571.287 783.842C571.197 785.736 569.542 787.21 567.618 787.12C565.693 787.03 564.219 785.375 564.339 783.481C564.429 781.586 566.084 780.113 568.009 780.203Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M548.309 812.201C550.233 812.291 551.707 813.945 551.587 815.84C551.497 817.734 549.842 819.208 547.918 819.118C545.993 819.028 544.519 817.374 544.639 815.479C544.73 813.584 546.384 812.111 548.309 812.201Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M550.023 802.487C551.015 802.547 551.797 803.389 551.737 804.382C551.677 805.374 550.835 806.126 549.842 806.066C548.85 806.006 548.068 805.164 548.128 804.171C548.188 803.179 549.03 802.427 550.023 802.487Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M556.971 808.051C557.602 808.081 558.114 808.622 558.053 809.254C558.023 809.885 557.482 810.367 556.82 810.336C556.189 810.306 555.677 809.765 555.738 809.133C555.768 808.502 556.309 808.021 556.971 808.051Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M553.03 770.339C553.361 770.339 553.602 770.639 553.572 770.94C553.572 771.271 553.271 771.512 552.97 771.481C552.639 771.481 552.399 771.181 552.429 770.88C552.429 770.549 552.73 770.309 553.03 770.339Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M548.79 809.855C549.121 809.855 549.361 810.156 549.331 810.457C549.331 810.787 549.03 811.028 548.73 810.998C548.399 810.998 548.158 810.697 548.188 810.396C548.188 810.066 548.489 809.825 548.79 809.855Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M552.64 801.284C552.97 801.284 553.211 801.585 553.181 801.886C553.181 802.217 552.88 802.457 552.579 802.427C552.249 802.427 552.008 802.126 552.038 801.826C552.038 801.495 552.339 801.254 552.64 801.284Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M538.955 784.684C539.586 784.714 540.098 785.255 540.037 785.887C540.007 786.518 539.466 786.999 538.804 786.969C538.173 786.939 537.661 786.398 537.721 785.766C537.752 785.135 538.293 784.654 538.955 784.684Z"
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d="M548.369 796.833C549 796.863 549.512 797.405 549.451 798.036C549.421 798.668 548.88 799.149 548.218 799.119C547.587 799.089 547.075 798.548 547.136 797.916C547.166 797.285 547.707 796.803 548.369 796.833Z"
         fill="white"
       />
@@ -3202,11 +3202,11 @@ const AllSvg: React.FC<SvgProps> = () => {
           y2="-26.5162"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.19" stop-color="#037EC1" />
-          <stop offset="0.5" stop-color="#0498EA" />
-          <stop offset="0.58" stop-color="#1B9DE1" />
-          <stop offset="0.76" stop-color="#59ACCC" />
-          <stop offset="1" stop-color="#B8C3AB" />
+          <stop offset="0.19" stopColor="#037EC1" />
+          <stop offset="0.5" stopColor="#0498EA" />
+          <stop offset="0.58" stopColor="#1B9DE1" />
+          <stop offset="0.76" stopColor="#59ACCC" />
+          <stop offset="1" stopColor="#B8C3AB" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_103_1128"
@@ -3216,11 +3216,11 @@ const AllSvg: React.FC<SvgProps> = () => {
           y2="1175.67"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.19" stop-color="#037EC1" />
-          <stop offset="0.5" stop-color="#0498EA" />
-          <stop offset="0.58" stop-color="#1B9DE1" />
-          <stop offset="0.76" stop-color="#59ACCC" />
-          <stop offset="1" stop-color="#B8C3AB" />
+          <stop offset="0.19" stopColor="#037EC1" />
+          <stop offset="0.5" stopColor="#0498EA" />
+          <stop offset="0.58" stopColor="#1B9DE1" />
+          <stop offset="0.76" stopColor="#59ACCC" />
+          <stop offset="1" stopColor="#B8C3AB" />
         </linearGradient>
         <linearGradient
           id="paint2_linear_103_1128"
@@ -3230,8 +3230,8 @@ const AllSvg: React.FC<SvgProps> = () => {
           y2="554.412"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#CEEDFC" />
-          <stop offset="1" stop-color="white" />
+          <stop stopColor="#CEEDFC" />
+          <stop offset="1" stopColor="white" />
         </linearGradient>
         <linearGradient
           id="paint3_linear_103_1128"
@@ -3241,15 +3241,15 @@ const AllSvg: React.FC<SvgProps> = () => {
           y2="305.344"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.02" stop-color="#51B6E7" />
-          <stop offset="0.06" stop-color="#47A4CC" />
-          <stop offset="0.15" stop-color="#2E7989" />
-          <stop offset="0.24" stop-color="#1A5654" />
-          <stop offset="0.31" stop-color="#0B3D2E" />
-          <stop offset="0.37" stop-color="#032E16" />
-          <stop offset="0.4" stop-color="#00290E" />
-          <stop offset="0.62" stop-color="#005746" />
-          <stop offset="1" stop-color="#00AFAF" />
+          <stop offset="0.02" stopColor="#51B6E7" />
+          <stop offset="0.06" stopColor="#47A4CC" />
+          <stop offset="0.15" stopColor="#2E7989" />
+          <stop offset="0.24" stopColor="#1A5654" />
+          <stop offset="0.31" stopColor="#0B3D2E" />
+          <stop offset="0.37" stopColor="#032E16" />
+          <stop offset="0.4" stopColor="#00290E" />
+          <stop offset="0.62" stopColor="#005746" />
+          <stop offset="1" stopColor="#00AFAF" />
         </linearGradient>
         <linearGradient
           id="paint4_linear_103_1128"
@@ -3259,8 +3259,8 @@ const AllSvg: React.FC<SvgProps> = () => {
           y2="307.689"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BEB8CB" />
-          <stop offset="1" stop-color="#925CBF" />
+          <stop stopColor="#BEB8CB" />
+          <stop offset="1" stopColor="#925CBF" />
         </linearGradient>
         <linearGradient
           id="paint5_linear_103_1128"
@@ -3271,10 +3271,10 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
         >
           <stop />
-          <stop offset="0.36" stop-color="#050603" stop-opacity="0.95" />
-          <stop offset="0.65" stop-color="#151A0D" stop-opacity="0.78" />
-          <stop offset="0.91" stop-color="#313B1F" stop-opacity="0.51" />
-          <stop offset="0.92" stop-color="#323D20" stop-opacity="0.5" />
+          <stop offset="0.36" stopColor="#050603" stopOpacity="0.95" />
+          <stop offset="0.65" stopColor="#151A0D" stopOpacity="0.78" />
+          <stop offset="0.91" stopColor="#313B1F" stopOpacity="0.51" />
+          <stop offset="0.92" stopColor="#323D20" stopOpacity="0.5" />
         </linearGradient>
         <linearGradient
           id="paint6_linear_103_1128"
@@ -3284,12 +3284,12 @@ const AllSvg: React.FC<SvgProps> = () => {
           y2="799.149"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#092819" />
-          <stop offset="0.15" stop-color="#092B1E" />
-          <stop offset="0.33" stop-color="#0B352D" />
-          <stop offset="0.51" stop-color="#0F4444" />
-          <stop offset="0.88" stop-color="#0A5439" />
-          <stop offset="1" stop-color="#095B36" />
+          <stop stopColor="#092819" />
+          <stop offset="0.15" stopColor="#092B1E" />
+          <stop offset="0.33" stopColor="#0B352D" />
+          <stop offset="0.51" stopColor="#0F4444" />
+          <stop offset="0.88" stopColor="#0A5439" />
+          <stop offset="1" stopColor="#095B36" />
         </linearGradient>
         <linearGradient
           id="paint7_linear_103_1128"
@@ -3299,8 +3299,8 @@ const AllSvg: React.FC<SvgProps> = () => {
           y2="1096.48"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#4C335C" />
-          <stop offset="1" stop-color="#472484" />
+          <stop stopColor="#4C335C" />
+          <stop offset="1" stopColor="#472484" />
         </linearGradient>
         <linearGradient
           id="paint8_linear_103_1128"
@@ -3310,8 +3310,8 @@ const AllSvg: React.FC<SvgProps> = () => {
           y2="1149.53"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#4C335C" />
-          <stop offset="1" stop-color="#472484" />
+          <stop stopColor="#4C335C" />
+          <stop offset="1" stopColor="#472484" />
         </linearGradient>
         <linearGradient
           id="paint9_linear_103_1128"
@@ -3321,8 +3321,8 @@ const AllSvg: React.FC<SvgProps> = () => {
           y2="1016.4"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#4C335C" />
-          <stop offset="1" stop-color="#472484" />
+          <stop stopColor="#4C335C" />
+          <stop offset="1" stopColor="#472484" />
         </linearGradient>
         <linearGradient
           id="paint10_linear_103_1128"
@@ -3332,8 +3332,8 @@ const AllSvg: React.FC<SvgProps> = () => {
           y2="1018.02"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#4C335C" />
-          <stop offset="1" stop-color="#472484" />
+          <stop stopColor="#4C335C" />
+          <stop offset="1" stopColor="#472484" />
         </linearGradient>
         <linearGradient
           id="paint11_linear_103_1128"
@@ -3343,8 +3343,8 @@ const AllSvg: React.FC<SvgProps> = () => {
           y2="988.431"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#4C335C" />
-          <stop offset="1" stop-color="#472484" />
+          <stop stopColor="#4C335C" />
+          <stop offset="1" stopColor="#472484" />
         </linearGradient>
         <linearGradient
           id="paint12_linear_103_1128"
@@ -3354,8 +3354,8 @@ const AllSvg: React.FC<SvgProps> = () => {
           y2="675.758"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#3A6E5F" />
-          <stop offset="1" stop-color="white" />
+          <stop stopColor="#3A6E5F" />
+          <stop offset="1" stopColor="white" />
         </linearGradient>
         <linearGradient
           id="paint13_linear_103_1128"
@@ -3365,13 +3365,13 @@ const AllSvg: React.FC<SvgProps> = () => {
           y2="430.72"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#A89D91" />
-          <stop offset="0.03" stop-color="#AEA396" />
-          <stop offset="0.15" stop-color="#C7BAAC" />
-          <stop offset="0.28" stop-color="#DACCBC" />
-          <stop offset="0.44" stop-color="#E7D9C8" />
-          <stop offset="0.63" stop-color="#EFE0CF" />
-          <stop offset="1" stop-color="#F2E3D1" />
+          <stop stopColor="#A89D91" />
+          <stop offset="0.03" stopColor="#AEA396" />
+          <stop offset="0.15" stopColor="#C7BAAC" />
+          <stop offset="0.28" stopColor="#DACCBC" />
+          <stop offset="0.44" stopColor="#E7D9C8" />
+          <stop offset="0.63" stopColor="#EFE0CF" />
+          <stop offset="1" stopColor="#F2E3D1" />
         </linearGradient>
         <linearGradient
           id="paint14_linear_103_1128"
@@ -3381,8 +3381,8 @@ const AllSvg: React.FC<SvgProps> = () => {
           y2="658.586"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#8D365C" />
-          <stop offset="1" stop-color="white" />
+          <stop stopColor="#8D365C" />
+          <stop offset="1" stopColor="white" />
         </linearGradient>
         <radialGradient
           id="paint15_radial_103_1128"
@@ -3392,7 +3392,7 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(1134.42 618.149) scale(63.2727 60.7362)"
         >
-          <stop stop-color="#AD1C00" />
+          <stop stopColor="#AD1C00" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3403,7 +3403,7 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(1148.62 527.599) scale(66.9693 74.1514)"
         >
-          <stop stop-color="#AD1C00" />
+          <stop stopColor="#AD1C00" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3414,7 +3414,7 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(1204.08 353.385) scale(21.8398 27.9863)"
         >
-          <stop stop-color="#AD1C00" />
+          <stop stopColor="#AD1C00" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3425,7 +3425,7 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(1234.22 529.666) scale(40.6191 51.6015)"
         >
-          <stop stop-color="#AD1C00" />
+          <stop stopColor="#AD1C00" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3436,7 +3436,7 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(1193.6 529.666) scale(40.6191 51.6015)"
         >
-          <stop stop-color="#AD1C00" />
+          <stop stopColor="#AD1C00" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3447,7 +3447,7 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(1113.2 357.117) scale(25.7271 26.3608)"
         >
-          <stop stop-color="#AD1C00" />
+          <stop stopColor="#AD1C00" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3458,7 +3458,7 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(1070.56 515.714) scale(63.9644 45.4424)"
         >
-          <stop stop-color="#AD1C00" />
+          <stop stopColor="#AD1C00" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3469,14 +3469,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(1454.03 598.712) scale(51.8351 49.9387)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3487,14 +3487,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(1454.03 -503.632) scale(28.6782 27.6291)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3505,14 +3505,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(973.074 908.392) rotate(-54.0375) scale(40.5838 30.5128)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3523,14 +3523,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(973.071 908.429) rotate(-54.0376) scale(22.455 16.8827)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3541,14 +3541,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(513.316 796.454) rotate(-29.0378) scale(92.5429 69.5727)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3559,14 +3559,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(513.345 796.45) rotate(-29.0378) scale(25.3813 19.0814)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3577,14 +3577,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(472.872 832.306) rotate(-122.732) scale(22.6197 17.0067)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3595,14 +3595,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(472.872 832.306) rotate(-122.732) scale(12.5253 9.41719)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3613,14 +3613,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(338.956 845.81) rotate(-127.653) scale(39.6363 29.8002)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3631,14 +3631,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(338.956 845.81) rotate(-127.652) scale(21.9194 16.48)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3649,14 +3649,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(288.044 1046.09) rotate(148.722) scale(51.0921 38.4107)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3667,14 +3667,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(293.326 1136.9) rotate(178.33) scale(51.0933 9.32272)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3685,14 +3685,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(293.327 1136.9) rotate(178.33) scale(21.5499 3.93212)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3703,14 +3703,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(288.042 1046.18) rotate(148.722) scale(28.2242 21.2188)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3721,14 +3721,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(195.062 591.694) rotate(148.722) scale(40.6265 30.5427)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3739,14 +3739,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(195.062 591.694) rotate(148.722) scale(22.4558 16.8821)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3757,14 +3757,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(723.277 946.041) rotate(-124.912) scale(23.691 17.8121)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3775,14 +3775,14 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(723.277 946.041) rotate(-124.912) scale(13.1022 9.85086)"
         >
-          <stop stop-color="#FDED28" />
-          <stop offset="0.03" stop-color="#EEDF25" />
-          <stop offset="0.19" stop-color="#B0A51B" />
-          <stop offset="0.34" stop-color="#7A7213" />
-          <stop offset="0.49" stop-color="#4E490C" />
-          <stop offset="0.64" stop-color="#2C2907" />
-          <stop offset="0.77" stop-color="#131203" />
-          <stop offset="0.9" stop-color="#050400" />
+          <stop stopColor="#FDED28" />
+          <stop offset="0.03" stopColor="#EEDF25" />
+          <stop offset="0.19" stopColor="#B0A51B" />
+          <stop offset="0.34" stopColor="#7A7213" />
+          <stop offset="0.49" stopColor="#4E490C" />
+          <stop offset="0.64" stopColor="#2C2907" />
+          <stop offset="0.77" stopColor="#131203" />
+          <stop offset="0.9" stopColor="#050400" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3793,7 +3793,7 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(1262.18 676.31) rotate(144.402) scale(381.775 381.764)"
         >
-          <stop stop-color="#432A5E" />
+          <stop stopColor="#432A5E" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3804,7 +3804,7 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(563.754 949.702) rotate(-35.5975) scale(381.775 381.764)"
         >
-          <stop stop-color="#C582B8" stop-opacity="0.67" />
+          <stop stopColor="#C582B8" stopOpacity="0.67" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3815,7 +3815,7 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(787.931 447.264) rotate(148.492) scale(349.657 349.642)"
         >
-          <stop stop-color="#775771" stop-opacity="0.7" />
+          <stop stopColor="#775771" stopOpacity="0.7" />
           <stop offset="1" />
         </radialGradient>
         <radialGradient
@@ -3826,7 +3826,7 @@ const AllSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
           gradientTransform="translate(642.737 924.337) rotate(-39.4274) scale(206.134 206.131)"
         >
-          <stop stop-color="#432A5E" />
+          <stop stopColor="#432A5E" />
           <stop offset="1" />
         </radialGradient>
       </defs>

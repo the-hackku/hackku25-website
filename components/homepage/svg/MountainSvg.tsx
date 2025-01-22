@@ -600,15 +600,15 @@ const MountainSvg: React.FC<SvgProps> = () => {
           y2="3.34375"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0.02" stop-color="#51B6E7" />
-          <stop offset="0.06" stop-color="#47A4CC" />
-          <stop offset="0.15" stop-color="#2E7989" />
-          <stop offset="0.24" stop-color="#1A5654" />
-          <stop offset="0.31" stop-color="#0B3D2E" />
-          <stop offset="0.37" stop-color="#032E16" />
-          <stop offset="0.4" stop-color="#00290E" />
-          <stop offset="0.62" stop-color="#005746" />
-          <stop offset="1" stop-color="#00AFAF" />
+          <stop offset="0.02" stopColor="#51B6E7" />
+          <stop offset="0.06" stopColor="#47A4CC" />
+          <stop offset="0.15" stopColor="#2E7989" />
+          <stop offset="0.24" stopColor="#1A5654" />
+          <stop offset="0.31" stopColor="#0B3D2E" />
+          <stop offset="0.37" stopColor="#032E16" />
+          <stop offset="0.4" stopColor="#00290E" />
+          <stop offset="0.62" stopColor="#005746" />
+          <stop offset="1" stopColor="#00AFAF" />
         </linearGradient>
         <linearGradient
           id="paint1_linear_0_1"
@@ -618,8 +618,8 @@ const MountainSvg: React.FC<SvgProps> = () => {
           y2="5.68945"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#BEB8CB" />
-          <stop offset="1" stop-color="#925CBF" />
+          <stop stopColor="#BEB8CB" />
+          <stop offset="1" stopColor="#925CBF" />
         </linearGradient>
         <linearGradient
           id="paint2_linear_0_1"
@@ -630,10 +630,10 @@ const MountainSvg: React.FC<SvgProps> = () => {
           gradientUnits="userSpaceOnUse"
         >
           <stop />
-          <stop offset="0.36" stop-color="#050603" stop-opacity="0.95" />
-          <stop offset="0.65" stop-color="#151A0D" stop-opacity="0.78" />
-          <stop offset="0.91" stop-color="#313B1F" stop-opacity="0.51" />
-          <stop offset="0.92" stop-color="#323D20" stop-opacity="0.5" />
+          <stop offset="0.36" stopColor="#050603" stop-opacity="0.95" />
+          <stop offset="0.65" stopColor="#151A0D" stop-opacity="0.78" />
+          <stop offset="0.91" stopColor="#313B1F" stop-opacity="0.51" />
+          <stop offset="0.92" stopColor="#323D20" stop-opacity="0.5" />
         </linearGradient>
         <linearGradient
           id="paint3_linear_0_1"
@@ -643,12 +643,12 @@ const MountainSvg: React.FC<SvgProps> = () => {
           y2="497.149"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#092819" />
-          <stop offset="0.15" stop-color="#092B1E" />
-          <stop offset="0.33" stop-color="#0B352D" />
-          <stop offset="0.51" stop-color="#0F4444" />
-          <stop offset="0.88" stop-color="#0A5439" />
-          <stop offset="1" stop-color="#095B36" />
+          <stop stopColor="#092819" />
+          <stop offset="0.15" stopColor="#092B1E" />
+          <stop offset="0.33" stopColor="#0B352D" />
+          <stop offset="0.51" stopColor="#0F4444" />
+          <stop offset="0.88" stopColor="#0A5439" />
+          <stop offset="1" stopColor="#095B36" />
         </linearGradient>
         <linearGradient
           id="paint4_linear_0_1"
@@ -658,8 +658,8 @@ const MountainSvg: React.FC<SvgProps> = () => {
           y2="794.485"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#4C335C" />
-          <stop offset="1" stop-color="#472484" />
+          <stop stopColor="#4C335C" />
+          <stop offset="1" stopColor="#472484" />
         </linearGradient>
         <linearGradient
           id="paint5_linear_0_1"
@@ -669,8 +669,8 @@ const MountainSvg: React.FC<SvgProps> = () => {
           y2="847.534"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#4C335C" />
-          <stop offset="1" stop-color="#472484" />
+          <stop stopColor="#4C335C" />
+          <stop offset="1" stopColor="#472484" />
         </linearGradient>
         <linearGradient
           id="paint6_linear_0_1"
@@ -680,8 +680,8 @@ const MountainSvg: React.FC<SvgProps> = () => {
           y2="714.399"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#4C335C" />
-          <stop offset="1" stop-color="#472484" />
+          <stop stopColor="#4C335C" />
+          <stop offset="1" stopColor="#472484" />
         </linearGradient>
         <linearGradient
           id="paint7_linear_0_1"
@@ -691,8 +691,8 @@ const MountainSvg: React.FC<SvgProps> = () => {
           y2="716.023"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#4C335C" />
-          <stop offset="1" stop-color="#472484" />
+          <stop stopColor="#4C335C" />
+          <stop offset="1" stopColor="#472484" />
         </linearGradient>
         <linearGradient
           id="paint8_linear_0_1"
@@ -702,8 +702,8 @@ const MountainSvg: React.FC<SvgProps> = () => {
           y2="686.431"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#4C335C" />
-          <stop offset="1" stop-color="#472484" />
+          <stop stopColor="#4C335C" />
+          <stop offset="1" stopColor="#472484" />
         </linearGradient>
         <linearGradient
           id="paint9_linear_0_1"
@@ -713,8 +713,8 @@ const MountainSvg: React.FC<SvgProps> = () => {
           y2="373.758"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#3A6E5F" />
-          <stop offset="1" stop-color="white" />
+          <stop stopColor="#3A6E5F" />
+          <stop offset="1" stopColor="white" />
         </linearGradient>
       </defs>
     </svg>
