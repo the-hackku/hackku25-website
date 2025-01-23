@@ -30,7 +30,7 @@ export const formSchema = z
     race: z.string(),
     hispanicOrLatino: z.enum(["Yes", "No", "Prefer not to answer"]),
     countryOfResidence: z.string().min(2, "Please enter a valid country."),
-    tShirtSize: z.enum(["S", "M", "L", "XL", "XXL"]),
+    tShirtSize: z.enum(["S", "M", "L", "XL", "XXL", "XXXL"]),
     dietaryRestrictions: z.string().optional(),
     specialAccommodations: z.string().optional(),
     currentSchool: z.string(),

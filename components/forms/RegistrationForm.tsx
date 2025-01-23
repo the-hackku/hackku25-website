@@ -156,6 +156,7 @@ export function RegistrationForm() {
     { label: "Large", value: "L" },
     { label: "XL", value: "XL" },
     { label: "XXL", value: "XXL" },
+    { label: "XXXL", value: "XXXL" },
   ];
 
   const levelOfStudyOptions: { label: string; value: LevelOfStudy }[] = [
@@ -366,7 +367,7 @@ export function RegistrationForm() {
                   />
                   <FormInputField
                     name="chaperonePhoneNumber"
-                    label="Chaperone Phone Number"
+                    label="Chaperone Phone #"
                     placeholder="Chaperone's phone number"
                     required={isFieldRequired("chaperonePhoneNumber")}
                   />
@@ -400,7 +401,7 @@ export function RegistrationForm() {
 
               <FormInputField
                 name="previousHackathons"
-                label="How many Hackathons have you attended?"
+                label="Hackathons Attended"
                 placeholder="Enter the number of previous hackathons"
                 type="number"
                 required={isFieldRequired("previousHackathons")}
@@ -415,8 +416,8 @@ export function RegistrationForm() {
               />
               <FormInputField
                 name="specialAccommodations"
-                label="Special Accommodations"
-                placeholder="Enter any special accommodations"
+                label="Special Accoms."
+                placeholder="Special accommodations"
                 required={isFieldRequired("specialAccommodations")}
               />
             </div>
