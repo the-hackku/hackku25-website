@@ -108,7 +108,7 @@ export default function HomePage() {
       {/* Header Section */}
       <section
         id="header"
-        className="relative w-full flex items-center justify-start overflow-hidden pb-40 pt-32 md:pb-96 md:pt-48 px-40"
+        className="relative w-full h-screen flex items-center justify-start overflow-hidden pb-40 pt-32 md:pb-96 md:pt-48 px-40"
         onMouseMove={handleMouseMove}
         onMouseLeave={resetTilt}
       >
@@ -193,7 +193,7 @@ export default function HomePage() {
 
         {/* Background SVG */}
         <div className="absolute bottom-0 left-[32%] transform -translate-x-[32%] z-0 w-full h-full">
-          <AllSvg />
+          <AllSvg className="w-full h-full object-cover"/>
         </div>
       </section>
 

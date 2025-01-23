@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, {useState, useEffect } from "react";
 
 interface SvgProps {
   className?: string;
@@ -10,12 +10,35 @@ interface SvgProps {
 }
 
 const AllSvg: React.FC<SvgProps> = () => {
+
+  const [viewBox, setViewBox] = useState<string | null>(null);
+
+  useEffect(() => {
+    const updateViewBox = () => {
+      if (window.innerWidth < 768) {
+        // Mobile screen
+        setViewBox("850 0 500 1500");
+      } else {
+        // Desktop screen
+        setViewBox("0 0 1750 1500");
+      }
+    };
+    updateViewBox();
+    window.addEventListener("resize", updateViewBox);
+    return () => window.removeEventListener("resize", updateViewBox);
+  }, []);
+
+  if(!viewBox) {
+    return <div className="w-full h-full flex items-center justify-center"> Loading... </div>;
+  }
+
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 1750 1500"
+      viewBox={viewBox}
       className="w-full"
     >
+
       <path
         d="M2662.51 -26.5162H-364.563V943.291H2662.51V-26.5162Z"
         fill="url(#paint0_linear_103_1128)"
