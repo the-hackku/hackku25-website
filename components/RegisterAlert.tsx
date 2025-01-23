@@ -29,22 +29,14 @@ export default function RegisterAlert() {
                 <div className="flex items-center space-x-3">
                   <IconAlertCircle className="w-6 h-6 text-red-600" />
                   <div>
-                    <AlertTitle className="font-semibold text-lg">
-                      Incomplete Registration
-                    </AlertTitle>
-                    <AlertDescription className="mt-1 text-sm">
-                      Complete your registration{" "}
-                      <u>
-                        <Link
-                          href="/register"
-                          className="underline"
-                          onClick={handleClose}
-                        >
-                          here
-                        </Link>
-                      </u>
-                      .
-                    </AlertDescription>
+                    <Link href="/register" onClick={handleClose}>
+                      <AlertTitle className="font-semibold text-lg">
+                        Incomplete Registration
+                      </AlertTitle>
+                      <AlertDescription className="mt-1 text-sm">
+                        Complete your registration <u>here</u>.
+                      </AlertDescription>
+                    </Link>
                   </div>
                 </div>
                 <button onClick={handleClose} aria-label="Close alert">

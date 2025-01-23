@@ -137,6 +137,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                       scale: 1.1,
                       transition: { duration: 0.2 },
                     }}
+                    className="drop-shadow-lg" // Apply drop shadow
                   >
                     <Image
                       src="/images/branding/logo_black.png"
@@ -155,8 +156,8 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
           <header className="lg:hidden">
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="outline">
-                  <IconMenu2 size={24} />
+                <Button variant="ghost">
+                  <IconMenu2 size={32} />
                 </Button>
               </SheetTrigger>
               <SheetContent side="right">
@@ -300,6 +301,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                     href="https://mlh.io/seasons/2025/events"
                     target="_blank"
                     passHref
+                    className="drop-shadow-lg" // Apply drop shadow
                   >
                     <motion.div
                       whileHover={{

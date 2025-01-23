@@ -505,9 +505,9 @@ export function RegistrationForm() {
             <Button
               type="submit"
               disabled={form.formState.isSubmitting}
-              className="w-full"
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white"
             >
-              Register
+              Register!
             </Button>
           </form>
         </FormProvider>

@@ -1,5 +1,6 @@
-// utils/emailTemplate.ts
-export const htmlTemplate = (url: string, host: string) => `
+// utils/emailTemplate.tsx
+
+export const htmlTemplate = (url: string, host: string): string => `
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -77,7 +78,18 @@ export const htmlTemplate = (url: string, host: string) => `
         <p>
           Hello! Thank you for using our platform. To sign in or to create your account, simply click the button below:
         </p>
-        <a href="${url}" class="button">Sign in</a>
+        <a href="${url}" class="button" style="
+            display: inline-block;
+            margin: 20px 0;
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #ffffff;
+            background: #1a73e8;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        ">Sign in</a>
         <p>
           If you didn't request this, please ignore this email or let us know if you have any concerns.
         </p>
@@ -93,3 +105,5 @@ export const htmlTemplate = (url: string, host: string) => `
   </body>
 </html>
 `;
+
+export default htmlTemplate;
