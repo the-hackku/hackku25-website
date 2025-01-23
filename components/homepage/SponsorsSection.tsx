@@ -31,7 +31,7 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
         className="max-w-2xl text-center mb-8 md:mb-12 px-4 md:px-0"
       >
         <h2 className="text-5xl md:text-7xl font-bold mb-2 text-white font-dfvn">
-          Our Sponsors
+          2025 Sponsors
         </h2>
         <p className="text-lg md:text-2xl text-white">
           HackKU is supported by an incredible group of sponsors who make this

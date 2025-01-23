@@ -16,6 +16,7 @@ import {
   IconInfoCircleFilled,
   IconUser,
   IconQrcode,
+  IconStar,
 } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -212,7 +213,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
             </Sheet>
           </header>
 
-          {/* Center Tabs (Always Visible) */}
+          {/* Center Tabs (Always Visible) (Desktop Only) */}
           <motion.div
             className={`hidden lg:flex justify-center flex-1 ${
               isHomePage ? "drop-shadow-lg" : "drop-shadow-sm"
@@ -278,6 +279,14 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                     }
                   </Link>
                 </TabsTrigger>
+                {isAdmin && (
+                  <TabsTrigger value="admin" asChild>
+                    <Link href="/admin">
+                      <IconStar size={20} className="mr-2" />
+                      Admin
+                    </Link>
+                  </TabsTrigger>
+                )}
               </TabsList>
             </Tabs>
           </motion.div>
