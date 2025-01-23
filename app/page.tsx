@@ -115,19 +115,20 @@ export default function HomePage() {
       >
 
         <motion.div
-          className="z-10 max-w-[60%] text-center md:text-left"
+          className="z-10 max-w-[80%] text-center md:text-left md:max-w-[60%]"
           style={{
             transform: `perspective(1000px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)`,
             transition: isMouseOver
               ? "transform .1s ease-out"
               : "transform 1s ease-out",
+            textShadow: `-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000`,
           }}
         >
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-md md:text-lg"
+            className="text-4xl md:text-lg"
           >
             APRIL 4th - 6th, 2025
           </motion.p>
@@ -148,7 +149,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-md md:text-3xl "
+            className="text-3xl md:text-3xl"
           >
             @{" "}
             <Link
@@ -171,7 +172,7 @@ export default function HomePage() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-3 bg-yellow-500 rounded-full text-lg md:text-2xl text-black font-agency"
+                className="px-6 py-5 bg-yellow-500 rounded-full text-3xl md:text-2xl text-black font-agency md:px-6 md:py-3"
               >
                 Register Now!
               </motion.button>

@@ -17,7 +17,7 @@ const AllSvg: React.FC<SvgProps> = () => {
     const updateViewBox = () => {
       if (window.innerWidth < 768) {
         // Mobile screen
-        setViewBox("850 0 500 1500");
+        setViewBox("850 -200 575 1500");
       } else {
         // Desktop screen
         setViewBox("0 0 1750 1500");
