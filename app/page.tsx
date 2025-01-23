@@ -106,14 +106,16 @@ export default function HomePage() {
   return (
     <div className="w-full min-h-screen overflow-x-hidden overflow-y-auto text-white font-agency">
       {/* Header Section */}
+
       <section
         id="header"
-        className="relative w-full h-screen flex items-center justify-start overflow-hidden pb-40 pt-32 md:pb-96 md:pt-48 px-40"
+        className="relative w-full h-screen flex items-center justify-center md:justify-start overflow-hidden pb-40 pt-32 md:pb-96 md:pt-48 md:px-40"
         onMouseMove={handleMouseMove}
         onMouseLeave={resetTilt}
       >
+
         <motion.div
-          className="z-10 max-w-[60%] text-left"
+          className="z-10 max-w-[60%] text-center md:text-left"
           style={{
             transform: `perspective(1000px) rotateX(${tilt.y}deg) rotateY(${tilt.x}deg)`,
             transition: isMouseOver
@@ -125,7 +127,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-md md:text-lg "
+            className="text-md md:text-lg"
           >
             APRIL 4th - 6th, 2025
           </motion.p>
@@ -135,7 +137,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: -50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="text-6xl md:text-8xl font-dfvn drop-shadow-lg"
+            className="text-7xl md:text-8xl font-dfvn drop-shadow-lg"
             style={{ textShadow: "2px 2px 0 black" }}
           >
             HackKU25
@@ -152,7 +154,7 @@ export default function HomePage() {
             <Link
               href="https://maps.app.goo.gl/g2MHMwYqWsaYvLSL9"
               target="_blank"
-              className="hover:underline"
+              className="hover:underline md:text-white"
             >
               THE UNIVERSITY OF KANSAS
             </Link>
