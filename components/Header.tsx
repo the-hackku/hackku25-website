@@ -67,11 +67,11 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
 
   // Decide header position & background
   let headerPosition = "sticky";
-  let headerBackground = "bg-white"; // default for non-home pages
+  let headerBackground = "bg-white";
 
   if (isHomePage) {
-    headerPosition = "fixed"; // Remain fixed on homepage
-    headerBackground = "bg-transparent"; // Transparent on homepage
+    headerPosition = "fixed";
+    headerBackground = "bg-transparent";
   }
 
   // Tab logic for highlighting active route
@@ -117,7 +117,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
     px-4
     py-4
     ${headerBackground}
-    ${isMobile ? "backdrop-blur-md bg-white/80" : ""}
+    backdrop-blur-md bg-white/80 lg:backdrop-blur-none lg:bg-transparent
     `}
     >
       <div className="container mx-auto max-w-7xl">
@@ -139,14 +139,14 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                       scale: 1.1,
                       transition: { duration: 0.2 },
                     }}
-                    className="drop-shadow-lg" // Apply drop shadow
+                    className="drop-shadow-md"
                   >
                     <Image
                       src="/images/branding/logo_black.png"
                       width={75}
                       height={75}
                       alt="HackKU Logo"
-                      className="w-auto h-12 md:h-10" // Adjust size for responsiveness
+                      className="w-auto h-12 md:h-10"
                     />
                   </motion.div>
                 </Link>
@@ -192,7 +192,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                     <SheetClose asChild>
                       <span className="flex items-center text-xl">
                         <IconUser size={24} className="mr-2" />
-                        My Profile
+                        {isAuthenticated ? "Profile" : "Sign In"}
                       </span>
                     </SheetClose>
                   </Link>

@@ -117,7 +117,7 @@ const SignInPage = () => {
   return (
     <div className="container max-w-md mx-auto py-8 px-4 sm:px-6">
       {!emailSent ? (
-        <Card className="border rounded-lg p-4 shadow-md">
+        <Card className="border rounded-lg p-4 shadow-sm">
           <CardHeader>
             <CardTitle className="text-center text-lg sm:text-xl">
               Sign In or Sign Up
