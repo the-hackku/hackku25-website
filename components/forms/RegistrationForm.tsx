@@ -23,6 +23,7 @@ import { ComboboxSelect } from "@/components/customui/ComboSelect";
 import { RegistrationData, formSchema } from "@/app/actions/schemas";
 
 import { registerUser } from "@/app/actions/register";
+import constants from "@/constants";
 
 // Predefined options
 const predefinedSchools = [
@@ -161,8 +162,8 @@ export function RegistrationForm() {
 
   const levelOfStudyOptions: { label: string; value: LevelOfStudy }[] = [
     { label: "Undergraduate", value: "Undergraduate" },
-    { label: "High School", value: "High School" },
     { label: "Graduate", value: "Graduate" },
+    { label: "High School", value: "High School" },
     { label: "Other", value: "Other" },
   ];
 
@@ -245,13 +246,10 @@ export function RegistrationForm() {
 
         <p className="pt-4 text-sm">
           HackKU25 will be held at the University of Kansas School of
-          Engineering from April 4th - 6th, in-person. Check out our website{" "}
-          <Link href="https://hackku.org" className="underline" target="_blank">
-            hackku.org
-          </Link>{" "}
-          for more information or reach out to{" "}
-          <Link href="mailto:hack@ku.edu" className="underline">
-            hack@ku.edu
+          Engineering from April 4th - 6th, in-person. For more information,
+          reach out to{" "}
+          <Link href={`mailto:${constants.supportEmail}`} className="underline">
+            {constants.supportEmail}
           </Link>{" "}
           with any questions.
         </p>
@@ -263,8 +261,8 @@ export function RegistrationForm() {
         <p className="pt-2 text-sm">
           You must be a student to attend, if you are a working professional and
           would like to volunteer during the event, please contact us via{" "}
-          <Link href="mailto:hack@ku.edu" className="underline">
-            hack@ku.edu
+          <Link href={`mailto:${constants.supportEmail}`} className="underline">
+            {constants.supportEmail}
           </Link>{" "}
           .
         </p>
@@ -314,16 +312,16 @@ export function RegistrationForm() {
             {/* Education Information Section */}
             <hr className="my-4" />
             <h2 className="text-lg font-semibold">Education Information</h2>
-            <ComboboxSelect
-              name="currentSchool"
-              label="Current School"
-              required={isFieldRequired("currentSchool")}
-              placeholder="Select your school"
-              options={predefinedSchools}
-              allowCustomInput
-              closeOnSelect
-            />
             <div className="flex space-x-4">
+              <ComboboxSelect
+                name="currentSchool"
+                label="Current School"
+                required={isFieldRequired("currentSchool")}
+                placeholder="Select your school"
+                options={predefinedSchools}
+                allowCustomInput
+                closeOnSelect
+              />
               <FormSelectField<LevelOfStudy>
                 name="levelOfStudy"
                 label="Level of Study"
@@ -334,36 +332,71 @@ export function RegistrationForm() {
                   setShowChaperoneFields(value === "High School");
                 }}
               />
+            </div>
+            <div className="flex space-x-4">
               {!showChaperoneFields && (
-                <ComboboxSelect
-                  name="major"
-                  label="Major"
-                  required={isFieldRequired("major")}
-                  placeholder="Select your major"
-                  options={[
-                    { label: "Computer Science", value: "Computer Science" },
-                    {
-                      label: "Electrical Engineering",
-                      value: "Electrical Engineering",
-                    },
-                    {
-                      label: "Computer Engineering",
-                      value: "Computer Engineering",
-                    },
-                    {
-                      label: "Mechanical Engineering",
-                      value: "Mechanical Engineering",
-                    },
-                    {
-                      label: "Business Administration",
-                      value: "Business Administration",
-                    },
-                    { label: "Psychology", value: "Psychology" },
-                    { label: "Biology", value: "Biology" },
-                  ]}
-                  allowCustomInput
-                  closeOnSelect
-                />
+                <>
+                  <ComboboxSelect
+                    name="major"
+                    label="Major(s)"
+                    required={isFieldRequired("major")}
+                    placeholder="Select your major"
+                    options={[
+                      { label: "Computer Science", value: "Computer Science" },
+                      {
+                        label: "Electrical Engineering",
+                        value: "Electrical Engineering",
+                      },
+                      {
+                        label: "Computer Engineering",
+                        value: "Computer Engineering",
+                      },
+                      {
+                        label: "Mechanical Engineering",
+                        value: "Mechanical Engineering",
+                      },
+                      {
+                        label: "Business Administration",
+                        value: "Business Administration",
+                      },
+                      { label: "Psychology", value: "Psychology" },
+                      { label: "Biology", value: "Biology" },
+                    ]}
+                    allowCustomInput
+                    closeOnSelect={false}
+                    multiselect
+                  />
+                  <ComboboxSelect
+                    name="minor"
+                    label="Minor(s)"
+                    required={isFieldRequired("minor")}
+                    placeholder="Select your minor(s)"
+                    options={[
+                      { label: "Computer Science", value: "Computer Science" },
+                      {
+                        label: "Electrical Engineering",
+                        value: "Electrical Engineering",
+                      },
+                      {
+                        label: "Computer Engineering",
+                        value: "Computer Engineering",
+                      },
+                      {
+                        label: "Mechanical Engineering",
+                        value: "Mechanical Engineering",
+                      },
+                      {
+                        label: "Business Administration",
+                        value: "Business Administration",
+                      },
+                      { label: "Psychology", value: "Psychology" },
+                      { label: "Biology", value: "Biology" },
+                    ]}
+                    allowCustomInput
+                    closeOnSelect={false}
+                    multiselect
+                  />
+                </>
               )}
             </div>
 
@@ -593,6 +626,10 @@ export function RegistrationForm() {
             </Button>
           </form>
         </FormProvider>
+        <p className="text-xs text-center mt-4 text-gray-500">
+          Still have questions? join the Discord server or email us at
+          {constants.supportEmail}
+        </p>
       </CardContent>
     </Card>
   );

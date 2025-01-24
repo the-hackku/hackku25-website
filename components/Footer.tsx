@@ -7,6 +7,7 @@ import {
   IconBrandLinkedin,
   IconBrandDiscord,
 } from "@tabler/icons-react";
+import constants from "@/constants";
 
 export default function Footer() {
   return (
@@ -15,7 +16,7 @@ export default function Footer() {
         {/* Social Links on the left */}
         <div className="flex space-x-4">
           <Link
-            href="https://discord.com/invite/AJXm3k6xWq"
+            href={constants.discordInvite}
             target="_blank"
             className="text-gray-400 hover:text-blue-400 transition-colors"
           >
@@ -47,9 +48,8 @@ export default function Footer() {
         {/* Text on the right */}
         <div className="text-right">
           <p className="text-sm text-gray-500">
-            © {new Date().getFullYear()} HackKU
+            ©{new Date().getFullYear()} HackKU25 Team
           </p>
-          <p className="text-sm text-gray-500">Designed by the HackKU Team</p>
         </div>
       </div>
     </footer>

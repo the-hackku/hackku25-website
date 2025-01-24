@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 
 interface PreviousEvent {
   name: string;
@@ -29,10 +30,18 @@ const AboutSection: React.FC<AboutSectionProps> = ({ previousEvents }) => {
           What is HackKU?
         </h2>
         <p className="text-lg md:text-2xl text-black">
-          HackKU is a 36-hour event where students come together to build
-          innovative projects and compete for exciting prizes. Hackers can
-          attend workshops, network with sponsors, and explore new technologies,
-          all while meeting new people and having fun!
+          HackKU is a 36 hour{" "}
+          <Link
+            href="https://en.wikipedia.org/wiki/Hackathon"
+            className="underline"
+            target="_blank"
+          >
+            hackathon
+          </Link>{" "}
+          event where students come together to build innovative projects and
+          compete for exciting prizes. Hackers can attend workshops, network
+          with sponsors, and explore new technologies, all while meeting new
+          people and having fun!
         </p>
 
         <h2 className="text-lg md:text-xl mt-12 mb-8 text-center text-gray-800">

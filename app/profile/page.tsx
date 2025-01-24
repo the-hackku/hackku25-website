@@ -20,6 +20,7 @@ import {
 import AuthButtons from "@/components/AuthButtons";
 import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 function formatDate(dateString: string) {
   const date = new Date(dateString);
@@ -47,7 +48,7 @@ export default async function ProfilePage() {
     const participant = user?.ParticipantInfo;
     const fullName = participant
       ? `${participant.firstName} ${participant.lastName}`
-      : "N/A";
+      : null;
     const accountCreationDate = user
       ? formatDate(user.createdAt.toString())
       : "N/A";
@@ -136,10 +137,12 @@ export default async function ProfilePage() {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        <div className="flex items-center space-x-2">
-                          <IconUser className="text-primary" size={20} />
-                          <p>{fullName}</p>
-                        </div>
+                        {fullName && (
+                          <div className="flex items-center space-x-2">
+                            <IconUser className="text-primary" size={20} />
+                            <p>{fullName}</p>
+                          </div>
+                        )}
                         <div className="flex items-center space-x-2">
                           <IconMail className="text-primary" size={20} />
                           <p>{session.user.email}</p>
@@ -201,12 +204,11 @@ export default async function ProfilePage() {
                       </div>
                     </>
                   ) : (
-                    <p className="text-center text-muted-foreground">
-                      Please complete your application{" "}
-                      <u>
-                        <Link href="/register">here</Link>
-                      </u>
-                    </p>
+                    <Link href="/register">
+                      <Button className="bg-blue-500 text-white mx-auto block">
+                        Complete your application here
+                      </Button>
+                    </Link>
                   )}
                 </div>
               </TabsContent>

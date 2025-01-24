@@ -58,6 +58,7 @@ interface ParticipantInfo {
   currentSchool: string;
   levelOfStudy: string;
   major: string;
+  minor: string;
   previousHackathons: number;
   chaperoneFirstName: string;
   chaperoneLastName: string;
@@ -121,6 +122,10 @@ function transformData(sheetData: string[][]): TransformedData[] {
           major:
             entry[
               "Major(s), If applicable (Use semicolons to delimit multiple degrees)"
+            ],
+          minor:
+            entry[
+              "Minor(s), If applicable (Use semicolons to delimit multiple degrees)"
             ],
           previousHackathons:
             parseInt(

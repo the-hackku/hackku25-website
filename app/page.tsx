@@ -4,9 +4,11 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { useState } from "react";
 import SponsorsSection from "@/components/homepage/SponsorsSection";
-import TeamSection from "@/components/homepage/TeamSection";
 import AboutSection from "@/components/homepage/AboutSection";
 import AllSvg from "@/components/homepage/svg/AllSvg";
+import FAQSection from "@/components/homepage/FAQSection";
+
+// import TeamSection from "@/components/homepage/TeamSection";
 
 export default function HomePage() {
   const scrollToSection = (id: string) => {
@@ -30,28 +32,6 @@ export default function HomePage() {
     setIsMouseOver(false);
   };
 
-  const sponsorTiers = ["Kila", "Mega"];
-  const sponsors = [
-    {
-      name: "Tradebot",
-      logo: "/images/sponsors/tradebot.webp",
-      website: "https://www.tradebot.com",
-      tier: "Kila",
-    },
-    {
-      name: "Security Benefit",
-      logo: "/images/sponsors/security.png",
-      website: "https://www.securitybenefit.com",
-      tier: "Kila",
-    },
-    {
-      name: "Patient Safety",
-      logo: "/images/sponsors/patient.png",
-      website: "https://www.patientsafetytech.com/",
-      tier: "Mega",
-    },
-  ];
-
   const previousEvents = [
     {
       name: "HackKU 2021",
@@ -72,6 +52,61 @@ export default function HomePage() {
       name: "HackKU 2024",
       image: "/images/prev/2024.png",
       link: "https://hackku-2024.devpost.com/",
+    },
+  ];
+
+  const faqs = [
+    {
+      question: "What is a hackathon?",
+      answer:
+        "A hackathon is an event where individuals or teams come together to brainstorm, design, and build projects. It provides an environment to learn new skills, tackle real-world challenges, and create impactful solutions, with opportunities to network and compete for prizes!",
+    },
+    {
+      question: "Who can participate?",
+      answer:
+        "Students and recent graduates are welcome to participate. No prior experience is necessary! All High school students will require a chaperone.",
+    },
+    {
+      question: "Is there a cost to attend?",
+      answer:
+        "No, HackKU is free to attend! We provide meals, swag, and resources for all participants.",
+    },
+    {
+      question: "What should I bring?",
+      answer:
+        "Bring a laptop, charger, and any hardware you plan to use. We also recommend bringing a change of clothes and toiletries.",
+    },
+    {
+      question: "Do you offer travel reimbursements?",
+      answer:
+        "Unfortunately, we are unable to provide travel reimbursements at this time. This may change in the future, so stay tuned!",
+    },
+    {
+      question: "Can I participate remotely?",
+      answer:
+        "No, HackKU is an in-person event. We believe that the best experience comes from being on-site, collaborating with others, and engaging in the full hackathon experience.",
+    },
+  ];
+
+  const sponsorTiers = ["Kila", "Mega"];
+  const sponsors = [
+    {
+      name: "Tradebot",
+      logo: "/images/sponsors/tradebot.webp",
+      website: "https://www.tradebot.com",
+      tier: "Kila",
+    },
+    {
+      name: "Security Benefit",
+      logo: "/images/sponsors/security.png",
+      website: "https://www.securitybenefit.com",
+      tier: "Kila",
+    },
+    {
+      name: "Patient Safety",
+      logo: "/images/sponsors/patient.png",
+      website: "https://www.patientsafetytech.com/",
+      tier: "Mega",
     },
   ];
 
@@ -105,7 +140,6 @@ export default function HomePage() {
   return (
     <div className="w-full min-h-screen overflow-x-hidden overflow-y-auto text-white font-agency">
       {/* Header Section */}
-
       <section
         id="header"
         className="relative w-full h-screen flex items-center justify-center md:justify-start overflow-hidden pb-40 pt-32 md:pb-96 md:pt-48 md:px-40"
@@ -190,10 +224,10 @@ export default function HomePage() {
           <AllSvg className="w-full h-full object-cover" />
         </div>
       </section>
-
       <AboutSection previousEvents={previousEvents} />
+      <FAQSection faqs={faqs} />;
       <SponsorsSection sponsorTiers={sponsorTiers} sponsors={sponsors} />
-      <TeamSection teamMembers={teamMembers} />
+      {/* <TeamSection teamMembers={teamMembers} /> */}
     </div>
   );
 }

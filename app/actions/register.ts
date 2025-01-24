@@ -42,6 +42,7 @@ export async function registerUser(data: RegistrationData) {
       currentSchool: data.currentSchool ?? "",
       levelOfStudy: data.levelOfStudy ?? "",
       major: data.major ?? "",
+      minor: data.minor ?? "",
       previousHackathons: data.previousHackathons ?? 0,
       chaperoneFirstName: data.chaperoneFirstName ?? "",
       chaperoneLastName: data.chaperoneLastName ?? "",

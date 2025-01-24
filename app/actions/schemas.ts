@@ -33,6 +33,7 @@ export const formSchema = z
     currentSchool: z.string(),
     levelOfStudy: z.enum(["High School", "Undergraduate", "Graduate", "Other"]),
     major: z.string().optional(),
+    minor: z.string().optional(),
     previousHackathons: z.coerce.number(),
     chaperoneFirstName: z.string().optional(),
     chaperoneLastName: z.string().optional(),

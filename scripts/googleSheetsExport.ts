@@ -47,6 +47,7 @@ function transformUserData(user: UserWithParticipantInfo): string[] {
     user.ParticipantInfo.levelOfStudy ?? "N/A",
     user.ParticipantInfo.currentSchool ?? "N/A",
     user.ParticipantInfo.major ?? "N/A",
+    user.ParticipantInfo.minor ?? "N/A",
     user.ParticipantInfo.previousHackathons?.toString() ?? "N/A",
     user.ParticipantInfo.tShirtSize ?? "N/A",
     user.ParticipantInfo.dietaryRestrictions ?? "N/A",

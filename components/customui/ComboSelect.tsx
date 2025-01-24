@@ -38,6 +38,7 @@ interface ComboboxSelectProps {
   allowCustomInput?: boolean;
   closeOnSelect?: boolean;
   required?: boolean;
+  multiselect?: boolean;
 }
 
 export function ComboboxSelect({
@@ -49,6 +50,7 @@ export function ComboboxSelect({
   allowCustomInput = false,
   closeOnSelect = true,
   required = false,
+  multiselect = false,
 }: ComboboxSelectProps) {
   const { control } = useFormContext();
   const [open, setOpen] = React.useState(false);
@@ -59,15 +61,29 @@ export function ComboboxSelect({
       control={control}
       name={name}
       render={({ field }) => {
-        // Filter options based on input value
+        const selectedValues = field.value
+          ? (field.value as string).split(",").map((val) => val.trim())
+          : [];
+
         const filteredOptions = options.filter((option) =>
           option.label.toLowerCase().includes(inputValue.toLowerCase())
         );
 
-        // Check if inputValue matches any option
         const isExistingOption = options.some(
           (option) => option.label.toLowerCase() === inputValue.toLowerCase()
         );
+
+        const toggleValue = (value: string) => {
+          if (selectedValues.includes(value)) {
+            // Remove value if already selected
+            const newValues = selectedValues.filter((v) => v !== value);
+            field.onChange(newValues.join(", "));
+          } else {
+            // Add value if not already selected
+            const newValues = [...selectedValues, value];
+            field.onChange(newValues.join(", "));
+          }
+        };
 
         return (
           <FormItem className="flex-1">
@@ -83,13 +99,12 @@ export function ComboboxSelect({
                     role="combobox"
                     aria-expanded={open}
                     className={cn(
-                      "w-full justify-between",
+                      "w-full justify-between truncate",
                       !field.value && "text-muted-foreground"
                     )}
                   >
-                    {field.value
-                      ? options.find((option) => option.value === field.value)
-                          ?.label || field.value // Show custom input value
+                    {selectedValues.length > 0
+                      ? selectedValues.join(", ") // Display comma-separated values
                       : placeholder}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
@@ -117,15 +132,19 @@ export function ComboboxSelect({
                               value={option.label}
                               key={option.value}
                               onSelect={() => {
-                                field.onChange(option.value);
+                                if (multiselect) {
+                                  toggleValue(option.value);
+                                } else {
+                                  field.onChange(option.value);
+                                  if (closeOnSelect) setOpen(false);
+                                }
                                 setInputValue("");
-                                if (closeOnSelect) setOpen(false);
                               }}
                             >
                               <Check
                                 className={cn(
                                   "mr-2 h-4 w-4",
-                                  option.value === field.value
+                                  selectedValues.includes(option.value)
                                     ? "opacity-100"
                                     : "opacity-0"
                                 )}
@@ -141,9 +160,13 @@ export function ComboboxSelect({
                           <CommandItem
                             value={inputValue}
                             onSelect={() => {
-                              field.onChange(inputValue);
+                              if (multiselect) {
+                                toggleValue(inputValue);
+                              } else {
+                                field.onChange(inputValue);
+                                if (closeOnSelect) setOpen(false);
+                              }
                               setInputValue("");
-                              if (closeOnSelect) setOpen(false);
                             }}
                           >
                             <Plus className="mr-2 h-4 w-4" />

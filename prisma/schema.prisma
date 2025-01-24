@@ -159,6 +159,7 @@ model ParticipantInfo {
   currentSchool          String?         // School of the participant
   levelOfStudy           String?         // e.g., High School, Undergraduate, Graduate
   major                  String?         // Major(s), stored as a semicolon-separated string
+  minor                  String?         // Minor(s), stored as a semicolon-separated string
 
   // Experience Information
   previousHackathons     Int?            // Number of hackathons previously attended
