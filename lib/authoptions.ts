@@ -37,6 +37,15 @@ export const authOptions: NextAuthOptions = {
       }
       return session;
     },
+    async redirect({ url, baseUrl }) {
+      // Always redirect to /register after sign-in
+      if (url.startsWith(baseUrl)) {
+        return `${baseUrl}/register`; // Redirect within your app
+      }
+
+      // For external URLs (safety check), fallback to /register
+      return `${baseUrl}/register`;
+    },
   },
   adapter: {
     ...PrismaAdapter(prisma),

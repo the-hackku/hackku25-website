@@ -30,7 +30,7 @@ const SignInPage = () => {
 
   useEffect(() => {
     if (status === "authenticated") {
-      router.push("/profile");
+      router.push("/register");
     }
   }, [status, router]);
 
