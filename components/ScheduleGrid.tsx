@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { Badge } from "@/components/ui/badge";
 import { CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
@@ -195,7 +194,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
           {/* Tabs to select the day */}
           <Tabs value={selectedDay} onValueChange={handleDayChange}>
             <TabsList>
-              <TabsTrigger value="All">All Days</TabsTrigger>
+              <TabsTrigger value="All">All</TabsTrigger>
               {days.map((date) => (
                 <TabsTrigger key={date} value={date}>
                   {new Date(date).toLocaleDateString(undefined, {
@@ -283,11 +282,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                   {(selectedDay === "All" ? days : [selectedDay]).map((day) => (
                     <td
                       key={day}
-                      className={`relative border-r border-gray-300 overflow-visible ${
-                        slotIndex % 2 === 1
-                          ? "border-b border-dashed" // Half-hour row: dashed
-                          : "border-b" // Hour row: solid
-                      }`}
+                      className={`relative border-r border-gray-300 overflow-visible border-b border-dashed`}
                     >
                       {filteredGroupedEvents[day]
                         ?.filter(
@@ -336,11 +331,6 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                               <IconMapPin size={12} className="mr-1" />
                               {event.location || "TBA"}
                             </div>
-                            {event.name.toLowerCase().includes("ceremony") && (
-                              <Badge className="mt-1" variant="outline">
-                                Main Event
-                              </Badge>
-                            )}
                           </div>
                         ))}
                     </td>

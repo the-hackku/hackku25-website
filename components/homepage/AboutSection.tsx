@@ -16,7 +16,7 @@ interface AboutSectionProps {
 const AboutSection: React.FC<AboutSectionProps> = ({ previousEvents }) => {
   return (
     <section
-      id="what-is-it"
+      id="about"
       className="w-full py-32 md:py-44 flex items-center justify-center bg-[#F0E9DF]"
     >
       <motion.div

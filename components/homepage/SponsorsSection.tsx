@@ -72,7 +72,7 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
                     alt={sponsor.name}
                     width={200}
                     height={100}
-                    className="object-contain h-auto cursor-pointer transition-all duration-100 grayscale hover:grayscale-0"
+                    className="object-contain h-auto cursor-pointer transition-all duration-100 md:grayscale hover:grayscale-0"
                   />
                 </motion.a>
               ))}

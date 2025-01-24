@@ -5,9 +5,9 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authoptions";
 
 export async function validateQrCode(scannedCode: string, eventId: string) {
-  // Fetch the user's session
   const session = await getServerSession(authOptions);
 
+  // Verify that the user is an admin
   if (!session || session.user.role !== "ADMIN") {
     return {
       success: false,
@@ -15,15 +15,26 @@ export async function validateQrCode(scannedCode: string, eventId: string) {
     };
   }
 
-  // Fetch the adminId by looking up the user based on their email in the session
-  const admin = await prisma.user.findUnique({
-    where: {
-      email: session.user.email, // Use the email from the session
-    },
-    select: {
-      id: true, // Only select the id field
-    },
-  });
+  // Fetch admin and user (with ParticipantInfo) in a single transaction
+  const [admin, user] = await prisma.$transaction([
+    prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { id: true },
+    }),
+    prisma.user.findUnique({
+      where: { id: scannedCode },
+      select: {
+        id: true,
+        email: true,
+        ParticipantInfo: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
+        },
+      },
+    }),
+  ]);
 
   if (!admin) {
     return {
@@ -32,19 +43,6 @@ export async function validateQrCode(scannedCode: string, eventId: string) {
     };
   }
 
-  const adminId = admin.id; // Now we have the adminId
-
-  // First, attempt to find the user by the scanned code
-  const user = await prisma.user.findUnique({
-    where: {
-      id: scannedCode,
-    },
-    select: {
-      email: true,
-    },
-  });
-
-  // If no user is found, return an error and do not create a scan record
   if (!user) {
     return {
       success: false,
@@ -52,56 +50,59 @@ export async function validateQrCode(scannedCode: string, eventId: string) {
     };
   }
 
-  // Check if the user has already checked in for this event
-  const checkinExists = await prisma.checkin.findFirst({
-    where: {
-      userId: scannedCode,
-      eventId,
-    },
+  // Check if a check-in already exists for the user and event
+  const existingCheckin = await prisma.checkin.findFirst({
+    where: { userId: scannedCode, eventId },
+    include: { Scan: true }, // Include the Scan to check the association
   });
 
-  let scanSuccess = false;
-  let message = "User has already checked in."; // Default message
-
-  if (!checkinExists) {
-    // If check-in doesn't exist, create a new check-in record
-    await prisma.checkin.create({
+  if (existingCheckin) {
+    // Create a new failed scan (not linked to the existing check-in)
+    await prisma.scan.create({
       data: {
-        user: {
-          connect: { id: scannedCode }, // Connect existing user
-        },
-        admin: {
-          connect: { id: adminId }, // Connect the admin performing the check-in
-        },
-        event: {
-          connect: { id: eventId }, // Connect the event
-        },
+        user: { connect: { id: scannedCode } },
+        admin: { connect: { id: admin.id } },
+        event: { connect: { id: eventId } },
+        successful: false, // Mark this scan as failed
       },
     });
 
-    scanSuccess = true; // Mark scan as successful if check-in succeeds
-    message = "User successfully checked in."; // Success message
+    const fullName = user.ParticipantInfo
+      ? `${user.ParticipantInfo.firstName} ${user.ParticipantInfo.lastName}`
+      : "Participant";
+
+    return {
+      success: false,
+      name: fullName,
+      message: "User has already checked in.",
+    };
   }
 
-  // Create a scan record, marking it successful only if check-in was successful
-  await prisma.scan.create({
+  // Create a new check-in and associate it with a successful scan
+  await prisma.checkin.create({
     data: {
-      user: {
-        connect: { id: scannedCode }, // Connect existing user
+      user: { connect: { id: scannedCode } },
+      admin: { connect: { id: admin.id } },
+      event: { connect: { id: eventId } },
+      Scan: {
+        create: {
+          user: { connect: { id: scannedCode } },
+          admin: { connect: { id: admin.id } },
+          event: { connect: { id: eventId } },
+          successful: true, // Mark this scan as successful
+        },
       },
-      admin: {
-        connect: { id: adminId }, // Connect the admin performing the scan
-      },
-      event: {
-        connect: { id: eventId }, // Connect the event
-      },
-      successful: scanSuccess, // Mark scan as successful based on check-in result
     },
+    include: { Scan: true }, // Include the associated scan for confirmation
   });
 
+  const fullName = user.ParticipantInfo
+    ? `${user.ParticipantInfo.firstName} ${user.ParticipantInfo.lastName}`
+    : "Participant";
+
   return {
-    success: scanSuccess,
-    email: scanSuccess ? user.email : null,
-    message,
+    success: true,
+    name: fullName,
+    message: "User successfully checked in.",
   };
 }

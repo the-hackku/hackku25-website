@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import SponsorsSection from "@/components/homepage/SponsorsSection";
@@ -159,12 +158,12 @@ export default function HomePage() {
             </Link>
           </motion.p>
 
-          {/* Register Now Button */}
+          {/* Action Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="mt-6"
+            className="mt-6 flex flex-col md:flex-row items-center md:items-start"
           >
             <Link href="/register">
               <motion.button
@@ -172,24 +171,18 @@ export default function HomePage() {
                 whileTap={{ scale: 0.95 }}
                 className="px-5 py-4 bg-yellow-500 rounded-full text-3xl md:text-2xl text-black font-agency md:px-6 md:py-3"
               >
-                Register Now!
+                Register Now
               </motion.button>
             </Link>
+            <motion.button
+              onClick={() => scrollToSection("about")}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="mt-4 md:mt-0 md:ml-4 px-5 py-4 bg-gray-600 rounded-full text-3xl md:text-2xl font-agency text-white md:px-6 md:py-3"
+            >
+              Learn More
+            </motion.button>
           </motion.div>
-        </motion.div>
-
-        {/* Scroll Down Icon */}
-        <motion.div
-          className="absolute bottom-8 md:bottom-10 cursor-pointer"
-          onClick={() => scrollToSection("what-is-it")}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1.5 }}
-        >
-          <p className="flex flex-col items-center text-md md:text-lg">
-            <ChevronDown size={24} />
-            Scroll to Learn More
-          </p>
         </motion.div>
 
         {/* Background SVG */}

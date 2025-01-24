@@ -134,13 +134,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                 transition={{ duration: 0.25 }}
               >
                 <Link href="/" onClick={handleLogoClick}>
-                  <motion.div
-                    whileHover={{
-                      scale: 1.1,
-                      transition: { duration: 0.2 },
-                    }}
-                    className="drop-shadow-md"
-                  >
+                  <motion.div className="drop-shadow-md hover:drop-shadow-lg">
                     <Image
                       src="/images/branding/logo_black.png"
                       width={75}
@@ -188,6 +182,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                       </span>
                     </SheetClose>
                   </Link>
+                  <hr className="my-4" />
                   <Link href="/profile" passHref>
                     <SheetClose asChild>
                       <span className="flex items-center text-xl">

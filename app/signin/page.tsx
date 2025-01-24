@@ -131,7 +131,7 @@ const SignInPage = () => {
             {/* Google, Discord, GitHub Sign-In Buttons */}
             <div className="flex flex-col gap-3 mb-6">
               <Button
-                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base  text-white rounded-md transition hover:shadow-md"
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base  text-white rounded-md transition hover:shadow-lg"
                 style={{ backgroundColor: "#4285F4" }}
                 onClick={handleGoogleSignIn}
               >
@@ -140,7 +140,7 @@ const SignInPage = () => {
               </Button>
 
               <Button
-                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base  text-white rounded-md transition hover:shadow-md"
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base  text-white rounded-md transition hover:shadow-lg"
                 style={{ backgroundColor: "#5865F2" }}
                 onClick={handleDiscordSignIn}
               >
@@ -149,7 +149,7 @@ const SignInPage = () => {
               </Button>
 
               <Button
-                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base  text-white rounded-md transition hover:shadow-md"
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base  text-white rounded-md transition hover:shadow-lg"
                 style={{ backgroundColor: "#24292E" }}
                 onClick={handleGitHubSignIn}
               >

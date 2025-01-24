@@ -14,9 +14,9 @@ import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 
 // Custom components
-import { FormInputField } from "../FormInputField";
-import { FormSelectField } from "../FormSelectField";
-import { FormCheckboxField } from "../FormCheckboxField";
+import { FormInputField } from "../customui/FormInputField";
+import { FormSelectField } from "../customui/FormSelectField";
+import { FormCheckboxField } from "../customui/FormCheckboxField";
 import { ComboboxSelect } from "@/components/customui/ComboSelect";
 
 // Schema and types

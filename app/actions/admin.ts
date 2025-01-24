@@ -8,8 +8,8 @@ interface EventData {
   startDate: string; // Use separate startDate field
   endDate: string; // Use separate endDate field
   name: string;
-  location?: string;
-  description?: string;
+  location: string;
+  description: string;
 }
 
 // CRUD operations for the admin dashboard
@@ -67,16 +67,17 @@ export async function getCheckins() {
 }
 
 // Create a new event
+// Create a new event
 export async function createEvent(data: EventData) {
   await isAdmin(); // Ensure only admins can access
 
   return await prisma.event.create({
     data: {
       name: data.name,
-      // Prisma interprets ISO strings as UTC by default
-      startDate: new Date(data.startDate),
+      startDate: new Date(data.startDate), // Prisma interprets ISO strings as UTC
       endDate: new Date(data.endDate),
       location: data.location || null,
+      description: data.description,
     },
     select: {
       id: true,
@@ -84,6 +85,7 @@ export async function createEvent(data: EventData) {
       startDate: true,
       endDate: true,
       location: true,
+      description: true, // Return the description in the response
     },
   });
 }

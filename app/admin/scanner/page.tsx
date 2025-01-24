@@ -40,19 +40,25 @@ export default function ScannerPage() {
     }
 
     if (!isProcessing) {
+      const startTime = Date.now(); // Record the start time
       setIsProcessing(true); // Block new scans while processing
       setLoading(true);
 
-      // Use a timeout to ensure state is fully updated
       setTimeout(() => {
         startTransition(async () => {
           const result = await validateQrCode(scannedCode, selectedEvent);
+          const endTime = Date.now(); // Record the end time
+          const duration = endTime - startTime; // Calculate duration in milliseconds
 
           if (result.success) {
-            setValidationResult(`Welcome ${result.email}!`);
+            setValidationResult(`Welcome ${result.name}! (${duration}ms)`);
             setBackgroundColor("green"); // Turn background green on success
           } else {
-            setValidationResult(result.message || "Invalid QR code.");
+            setValidationResult(
+              `${
+                result.message || "Invalid QR code."
+              } (Scan time: ${duration}ms)`
+            );
             setBackgroundColor("red"); // Turn background red on failure
           }
 
@@ -60,12 +66,12 @@ export default function ScannerPage() {
 
           // Add a delay before resetting the background and enabling a new scan
           setTimeout(() => {
-            setIsProcessing(false); // Allow new scans after 3 seconds
+            setIsProcessing(false); // Allow new scans after 2 seconds
             setBackgroundColor("inherit"); // Reset background after delay
             setValidationResult(null); // Clear the result
-          }, 3000); // 3-second delay
+          }, 2000); // 2-second delay
         });
-      }, 100); // Slight delay to ensure the state is updated before validation
+      }, 2); // Slight delay to ensure the state is updated before validation
     }
   };
 

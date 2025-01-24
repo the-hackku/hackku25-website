@@ -34,7 +34,7 @@ const formSchema = z.object({
     .min(0.5, { message: "Minimum duration is 0.5 hours." })
     .max(12, { message: "Maximum duration is 12 hours." }),
   location: z.string().optional(),
-  description: z.string().optional(),
+  description: z.string(),
 });
 
 export function EventForm() {
@@ -46,7 +46,7 @@ export function EventForm() {
       name: "",
       date: "2025-04-04",
       startTime: "12:00",
-      duration: 1.5, // Default to 1.5 hours (90 minutes)
+      duration: 1,
       location: "",
       description: "",
     },
@@ -73,12 +73,12 @@ export function EventForm() {
         startDate: eventStart.toISOString(),
         endDate: eventEnd.toISOString(),
         location: data.location,
+        description: data.description,
       });
 
       // Reset the form and refresh the page
       form.reset();
       router.refresh();
-      console.log("hi");
     } catch (error) {
       console.error("Failed to create event:", error);
     }

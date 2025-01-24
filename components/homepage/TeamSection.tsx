@@ -17,7 +17,7 @@ interface TeamSectionProps {
 const TeamSection: React.FC<TeamSectionProps> = ({ teamMembers }) => {
   return (
     <section
-      id="meet-the-team"
+      id="team"
       className="w-full py-32 md:py-44 flex flex-col items-center justify-center bg-[#037EC1]"
     >
       <motion.div

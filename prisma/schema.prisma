@@ -106,31 +106,37 @@ model Event {
 }
 
 model Scan {
-  id                     String          @id @default(cuid())
-  userId                 String
-  eventId                String
-  adminId                String          // The admin who performed the scan
-  successful             Boolean         // Whether the scan resulted in a check-in or not
+  id        String    @id @default(cuid())
+  userId    String
+  eventId   String
+  adminId   String
+  checkinId String?   // Nullable reference to Checkin
+  successful Boolean  // Whether the scan resulted in a check-in
 
-  user                   User            @relation(fields: [userId], references: [id], name: "UserScanned")
-  admin                  User            @relation(fields: [adminId], references: [id], name: "AdminScanner")
-  event                  Event           @relation(fields: [eventId], references: [id])
+  user      User      @relation(fields: [userId], references: [id], name: "UserScanned")
+  admin     User      @relation(fields: [adminId], references: [id], name: "AdminScanner")
+  event     Event     @relation(fields: [eventId], references: [id])
+  checkin   Checkin?  @relation(fields: [checkinId], references: [id])
 
-  createdAt              DateTime        @default(now())
+  createdAt DateTime  @default(now())
+
 }
 
 model Checkin {
-  id                     String          @id @default(cuid())
-  userId                 String
-  eventId                String
-  adminId                String          // The admin who checked the user in
+  id        String    @id @default(cuid())
+  userId    String
+  eventId   String
+  adminId   String
 
-  user                   User            @relation(fields: [userId], references: [id], name: "UserCheckedIn")
-  admin                  User            @relation(fields: [adminId], references: [id], name: "AdminCheckin")
-  event                  Event           @relation(fields: [eventId], references: [id])
+  user      User      @relation(fields: [userId], references: [id], name: "UserCheckedIn")
+  admin     User      @relation(fields: [adminId], references: [id], name: "AdminCheckin")
+  event     Event     @relation(fields: [eventId], references: [id])
 
-  createdAt              DateTime        @default(now())
+  createdAt DateTime  @default(now())
+
+  Scan Scan[]
 }
+
 
 model ParticipantInfo {
   id                     String          @id @default(cuid())
