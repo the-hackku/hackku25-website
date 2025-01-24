@@ -3,10 +3,6 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/authoptions";
 import { prisma } from "@/prisma";
 import { RegistrationForm } from "@/components/forms/RegistrationForm";
-import Link from "next/link";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { Info } from "lucide-react";
-import { toast } from "sonner";
 
 export default async function RegisterPage() {
   const session = await getServerSession(authOptions);

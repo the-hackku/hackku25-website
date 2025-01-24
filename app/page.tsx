@@ -41,7 +41,7 @@ export default function HomePage() {
     },
     {
       name: "Security Benefit",
-      logo: "/images/sponsors/security.svg",
+      logo: "/images/sponsors/security.png",
       website: "https://www.securitybenefit.com",
       tier: "Kila",
     },

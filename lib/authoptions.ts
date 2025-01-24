@@ -2,6 +2,9 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/prisma";
 import nodemailer from "nodemailer";
 import EmailProvider from "next-auth/providers/email";
+import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
+import DiscordProvider from "next-auth/providers/discord";
 import type { NextAuthOptions, Session, User } from "next-auth";
 import { htmlTemplate } from "@/utils/htmltemplate";
 
@@ -28,6 +31,18 @@ export const authOptions: NextAuthOptions = {
         }
       },
     }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    }),
+    GitHubProvider({
+      clientId: process.env.GITHUB_CLIENT_ID!,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+    }),
+    DiscordProvider({
+      clientId: process.env.DISCORD_CLIENT_ID!,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET!,
+    }),
   ],
   callbacks: {
     async session({ session, user }: { session: Session; user: User }) {
@@ -36,15 +51,6 @@ export const authOptions: NextAuthOptions = {
         session.user.id = user.id;
       }
       return session;
-    },
-    async redirect({ url, baseUrl }) {
-      // Always redirect to /register after sign-in
-      if (url.startsWith(baseUrl)) {
-        return `${baseUrl}/register`; // Redirect within your app
-      }
-
-      // For external URLs (safety check), fallback to /register
-      return `${baseUrl}/register`;
     },
   },
   adapter: {

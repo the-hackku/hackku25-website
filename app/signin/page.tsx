@@ -8,6 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import {
+  IconBrandDiscord,
+  IconBrandGithub,
+  IconBrandGoogleFilled,
+} from "@tabler/icons-react";
 
 interface SignInForm {
   email: string;
@@ -27,6 +32,18 @@ const SignInPage = () => {
   } = useForm<SignInForm>();
   const email = watch("email");
   const { status } = useSession();
+
+  const handleGoogleSignIn = () => {
+    signIn("google", { callbackUrl: "/register" });
+  };
+
+  const handleGitHubSignIn = () => {
+    signIn("github", { callbackUrl: "/register" });
+  };
+
+  const handleDiscordSignIn = () => {
+    signIn("discord", { callbackUrl: "/register" });
+  };
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -54,7 +71,7 @@ const SignInPage = () => {
       const result = await signIn("email", {
         email,
         redirect: false,
-        callbackUrl: "/",
+        callbackUrl: "/register",
       });
       if (result?.error) {
         setError(
@@ -103,19 +120,55 @@ const SignInPage = () => {
         <Card className="border rounded-lg p-4 shadow-md">
           <CardHeader>
             <CardTitle className="text-center text-lg sm:text-xl">
-              Sign In / Create Account
+              Sign In or Sign Up
             </CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-center text-gray-600 text-sm sm:text-base mb-6">
-              Enter your email address to sign in or create an account.
-              We&apos;ll email you a magic link to sign in.
+              Continue to your account or create a new one in seconds.
             </p>
 
+            {/* Google, Discord, GitHub Sign-In Buttons */}
+            <div className="flex flex-col gap-3 mb-6">
+              <Button
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base  text-white rounded-md transition hover:shadow-md"
+                style={{ backgroundColor: "#4285F4" }}
+                onClick={handleGoogleSignIn}
+              >
+                <IconBrandGoogleFilled className="h-5 w-5" />
+                Continue with Google
+              </Button>
+
+              <Button
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base  text-white rounded-md transition hover:shadow-md"
+                style={{ backgroundColor: "#5865F2" }}
+                onClick={handleDiscordSignIn}
+              >
+                <IconBrandDiscord className="h-5 w-5" />
+                Continue with Discord
+              </Button>
+
+              <Button
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base  text-white rounded-md transition hover:shadow-md"
+                style={{ backgroundColor: "#24292E" }}
+                onClick={handleGitHubSignIn}
+              >
+                <IconBrandGithub className="h-5 w-5" />
+                Continue with GitHub
+              </Button>
+            </div>
+
+            <div className="flex items-center justify-center mb-6">
+              <hr className="w-1/3 border-gray-300" />
+              <p className="mx-2 text-gray-400 text-sm">or</p>
+              <hr className="w-1/3 border-gray-300" />
+            </div>
+
+            {/* Email Sign-In Form */}
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="mb-4">
                 <label
-                  className="block text-sm font-medium mb-1"
+                  className="block text-sm font-medium mb-1 text-gray-700"
                   htmlFor="email"
                 >
                   Email Address
@@ -125,7 +178,7 @@ const SignInPage = () => {
                   placeholder="Enter your email"
                   {...register("email", { required: "Email is required" })}
                   aria-invalid={errors.email ? "true" : "false"}
-                  className="text-sm sm:text-base"
+                  className="w-full text-sm sm:text-base px-4 py-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
                 />
                 {errors.email && (
                   <p className="text-red-500 text-xs sm:text-sm mt-1">
@@ -136,12 +189,13 @@ const SignInPage = () => {
 
               <Button
                 type="submit"
-                className="w-full text-sm sm:text-base bg-blue-600 hover:bg-blue-700"
-                disabled={loading}
+                className="w-full py-3 text-sm sm:text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-md transition hover:shadow-md"
+                disabled={loading || !email}
               >
                 {loading ? "Sending..." : "Send Magic Link"}
               </Button>
             </form>
+
             {error && (
               <p className="text-red-500 text-center text-xs sm:text-sm mt-4">
                 {error}
@@ -166,7 +220,7 @@ const SignInPage = () => {
             <div className="flex justify-center mt-6 gap-4">
               <Button
                 onClick={handleResend}
-                className="text-sm sm:text-base"
+                className="py-3 text-sm sm:text-base bg-blue-600 hover:bg-blue-700 text-white rounded-md transition hover:shadow-md"
                 disabled={loading || resendTimer > 0}
               >
                 {loading
@@ -178,7 +232,7 @@ const SignInPage = () => {
               <Button
                 onClick={handleChangeEmail}
                 variant="outline"
-                className="text-sm sm:text-base"
+                className="py-3 text-sm sm:text-base border-gray-300 rounded-md text-gray-700 hover:border-gray-400 hover:text-gray-900 transition"
               >
                 Change Email
               </Button>
