@@ -110,32 +110,32 @@ export default function HomePage() {
     },
   ];
 
-  const teamMembers = [
-    {
-      name: "James Hurd",
-      role: "Director",
-      image: "/images/team/james.jpeg",
-      linkedin: "https://www.linkedin.com/in/jameshurd2718/",
-    },
-    {
-      name: "Joshua Lee",
-      role: "Vice Director",
-      image: "/images/team/joshua.jpeg",
-      linkedin: "https://www.linkedin.com/in/joshualee128/",
-    },
-    {
-      name: "Will Whitehead",
-      role: "Technology Lead",
-      image: "/images/team/will.jpeg",
-      linkedin: "https://www.linkedin.com/in/willwhitehead122/",
-    },
-    {
-      name: "Andrew Huang",
-      role: "Tech Team",
-      image: "/images/team/andrew.jpeg",
-      linkedin: "https://www.linkedin.com/in/andrew-l-huang/",
-    },
-  ];
+  // const teamMembers = [
+  //   {
+  //     name: "James Hurd",
+  //     role: "Director",
+  //     image: "/images/team/james.jpeg",
+  //     linkedin: "https://www.linkedin.com/in/jameshurd2718/",
+  //   },
+  //   {
+  //     name: "Joshua Lee",
+  //     role: "Vice Director",
+  //     image: "/images/team/joshua.jpeg",
+  //     linkedin: "https://www.linkedin.com/in/joshualee128/",
+  //   },
+  //   {
+  //     name: "Will Whitehead",
+  //     role: "Technology Lead",
+  //     image: "/images/team/will.jpeg",
+  //     linkedin: "https://www.linkedin.com/in/willwhitehead122/",
+  //   },
+  //   {
+  //     name: "Andrew Huang",
+  //     role: "Tech Team",
+  //     image: "/images/team/andrew.jpeg",
+  //     linkedin: "https://www.linkedin.com/in/andrew-l-huang/",
+  //   },
+  // ];
 
   return (
     <div className="w-full min-h-screen overflow-x-hidden overflow-y-auto text-white font-agency">

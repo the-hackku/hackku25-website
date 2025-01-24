@@ -150,63 +150,57 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
 
           {/* Mobile Menu */}
           <header className="lg:hidden">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="ghost">
-                  <IconMenu2 size={32} />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="right">
-                <nav className="flex flex-col space-y-4 pt-4">
-                  <Link href="/" passHref>
-                    <SheetClose asChild>
-                      <span className="flex items-center text-xl">
-                        <IconHome2 size={24} className="mr-2" />
-                        Home
-                      </span>
-                    </SheetClose>
-                  </Link>
-                  <Link href="/schedule" passHref>
-                    <SheetClose asChild>
-                      <span className="flex items-center text-xl">
-                        <IconCalendar size={24} className="mr-2" />
-                        Schedule
-                      </span>
-                    </SheetClose>
-                  </Link>
-                  <Link href="/info" passHref>
-                    <SheetClose asChild>
-                      <span className="flex items-center text-xl">
-                        <IconInfoCircle size={24} className="mr-2" />
-                        HackerDoc
-                      </span>
-                    </SheetClose>
-                  </Link>
-                  <hr className="my-4" />
-                  <Link href="/profile" passHref>
-                    <SheetClose asChild>
-                      <span className="flex items-center text-xl">
-                        <IconUser size={24} className="mr-2" />
-                        {isAuthenticated ? "Profile" : "Sign In"}
-                      </span>
-                    </SheetClose>
-                  </Link>
-                  {isAdmin && (
-                    <>
-                      <hr className="my-4" />
-                      <Link href="/admin/scanner" passHref>
-                        <SheetClose asChild>
-                          <span className="flex items-center text-xl">
-                            <IconQrcode size={24} className="mr-2" />
-                            Admin Scanner
-                          </span>
-                        </SheetClose>
-                      </Link>
-                    </>
-                  )}
-                </nav>
-              </SheetContent>
-            </Sheet>
+            <div className="flex items-center">
+              {isAdmin && (
+                <Link href="/admin/scanner" passHref>
+                  <IconQrcode size={32} />
+                </Link>
+              )}
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="ghost">
+                    <IconMenu2 size={32} />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="right">
+                  <nav className="flex flex-col space-y-4 pt-4">
+                    <Link href="/" passHref>
+                      <SheetClose asChild>
+                        <span className="flex items-center text-xl">
+                          <IconHome2 size={24} className="mr-2" />
+                          Home
+                        </span>
+                      </SheetClose>
+                    </Link>
+                    <Link href="/schedule" passHref>
+                      <SheetClose asChild>
+                        <span className="flex items-center text-xl">
+                          <IconCalendar size={24} className="mr-2" />
+                          Schedule
+                        </span>
+                      </SheetClose>
+                    </Link>
+                    <Link href="/info" passHref>
+                      <SheetClose asChild>
+                        <span className="flex items-center text-xl">
+                          <IconInfoCircle size={24} className="mr-2" />
+                          HackerDoc
+                        </span>
+                      </SheetClose>
+                    </Link>
+                    <hr className="my-4" />
+                    <Link href="/profile" passHref>
+                      <SheetClose asChild>
+                        <span className="flex items-center text-xl">
+                          <IconUser size={24} className="mr-2" />
+                          {isAuthenticated ? "Profile" : "Sign In"}
+                        </span>
+                      </SheetClose>
+                    </Link>
+                  </nav>
+                </SheetContent>
+              </Sheet>
+            </div>
           </header>
 
           {/* Center Tabs (Always Visible) (Desktop Only) */}
