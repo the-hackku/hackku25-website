@@ -31,7 +31,7 @@ export function FormCheckboxField({
           </FormControl>
           <FormLabel className="m-0">
             {label}
-            {required && <span className="text-red-500">*</span>}
+            {required && <span className="text-red-500 m-0">*</span>}
           </FormLabel>
         </FormItem>
       )}

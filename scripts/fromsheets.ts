@@ -1,9 +1,14 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-const { google } = require("googleapis");
-const { PrismaClient } = require("@prisma/client");
-const dotenv = require("dotenv");
+import { google } from "googleapis";
+import { PrismaClient } from "@prisma/client";
+import dotenv from "dotenv";
 
 dotenv.config();
+
+// const { google } = require("googleapis");
+// const { PrismaClient } = require("@prisma/client");
+// const dotenv = require("dotenv");
+
+// dotenv.config();
 
 const prisma = new PrismaClient();
 const sheets = google.sheets("v4");

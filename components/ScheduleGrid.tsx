@@ -167,8 +167,14 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
     return acc;
   }, {} as Record<string, ScheduleGridProps["schedule"]>);
 
-  const earliestEventIndex = filteredEvents.length
-    ? Math.min(...filteredEvents.map((event) => getRowIndex(event.startDate)))
+  // Determine earliest event index based on selected day
+  const dayEvents =
+    selectedDay === "All"
+      ? filteredEvents
+      : filteredGroupedEvents[selectedDay] || [];
+
+  const earliestEventIndex = dayEvents.length
+    ? Math.min(...dayEvents.map((event) => getRowIndex(event.startDate)))
     : 0;
 
   const firstEventSlotIndex = Math.max(0, earliestEventIndex - 2);
@@ -268,7 +274,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
               {slots.map((slotIndex) => (
                 <tr key={slotIndex} className="h-8">
                   <td
-                    className={`border-r border-gray-300 text-xs text-right pr-2 ${
+                    className={`border-r border-dashed border-gray-300 text-xs text-right pr-2 ${
                       slotIndex % 2 === 1 ? "border-b border-dashed" : ""
                     }`}
                   >
@@ -277,8 +283,10 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                   {(selectedDay === "All" ? days : [selectedDay]).map((day) => (
                     <td
                       key={day}
-                      className={`relative border ${
-                        slotIndex % 2 === 1 ? "border-b border-dashed" : ""
+                      className={`relative border-r border-gray-300 overflow-visible ${
+                        slotIndex % 2 === 1
+                          ? "border-b border-dashed" // Half-hour row: dashed
+                          : "border-b" // Hour row: solid
                       }`}
                     >
                       {filteredGroupedEvents[day]
@@ -306,7 +314,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                               height: `${
                                 getRowSpan(event.startDate, event.endDate) * 2
                               }rem`,
-                              zIndex: getRowIndex(event.startDate),
+                              zIndex: 2,
                             }}
                           >
                             <CardTitle className="text-sm font-bold flex justify-between">
@@ -402,30 +410,38 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
               {/* Bottom Section: Pagination Buttons */}
               <div className="flex justify-between items-center mt-6 pt-4 border-t">
                 {/* Left Button: Previous Event */}
-                {getPreviousEvent(selectedEvent) ? (
-                  <button
-                    onClick={() =>
-                      setSelectedEvent(getPreviousEvent(selectedEvent))
+                <button
+                  onClick={() => {
+                    if (getPreviousEvent(selectedEvent)) {
+                      setSelectedEvent(getPreviousEvent(selectedEvent));
                     }
-                    className="text-gray-600 hover:text-gray-900 focus:outline-none"
-                  >
-                    &larr; Previous
-                  </button>
-                ) : (
-                  <span /> // Spacer element to maintain alignment
-                )}
+                  }}
+                  className={`${
+                    !getPreviousEvent(selectedEvent)
+                      ? "opacity-30 cursor-not-allowed"
+                      : "hover:text-gray-900 focus:outline-none"
+                  } text-gray-600 `}
+                  disabled={!getPreviousEvent(selectedEvent)}
+                >
+                  &larr; Previous
+                </button>
 
                 {/* Right Button: Next Event */}
-                {getNextEvent(selectedEvent) && (
-                  <button
-                    onClick={() =>
-                      setSelectedEvent(getNextEvent(selectedEvent))
+                <button
+                  onClick={() => {
+                    if (getNextEvent(selectedEvent)) {
+                      setSelectedEvent(getNextEvent(selectedEvent));
                     }
-                    className="text-gray-600 hover:text-gray-900 focus:outline-none"
-                  >
-                    Next &rarr;
-                  </button>
-                )}
+                  }}
+                  className={`${
+                    !getNextEvent(selectedEvent)
+                      ? "opacity-30 cursor-not-allowed"
+                      : "hover:text-gray-900 focus:outline-none"
+                  } text-gray-600 `}
+                  disabled={!getNextEvent(selectedEvent)}
+                >
+                  Next &rarr;
+                </button>
               </div>
             </motion.div>
           ) : (

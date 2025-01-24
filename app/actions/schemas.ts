@@ -20,9 +20,7 @@ export const formSchema = z
         }
       )
       .transform((value) => value.replace(/\D/g, "")),
-    age: z.string().refine((value) => /^\d+$/.test(value), {
-      message: "Age must be a number.",
-    }),
+    age: z.coerce.number().int().min(13, "You must be at least 13 years old."),
 
     genderIdentity: z
       .enum(["Male", "Female", "Non-binary", "Other", "Prefer not to Answer"])
@@ -36,7 +34,7 @@ export const formSchema = z
     currentSchool: z.string(),
     levelOfStudy: z.enum(["High School", "Undergraduate", "Graduate", "Other"]),
     major: z.string().optional(),
-    previousHackathons: z.string(),
+    previousHackathons: z.coerce.number(),
     chaperoneFirstName: z.string().optional(),
     chaperoneLastName: z.string().optional(),
     chaperoneEmail: z.string().optional(),
@@ -51,6 +49,9 @@ export const formSchema = z
       message: "You must agree to share your data with MLH.",
     }),
     receiveEmails: z.boolean().optional(),
+    photoWaiver: z.boolean().refine((value) => value === true, {
+      message: "You must agree to the waiver.",
+    }),
   })
   .superRefine((data, ctx) => {
     if (data.levelOfStudy === "High School") {

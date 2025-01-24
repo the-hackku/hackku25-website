@@ -425,7 +425,7 @@ export function RegistrationForm() {
             {/* Agreements Section */}
             <hr className="my-4" />
             <h2 className="text-lg font-semibold mb-2">Agreements</h2>
-            <div className="space-y-3">
+            <div className="space-y-4">
               <FormCheckboxField
                 name="agreeHackKUCode"
                 label={
@@ -438,6 +438,23 @@ export function RegistrationForm() {
                   </>
                 }
                 required={isFieldRequired("agreeHackKUCode")}
+              />
+              <FormCheckboxField
+                name="photoWaiver"
+                label={
+                  <>
+                    I agree to the{" "}
+                    <Link
+                      href="https://docs.google.com/document/d/1HBLL_QggxCymsCMMIsNulNvK0twMgSxP/"
+                      className="underline"
+                      target="_blank"
+                    >
+                      HackKU Waiver / Photo Release
+                    </Link>
+                    .
+                  </>
+                }
+                required={true}
               />
               <FormCheckboxField
                 name="agreeMLHCode"
@@ -505,7 +522,7 @@ export function RegistrationForm() {
             </div>
             <Button
               type="submit"
-              disabled={form.formState.isSubmitting}
+              disabled={form.formState.isSubmitting || !form.formState.isValid}
               className="w-full bg-blue-500 hover:bg-blue-600 text-white"
             >
               Register!

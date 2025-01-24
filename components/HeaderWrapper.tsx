@@ -1,28 +1,33 @@
 import RegisterAlert from "./RegisterAlert";
 import Header from "./Header";
-import { isAdmin } from "@/middlewares/isAdmin";
 import { prisma } from "@/prisma";
+import { authOptions } from "@/lib/authoptions";
+import { getServerSession } from "next-auth";
 
-// This is a server component
 export default async function HeaderWrapper() {
-  try {
-    const session = await isAdmin(); // Get the session; throws an error if the user is not logged in
-    const user = await prisma.user.findUnique({
-      where: { email: session.user.email },
-      include: { ParticipantInfo: true },
-    });
+  // 1. Try to get the session; null if not logged in
+  const session = await getServerSession(authOptions);
 
-    const isAdminUser = user?.role === "ADMIN";
-    const isRegistered = Boolean(user?.ParticipantInfo);
-
-    return (
-      <>
-        {!isRegistered && <RegisterAlert />}
-        <Header isAdmin={isAdminUser} />
-      </>
-    );
-  } catch {
-    // If not logged in, render the header without the alert
+  if (!session) {
+    // 2. If user is NOT logged in, no alert, just the basic Header
     return <Header isAdmin={false} />;
   }
+
+  // 3. If user is logged in, find them in the DB
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    include: { ParticipantInfo: true },
+  });
+
+  // 4. Determine if they’re an admin & if they’re registered
+  const isAdminUser = user?.role === "ADMIN";
+  const isRegistered = Boolean(user?.ParticipantInfo);
+
+  // 5. Show alert if they’re logged in but not registered
+  return (
+    <>
+      {!isRegistered && <RegisterAlert />}
+      <Header isAdmin={isAdminUser} />
+    </>
+  );
 }

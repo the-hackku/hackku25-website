@@ -117,7 +117,8 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
     px-4
     py-4
     ${headerBackground}
-  `}
+    ${isMobile ? "backdrop-blur-md bg-white/80" : ""}
+    `}
     >
       <div className="container mx-auto max-w-7xl">
         <div className="flex items-center justify-between">

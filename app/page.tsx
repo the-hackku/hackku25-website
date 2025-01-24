@@ -47,7 +47,7 @@ export default function HomePage() {
     },
     {
       name: "Patient Safety",
-      logo: "/images/sponsors/patient.gif",
+      logo: "/images/sponsors/patient.png",
       website: "https://www.patientsafetytech.com/",
       tier: "Mega",
     },
@@ -113,7 +113,6 @@ export default function HomePage() {
         onMouseMove={handleMouseMove}
         onMouseLeave={resetTilt}
       >
-
         <motion.div
           className="z-10 max-w-[80%] text-center md:text-left md:max-w-[60%]"
           style={{
@@ -121,7 +120,6 @@ export default function HomePage() {
             transition: isMouseOver
               ? "transform .1s ease-out"
               : "transform 1s ease-out",
-            textShadow: `-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000`,
           }}
         >
           <motion.p
@@ -172,7 +170,7 @@ export default function HomePage() {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-6 py-5 bg-yellow-500 rounded-full text-3xl md:text-2xl text-black font-agency md:px-6 md:py-3"
+                className="px-5 py-4 bg-yellow-500 rounded-full text-3xl md:text-2xl text-black font-agency md:px-6 md:py-3"
               >
                 Register Now!
               </motion.button>
@@ -196,7 +194,7 @@ export default function HomePage() {
 
         {/* Background SVG */}
         <div className="absolute bottom-0 left-[32%] transform -translate-x-[32%] z-0 w-full h-full">
-          <AllSvg className="w-full h-full object-cover"/>
+          <AllSvg className="w-full h-full object-cover" />
         </div>
       </section>
 

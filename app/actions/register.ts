@@ -3,14 +3,17 @@
 import { PrismaClient } from "@prisma/client";
 import { authOptions } from "@/lib/authoptions";
 import { getServerSession } from "next-auth";
-import { RegistrationData } from "./schemas"; // Import the type from the new file
+import {
+  exportToGoogleSheet,
+  UserWithParticipantInfo,
+} from "@/scripts/googleSheetsExport";
+import { RegistrationData } from "@/app/actions/schemas"; // Import the shared schema
 
 const prisma = new PrismaClient();
 
-// Server action for registering a user
 export async function registerUser(data: RegistrationData) {
   const session = await getServerSession(authOptions);
-  if (!session || !session.user?.email) {
+  if (!session?.user?.email) {
     throw new Error("User not authenticated");
   }
 
@@ -22,33 +25,28 @@ export async function registerUser(data: RegistrationData) {
     throw new Error("User not found");
   }
 
-  // Convert age and previousHackathons to numbers
-  const age = parseInt(data.age) || 0;
-  const previousHackathons = parseInt(data.previousHackathons) || 0;
-
-  // Create a ParticipantInfo record linked to the user
-  await prisma.participantInfo.create({
+  const participantInfo = await prisma.participantInfo.create({
     data: {
       userId: user.id,
       firstName: data.firstName,
       lastName: data.lastName,
       phoneNumber: data.phoneNumber,
-      age: age,
-      genderIdentity: data.genderIdentity || "",
-      race: data.race || "",
-      hispanicOrLatino: data.hispanicOrLatino || "",
-      countryOfResidence: data.countryOfResidence || "",
+      age: data.age,
+      genderIdentity: data.genderIdentity ?? "",
+      race: data.race ?? "",
+      hispanicOrLatino: data.hispanicOrLatino ?? "",
+      countryOfResidence: data.countryOfResidence ?? "",
       tShirtSize: data.tShirtSize,
-      dietaryRestrictions: data.dietaryRestrictions || "",
-      specialAccommodations: data.specialAccommodations || "",
-      currentSchool: data.currentSchool || "",
-      levelOfStudy: data.levelOfStudy || "",
-      major: data.major || "",
-      previousHackathons: previousHackathons,
-      chaperoneFirstName: data.chaperoneFirstName || "",
-      chaperoneLastName: data.chaperoneLastName || "",
-      chaperoneEmail: data.chaperoneEmail || "",
-      chaperonePhoneNumber: data.chaperonePhoneNumber || "",
+      dietaryRestrictions: data.dietaryRestrictions ?? "",
+      specialAccommodations: data.specialAccommodations ?? "",
+      currentSchool: data.currentSchool ?? "",
+      levelOfStudy: data.levelOfStudy ?? "",
+      major: data.major ?? "",
+      previousHackathons: data.previousHackathons ?? 0,
+      chaperoneFirstName: data.chaperoneFirstName ?? "",
+      chaperoneLastName: data.chaperoneLastName ?? "",
+      chaperoneEmail: data.chaperoneEmail ?? "",
+      chaperonePhoneNumber: data.chaperonePhoneNumber ?? "",
       agreeHackKUCode: data.agreeHackKUCode,
       agreeMLHCode: data.agreeMLHCode,
       shareWithMLH: data.shareWithMLH ?? false,
@@ -56,6 +54,16 @@ export async function registerUser(data: RegistrationData) {
       isHighSchoolStudent: data.levelOfStudy === "High School",
     },
   });
+
+  try {
+    const userWithInfo: UserWithParticipantInfo = {
+      ...user,
+      ParticipantInfo: participantInfo,
+    };
+    await exportToGoogleSheet(userWithInfo);
+  } catch (error) {
+    console.error("Error updating Google Sheet:", error);
+  }
 
   return { success: true };
 }
