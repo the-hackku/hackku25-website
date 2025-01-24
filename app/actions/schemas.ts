@@ -15,8 +15,7 @@ export const formSchema = z
         (value) =>
           /^[0-9()-\s]+$/.test(value) && value.replace(/\D/g, "").length === 10,
         {
-          message:
-            "Phone number must be 10 digits and match the format (XXX) XXX-XXXX.",
+          message: "Phone number must be 10 digits",
         }
       )
       .transform((value) => value.replace(/\D/g, "")),

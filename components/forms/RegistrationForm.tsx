@@ -238,9 +238,39 @@ export function RegistrationForm() {
           <CardTitle className="text-center text-xl py-4">
             HackKU25 Registration
           </CardTitle>
+
           <span className="text-sm font-medium">{progress}% Complete</span>
         </div>
-        <Progress value={progress} className="w-full h-2" />
+        <Progress value={progress} className="w-full h-2 my-6" />
+
+        <p className="pt-4 text-sm">
+          HackKU25 will be held at the University of Kansas School of
+          Engineering from April 4th - 6th, in-person. Check out our website{" "}
+          <Link href="https://hackku.org" className="underline" target="_blank">
+            hackku.org
+          </Link>{" "}
+          for more information or reach out to{" "}
+          <Link href="mailto:hack@ku.edu" className="underline">
+            hack@ku.edu
+          </Link>{" "}
+          with any questions.
+        </p>
+        <p className="pt-2 text-sm">
+          <b>ALL</b> high schoolers under the age of 18 must have an adult
+          chaperone in attendance with them. Chaperones may accompany a single
+          student or a group of students.
+        </p>
+        <p className="pt-2 text-sm">
+          You must be a student to attend, if you are a working professional and
+          would like to volunteer during the event, please contact us via{" "}
+          <Link href="mailto:hack@ku.edu" className="underline">
+            hack@ku.edu
+          </Link>{" "}
+          .
+        </p>
+        <p className="pt-2 text-sm">
+          We are excited to create with you in April! ❤️😁
+        </p>
       </CardHeader>
       <CardContent>
         <FormProvider {...form}>
@@ -315,6 +345,10 @@ export function RegistrationForm() {
                     {
                       label: "Electrical Engineering",
                       value: "Electrical Engineering",
+                    },
+                    {
+                      label: "Computer Engineering",
+                      value: "Computer Engineering",
                     },
                     {
                       label: "Mechanical Engineering",
@@ -443,15 +477,45 @@ export function RegistrationForm() {
                 name="photoWaiver"
                 label={
                   <>
-                    I agree to the{" "}
-                    <Link
-                      href="https://docs.google.com/document/d/1HBLL_QggxCymsCMMIsNulNvK0twMgSxP/"
-                      className="underline"
-                      target="_blank"
-                    >
-                      HackKU Waiver / Photo Release
-                    </Link>
-                    .
+                    {form.getValues().levelOfStudy === "High School" ? (
+                      <>
+                        By checking this box, I certify that I am the parent or
+                        guardian of the participant and consent to the terms of
+                        the Photo Release and Participation Waiver on their
+                        behalf. I am the parent/guardian and consent to the
+                        above terms.{" "}
+                        <Link
+                          href="https://docs.google.com/document/d/1HBLL_QggxCymsCMMIsNulNvK0twMgSxP/"
+                          className="underline"
+                          target="_blank"
+                        >
+                          HackKU Waiver / Photo Release
+                        </Link>
+                      </>
+                    ) : (
+                      <>
+                        By checking this box, I agree to the following: I
+                        release The University of Kansas, the Kansas Board of
+                        Regents, the KU School of Engineering, HackKU, ACM, and
+                        their representatives from all claims, damages, or
+                        liabilities arising from my participation in HackKU
+                        activities. I authorize HackKU to take and use photos,
+                        videos, and recordings of me for promotional or
+                        informational purposes, with HackKU retaining all
+                        rights, including copyright, to these materials. I
+                        acknowledge that this agreement is governed by Kansas
+                        law.{" "}
+                        <Link
+                          href="https://docs.google.com/document/d/1HBLL_QggxCymsCMMIsNulNvK0twMgSxP/"
+                          className="underline"
+                          target="_blank"
+                        >
+                          HackKU Waiver / Photo Release
+                        </Link>
+                        . I have read and agree to the Photo Release and
+                        Participation Waiver.
+                      </>
+                    )}
                   </>
                 }
                 required={true}

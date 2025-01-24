@@ -100,19 +100,16 @@ export function ComboboxSelect({
                   align="start"
                   sideOffset={4}
                 >
-                  <Command>
+                  <Command shouldFilter={false}>
                     <CommandInput
                       placeholder={`Search ${label.toLowerCase()}...`}
                       value={inputValue}
-                      onValueChange={(val) => {
-                        setInputValue(val);
-                      }}
+                      onValueChange={(val) => setInputValue(val)}
                     />
                     <CommandList>
                       {filteredOptions.length === 0 && !allowCustomInput && (
                         <CommandEmpty>No results found.</CommandEmpty>
                       )}
-
                       {filteredOptions.length > 0 && (
                         <CommandGroup>
                           {filteredOptions.map((option) => (
