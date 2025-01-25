@@ -5,7 +5,7 @@ import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import DiscordProvider from "next-auth/providers/discord";
-import type { NextAuthOptions, Session, User } from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import { htmlTemplate } from "@/utils/htmltemplate";
 
 const transporter = nodemailer.createTransport(process.env.EMAIL_SERVER);
