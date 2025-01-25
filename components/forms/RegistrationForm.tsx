@@ -119,18 +119,21 @@ export function RegistrationForm() {
       label: "First Name",
       placeholder: "First name",
       required: isFieldRequired("firstName"),
+      type: "text", // Default to text
     },
     {
       name: "lastName" as const,
       label: "Last Name",
       placeholder: "Last name",
       required: isFieldRequired("lastName"),
+      type: "text", // Default to text
     },
     {
       name: "phoneNumber" as const,
       label: "Phone Number",
       placeholder: "Phone number",
       required: isFieldRequired("phoneNumber"),
+      type: "number",
     },
     {
       name: "age" as const,
@@ -321,9 +324,11 @@ export function RegistrationForm() {
               ))}
             </div>
             <div className="flex space-x-4">
-              <FormInputField {...personalInfoFields[2]} />
-              <FormInputField {...personalInfoFields[3]} />
+              {personalInfoFields.slice(2).map((field) => (
+                <FormInputField key={field.name} {...field} />
+              ))}
             </div>
+
             {/* Select Fields */}
             <div className="flex space-x-4">
               <ComboboxSelect

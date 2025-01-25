@@ -24,7 +24,7 @@ export function FormInputField({
   label,
   placeholder,
   required = false,
-  type = "text",
+  type = "text", // Default to text
   formatValue,
 }: FormInputFieldProps) {
   const { control } = useFormContext();
@@ -41,7 +41,7 @@ export function FormInputField({
           </FormLabel>
           <FormControl>
             <Input
-              type={type}
+              type={type} // Use the type dynamically
               placeholder={placeholder}
               value={formatValue ? formatValue(field.value) : field.value || ""}
               onChange={(e) => field.onChange(e.target.value)}
