@@ -47,3 +47,4 @@ yarn-error.log*
 *.tsbuildinfo
 
 dev.db is still included
+failed_entries.log

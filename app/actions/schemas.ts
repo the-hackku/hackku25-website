@@ -13,13 +13,15 @@ export const formSchema = z
       .string()
       .refine(
         (value) =>
-          /^[0-9()-\s]+$/.test(value) && value.replace(/\D/g, "").length === 10,
+          /^[0-9()-\s]+$/.test(value) &&
+          (value.replace(/\D/g, "").length === 10 ||
+            value.replace(/\D/g, "").length === 11),
         {
-          message: "Phone number must be 10 digits",
+          message: "Phone number must be 10 or 11 digits",
         }
       )
       .transform((value) => value.replace(/\D/g, "")),
-    age: z.coerce.number().int().min(13, "You must be at least 13 years old."),
+    age: z.coerce.number().int().min(14, "You must be at least 14 years old."),
 
     genderIdentity: z
       .enum(["Male", "Female", "Non-binary", "Other", "Prefer not to Answer"])

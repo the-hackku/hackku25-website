@@ -28,20 +28,55 @@ import constants from "@/constants";
 // Predefined options
 const predefinedSchools = [
   { label: "University of Kansas", value: "University of Kansas" },
+  {
+    label: "University of Nebraska at Kearney",
+    value: "University of Nebraska at Kearney",
+  },
   { label: "Kansas State University", value: "Kansas State University" },
+  { label: "Arizona State University", value: "Arizona State University" },
+  {
+    label: "Florida International University",
+    value: "Florida International University",
+  },
+  { label: "Colorado School of Mines", value: "Colorado School of Mines" },
+  { label: "Grinnell College", value: "Grinnell College" },
+  {
+    label: "Johnson County Community College",
+    value: "Johnson County Community College",
+  },
+  { label: "San Jose State University", value: "San Jose State University" },
+  {
+    label: "University of Missouri St. Louis",
+    value: "University of Missouri St. Louis",
+  },
   {
     label: "University of Missouri-Kansas City",
     value: "University of Missouri-Kansas City",
   },
   {
+    label: "University of Nebraska Kearney",
+    value: "University of Nebraska Kearney",
+  },
+  { label: "Blue Valley CAPS", value: "Blue Valley CAPS" },
+  {
     label: "Haskell Indian Nations University",
     value: "Haskell Indian Nations University",
   },
-  { label: "Wichita State University", value: "Wichita State University" },
   {
-    label: "Johnson County Community College",
-    value: "Johnson County Community College",
+    label: "Northwest Missouri State University",
+    value: "Northwest Missouri State University",
   },
+  { label: "Saint Louis University", value: "Saint Louis University" },
+  {
+    label: "University of Central Florida",
+    value: "University of Central Florida",
+  },
+  {
+    label: "University of Central Missouri",
+    value: "University of Central Missouri",
+  },
+  { label: "University of Minnesota", value: "University of Minnesota" },
+  { label: "University of Rochester", value: "University of Rochester" },
 ];
 
 export function RegistrationForm() {
@@ -127,8 +162,8 @@ export function RegistrationForm() {
   ];
 
   const raceOptions: { label: string; value: Race }[] = [
-    { label: "White", value: "White" },
     { label: "Black or African American", value: "Black or African American" },
+    { label: "White", value: "White" },
     { label: "Asian", value: "Asian" },
     {
       label: "Native Hawaiian or Other Pacific Islander",
@@ -157,7 +192,6 @@ export function RegistrationForm() {
     { label: "Large", value: "L" },
     { label: "XL", value: "XL" },
     { label: "XXL", value: "XXL" },
-    { label: "XXXL", value: "XXXL" },
   ];
 
   const levelOfStudyOptions: { label: string; value: LevelOfStudy }[] = [
@@ -171,11 +205,13 @@ export function RegistrationForm() {
     try {
       // Replace with your registration function
       await registerUser(data);
-      toast.success("Registration successful!");
       router.push("/profile");
+      toast.success("Registration successful!");
     } catch (error) {
       console.error("Failed to register:", error);
-      toast.error("Registration failed, please try again.");
+      toast.error(
+        "Registration failed, please try again. Please contact support if the issue persists."
+      );
     }
   };
 
@@ -251,7 +287,11 @@ export function RegistrationForm() {
           <Link href={`mailto:${constants.supportEmail}`} className="underline">
             {constants.supportEmail}
           </Link>{" "}
-          with any questions.
+          or join our{" "}
+          <Link href={constants.discordInvite} className="underline">
+            Discord
+          </Link>{" "}
+          server for questions.
         </p>
         <p className="pt-2 text-sm">
           <b>ALL</b> high schoolers under the age of 18 must have an adult
@@ -266,9 +306,10 @@ export function RegistrationForm() {
           </Link>{" "}
           .
         </p>
-        <p className="pt-2 text-sm">
+        <p className="py-2 text-sm">
           We are excited to create with you in April! ❤️😁
         </p>
+        <hr />
       </CardHeader>
       <CardContent>
         <FormProvider {...form}>
@@ -289,25 +330,57 @@ export function RegistrationForm() {
             </div>
             {/* Select Fields */}
             <div className="flex space-x-4">
+              <ComboboxSelect
+                name="countryOfResidence"
+                label="Country of Residence"
+                required={isFieldRequired("countryOfResidence")}
+                placeholder="Select your country"
+                options={[
+                  { label: "United States", value: "United States" },
+                  { label: "Canada", value: "Canada" },
+                  { label: "Mexico", value: "Mexico" },
+                  { label: "Brazil", value: "Brazil" },
+                  { label: "United Kingdom", value: "United Kingdom" },
+                  { label: "Germany", value: "Germany" },
+                  { label: "France", value: "France" },
+                  { label: "Spain", value: "Spain" },
+                  { label: "Italy", value: "Italy" },
+                  { label: "China", value: "China" },
+                  { label: "Japan", value: "Japan" },
+                  { label: "Australia", value: "Australia" },
+                  { label: "India", value: "India" },
+                  { label: "Singapore", value: "Singapore" },
+                  { label: "India", value: "India" },
+                  { label: "Singapore", value: "Singapore" },
+                ]}
+                allowCustomInput
+                closeOnSelect
+              />
               <FormSelectField<GenderIdentity>
                 name="genderIdentity"
                 label="Gender Identity"
                 options={genderIdentityOptions}
                 required={isFieldRequired("genderIdentity")}
               />
-              <FormSelectField<Race>
+            </div>
+            <div className="flex space-x-4">
+              <ComboboxSelect
                 name="race"
                 label="Race"
-                options={raceOptions}
                 required={isFieldRequired("race")}
+                placeholder="Race"
+                options={raceOptions}
+                closeOnSelect
+                multiselect
+              />
+
+              <FormSelectField<HispanicOrLatino>
+                name="hispanicOrLatino"
+                label="Are you Hispanic or Latino?"
+                options={hispanicOrLatinoOptions}
+                required={isFieldRequired("hispanicOrLatino")}
               />
             </div>
-            <FormSelectField<HispanicOrLatino>
-              name="hispanicOrLatino"
-              label="Are you Hispanic or Latino?"
-              options={hispanicOrLatinoOptions}
-              required={isFieldRequired("hispanicOrLatino")}
-            />
 
             {/* Education Information Section */}
             <hr className="my-4" />
@@ -344,61 +417,92 @@ export function RegistrationForm() {
                     options={[
                       { label: "Computer Science", value: "Computer Science" },
                       {
-                        label: "Electrical Engineering",
-                        value: "Electrical Engineering",
-                      },
-                      {
                         label: "Computer Engineering",
                         value: "Computer Engineering",
                       },
-                      {
-                        label: "Mechanical Engineering",
-                        value: "Mechanical Engineering",
-                      },
-                      {
-                        label: "Business Administration",
-                        value: "Business Administration",
-                      },
-                      { label: "Psychology", value: "Psychology" },
-                      { label: "Biology", value: "Biology" },
-                    ]}
-                    allowCustomInput
-                    closeOnSelect={false}
-                    multiselect
-                  />
-                  <ComboboxSelect
-                    name="minor"
-                    label="Minor(s)"
-                    required={isFieldRequired("minor")}
-                    placeholder="Select your minor(s)"
-                    options={[
-                      { label: "Computer Science", value: "Computer Science" },
                       {
                         label: "Electrical Engineering",
                         value: "Electrical Engineering",
                       },
                       {
-                        label: "Computer Engineering",
-                        value: "Computer Engineering",
+                        label: "Aerospace Engineering",
+                        value: "Aerospace Engineering",
+                      },
+                      {
+                        label: "Chemical Engineering",
+                        value: "Chemical Engineering",
+                      },
+                      {
+                        label: "Interdisciplinary Engineering",
+                        value: "Interdisciplinary Engineering",
                       },
                       {
                         label: "Mechanical Engineering",
                         value: "Mechanical Engineering",
                       },
+                      { label: "Cybersecurity", value: "Cybersecurity" },
+                      {
+                        label: "Information Systems Technology",
+                        value: "Information Systems Technology",
+                      },
+                      {
+                        label: "Applied Computing",
+                        value: "Applied Computing",
+                      },
                       {
                         label: "Business Administration",
                         value: "Business Administration",
                       },
-                      { label: "Psychology", value: "Psychology" },
-                      { label: "Biology", value: "Biology" },
                     ]}
                     allowCustomInput
-                    closeOnSelect={false}
+                    closeOnSelect
                     multiselect
                   />
                 </>
               )}
             </div>
+            {!showChaperoneFields && (
+              <ComboboxSelect
+                name="minor"
+                label="Minor(s) / Certificate(s)"
+                required={isFieldRequired("minor")}
+                placeholder="Select your minor(s)"
+                options={[
+                  { label: "Psychology", value: "Psychology" },
+                  { label: "Biology", value: "Biology" },
+                  { label: "Mathematics", value: "Mathematics" },
+                  { label: "Physics", value: "Physics" },
+                  { label: "Chemistry", value: "Chemistry" },
+                  { label: "Philosophy", value: "Philosophy" },
+                  { label: "Music", value: "Music" },
+                  { label: "Art", value: "Art" },
+                  { label: "Dance", value: "Dance" },
+                  { label: "Theatre", value: "Theatre" },
+                  { label: "Film", value: "Film" },
+                  { label: "Journalism", value: "Journalism" },
+                  { label: "History", value: "History" },
+                  { label: "Sociology", value: "Sociology" },
+                  { label: "Political Science", value: "Political Science" },
+                  {
+                    label: "African & African-American Studies",
+                    value: "African & African-American Studies",
+                  },
+                  { label: "Economics", value: "Economics" },
+                  { label: "Geography", value: "Geography" },
+                  {
+                    label: "Environmental Studies",
+                    value: "Environmental Studies",
+                  },
+                  {
+                    label: "Global & International Studies",
+                    value: "Global & International Studies",
+                  },
+                ]}
+                allowCustomInput
+                multiselect
+                closeOnSelect
+              />
+            )}
 
             {/* Chaperone Information */}
             {showChaperoneFields && (
@@ -445,19 +549,7 @@ export function RegistrationForm() {
             {/* Additional Information Section */}
             <hr className="my-4" />
             <h2 className="text-lg font-semibold">Additional Information</h2>
-            <ComboboxSelect
-              name="countryOfResidence"
-              label="Country of Residence"
-              required={isFieldRequired("countryOfResidence")}
-              placeholder="Select your country"
-              options={[
-                { label: "United States", value: "United States" },
-                { label: "Canada", value: "Canada" },
-                // Add more countries as needed
-              ]}
-              allowCustomInput
-              closeOnSelect
-            />
+
             <div className="flex space-x-4">
               <FormSelectField<TShirtSize>
                 name="tShirtSize"
@@ -474,17 +566,22 @@ export function RegistrationForm() {
                 required={isFieldRequired("previousHackathons")}
               />
             </div>
-            <div className="flex space-x-4">
-              <FormInputField
-                name="dietaryRestrictions"
-                label="Dietary Restrictions"
-                placeholder="Enter any dietary restrictions"
-                required={isFieldRequired("dietaryRestrictions")}
-              />
+            <FormInputField
+              name="dietaryRestrictions"
+              label="Dietary Restrictions"
+              placeholder="Enter any dietary restrictions"
+              required={isFieldRequired("dietaryRestrictions")}
+            />
+            <div>
+              <p className="mb-2 text-sm">
+                When planning HackKU25, inclusivity is our top priority! How can
+                we best accommodate you for the best hackathon experience
+                possible?
+              </p>
               <FormInputField
                 name="specialAccommodations"
-                label="Special Accoms."
-                placeholder="Special accommodations"
+                label=""
+                placeholder="Enter any special accommodations"
                 required={isFieldRequired("specialAccommodations")}
               />
             </div>
@@ -498,7 +595,11 @@ export function RegistrationForm() {
                 label={
                   <>
                     I agree to the{" "}
-                    <Link href="/rules" className="underline" target="_blank">
+                    <Link
+                      href="/legal/code-of-conduct"
+                      className="underline"
+                      target="_blank"
+                    >
                       HackKU Code of Conduct
                     </Link>
                     .
@@ -512,41 +613,27 @@ export function RegistrationForm() {
                   <>
                     {form.getValues().levelOfStudy === "High School" ? (
                       <>
-                        By checking this box, I certify that I am the parent or
-                        guardian of the participant and consent to the terms of
-                        the Photo Release and Participation Waiver on their
-                        behalf. I am the parent/guardian and consent to the
-                        above terms.{" "}
+                        I certify that I am the parent or guardian of the
+                        participant and consent to the terms of the{" "}
                         <Link
-                          href="https://docs.google.com/document/d/1HBLL_QggxCymsCMMIsNulNvK0twMgSxP/"
+                          href="/legal/waiver"
                           className="underline"
                           target="_blank"
                         >
-                          HackKU Waiver / Photo Release
-                        </Link>
+                          HackKU Waiver / Photo Release Waiver
+                        </Link>{" "}
+                        on their behalf.{" "}
                       </>
                     ) : (
                       <>
-                        By checking this box, I agree to the following: I
-                        release The University of Kansas, the Kansas Board of
-                        Regents, the KU School of Engineering, HackKU, ACM, and
-                        their representatives from all claims, damages, or
-                        liabilities arising from my participation in HackKU
-                        activities. I authorize HackKU to take and use photos,
-                        videos, and recordings of me for promotional or
-                        informational purposes, with HackKU retaining all
-                        rights, including copyright, to these materials. I
-                        acknowledge that this agreement is governed by Kansas
-                        law.{" "}
+                        I agree to the{" "}
                         <Link
-                          href="https://docs.google.com/document/d/1HBLL_QggxCymsCMMIsNulNvK0twMgSxP/"
+                          href="/legal/waiver"
                           className="underline"
                           target="_blank"
                         >
                           HackKU Waiver / Photo Release
                         </Link>
-                        . I have read and agree to the Photo Release and
-                        Participation Waiver.
                       </>
                     )}
                   </>
@@ -584,23 +671,14 @@ export function RegistrationForm() {
                     >
                       MLH Privacy Policy
                     </Link>
-                    . I further agree to the terms of both the{" "}
+                    . I agree to the{" "}
                     <Link
                       href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md"
                       target="_blank"
                       className="underline"
                     >
                       MLH Contest Terms
-                    </Link>{" "}
-                    and the{" "}
-                    <Link
-                      href="https://github.com/MLH/mlh-policies/blob/main/privacy-policy.md"
-                      target="_blank"
-                      className="underline"
-                    >
-                      MLH Privacy Policy
                     </Link>
-                    .
                   </>
                 }
                 required={isFieldRequired("shareWithMLH")}

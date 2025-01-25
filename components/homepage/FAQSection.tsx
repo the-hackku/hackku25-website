@@ -29,14 +29,12 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
         transition={{ duration: 0.6 }}
         className="max-w-4xl w-full text-center px-4 md:px-0 overflow-hidden"
       >
-        <h2 className="text-5xl md:text-7xl font-bold mb-12 font-dfvn">
-          Frequently Asked Queries
-        </h2>
+        <h2 className="text-5xl md:text-7xl font-bold mb-12 font-dfvn">FAQ</h2>
 
-        {/* 
-          Wrap the Accordion in a container that allows some padding 
-          but avoids causing horizontal overflow.
-        */}
+        <p className="text-lg md:text-xl text-gray-700">
+          Here are some frequently asked questions about HackKU.
+        </p>
+
         <div className="mx-auto w-full max-w-2xl p-4 md:p-8">
           <Accordion type="single" collapsible>
             {faqs.map((faq, index) => (

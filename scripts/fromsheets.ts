@@ -1,14 +1,13 @@
-import { google } from "googleapis";
-import { PrismaClient } from "@prisma/client";
-import dotenv from "dotenv";
+const { google } = require("googleapis");
+const { PrismaClient } = require("@prisma/client");
+
+const fs = require("fs");
+const path = require("path");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
-// const { google } = require("googleapis");
-// const { PrismaClient } = require("@prisma/client");
-// const dotenv = require("dotenv");
-
-// dotenv.config();
+// to run: npx ts-node scripts/fromsheets.ts
 
 const prisma = new PrismaClient();
 const sheets = google.sheets("v4");
@@ -125,7 +124,7 @@ function transformData(sheetData: string[][]): TransformedData[] {
             ],
           minor:
             entry[
-              "Minor(s), If applicable (Use semicolons to delimit multiple degrees)"
+              "Minor(s) and/or Certificate(s), If applicable (Use semicolons to delimit multiple specializations)"
             ],
           previousHackathons:
             parseInt(
@@ -155,22 +154,44 @@ function transformData(sheetData: string[][]): TransformedData[] {
   });
 }
 
-// Write the transformed data into Prisma
 async function migrateData() {
+  const failedEntriesLogPath = path.resolve("failed_entries.log");
+
   try {
     const sheetData = await getGoogleSheetData();
     const transformedData = transformData(sheetData);
 
+    // Clear or create the log file
+    fs.writeFileSync(failedEntriesLogPath, "Failed Entries Log\n\n");
+
     for (const userData of transformedData) {
-      // Use upsert to avoid duplicates based on email
-      await prisma.user.upsert({
-        where: { email: userData.email },
-        update: {}, // No updates for now
-        create: userData,
-      });
+      try {
+        await prisma.user.upsert({
+          where: { email: userData.email },
+          update: {},
+          create: userData,
+        });
+        console.log(
+          `User with email ${userData.email} processed successfully.`
+        );
+      } catch (error) {
+        console.error(
+          `Error processing user with email ${userData.email}:`,
+          error
+        );
+
+        // Log failed entry details into the log file
+        fs.appendFileSync(
+          failedEntriesLogPath,
+          `Failed to process user with email ${userData.email}.\nError: ${
+            (error as any).message
+          }\nData: ${JSON.stringify(userData, null, 2)}\n\n`
+        );
+      }
     }
 
     console.log("Data migration completed successfully!");
+    console.log(`Check ${failedEntriesLogPath} for failed entries.`);
   } catch (error) {
     console.error("Error during migration:", error);
   } finally {

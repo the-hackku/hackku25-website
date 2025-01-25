@@ -45,8 +45,8 @@ export default async function ProfilePage() {
     });
 
     const qrCodeData = user?.ParticipantInfo
-      ? String(user?.id ?? "1234567890")
-      : "1234567890";
+      ? String(user?.id)
+      : "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
     const participant = user?.ParticipantInfo;
     const fullName = participant
       ? `${participant.firstName} ${participant.lastName}`
@@ -121,12 +121,14 @@ export default async function ProfilePage() {
                             !participant ? "blur-sm" : ""
                           }`}
                         >
-                          <QrCodeComponent
-                            qrCodeData={qrCodeData as string | null}
-                          />
+                          <QrCodeComponent qrCodeData={qrCodeData} />
                         </div>
                         <p className="text-xs text-gray-500">
-                          {participant ? <code>{qrCodeData}</code> : "N/A"}
+                          {participant ? (
+                            <code>{qrCodeData}</code>
+                          ) : (
+                            "nice try lol"
+                          )}
                         </p>
                       </CardContent>
                     </Card>

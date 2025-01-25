@@ -117,7 +117,9 @@ export function ComboboxSelect({
                 >
                   <Command shouldFilter={false}>
                     <CommandInput
-                      placeholder={`Search ${label.toLowerCase()}...`}
+                      placeholder={`Search ${
+                        allowCustomInput ? "or add " : ""
+                      }${label.toLowerCase()}...`}
                       value={inputValue}
                       onValueChange={(val) => setInputValue(val)}
                     />

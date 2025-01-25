@@ -7,7 +7,7 @@ import {
   exportToGoogleSheet,
   UserWithParticipantInfo,
 } from "@/scripts/googleSheetsExport";
-import { RegistrationData } from "@/app/actions/schemas"; // Import the shared schema
+import { RegistrationData } from "@/app/actions/schemas";
 
 const prisma = new PrismaClient();
 

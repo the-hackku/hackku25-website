@@ -1,17 +1,11 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { User, CheckSquare, Calendar, QrCode } from "lucide-react";
-import { authOptions } from "@/lib/authoptions";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 
 export default async function AdminPage() {
-  const session = await getServerSession(authOptions);
-
-  if (!session || session.user.role !== "ADMIN") {
-    redirect("/"); // Redirect non-admin users to the home page
-  }
   return (
     <div className="container mx-auto max-w-4xl py-12">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
