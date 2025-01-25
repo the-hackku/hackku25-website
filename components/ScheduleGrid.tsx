@@ -183,11 +183,11 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   );
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 overflow-hidden p-4 h-2/5">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4 overflow-visible md:overflow-hidden p-4 h-max">
       {/* Left Section: Schedule Grid */}
       <div
         ref={scheduleGridRef}
-        className="overflow-y-scroll h-[500px] border-r border-gray-300 relative"
+        className="overflow-y-scroll h-[400px] md:h-[500px] border-r border-gray-300 relative"
       >
         {/* Container for Tabs and Heart Icon */}
         <div className="flex justify-between items-center mb-4 space-x-4 bg-white sticky top-0 z-50 p-2">
@@ -343,7 +343,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
       </div>
 
       {/* Right Section: Event Details */}
-      <div className="p-4 relative">
+      <div className="md:p-4 relative">
         <AnimatePresence>
           {selectedEvent ? (
             <motion.div
@@ -352,7 +352,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 300 }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="p-4 bg-white rounded-lg shadow-sm border absolute inset-0 flex flex-col justify-between"
+              className="p-4 bg-white rounded-lg shadow-sm border absolute inset-0 flex flex-col justify-between h-max"
             >
               {/* Top Section: Event Details */}
               <div>
