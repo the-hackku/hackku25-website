@@ -148,9 +148,14 @@ export function ComboboxSelect({
                                   toggleValue(option.value);
                                 } else {
                                   field.onChange(option.value);
-                                  if (closeOnSelect) setOpen(false);
                                 }
-                                setInputValue("");
+
+                                // Close the Popover if closeOnSelect is true
+                                if (closeOnSelect) {
+                                  setOpen(false);
+                                }
+
+                                setInputValue(""); // Clear the input value
                               }}
                             >
                               <Check

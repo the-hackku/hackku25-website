@@ -264,13 +264,10 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
           <table className="table-fixed w-full border-collapse">
             <thead>
               <tr className="bg-gray-100">
-                <th className="w-16 border-r border-gray-300"></th>
+                <th className="w-16"></th>
                 {selectedDay === "All" ? (
                   days.map((date) => (
-                    <th
-                      key={date}
-                      className="border border-gray-300 p-2 text-center"
-                    >
+                    <th key={date} className="p-2 text-center">
                       {new Date(date).toLocaleDateString(undefined, {
                         weekday: "long",
                         month: "long",
@@ -279,7 +276,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                     </th>
                   ))
                 ) : (
-                  <th className="border border-gray-300 p-2 text-center">
+                  <th className="p-2 text-center">
                     {new Date(selectedDay).toLocaleDateString(undefined, {
                       weekday: "long",
                       month: "long",
@@ -293,7 +290,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
               {slots.map((slotIndex) => (
                 <tr key={slotIndex} className="h-8">
                   <td
-                    className={`border-r border-dashed border-gray-300 text-xs text-right pr-2 ${
+                    className={`border-r border-l border-dashed border-gray-300 text-xs text-right pr-2 ${
                       slotIndex % 2 === 1 ? "border-b border-dashed" : ""
                     }`}
                   >
