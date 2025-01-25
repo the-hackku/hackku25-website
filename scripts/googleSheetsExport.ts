@@ -13,7 +13,7 @@ dotenv.config();
 
 // Replace with your own Google Sheet ID and desired range:
 const SHEET_ID = "1Xwv7RBzU2VFX_xXCNxEpOi-StvNJV5DsiqkIYEQWQD4";
-const RANGE = "Sheet1";
+const RANGE = "Sheet1!A1";
 
 const serviceAccountKey = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
 if (!serviceAccountKey) {
@@ -71,13 +71,14 @@ export async function exportToGoogleSheet(user: UserWithParticipantInfo) {
 
     const rowValues = transformUserData(user);
 
-    // Append data to the Google Sheet
+    // Append data to the Google Sheet, starting at the correct position
     await sheetsApi.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: RANGE,
+      range: RANGE, // Refers to the entire sheet, starting from the first available row
       valueInputOption: "RAW",
+      insertDataOption: "INSERT_ROWS", // Ensures rows are inserted correctly
       requestBody: {
-        values: [rowValues],
+        values: [rowValues], // Adds a new row of data
       },
     });
 

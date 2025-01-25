@@ -5,7 +5,7 @@ import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import DiscordProvider from "next-auth/providers/discord";
-import type { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions, Session } from "next-auth";
 import { htmlTemplate } from "@/utils/htmltemplate";
 
 const transporter = nodemailer.createTransport(process.env.EMAIL_SERVER);
@@ -45,7 +45,7 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ account, profile, user }) {
+    async signIn({ account, profile }) {
       const email = profile?.email;
 
       if (!email) {
@@ -104,10 +104,16 @@ export const authOptions: NextAuthOptions = {
       return true;
     },
 
-    async session({ session, user }) {
+    async session({
+      session,
+      user,
+    }: {
+      session: Session;
+      user: { id: string; role?: string };
+    }) {
       if (session.user) {
         session.user.id = user.id;
-        session.user.role = (user as any).role || "HACKER";
+        session.user.role = user.role || "HACKER";
       }
       return session;
     },
