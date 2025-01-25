@@ -269,7 +269,7 @@ export function RegistrationForm() {
   }, [form, isFieldRequired]);
 
   return (
-    <Card className="max-w-3xl mx-auto mt-8">
+    <Card className="max-w-3xl mx-auto mt-2 border-none shadow-none">
       <CardHeader>
         <div className="flex justify-between items-center">
           <CardTitle className="text-center text-xl py-4">
@@ -334,7 +334,7 @@ export function RegistrationForm() {
                 name="countryOfResidence"
                 label="Country of Residence"
                 required={isFieldRequired("countryOfResidence")}
-                placeholder="Select your country"
+                placeholder="Country"
                 options={[
                   { label: "United States", value: "United States" },
                   { label: "Canada", value: "Canada" },
@@ -376,7 +376,7 @@ export function RegistrationForm() {
 
               <FormSelectField<HispanicOrLatino>
                 name="hispanicOrLatino"
-                label="Are you Hispanic or Latino?"
+                label="Hispanic or Latino?"
                 options={hispanicOrLatinoOptions}
                 required={isFieldRequired("hispanicOrLatino")}
               />
@@ -390,7 +390,7 @@ export function RegistrationForm() {
                 name="currentSchool"
                 label="Current School"
                 required={isFieldRequired("currentSchool")}
-                placeholder="Select your school"
+                placeholder="Enter School"
                 options={predefinedSchools}
                 allowCustomInput
                 closeOnSelect
@@ -413,7 +413,7 @@ export function RegistrationForm() {
                     name="major"
                     label="Major(s)"
                     required={isFieldRequired("major")}
-                    placeholder="Select your major"
+                    placeholder="Select your major(s)"
                     options={[
                       { label: "Computer Science", value: "Computer Science" },
                       {
@@ -705,8 +705,15 @@ export function RegistrationForm() {
           </form>
         </FormProvider>
         <p className="text-xs text-center mt-4 text-gray-500">
-          Still have questions? join the Discord server or email us at
-          {constants.supportEmail}
+          Have questions? Join the{" "}
+          <Link href={constants.discordInvite} className="underline">
+            Discord Server
+          </Link>{" "}
+          or email us at{" "}
+          <Link href={`mailto:${constants.supportEmail}`} className="underline">
+            {constants.supportEmail}
+          </Link>
+          .
         </p>
       </CardContent>
     </Card>

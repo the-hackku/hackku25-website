@@ -320,9 +320,13 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                       <Image
                         src="/images/mlh-badge.svg"
                         alt="MLH Badge"
-                        width={200}
-                        height={200}
-                        className="w-auto h-10 md:h-32"
+                        width={pathname === "/schedule" ? 100 : 200}
+                        height={pathname === "/schedule" ? 100 : 200}
+                        className={`w-auto ${
+                          pathname === "/schedule"
+                            ? "h-5 md:h-16"
+                            : "h-10 md:h-32"
+                        }`}
                       />
                     </motion.div>
                   </Link>

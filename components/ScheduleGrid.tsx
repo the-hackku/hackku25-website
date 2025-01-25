@@ -35,7 +35,7 @@ const formatTime = (index: number) => {
   const minutes = index % 2 === 0 ? "00" : "30";
   const adjustedHour = hour % 24; // Ensure hour stays within 24-hour format
 
-  // Convert 24-hour format to 12-hour format, handling 12 AM and 12 PM correctly
+  // Convert 24-hour format to 12-hour format
   const displayHour =
     adjustedHour === 0
       ? 12
@@ -50,9 +50,10 @@ const formatTime = (index: number) => {
 // Calculate the start row for the event based on its start time
 const getRowIndex = (dateString: string) => {
   const date = new Date(dateString);
-  const hours = date.getHours() - 7; // Use local hours instead of UTC hours
-  const minutes = date.getMinutes(); // Use local minutes instead of UTC minutes
-  return hours * 2 + (minutes >= 30 ? 1 : 0);
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  // We start at 7 AM, so subtract 7 from the hour
+  return (hours - 7) * 2 + (minutes >= 30 ? 1 : 0);
 };
 
 // Calculate the number of rows to span based on event duration
@@ -60,6 +61,7 @@ const getRowSpan = (startString: string, endString: string) => {
   const start = new Date(startString);
   const end = new Date(endString);
   const duration = (end.getTime() - start.getTime()) / (1000 * 60);
+  // Each slot is 30 minutes, so how many 30-minute segments fit in `duration`?
   return Math.max(1, duration / 30);
 };
 
@@ -88,6 +90,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const [selectedDay, setSelectedDay] = useState("All");
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
   const scheduleGridRef = useRef<HTMLDivElement | null>(null);
 
   // Group events by date
@@ -107,6 +111,15 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
       setSelectedDay(days[0]);
     }
   }, [days, selectedDay]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust the breakpoint as needed
+    };
+    handleResize(); // Check on mount
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Helper function to get the next event based on the current event
   const getNextEvent = (
@@ -151,11 +164,11 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
         .sort(
           (a, b) =>
             new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-        ) // Sort by start date
+        )
     : allEvents.sort(
         (a, b) =>
           new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-      ); // Sort by start date
+      );
 
   const filteredGroupedEvents = filteredEvents.reduce((acc, event) => {
     const eventDate = new Date(event.startDate).toLocaleDateString("en-US", {
@@ -183,15 +196,25 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   );
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4 overflow-visible md:overflow-hidden p-4 h-max">
-      {/* Left Section: Schedule Grid */}
-      <div
+    <div className="flex flex-col md:flex-row gap-4 p-4 h-screen md:max-h-[calc(100vh-4rem)]">
+      {/* LEFT SECTION: Schedule Grid */}
+      <motion.div
         ref={scheduleGridRef}
-        className="overflow-y-scroll h-[400px] md:h-[500px] border-r border-gray-300 relative"
+        // Animate width on desktop, height on mobile
+        animate={
+          selectedEvent
+            ? isMobile
+              ? { height: "66%" }
+              : { flex: "1 1 50%" }
+            : isMobile
+            ? { height: "100%" }
+            : { flex: "1 1 100%" }
+        }
+        transition={{ duration: 0.2 }}
+        className="overflow-y-scroll relative"
       >
-        {/* Container for Tabs and Heart Icon */}
-        <div className="flex justify-between items-center mb-4 space-x-4 bg-white sticky top-0 z-50 p-2">
-          {/* Tabs to select the day */}
+        {/* Container for Tabs and Filter */}
+        <div className="flex justify-start items-center space-x-4 bg-white sticky top-0 z-40 pb-2">
           <Tabs value={selectedDay} onValueChange={handleDayChange}>
             <TabsList>
               <TabsTrigger value="All">All</TabsTrigger>
@@ -199,8 +222,6 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                 <TabsTrigger key={date} value={date}>
                   {new Date(date).toLocaleDateString(undefined, {
                     weekday: "long",
-                    month: "short",
-                    day: "numeric",
                   })}
                 </TabsTrigger>
               ))}
@@ -210,9 +231,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
           {/* Popover for Filters */}
           <Popover>
             <PopoverTrigger>
-              <div className="flex items-center cursor-pointer p-2 border rounded-lg shadow-sm">
-                <IconFilter size={16} className="mr-2" />
-                Filters
+              <div className="flex items-center cursor-pointer p-3 border rounded-lg shadow-sm">
+                <IconFilter size={16} />
               </div>
             </PopoverTrigger>
             <PopoverContent className="p-4 bg-white shadow-lg rounded-md w-60">
@@ -282,7 +302,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                   {(selectedDay === "All" ? days : [selectedDay]).map((day) => (
                     <td
                       key={day}
-                      className={`relative border-r border-gray-300 overflow-visible border-b border-dashed`}
+                      className="relative border-r border-gray-300 border-b border-dashed overflow-visible"
                     >
                       {filteredGroupedEvents[day]
                         ?.filter(
@@ -319,13 +339,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                   e.stopPropagation();
                                   toggleFavorite(event.id);
                                 }}
-                              >
-                                {favorites[event.id] ? (
-                                  <IconHeartFilled className="text-red-400" />
-                                ) : (
-                                  <IconHeart className="text-white" />
-                                )}
-                              </span>
+                              ></span>
                             </CardTitle>
                             <div className="text-xs flex items-center">
                               <IconMapPin size={12} className="mr-1" />
@@ -340,19 +354,34 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
             </tbody>
           </table>
         )}
-      </div>
+      </motion.div>
 
-      {/* Right Section: Event Details */}
-      <div className="md:p-4 relative">
-        <AnimatePresence>
-          {selectedEvent ? (
+      {/* RIGHT SECTION: Event Details */}
+      <motion.div
+        // Animate width on desktop, height on mobile
+        animate={
+          selectedEvent
+            ? isMobile
+              ? { height: "33%" }
+              : { flex: "1 1 50%" }
+            : isMobile
+            ? { height: 0 }
+            : { flex: "0 1 0%" }
+        }
+        transition={{ duration: 0.2 }}
+        className="relative overflow-hidden"
+      >
+        <AnimatePresence mode="wait">
+          {selectedEvent && (
             <motion.div
               key={selectedEvent.id}
-              initial={{ opacity: 0, x: 300 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 300 }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-              className="p-4 bg-white rounded-lg shadow-sm border absolute inset-0 flex flex-col justify-between h-max"
+              initial={
+                isMobile ? { opacity: 0, y: 300 } : { opacity: 0, x: 300 }
+              }
+              animate={isMobile ? { opacity: 1, y: 0 } : { opacity: 1, x: 0 }}
+              exit={isMobile ? { opacity: 0, y: 300 } : { opacity: 0, x: 300 }}
+              transition={{ duration: 0.2 }}
+              className="p-4 bg-white rounded-lg shadow-sm border flex flex-col justify-between h-full"
             >
               {/* Top Section: Event Details */}
               <div>
@@ -360,11 +389,14 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                   {selectedEvent.name}
                   <span className="flex items-center">
                     {/* Favorite Toggle */}
-                    <span onClick={() => toggleFavorite(selectedEvent.id)}>
+                    <span
+                      onClick={() => toggleFavorite(selectedEvent.id)}
+                      className="cursor-pointer"
+                    >
                       {favorites[selectedEvent.id] ? (
-                        <IconHeartFilled className="text-red-400 cursor-pointer" />
+                        <IconHeartFilled className="text-red-400" />
                       ) : (
-                        <IconHeart className="text-gray-400 cursor-pointer" />
+                        <IconHeart className="text-gray-400" />
                       )}
                     </span>
 
@@ -397,9 +429,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                 )}
               </div>
 
-              {/* Bottom Section: Pagination Buttons */}
+              {/* Bottom Section: Previous/Next Buttons */}
               <div className="flex justify-between items-center mt-6 pt-4 border-t">
-                {/* Left Button: Previous Event */}
                 <button
                   onClick={() => {
                     if (getPreviousEvent(selectedEvent)) {
@@ -410,13 +441,11 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                     !getPreviousEvent(selectedEvent)
                       ? "opacity-30 cursor-not-allowed"
                       : "hover:text-gray-900 focus:outline-none"
-                  } text-gray-600 `}
+                  } text-gray-600`}
                   disabled={!getPreviousEvent(selectedEvent)}
                 >
                   &larr; Previous
                 </button>
-
-                {/* Right Button: Next Event */}
                 <button
                   onClick={() => {
                     if (getNextEvent(selectedEvent)) {
@@ -427,25 +456,16 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                     !getNextEvent(selectedEvent)
                       ? "opacity-30 cursor-not-allowed"
                       : "hover:text-gray-900 focus:outline-none"
-                  } text-gray-600 `}
+                  } text-gray-600`}
                   disabled={!getNextEvent(selectedEvent)}
                 >
                   Next &rarr;
                 </button>
               </div>
             </motion.div>
-          ) : (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-center text-gray-500"
-            >
-              Select an event to view details
-            </motion.div>
           )}
         </AnimatePresence>
-      </div>
+      </motion.div>
     </div>
   );
 };

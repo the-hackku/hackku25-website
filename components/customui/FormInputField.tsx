@@ -34,7 +34,7 @@ export function FormInputField({
       control={control}
       name={name as string}
       render={({ field }) => (
-        <FormItem className="flex-1">
+        <FormItem className="flex-1 text-base">
           <FormLabel>
             {label}
             {required && <span className="text-red-500">*</span>}

@@ -10,7 +10,7 @@ export default function RegisterAlert() {
   const pathname = usePathname(); // Get the current route
 
   // Don't show the alert on the /register page
-  if (pathname === "/register") {
+  if (pathname === "/register" || pathname === "/schedule") {
     return null;
   }
 
