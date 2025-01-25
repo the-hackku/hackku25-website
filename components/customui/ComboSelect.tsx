@@ -1,4 +1,3 @@
-// ComboboxSelect.tsx
 "use client";
 
 import * as React from "react";
@@ -39,6 +38,7 @@ interface ComboboxSelectProps {
   closeOnSelect?: boolean;
   required?: boolean;
   multiselect?: boolean;
+  focusSearch?: boolean; // New prop
 }
 
 export function ComboboxSelect({
@@ -51,10 +51,19 @@ export function ComboboxSelect({
   closeOnSelect = true,
   required = false,
   multiselect = false,
+  focusSearch = false, // Default to false
 }: ComboboxSelectProps) {
   const { control } = useFormContext();
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState("");
+
+  const inputRef = React.useRef<HTMLInputElement | null>(null);
+
+  React.useEffect(() => {
+    if (open && focusSearch && inputRef.current) {
+      inputRef.current.focus(); // Automatically focus the search input
+    }
+  }, [open, focusSearch]);
 
   return (
     <FormField
@@ -117,6 +126,7 @@ export function ComboboxSelect({
                 >
                   <Command shouldFilter={false}>
                     <CommandInput
+                      ref={inputRef} // Attach ref to the CommandInput
                       placeholder={`Search ${
                         allowCustomInput ? "or add " : ""
                       }${label.toLowerCase()}...`}

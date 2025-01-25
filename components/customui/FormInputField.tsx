@@ -45,7 +45,7 @@ export function FormInputField({
               placeholder={placeholder}
               value={formatValue ? formatValue(field.value) : field.value || ""}
               onChange={(e) => field.onChange(e.target.value)}
-              className="w-full"
+              className="w-full text-base"
             />
           </FormControl>
           <FormMessage />

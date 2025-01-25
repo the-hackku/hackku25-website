@@ -28,10 +28,6 @@ import constants from "@/constants";
 // Predefined options
 const predefinedSchools = [
   { label: "University of Kansas", value: "University of Kansas" },
-  {
-    label: "University of Nebraska at Kearney",
-    value: "University of Nebraska at Kearney",
-  },
   { label: "Kansas State University", value: "Kansas State University" },
   { label: "Arizona State University", value: "Arizona State University" },
   {
@@ -363,7 +359,7 @@ export function RegistrationForm() {
                 required={isFieldRequired("genderIdentity")}
               />
             </div>
-            <div className="flex space-x-4">
+            <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
               <ComboboxSelect
                 name="race"
                 label="Race"
@@ -372,6 +368,7 @@ export function RegistrationForm() {
                 options={raceOptions}
                 closeOnSelect
                 multiselect
+                allowCustomInput={false}
               />
 
               <FormSelectField<HispanicOrLatino>

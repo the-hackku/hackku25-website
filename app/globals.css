@@ -81,3 +81,7 @@ body {
     --chart-5: 340 75% 55%;
   }
 }
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
