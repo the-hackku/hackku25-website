@@ -12,11 +12,10 @@ import {
   IconHome2,
   IconHomeFilled,
   IconMenu2,
-  IconInfoCircle,
-  IconInfoCircleFilled,
   IconUser,
   IconQrcode,
   IconStar,
+  IconScan,
 } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -80,7 +79,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
       "/": "home",
       "/schedule": "schedule",
       "/faq": "faq",
-      "/info": "info",
+      // "/info": "info",
       "/profile": "profile",
       "/signin": "profile",
     }),
@@ -151,11 +150,10 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
           {/* Mobile Menu */}
           <header className="lg:hidden">
             <div className="flex items-center">
-              {isAdmin && (
-                <Link href="/admin/scanner" passHref>
-                  <IconQrcode size={32} />
-                </Link>
-              )}
+              <Link href="/profile" passHref>
+                <IconQrcode size={32} />
+              </Link>
+
               <Sheet>
                 <SheetTrigger asChild>
                   <Button variant="ghost">
@@ -180,14 +178,14 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                         </span>
                       </SheetClose>
                     </Link>
-                    <Link href="/info" passHref>
+                    {/* <Link href="/info" passHref>
                       <SheetClose asChild>
                         <span className="flex items-center text-xl">
                           <IconInfoCircle size={24} className="mr-2" />
                           HackerDoc
                         </span>
                       </SheetClose>
-                    </Link>
+                    </Link> */}
                     <hr className="my-4" />
                     <Link href="/profile" passHref>
                       <SheetClose asChild>
@@ -197,6 +195,16 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                         </span>
                       </SheetClose>
                     </Link>
+                    {isAdmin && (
+                      <Link href="/admin/scanner" passHref>
+                        <SheetClose asChild>
+                          <span className="flex items-center text-xl">
+                            <IconScan size={24} className="mr-2" />
+                            Scan Hackers
+                          </span>
+                        </SheetClose>
+                      </Link>
+                    )}
                   </nav>
                 </SheetContent>
               </Sheet>
@@ -248,7 +256,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                 </TabsTrigger>
 
                 <TabsTrigger value="info" asChild>
-                  <Link
+                  {/* <Link
                     href="/info"
                     className="flex items-center text-lg font-medium"
                   >
@@ -258,7 +266,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                       <IconInfoCircle size={20} className="mr-2" />
                     )}
                     HackerDoc
-                  </Link>
+                  </Link> */}
                 </TabsTrigger>
                 <TabsTrigger value="profile" asChild>
                   <Link href="/profile">

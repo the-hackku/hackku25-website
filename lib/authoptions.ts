@@ -45,14 +45,74 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async session({ session, user }: { session: Session; user: User }) {
+    async signIn({ account, profile, user }) {
+      const email = profile?.email;
+
+      if (!email) {
+        // Reject sign-in if no email is provided (edge case)
+        return false;
+      }
+
+      try {
+        // Find an existing user with the same email
+        const existingUser = await prisma.user.findUnique({
+          where: { email },
+        });
+
+        if (existingUser) {
+          // Check if the current account belongs to this user
+          if (!account) {
+            return false;
+          }
+
+          const existingAccount = await prisma.account.findUnique({
+            where: {
+              provider_providerAccountId: {
+                provider: account.provider,
+                providerAccountId: account.providerAccountId,
+              },
+            },
+          });
+
+          if (!existingAccount) {
+            // If no account exists for this provider, link it
+            await prisma.account.create({
+              data: {
+                userId: existingUser.id,
+                type: account.type,
+                provider: account.provider,
+                providerAccountId: account.providerAccountId,
+                access_token: account.access_token,
+                refresh_token: account.refresh_token,
+                expires_at: account.expires_at,
+                token_type: account.token_type,
+                scope: account.scope,
+                id_token: account.id_token,
+              },
+            });
+          }
+
+          // Return the existing user (effectively merging the accounts)
+          return true;
+        }
+      } catch (error) {
+        console.error("Error linking accounts:", error);
+        return false;
+      }
+
+      // Allow sign-in for new users (user not found)
+      return true;
+    },
+
+    async session({ session, user }) {
       if (session.user) {
-        session.user.role = (user as User & { role?: string }).role || "HACKER";
         session.user.id = user.id;
+        session.user.role = (user as any).role || "HACKER";
       }
       return session;
     },
   },
+
   adapter: {
     ...PrismaAdapter(prisma),
     async useVerificationToken({ identifier, token }) {

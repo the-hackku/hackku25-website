@@ -44,7 +44,9 @@ export default async function ProfilePage() {
       include: { ParticipantInfo: true },
     });
 
-    const qrCodeData = user?.id;
+    const qrCodeData = user?.ParticipantInfo
+      ? String(user?.id ?? "1234567890")
+      : "1234567890";
     const participant = user?.ParticipantInfo;
     const fullName = participant
       ? `${participant.firstName} ${participant.lastName}`
@@ -58,7 +60,7 @@ export default async function ProfilePage() {
         <Card className="shadow-lg">
           <CardHeader className="p-6">
             <CardTitle className="text-3xl font-bold text-center p-0">
-              Hacker Dashboard
+              Your Profile
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -119,10 +121,12 @@ export default async function ProfilePage() {
                             !participant ? "blur-sm" : ""
                           }`}
                         >
-                          <QrCodeComponent qrCodeData={qrCodeData} />
+                          <QrCodeComponent
+                            qrCodeData={qrCodeData as string | null}
+                          />
                         </div>
                         <p className="text-xs text-gray-500">
-                          <code>{qrCodeData}</code>
+                          {participant ? <code>{qrCodeData}</code> : "N/A"}
                         </p>
                       </CardContent>
                     </Card>

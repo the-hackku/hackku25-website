@@ -9,8 +9,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import {
-  IconBrandDiscord,
-  IconBrandGithub,
+  IconBrandDiscordFilled,
+  IconBrandGithubFilled,
   IconBrandGoogleFilled,
 } from "@tabler/icons-react";
 
@@ -144,7 +144,7 @@ const SignInPage = () => {
                 style={{ backgroundColor: "#5865F2" }}
                 onClick={handleDiscordSignIn}
               >
-                <IconBrandDiscord className="h-5 w-5" />
+                <IconBrandDiscordFilled className="h-5 w-5" />
                 Continue with Discord
               </Button>
 
@@ -153,7 +153,7 @@ const SignInPage = () => {
                 style={{ backgroundColor: "#24292E" }}
                 onClick={handleGitHubSignIn}
               >
-                <IconBrandGithub className="h-5 w-5" />
+                <IconBrandGithubFilled className="h-5 w-5" />
                 Continue with GitHub
               </Button>
             </div>
