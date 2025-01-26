@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import { CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   IconFilter,
@@ -12,6 +11,7 @@ import {
   IconChevronRight,
   IconChevronLeft,
   IconX,
+  IconClock,
 } from "@tabler/icons-react";
 import {
   Popover,
@@ -103,7 +103,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const [selectedEvent, setSelectedEvent] = useState<ScheduleEvent | null>(
     null
   );
-  const [selectedDay, setSelectedDay] = useState("All");
+
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
   const [showFavoritesOnly] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -130,11 +130,9 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
 
   const days = Object.keys(groupedEvents).sort();
 
-  useEffect(() => {
-    if (days.length > 0 && selectedDay === "") {
-      setSelectedDay(days[0]);
-    }
-  }, [days, selectedDay]);
+  const [selectedDay, setSelectedDay] = useState<string>(
+    days.length > 0 ? days[0] : "" // Use the first day if available
+  );
 
   useEffect(() => {
     const handleResize = () => {
@@ -168,7 +166,9 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   // Handle changing day tabs
   const handleDayChange = (day: string) => {
     setSelectedDay(day);
-    setSelectedEvent(null);
+    if (day !== "All") {
+      setSelectedEvent(null);
+    }
   };
 
   // Toggle favorite status for an event
@@ -270,7 +270,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
           <div className="flex justify-start w-full gap-2">
             <Tabs value={selectedDay} onValueChange={handleDayChange}>
               <TabsList>
-                <TabsTrigger value="All">All</TabsTrigger>
+                {!isMobile && <TabsTrigger value="All">All</TabsTrigger>}
                 {days.map((date) => (
                   <TabsTrigger key={date} value={date}>
                     {new Date(date).toLocaleDateString(undefined, {
@@ -461,9 +461,14 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                               zIndex: 2,
                             }}
                           >
-                            <CardTitle className="text-sm font-bold flex justify-between">
-                              {event.name}
-                            </CardTitle>
+                            <span className="flex-col gap-0">
+                              <p className="text-sm font-bold">{event.name}</p>
+                              <div className="text-xs flex items-center">
+                                {formatTime(getRowIndex(event.startDate))} -{" "}
+                                {formatTime(getRowIndex(event.endDate))}
+                              </div>
+                            </span>
+
                             <div className="text-xs flex items-center">
                               <IconMapPin size={12} className="mr-1" />
                               {event.location || "TBA"}
@@ -537,7 +542,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
         transition={{ duration: 0.3 }}
       >
         {selectedEvent && (
-          <div className="p-4 bg-white w-full rounded-lg shadow-sm border md:h-full flex flex-col justify-between">
+          <div className="p-4 bg-white w-full rounded-lg shadow-sm border border- md:h-full flex flex-col justify-between">
             {/* Top Section: Event Details */}
             <div>
               <h2 className="text-xl font-bold flex justify-between">
