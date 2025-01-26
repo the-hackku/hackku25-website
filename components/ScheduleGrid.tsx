@@ -68,7 +68,7 @@ const getRowIndex = (dateString: string) => {
   const hours = date.getHours();
   const minutes = date.getMinutes();
   // We start at 7 AM, so subtract 7 from the hour
-  return (hours - 7) * 2 + (minutes >= 30 ? 1 : 0);
+  return (hours - 6) * 2 + (minutes >= 30 ? 1 : 0);
 };
 
 // Calculate the number of rows to span based on event duration
@@ -106,7 +106,13 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([]);
+  const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([
+    "FOOD",
+    "REQUIRED",
+    "WORKSHOPS",
+    "SPONSOR",
+    "ACTIVITIES",
+  ]);
   const [collapsed, setCollapsed] = useState(false);
 
   const scheduleGridRef = useRef<HTMLDivElement | null>(null);
@@ -180,7 +186,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   // Filter by type
   const typedEvents =
     selectedEventTypes.length === 0
-      ? allEvents
+      ? [] // Show no events if no types are selected
       : allEvents.filter(
           (ev) =>
             ev.eventType &&
@@ -213,6 +219,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
     : 0;
 
   const firstEventSlotIndex = Math.max(0, earliestEventIndex - 2);
+
   const slots = Array.from(
     { length: 38 - firstEventSlotIndex },
     (_, i) => i + firstEventSlotIndex
@@ -233,7 +240,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   console.log("hawdkjnawjkd");
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 p-4 h-screen md:max-h-[calc(100vh-4rem)]">
+    <div className="flex flex-col md:flex-row sm:gap-1 md:gap-3 p-4 h-screen md:max-h-[calc(100vh-4rem)]">
       {/* LEFT SECTION: Schedule Grid */}
       <motion.div
         ref={scheduleGridRef}
@@ -276,35 +283,58 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
             {/* Popover for Filters */}
             <Popover>
               <PopoverTrigger>
-                <div className="flex items-center cursor-pointer p-2 border rounded-lg shadow-sm">
-                  <IconFilter size={16} className="mr-2" />
-                  Filters
+                <div className="flex items-center relative cursor-pointer p-2 border rounded-lg shadow-sm">
+                  <IconFilter size={18} />
+                  {
+                    <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                      {selectedEventTypes.length}
+                    </div>
+                  }
                 </div>
               </PopoverTrigger>
-              <PopoverContent className="p-4 bg-white shadow-lg rounded-md w-60">
+              <PopoverContent className="p-4 bg-white shadow-lg rounded-md w-fit">
                 <h3 className="text-lg font-bold mb-3">Filter Options</h3>
 
-                {/* Favorites Only */}
-                <div className="flex items-center mb-4">
-                  <Checkbox
-                    id="favorites-only"
-                    checked={showFavoritesOnly}
-                    onCheckedChange={(checked) =>
-                      setShowFavoritesOnly(checked === true)
-                    }
-                    className="mr-2"
-                  />
-                  <label
-                    htmlFor="favorites-only"
-                    className="text-sm cursor-pointer"
-                  >
-                    Show Favorites Only
-                  </label>
+                {/* Display count of filtered events */}
+                <div className="text-sm text-gray-500 mb-2">
+                  {filteredEvents.length} event
+                  {filteredEvents.length !== 1 ? "s" : ""} found
                 </div>
 
                 {/* Event Type Filters (Multi-Select) */}
                 <div className="border-t pt-2">
                   <p className="text-md font-semibold mb-2">Event Types:</p>
+                  <div className="flex items-center mb-2">
+                    <Checkbox
+                      id="select-all-none"
+                      checked={selectedEventTypes.length === 5} // Assume 5 is the total number of event types
+                      onCheckedChange={(checked) => {
+                        if (checked) {
+                          // Select All
+                          setSelectedEventTypes([
+                            "FOOD",
+                            "REQUIRED",
+                            "WORKSHOPS",
+                            "SPONSOR",
+                            "ACTIVITIES",
+                          ] as EventType[]);
+                        } else {
+                          // Select None
+                          setSelectedEventTypes([]);
+                        }
+                      }}
+                      className="mr-2"
+                    />
+                    <label
+                      htmlFor="select-all-none"
+                      className="text-sm cursor-pointer"
+                    >
+                      {selectedEventTypes.length === 5
+                        ? "Unselect All"
+                        : "Select All"}
+                    </label>
+                  </div>
+
                   {(
                     [
                       "FOOD",
@@ -352,70 +382,68 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
         </div>
 
         {/* Schedule Grid Table */}
-        {filteredEvents.length === 0 ? (
-          <div className="text-center text-gray-500 p-4">No events found</div>
-        ) : (
-          <table className="table-fixed w-full border-collapse">
-            <thead>
-              <tr className="bg-gray-100">
-                <th className="w-16"></th>
-                {selectedDay === "All" ? (
-                  days.map((date) => (
-                    <th key={date} className="p-2 text-center">
-                      {new Date(date).toLocaleDateString(undefined, {
-                        weekday: "long",
-                        month: "long",
-                        day: "numeric",
-                      })}
-                    </th>
-                  ))
-                ) : (
-                  <th className="p-2 text-center">
-                    {new Date(selectedDay).toLocaleDateString(undefined, {
+
+        <table className="table-fixed w-full border-collapse">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="w-16"></th>
+              {selectedDay === "All" ? (
+                days.map((date) => (
+                  <th key={date} className="p-2 text-center">
+                    {new Date(date).toLocaleDateString(undefined, {
                       weekday: "long",
                       month: "long",
                       day: "numeric",
                     })}
                   </th>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {slots.map((slotIndex) => (
-                <tr key={slotIndex} className="h-8">
+                ))
+              ) : (
+                <th className="p-2 text-center">
+                  {new Date(selectedDay).toLocaleDateString(undefined, {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </th>
+              )}
+            </tr>
+          </thead>
+          <tbody>
+            {slots.map((slotIndex) => (
+              <tr key={slotIndex} className="h-8">
+                <td
+                  className={`border-r border-l border-dashed border-gray-300 text-xs text-right pr-2 ${
+                    slotIndex % 2 === 1 ? "border-b border-dashed" : ""
+                  }`}
+                >
+                  {slotIndex % 2 === 0 ? formatTime(slotIndex) : ""}
+                </td>
+                {(selectedDay === "All" ? days : [selectedDay]).map((day) => (
                   <td
-                    className={`border-r border-l border-dashed border-gray-300 text-xs text-right pr-2 ${
-                      slotIndex % 2 === 1 ? "border-b border-dashed" : ""
-                    }`}
+                    key={day}
+                    className="relative border-r border-gray-300 border-b border-dashed overflow-visible"
                   >
-                    {slotIndex % 2 === 0 ? formatTime(slotIndex) : ""}
-                  </td>
-                  {(selectedDay === "All" ? days : [selectedDay]).map((day) => (
-                    <td
-                      key={day}
-                      className="relative border-r border-gray-300 border-b border-dashed overflow-visible"
-                    >
-                      {filteredGroupedEvents[day]
-                        ?.filter(
-                          (event) => getRowIndex(event.startDate) === slotIndex
-                        )
-                        .map((event) => {
-                          const rowSpan = getRowSpan(
-                            event.startDate,
-                            event.endDate
-                          );
-                          const isSelected = selectedEvent?.id === event.id;
-                          const colorClass = event.eventType
-                            ? eventTypeColors[event.eventType]
-                            : "bg-gray-400";
+                    {filteredGroupedEvents[day]
+                      ?.filter(
+                        (event) => getRowIndex(event.startDate) === slotIndex
+                      )
+                      .map((event) => {
+                        const rowSpan = getRowSpan(
+                          event.startDate,
+                          event.endDate
+                        );
+                        const isSelected = selectedEvent?.id === event.id;
+                        const colorClass = event.eventType
+                          ? eventTypeColors[event.eventType]
+                          : "bg-gray-400";
 
-                          return (
-                            <div
-                              key={event.id}
-                              onClick={() =>
-                                setSelectedEvent(isSelected ? null : event)
-                              }
-                              className={`absolute inset-0 rounded-md  p-1 overflow-hidden cursor-pointer text-white
+                        return (
+                          <div
+                            key={event.id}
+                            onClick={() =>
+                              setSelectedEvent(isSelected ? null : event)
+                            }
+                            className={`absolute inset-0 rounded-md  p-1 overflow-hidden cursor-pointer text-white
                                  transition-shadow duration-150
                                 ${
                                   isSelected
@@ -426,29 +454,28 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                         !collapsed ? "shadow-sm" : ""
                                       }` // Add shadow on hover
                                 }`}
-                              style={{
-                                gridRow: `span ${rowSpan}`,
-                                height: `${rowSpan * 2}rem`,
-                                zIndex: 2,
-                              }}
-                            >
-                              <CardTitle className="text-sm font-bold flex justify-between">
-                                {event.name}
-                              </CardTitle>
-                              <div className="text-xs flex items-center">
-                                <IconMapPin size={12} className="mr-1" />
-                                {event.location || "TBA"}
-                              </div>
+                            style={{
+                              gridRow: `span ${rowSpan}`,
+                              height: `${rowSpan * 2}rem`,
+                              zIndex: 2,
+                            }}
+                          >
+                            <CardTitle className="text-sm font-bold flex justify-between">
+                              {event.name}
+                            </CardTitle>
+                            <div className="text-xs flex items-center">
+                              <IconMapPin size={12} className="mr-1" />
+                              {event.location || "TBA"}
                             </div>
-                          );
-                        })}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+                          </div>
+                        );
+                      })}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </motion.div>
       {/* Draggable Divider */}
       {!isMobile && !collapsed && (
@@ -498,14 +525,18 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
       {/* RIGHT SECTION: Event Details */}
       <motion.div
         className={`relative w-full ${
-          isMobile ? "" : collapsed ? "hidden" : "block"
+          isMobile
+            ? " overflow-visible  inset-x-0 absolute bottom-0"
+            : collapsed
+            ? "hidden"
+            : "block"
         }`}
-        animate={isMobile ? { height: selectedEvent ? "34%" : "0%" } : {}}
+        animate={isMobile ? { height: selectedEvent ? "80vh" : "0vh" } : {}}
         initial={isMobile ? { height: "0%", opacity: 0 } : {}}
         transition={{ duration: 0.3 }}
       >
         {selectedEvent && (
-          <div className="p-4 bg-white w-full rounded-lg shadow-sm border h-full flex flex-col justify-between">
+          <div className="p-4 bg-white w-full rounded-lg shadow-sm border md:h-full flex flex-col justify-between">
             {/* Top Section: Event Details */}
             <div>
               <h2 className="text-xl font-bold flex justify-between">
@@ -596,7 +627,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
 
         {
           // Show placeholder if no event is selected
-          !selectedEvent && (
+          !selectedEvent && !isMobile && (
             <div className="text-center text-gray-500 p-4">
               Select an event to view more details
             </div>
