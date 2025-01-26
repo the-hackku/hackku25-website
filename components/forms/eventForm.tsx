@@ -80,7 +80,7 @@ export function EventForm() {
     const [year, month, day] = date.split("-").map(Number);
     const [hours, minutes] = time.split(":").map(Number);
 
-    // Create a new Date object with specified year, month, day, hours, and minutes
+    // Create a new Date object using local time
     return new Date(year, month - 1, day, hours, minutes);
   };
 

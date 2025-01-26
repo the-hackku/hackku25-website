@@ -11,7 +11,6 @@ import {
   IconChevronRight,
   IconChevronLeft,
   IconX,
-  IconClock,
 } from "@tabler/icons-react";
 import {
   Popover,
@@ -47,28 +46,160 @@ const eventTypeColors: Record<EventType, string> = {
 
 // Helper function to map slot index to a readable time format (e.g., "7:00 AM", "7:30 AM", etc.)
 const formatTime = (index: number) => {
-  const hour = Math.floor(index / 2) + 7; // Start from 7 AM
+  const hour = Math.floor(index / 2) + 6; // Start from 7 AM
   const minutes = index % 2 === 0 ? "00" : "30";
-  const adjustedHour = hour % 24; // Ensure hour stays within 24-hour format
 
-  // Convert 24-hour to 12-hour format
-  const displayHour =
-    adjustedHour === 0
-      ? 12
-      : adjustedHour > 12
-      ? adjustedHour - 12
-      : adjustedHour;
-  const period = adjustedHour >= 12 && adjustedHour < 24 ? "PM" : "AM";
+  // Use a Date object to ensure consistent local time formatting
+  const date = new Date();
+  date.setHours(hour, parseInt(minutes), 0, 0); // Set local hours and minutes
 
-  return `${displayHour}:${minutes} ${period}`;
+  return date.toLocaleTimeString(undefined, {
+    hour: "numeric",
+    minute: "2-digit",
+  });
 };
+
+// Helper function to check if two events overlap
+const doEventsOverlap = (a: ScheduleEvent, b: ScheduleEvent) => {
+  const startA = new Date(a.startDate).getTime(); // Convert to milliseconds
+  const endA = new Date(a.endDate).getTime();
+  const startB = new Date(b.startDate).getTime();
+  const endB = new Date(b.endDate).getTime();
+
+  // Check if the two events overlap
+  return startA < endB && startB < endA; // No overlap if one ends before the other starts
+};
+
+// Function to group overlapping events
+const groupOverlappingEvents = (events: ScheduleEvent[]): ScheduleEvent[][] => {
+  const sortedEvents = events.sort(
+    (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+  );
+  const groups: ScheduleEvent[][] = [];
+
+  for (const event of sortedEvents) {
+    let placed = false;
+
+    for (const group of groups) {
+      // Check if the event overlaps with any event in the group
+      if (group.some((e) => doEventsOverlap(e, event))) {
+        group.push(event);
+        placed = true;
+        break;
+      }
+    }
+
+    if (!placed) {
+      groups.push([event]); // Create a new group
+    }
+  }
+
+  return groups;
+};
+
+type OverlapInfo = {
+  groupIndex: number;
+  eventIndex: number;
+  groupSize: number;
+};
+
+function buildOverlapMap(events: ScheduleEvent[]): Map<string, OverlapInfo> {
+  const overlapMap = new Map<string, OverlapInfo>();
+  const groups = groupOverlappingEvents(events);
+
+  groups.forEach((group, groupIndex) => {
+    group.forEach((ev, eventIndex) => {
+      overlapMap.set(ev.id, {
+        groupIndex,
+        eventIndex,
+        groupSize: group.length,
+      });
+    });
+  });
+
+  return overlapMap;
+}
+
+// ... [Other imports and code]
+
+// Updated getOverlapStyle function
+function getOverlapStyle(
+  eventIndex: number,
+  groupSize: number
+): React.CSSProperties {
+  // Single event in the group
+  if (groupSize === 1) {
+    return {
+      left: "0%",
+      width: "100%",
+    };
+  }
+
+  // Exactly two events in the group
+  if (groupSize === 2) {
+    if (eventIndex === 0) {
+      // Bottommost event
+      return {
+        left: "0%",
+        width: "70%",
+      };
+    } else {
+      // Topmost event
+      return {
+        left: "50%",
+        width: "45%",
+      };
+    }
+  }
+
+  // Exactly three events in the group
+  if (groupSize === 3) {
+    switch (eventIndex) {
+      case 0:
+        // Bottommost event
+        return {
+          left: "0%",
+          width: "50%",
+        };
+      case 1:
+        // Middle event
+        return {
+          left: "30%",
+          width: "60%",
+        };
+      case 2:
+        // Topmost event
+        return {
+          left: "60%",
+          width: "35%",
+        };
+      default:
+        // Fallback for unexpected indices
+        return {
+          left: "0%",
+          width: "100%",
+        };
+    }
+  }
+
+  // For groups with more than three events, distribute them evenly
+  const widthPercent = 100 / groupSize;
+  const leftPercent = widthPercent * eventIndex;
+  return {
+    left: `${leftPercent}%`,
+    width: `${widthPercent}%`,
+  };
+}
+
+// ... [Rest of the component code]
 
 // Calculate the start row for the event based on its start time
 const getRowIndex = (dateString: string) => {
-  const date = new Date(dateString);
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
-  // We start at 7 AM, so subtract 7 from the hour
+  const date = new Date(dateString); // Ensure this parses as local time
+  const hours = date.getHours(); // Local hours
+  const minutes = date.getMinutes(); // Local minutes
+
+  // Adjust for the grid start time (7 AM local time)
   return (hours - 6) * 2 + (minutes >= 30 ? 1 : 0);
 };
 
@@ -120,9 +251,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
 
   // Group events by date
   const groupedEvents = schedule.reduce((acc, event) => {
-    const eventDate = new Date(event.startDate).toLocaleDateString("en-US", {
-      timeZone: "UTC",
-    });
+    // Format the event start date as a local date string
+    const eventDate = new Date(event.startDate).toLocaleDateString("en-US"); // Use local time zone by default
     if (!acc[eventDate]) acc[eventDate] = [];
     acc[eventDate].push(event);
     return acc;
@@ -201,13 +331,20 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
 
   // Regroup after filtering
   const filteredGroupedEvents = filteredEvents.reduce((acc, event) => {
-    const eventDate = new Date(event.startDate).toLocaleDateString("en-US", {
-      timeZone: "UTC",
-    });
+    const eventDate = new Date(event.startDate).toLocaleDateString("en-US"); // Use local time
     if (!acc[eventDate]) acc[eventDate] = [];
     acc[eventDate].push(event);
     return acc;
   }, {} as Record<string, ScheduleEvent[]>);
+
+  // Build an overlapMap for each day after we've filtered
+  const overlapMaps = React.useMemo(() => {
+    const maps: Record<string, Map<string, OverlapInfo>> = {};
+    for (const day of Object.keys(filteredGroupedEvents)) {
+      maps[day] = buildOverlapMap(filteredGroupedEvents[day]);
+    }
+    return maps;
+  }, [filteredGroupedEvents]);
 
   // Determine earliest event index based on selected day
   const dayEvents =
@@ -238,7 +375,6 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
       }
     });
   };
-  console.log("hawdkjnawjkd");
 
   return (
     <div className="flex flex-col md:flex-row sm:gap-1 md:gap-3 p-4 h-screen md:max-h-[calc(100vh-4rem)]">
@@ -351,7 +487,9 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                       />
                       <label
                         htmlFor={`type-${type}`}
-                        className="text-sm cursor-pointer"
+                        className={`text-sm cursor-pointer ${
+                          eventTypeColors[type] // Dynamically apply the background color class
+                        } text-white rounded-md px-2 py-1`}
                       >
                         {type.charAt(0).toUpperCase() +
                           type.slice(1).toLowerCase()}
@@ -408,76 +546,96 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
             {slots.map((slotIndex) => (
               <tr key={slotIndex} className="h-8">
                 <td
-                  className={`border-r  border-gray-300 text-xs text-right pr-2 ${
-                    slotIndex % 2 === 1 ? "border-b " : ""
+                  className={`relative border-r border-gray-300 overflow-visible ${
+                    slotIndex % 2 === 0 ? "" : "border-b border-solid"
                   }`}
                 >
                   {slotIndex % 2 === 0 ? formatTime(slotIndex) : ""}
                 </td>
-                {(selectedDay === "All" ? days : [selectedDay]).map((day) => (
-                  <td
-                    key={day}
-                    className={`relative border-r border-gray-300 overflow-visible ${
-                      slotIndex % 2 === 0 ? "" : "border-b border-solid"
-                    }`}
-                    style={{
-                      borderRightStyle: "dashed",
-                    }}
-                  >
-                    {filteredGroupedEvents[day]
-                      ?.filter(
-                        (event) => getRowIndex(event.startDate) === slotIndex
-                      )
-                      .map((event) => {
-                        const rowSpan = getRowSpan(
-                          event.startDate,
-                          event.endDate
-                        );
-                        const isSelected = selectedEvent?.id === event.id;
-                        const colorClass = event.eventType
-                          ? eventTypeColors[event.eventType]
-                          : "bg-gray-400";
+                {(selectedDay === "All" ? days : [selectedDay]).map((day) => {
+                  const dayOverlapMap = overlapMaps[day]; // get the overlap map for this day
 
-                        return (
-                          <div
-                            key={event.id}
-                            onClick={() =>
-                              setSelectedEvent(isSelected ? null : event)
-                            }
-                            className={`absolute inset-0 rounded-md  p-1 overflow-hidden cursor-pointer text-white
-                                 transition-shadow duration-150
+                  return (
+                    <td
+                      key={day}
+                      className={`relative border-r border-gray-300 overflow-visible ${
+                        slotIndex % 2 === 0 ? "" : "border-b border-solid"
+                      }`}
+                      style={{
+                        borderRightStyle: "dashed",
+                      }}
+                    >
+                      {filteredGroupedEvents[day]
+                        ?.filter(
+                          (event) => getRowIndex(event.startDate) === slotIndex
+                        )
+                        .map((event) => {
+                          const rowSpan = getRowSpan(
+                            event.startDate,
+                            event.endDate
+                          );
+                          const isSelected = selectedEvent?.id === event.id;
+                          const colorClass = event.eventType
+                            ? eventTypeColors[event.eventType]
+                            : "bg-gray-400";
+
+                          // Look up this event's overlap info
+                          const overlapInfo = dayOverlapMap?.get(event.id);
+                          let overlapStyle: React.CSSProperties = {};
+
+                          if (overlapInfo) {
+                            overlapStyle = getOverlapStyle(
+                              overlapInfo.eventIndex,
+                              overlapInfo.groupSize
+                            );
+                          } else {
+                            // Default if not found in map
+                            overlapStyle = { left: "0%", width: "100%" };
+                          }
+
+                          return (
+                            <div
+                              key={event.id}
+                              onClick={() =>
+                                setSelectedEvent(isSelected ? null : event)
+                              }
+                              className={`absolute inset-0 rounded-md p-1 overflow-hidden cursor-pointer text-white
+                                transition-shadow duration-200
+                                ${colorClass}
                                 ${
                                   isSelected
-                                    ? `${colorClass} ${
-                                        !collapsed ? "shadow-xl" : ""
-                                      }`
-                                    : `${colorClass} hover:shadow-sm ${
-                                        !collapsed ? "shadow-sm" : ""
-                                      }` // Add shadow on hover
-                                }`}
-                            style={{
-                              gridRow: `span ${rowSpan}`,
-                              height: `${rowSpan * 2}rem`,
-                              zIndex: 2,
-                            }}
-                          >
-                            <span className="flex-col gap-0">
-                              <p className="text-sm font-bold">{event.name}</p>
+                                    ? "shadow-xl z-20"
+                                    : "hover:shadow-sm shadow-sm z-10"
+                                }
+                              `}
+                              style={{
+                                // Vertical placement from your existing logic
+                                gridRow: `span ${rowSpan}`,
+                                height: `${rowSpan * 2}rem`,
+                                // Horizontal placement from overlap logic
+                                position: "absolute", // ensure absolute so `left`/`width` apply
+                                ...overlapStyle,
+                              }}
+                            >
+                              <span className="flex-col gap-0">
+                                <p className="text-sm font-bold">
+                                  {event.name}
+                                </p>
+                                <div className="text-xs flex items-center">
+                                  {formatTime(getRowIndex(event.startDate))} -{" "}
+                                  {formatTime(getRowIndex(event.endDate))}
+                                </div>
+                              </span>
                               <div className="text-xs flex items-center">
-                                {formatTime(getRowIndex(event.startDate))} -{" "}
-                                {formatTime(getRowIndex(event.endDate))}
+                                <IconMapPin size={12} className="mr-1" />
+                                {event.location || "TBA"}
                               </div>
-                            </span>
-
-                            <div className="text-xs flex items-center">
-                              <IconMapPin size={12} className="mr-1" />
-                              {event.location || "TBA"}
                             </div>
-                          </div>
-                        );
-                      })}
-                  </td>
-                ))}
+                          );
+                        })}
+                    </td>
+                  );
+                })}
               </tr>
             ))}
           </tbody>

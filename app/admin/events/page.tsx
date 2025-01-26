@@ -18,8 +18,6 @@ export default async function EventsPage() {
   // Fetch events data from the backend
   const events = await fetchEvents();
 
-  console.log(events);
-
   // Pre-process the dates to keep them as full datetime strings
   const processedEvents: Event[] = events.map((event) => ({
     id: event.id,
