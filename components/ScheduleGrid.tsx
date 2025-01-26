@@ -11,6 +11,7 @@ import {
   IconTag,
   IconChevronRight,
   IconChevronLeft,
+  IconX,
 } from "@tabler/icons-react";
 import {
   Popover,
@@ -104,7 +105,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   );
   const [selectedDay, setSelectedDay] = useState("All");
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
-  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [showFavoritesOnly] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([
     "FOOD",
@@ -285,11 +286,6 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
               <PopoverTrigger>
                 <div className="flex items-center relative cursor-pointer p-2 border rounded-lg shadow-sm">
                   <IconFilter size={18} />
-                  {
-                    <div className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-                      {selectedEventTypes.length}
-                    </div>
-                  }
                 </div>
               </PopoverTrigger>
               <PopoverContent className="p-4 bg-white shadow-lg rounded-md w-fit">
@@ -412,8 +408,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
             {slots.map((slotIndex) => (
               <tr key={slotIndex} className="h-8">
                 <td
-                  className={`border-r border-l border-dashed border-gray-300 text-xs text-right pr-2 ${
-                    slotIndex % 2 === 1 ? "border-b border-dashed" : ""
+                  className={`border-r  border-gray-300 text-xs text-right pr-2 ${
+                    slotIndex % 2 === 1 ? "border-b " : ""
                   }`}
                 >
                   {slotIndex % 2 === 0 ? formatTime(slotIndex) : ""}
@@ -421,7 +417,12 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                 {(selectedDay === "All" ? days : [selectedDay]).map((day) => (
                   <td
                     key={day}
-                    className="relative border-r border-gray-300 border-b border-dashed overflow-visible"
+                    className={`relative border-r border-gray-300 overflow-visible ${
+                      slotIndex % 2 === 0 ? "" : "border-b border-solid"
+                    }`}
+                    style={{
+                      borderRightStyle: "dashed",
+                    }}
                   >
                     {filteredGroupedEvents[day]
                       ?.filter(
@@ -541,7 +542,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
             <div>
               <h2 className="text-xl font-bold flex justify-between">
                 {selectedEvent.name}
-                <span className="flex items-center">
+                <span className="flex items-center gap-2">
                   {/* Favorite Toggle */}
                   <span
                     onClick={() => toggleFavorite(selectedEvent.id)}
@@ -553,6 +554,15 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                       <IconHeart className="text-gray-400" />
                     )}
                   </span>
+
+                  {isMobile && (
+                    <span
+                      onClick={() => setSelectedEvent(null)}
+                      className="cursor-pointer"
+                    >
+                      <IconX className="text-gray-400" />
+                    </span>
+                  )}
 
                   {/* Close Button */}
                 </span>
@@ -590,38 +600,40 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
             </div>
 
             {/* Bottom Section: Previous/Next Buttons */}
-            <div className="flex justify-between items-center mt-6 pt-4 border-t">
-              <button
-                onClick={() => {
-                  if (getPreviousEvent(selectedEvent)) {
-                    setSelectedEvent(getPreviousEvent(selectedEvent));
-                  }
-                }}
-                className={`${
-                  !getPreviousEvent(selectedEvent)
-                    ? "opacity-30 cursor-not-allowed"
-                    : "hover:text-gray-900 focus:outline-none"
-                } `}
-                disabled={!getPreviousEvent(selectedEvent)}
-              >
-                &larr; Previous
-              </button>
-              <button
-                onClick={() => {
-                  if (getNextEvent(selectedEvent)) {
-                    setSelectedEvent(getNextEvent(selectedEvent));
-                  }
-                }}
-                className={`${
-                  !getNextEvent(selectedEvent)
-                    ? "opacity-30 cursor-not-allowed"
-                    : "hover:text-gray-900 focus:outline-none"
-                } `}
-                disabled={!getNextEvent(selectedEvent)}
-              >
-                Next &rarr;
-              </button>
-            </div>
+            {!isMobile && (
+              <div className="flex justify-between items-center mt-6 pt-4 border-t">
+                <button
+                  onClick={() => {
+                    if (getPreviousEvent(selectedEvent)) {
+                      setSelectedEvent(getPreviousEvent(selectedEvent));
+                    }
+                  }}
+                  className={`${
+                    !getPreviousEvent(selectedEvent)
+                      ? "opacity-30 cursor-not-allowed"
+                      : "hover:text-gray-900 focus:outline-none"
+                  } `}
+                  disabled={!getPreviousEvent(selectedEvent)}
+                >
+                  &larr; Previous
+                </button>
+                <button
+                  onClick={() => {
+                    if (getNextEvent(selectedEvent)) {
+                      setSelectedEvent(getNextEvent(selectedEvent));
+                    }
+                  }}
+                  className={`${
+                    !getNextEvent(selectedEvent)
+                      ? "opacity-30 cursor-not-allowed"
+                      : "hover:text-gray-900 focus:outline-none"
+                  } `}
+                  disabled={!getNextEvent(selectedEvent)}
+                >
+                  Next &rarr;
+                </button>
+              </div>
+            )}
           </div>
         )}
 
