@@ -15,6 +15,7 @@ async function getEvents(): Promise<Event[]> {
       createdAt: true,
       updatedAt: true,
       description: true,
+      eventType: true,
     },
   });
 

@@ -2,14 +2,17 @@
 
 import { prisma } from "@/prisma";
 import { isAdmin } from "@/middlewares/isAdmin";
+import { EventType } from "@prisma/client";
 
 // Type for the Event data used in creating or updating events// Type for the Event data used in creating or updating events
+
 interface EventData {
-  startDate: string; // Use separate startDate field
-  endDate: string; // Use separate endDate field
+  startDate: string;
+  endDate: string;
   name: string;
   location: string;
   description: string;
+  eventType: EventType;
 }
 
 // CRUD operations for the admin dashboard
@@ -25,21 +28,6 @@ export async function getUsers() {
       email: true,
       role: true,
       ParticipantInfo: true, // Fetch all fields from ParticipantInfo
-    },
-  });
-}
-
-// Fetch all events and return their names
-export async function getEvents() {
-  await isAdmin(); // Ensure only admins can access
-
-  return await prisma.event.findMany({
-    select: {
-      id: true, // Return ID if needed for frontend actions
-      name: true,
-      startDate: true, // Return the event date
-      endDate: true, // Return the end
-      location: true, // Include location if necessary
     },
   });
 }
@@ -67,17 +55,17 @@ export async function getCheckins() {
 }
 
 // Create a new event
-// Create a new event
 export async function createEvent(data: EventData) {
   await isAdmin(); // Ensure only admins can access
 
   return await prisma.event.create({
     data: {
       name: data.name,
-      startDate: new Date(data.startDate), // Prisma interprets ISO strings as UTC
+      startDate: new Date(data.startDate),
       endDate: new Date(data.endDate),
       location: data.location || null,
       description: data.description,
+      eventType: data.eventType,
     },
     select: {
       id: true,
@@ -85,12 +73,12 @@ export async function createEvent(data: EventData) {
       startDate: true,
       endDate: true,
       location: true,
-      description: true, // Return the description in the response
+      description: true,
+      eventType: true,
     },
   });
 }
 
-// Update an event
 export async function updateEvent(eventId: string, data: EventData) {
   await isAdmin(); // Ensure only admins can access
 
@@ -98,16 +86,20 @@ export async function updateEvent(eventId: string, data: EventData) {
     where: { id: eventId },
     data: {
       name: data.name,
-      startDate: new Date(data.startDate), // Convert string to Date object
-      endDate: new Date(data.endDate), // Set end date to the same as start date for now
+      startDate: new Date(data.startDate),
+      endDate: new Date(data.endDate),
       location: data.location || null,
+      description: data.description,
+      eventType: data.eventType, // Add eventType
     },
     select: {
-      id: true, // Include id for frontend reference
-      name: true, // Return the updated event name
-      startDate: true, // Return the updated event date
-      endDate: true, // Return the updated
-      location: true, // Return the updated location
+      id: true,
+      name: true,
+      startDate: true,
+      endDate: true,
+      location: true,
+      description: true,
+      eventType: true, // Include eventType
     },
   });
 }

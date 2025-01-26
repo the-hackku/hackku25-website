@@ -7,8 +7,10 @@ import {
   IconHeart,
   IconHeartFilled,
   IconMapPin,
-  IconX,
   IconInfoCircle,
+  IconTag,
+  IconChevronRight,
+  IconChevronLeft,
 } from "@tabler/icons-react";
 import {
   Popover,
@@ -16,26 +18,39 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Checkbox } from "./ui/checkbox";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
+import { EventType } from "@prisma/client";
+
+type ScheduleEvent = {
+  id: string;
+  name: string;
+  startDate: string;
+  endDate: string;
+  location: string | null;
+  description?: string;
+  eventType: EventType;
+};
 
 type ScheduleGridProps = {
-  schedule: {
-    id: string;
-    name: string;
-    startDate: string;
-    endDate: string;
-    location: string | null;
-    description?: string;
-  }[];
+  schedule: ScheduleEvent[];
+};
+
+// Helper function to map an eventType to a specific color
+const eventTypeColors: Record<EventType, string> = {
+  FOOD: "bg-orange-400",
+  REQUIRED: "bg-red-400",
+  WORKSHOPS: "bg-green-400",
+  SPONSOR: "bg-blue-400",
+  ACTIVITIES: "bg-purple-400",
 };
 
 // Helper function to map slot index to a readable time format (e.g., "7:00 AM", "7:30 AM", etc.)
 const formatTime = (index: number) => {
-  const hour = Math.floor(index / 2) + 7; // Calculate hour starting from 7 AM
+  const hour = Math.floor(index / 2) + 7; // Start from 7 AM
   const minutes = index % 2 === 0 ? "00" : "30";
   const adjustedHour = hour % 24; // Ensure hour stays within 24-hour format
 
-  // Convert 24-hour format to 12-hour format
+  // Convert 24-hour to 12-hour format
   const displayHour =
     adjustedHour === 0
       ? 12
@@ -60,9 +75,9 @@ const getRowIndex = (dateString: string) => {
 const getRowSpan = (startString: string, endString: string) => {
   const start = new Date(startString);
   const end = new Date(endString);
-  const duration = (end.getTime() - start.getTime()) / (1000 * 60);
-  // Each slot is 30 minutes, so how many 30-minute segments fit in `duration`?
-  return Math.max(1, duration / 30);
+  const durationInMinutes = (end.getTime() - start.getTime()) / (1000 * 60);
+  // Each slot is 30 minutes
+  return Math.max(1, durationInMinutes / 30);
 };
 
 // Format event time range as "Day, StartTime - EndTime"
@@ -84,13 +99,15 @@ const formatEventTimeRange = (startString: string, endString: string) => {
 };
 
 const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
-  const [selectedEvent, setSelectedEvent] = useState<
-    ScheduleGridProps["schedule"][0] | null
-  >(null);
+  const [selectedEvent, setSelectedEvent] = useState<ScheduleEvent | null>(
+    null
+  );
   const [selectedDay, setSelectedDay] = useState("All");
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([]);
+  const [collapsed, setCollapsed] = useState(false);
 
   const scheduleGridRef = useRef<HTMLDivElement | null>(null);
 
@@ -102,7 +119,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
     if (!acc[eventDate]) acc[eventDate] = [];
     acc[eventDate].push(event);
     return acc;
-  }, {} as Record<string, ScheduleGridProps["schedule"]>);
+  }, {} as Record<string, ScheduleEvent[]>);
 
   const days = Object.keys(groupedEvents).sort();
 
@@ -122,9 +139,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   }, []);
 
   // Helper function to get the next event based on the current event
-  const getNextEvent = (
-    currentEvent: ScheduleGridProps["schedule"][0] | null
-  ) => {
+  const getNextEvent = (currentEvent: ScheduleEvent | null) => {
     if (!currentEvent) return null;
     const currentIndex = filteredEvents.findIndex(
       (event) => event.id === currentEvent.id
@@ -135,9 +150,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   };
 
   // Helper function to get the previous event based on the current event
-  const getPreviousEvent = (
-    currentEvent: ScheduleGridProps["schedule"][0] | null
-  ) => {
+  const getPreviousEvent = (currentEvent: ScheduleEvent | null) => {
     if (!currentEvent) return null;
     const currentIndex = filteredEvents.findIndex(
       (event) => event.id === currentEvent.id
@@ -156,20 +169,30 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
     setFavorites((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
+  /**
+   * FILTERING LOGIC
+   * 1) Get all events across all days.
+   * 2) If showFavoritesOnly is true, keep only favorites.
+   * 3) If selectedEventTypes is non-empty, keep only matching event types.
+   */
   const allEvents = days.flatMap((day) => groupedEvents[day]);
 
-  const filteredEvents = showFavoritesOnly
-    ? allEvents
-        .filter((event) => favorites[event.id])
-        .sort(
-          (a, b) =>
-            new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-        )
-    : allEvents.sort(
-        (a, b) =>
-          new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-      );
+  // Filter by type
+  const typedEvents =
+    selectedEventTypes.length === 0
+      ? allEvents
+      : allEvents.filter(
+          (ev) =>
+            ev.eventType &&
+            selectedEventTypes.includes(ev.eventType as EventType)
+        );
 
+  // Filter by favorites
+  const filteredEvents = showFavoritesOnly
+    ? typedEvents.filter((ev) => favorites[ev.id])
+    : typedEvents;
+
+  // Regroup after filtering
   const filteredGroupedEvents = filteredEvents.reduce((acc, event) => {
     const eventDate = new Date(event.startDate).toLocaleDateString("en-US", {
       timeZone: "UTC",
@@ -177,7 +200,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
     if (!acc[eventDate]) acc[eventDate] = [];
     acc[eventDate].push(event);
     return acc;
-  }, {} as Record<string, ScheduleGridProps["schedule"]>);
+  }, {} as Record<string, ScheduleEvent[]>);
 
   // Determine earliest event index based on selected day
   const dayEvents =
@@ -195,6 +218,20 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
     (_, i) => i + firstEventSlotIndex
   );
 
+  // Handle multi-select of event types
+  const handleEventTypeChange = (type: EventType, checked: boolean) => {
+    setSelectedEventTypes((prev) => {
+      if (checked) {
+        // Add type
+        return [...prev, type];
+      } else {
+        // Remove type
+        return prev.filter((t) => t !== type);
+      }
+    });
+  };
+  console.log("hawdkjnawjkd");
+
   return (
     <div className="flex flex-col md:flex-row gap-4 p-4 h-screen md:max-h-[calc(100vh-4rem)]">
       {/* LEFT SECTION: Schedule Grid */}
@@ -205,56 +242,113 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
           selectedEvent
             ? isMobile
               ? { height: "66%" }
-              : { flex: "1 1 50%" }
+              : {}
             : isMobile
             ? { height: "100%" }
-            : { flex: "1 1 100%" }
+            : {}
         }
         transition={{ duration: 0.2 }}
         className="overflow-y-scroll relative"
+        style={
+          !isMobile
+            ? {
+                flex: collapsed ? "1 1 100%" : "0 0 60%", // Full width when collapsed
+              }
+            : {}
+        }
       >
         {/* Container for Tabs and Filter */}
-        <div className="flex justify-start items-center space-x-4 bg-white sticky top-0 z-40 pb-2">
-          <Tabs value={selectedDay} onValueChange={handleDayChange}>
-            <TabsList>
-              <TabsTrigger value="All">All</TabsTrigger>
-              {days.map((date) => (
-                <TabsTrigger key={date} value={date}>
-                  {new Date(date).toLocaleDateString(undefined, {
-                    weekday: "long",
-                  })}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
+        <div className="flex justify-between items-center space-x-4 bg-white sticky top-0 z-40 pb-2">
+          <div className="flex justify-start w-full gap-2">
+            <Tabs value={selectedDay} onValueChange={handleDayChange}>
+              <TabsList>
+                <TabsTrigger value="All">All</TabsTrigger>
+                {days.map((date) => (
+                  <TabsTrigger key={date} value={date}>
+                    {new Date(date).toLocaleDateString(undefined, {
+                      weekday: "long",
+                    })}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </Tabs>
 
-          {/* Popover for Filters */}
-          <Popover>
-            <PopoverTrigger>
-              <div className="flex items-center cursor-pointer p-3 border rounded-lg shadow-sm">
-                <IconFilter size={16} />
-              </div>
-            </PopoverTrigger>
-            <PopoverContent className="p-4 bg-white shadow-lg rounded-md w-60">
-              <h3 className="text-lg font-bold mb-3">Filter Options</h3>
-              <div className="flex items-center mb-2">
-                <Checkbox
-                  id="favorites-only"
-                  checked={showFavoritesOnly}
-                  onCheckedChange={(checked) =>
-                    setShowFavoritesOnly(checked === true)
-                  }
-                  className="mr-2"
-                />
-                <label
-                  htmlFor="favorites-only"
-                  className="text-sm cursor-pointer"
-                >
-                  Show Favorites Only
-                </label>
-              </div>
-            </PopoverContent>
-          </Popover>
+            {/* Popover for Filters */}
+            <Popover>
+              <PopoverTrigger>
+                <div className="flex items-center cursor-pointer p-2 border rounded-lg shadow-sm">
+                  <IconFilter size={16} className="mr-2" />
+                  Filters
+                </div>
+              </PopoverTrigger>
+              <PopoverContent className="p-4 bg-white shadow-lg rounded-md w-60">
+                <h3 className="text-lg font-bold mb-3">Filter Options</h3>
+
+                {/* Favorites Only */}
+                <div className="flex items-center mb-4">
+                  <Checkbox
+                    id="favorites-only"
+                    checked={showFavoritesOnly}
+                    onCheckedChange={(checked) =>
+                      setShowFavoritesOnly(checked === true)
+                    }
+                    className="mr-2"
+                  />
+                  <label
+                    htmlFor="favorites-only"
+                    className="text-sm cursor-pointer"
+                  >
+                    Show Favorites Only
+                  </label>
+                </div>
+
+                {/* Event Type Filters (Multi-Select) */}
+                <div className="border-t pt-2">
+                  <p className="text-md font-semibold mb-2">Event Types:</p>
+                  {(
+                    [
+                      "FOOD",
+                      "REQUIRED",
+                      "WORKSHOPS",
+                      "SPONSOR",
+                      "ACTIVITIES",
+                    ] as EventType[]
+                  ).map((type) => (
+                    <div key={type} className="flex items-center mb-2">
+                      <Checkbox
+                        id={`type-${type}`}
+                        checked={selectedEventTypes.includes(type)}
+                        onCheckedChange={(checked) =>
+                          handleEventTypeChange(type, checked === true)
+                        }
+                        className="mr-2"
+                      />
+                      <label
+                        htmlFor={`type-${type}`}
+                        className="text-sm cursor-pointer"
+                      >
+                        {type.charAt(0).toUpperCase() +
+                          type.slice(1).toLowerCase()}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          {!isMobile && (
+            <span
+              onClick={() => setCollapsed(!collapsed)}
+              className="ml-4 cursor-pointer"
+            >
+              {collapsed ? (
+                <IconChevronLeft size={24} />
+              ) : (
+                <IconChevronRight size={24} />
+              )}
+            </span>
+          )}
         </div>
 
         {/* Schedule Grid Table */}
@@ -305,45 +399,49 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                         ?.filter(
                           (event) => getRowIndex(event.startDate) === slotIndex
                         )
-                        .map((event) => (
-                          <div
-                            key={event.id}
-                            onClick={() =>
-                              setSelectedEvent(
-                                selectedEvent?.id === event.id ? null : event
-                              )
-                            }
-                            className={`absolute inset-0 ${
-                              selectedEvent?.id === event.id
-                                ? "bg-blue-500 text-white"
-                                : "bg-gray-400 text-white"
-                            } rounded-md shadow-md p-1 overflow-hidden cursor-pointer`}
-                            style={{
-                              gridRow: `span ${getRowSpan(
-                                event.startDate,
-                                event.endDate
-                              )}`,
-                              height: `${
-                                getRowSpan(event.startDate, event.endDate) * 2
-                              }rem`,
-                              zIndex: 2,
-                            }}
-                          >
-                            <CardTitle className="text-sm font-bold flex justify-between">
-                              {event.name}
-                              <span
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  toggleFavorite(event.id);
-                                }}
-                              ></span>
-                            </CardTitle>
-                            <div className="text-xs flex items-center">
-                              <IconMapPin size={12} className="mr-1" />
-                              {event.location || "TBA"}
+                        .map((event) => {
+                          const rowSpan = getRowSpan(
+                            event.startDate,
+                            event.endDate
+                          );
+                          const isSelected = selectedEvent?.id === event.id;
+                          const colorClass = event.eventType
+                            ? eventTypeColors[event.eventType]
+                            : "bg-gray-400";
+
+                          return (
+                            <div
+                              key={event.id}
+                              onClick={() =>
+                                setSelectedEvent(isSelected ? null : event)
+                              }
+                              className={`absolute inset-0 rounded-md  p-1 overflow-hidden cursor-pointer text-white
+                                 transition-shadow duration-150
+                                ${
+                                  isSelected
+                                    ? `${colorClass} ${
+                                        !collapsed ? "shadow-xl" : ""
+                                      }`
+                                    : `${colorClass} hover:shadow-sm ${
+                                        !collapsed ? "shadow-sm" : ""
+                                      }` // Add shadow on hover
+                                }`}
+                              style={{
+                                gridRow: `span ${rowSpan}`,
+                                height: `${rowSpan * 2}rem`,
+                                zIndex: 2,
+                              }}
+                            >
+                              <CardTitle className="text-sm font-bold flex justify-between">
+                                {event.name}
+                              </CardTitle>
+                              <div className="text-xs flex items-center">
+                                <IconMapPin size={12} className="mr-1" />
+                                {event.location || "TBA"}
+                              </div>
                             </div>
-                          </div>
-                        ))}
+                          );
+                        })}
                     </td>
                   ))}
                 </tr>
@@ -352,116 +450,158 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
           </table>
         )}
       </motion.div>
+      {/* Draggable Divider */}
+      {!isMobile && !collapsed && (
+        <div
+          className="bg-gray-300 w-1 cursor-col-resize transition-all duration-100 
+             hover:bg-gray-400"
+          style={{
+            flexShrink: 0, // Prevent shrinking
+            flexGrow: 0, // Prevent growing
+          }}
+          onMouseDown={(e) => {
+            e.preventDefault();
+
+            const startX = e.clientX;
+            const parentWidth =
+              scheduleGridRef.current?.parentElement?.getBoundingClientRect()
+                .width || 0;
+            const startLeftWidth =
+              scheduleGridRef.current?.getBoundingClientRect().width || 0;
+
+            const handleMouseMove = (e: MouseEvent) => {
+              const delta = e.clientX - startX;
+              const newLeftWidth = Math.max(
+                parentWidth * 0.35, // Minimum 30% of the parent width
+                Math.min(
+                  parentWidth * 0.75, // Maximum 70% of the parent width
+                  startLeftWidth + delta
+                )
+              );
+
+              if (scheduleGridRef.current) {
+                scheduleGridRef.current.style.flex = `0 0 ${newLeftWidth}px`;
+              }
+            };
+
+            const handleMouseUp = () => {
+              window.removeEventListener("mousemove", handleMouseMove);
+              window.removeEventListener("mouseup", handleMouseUp);
+            };
+
+            window.addEventListener("mousemove", handleMouseMove);
+            window.addEventListener("mouseup", handleMouseUp);
+          }}
+        ></div>
+      )}
 
       {/* RIGHT SECTION: Event Details */}
       <motion.div
-        // Animate width on desktop, height on mobile
-        animate={
-          selectedEvent
-            ? isMobile
-              ? { height: "33%" }
-              : { flex: "1 1 50%" }
-            : isMobile
-            ? { height: 0 }
-            : { flex: "0 1 0%" }
-        }
-        transition={{ duration: 0.2 }}
-        className="relative overflow-hidden"
+        className={`relative w-full ${
+          isMobile ? "" : collapsed ? "hidden" : "block"
+        }`}
+        animate={isMobile ? { height: selectedEvent ? "34%" : "0%" } : {}}
+        initial={isMobile ? { height: "0%", opacity: 0 } : {}}
+        transition={{ duration: 0.3 }}
       >
-        <AnimatePresence mode="wait">
-          {selectedEvent && (
-            <motion.div
-              key={selectedEvent.id}
-              initial={
-                isMobile ? { opacity: 0, y: 300 } : { opacity: 0, x: 300 }
-              }
-              animate={isMobile ? { opacity: 1, y: 0 } : { opacity: 1, x: 0 }}
-              exit={isMobile ? { opacity: 0, y: 300 } : { opacity: 0, x: 300 }}
-              transition={{ duration: 0.2 }}
-              className="p-4 bg-white rounded-lg shadow-sm border flex flex-col justify-between h-full"
-            >
-              {/* Top Section: Event Details */}
-              <div>
-                <h2 className="text-xl font-bold flex justify-between">
-                  {selectedEvent.name}
-                  <span className="flex items-center">
-                    {/* Favorite Toggle */}
-                    <span
-                      onClick={() => toggleFavorite(selectedEvent.id)}
-                      className="cursor-pointer"
-                    >
-                      {favorites[selectedEvent.id] ? (
-                        <IconHeartFilled className="text-red-400" />
-                      ) : (
-                        <IconHeart className="text-gray-400" />
-                      )}
-                    </span>
-
-                    {/* Close Button */}
-                    <span
-                      onClick={() => setSelectedEvent(null)}
-                      className="ml-4 cursor-pointer"
-                    >
-                      <IconX className="text-gray-400" />
-                    </span>
+        {selectedEvent && (
+          <div className="p-4 bg-white w-full rounded-lg shadow-sm border h-full flex flex-col justify-between">
+            {/* Top Section: Event Details */}
+            <div>
+              <h2 className="text-xl font-bold flex justify-between">
+                {selectedEvent.name}
+                <span className="flex items-center">
+                  {/* Favorite Toggle */}
+                  <span
+                    onClick={() => toggleFavorite(selectedEvent.id)}
+                    className="cursor-pointer"
+                  >
+                    {favorites[selectedEvent.id] ? (
+                      <IconHeartFilled className="text-red-400" />
+                    ) : (
+                      <IconHeart className="text-gray-400" />
+                    )}
                   </span>
-                </h2>
 
-                <p className="text-sm text-gray-500">
-                  {formatEventTimeRange(
-                    selectedEvent.startDate,
-                    selectedEvent.endDate
-                  )}
-                </p>
-                <hr className="my-2" />
-                <div className="flex items-center mt-2">
-                  <IconMapPin size={20} className="text-gray-400 mr-2" />
-                  <span>{selectedEvent.location || "TBA"}</span>
-                </div>
-                {selectedEvent.description && (
-                  <div className="flex items-center mt-2">
-                    <IconInfoCircle size={20} className="text-gray-400 mr-2" />
-                    {selectedEvent.description}
-                  </div>
+                  {/* Close Button */}
+                </span>
+              </h2>
+
+              <p className="text-sm text-gray-500">
+                {formatEventTimeRange(
+                  selectedEvent.startDate,
+                  selectedEvent.endDate
                 )}
-              </div>
+              </p>
 
-              {/* Bottom Section: Previous/Next Buttons */}
-              <div className="flex justify-between items-center mt-6 pt-4 border-t">
-                <button
-                  onClick={() => {
-                    if (getPreviousEvent(selectedEvent)) {
-                      setSelectedEvent(getPreviousEvent(selectedEvent));
-                    }
-                  }}
-                  className={`${
-                    !getPreviousEvent(selectedEvent)
-                      ? "opacity-30 cursor-not-allowed"
-                      : "hover:text-gray-900 focus:outline-none"
-                  } text-gray-600`}
-                  disabled={!getPreviousEvent(selectedEvent)}
-                >
-                  &larr; Previous
-                </button>
-                <button
-                  onClick={() => {
-                    if (getNextEvent(selectedEvent)) {
-                      setSelectedEvent(getNextEvent(selectedEvent));
-                    }
-                  }}
-                  className={`${
-                    !getNextEvent(selectedEvent)
-                      ? "opacity-30 cursor-not-allowed"
-                      : "hover:text-gray-900 focus:outline-none"
-                  } text-gray-600`}
-                  disabled={!getNextEvent(selectedEvent)}
-                >
-                  Next &rarr;
-                </button>
+              {/* Display Event Type */}
+              {selectedEvent.eventType && (
+                <div className="flex items-center mt-2">
+                  <IconTag size={20} className="text-gray-400 mr-2" />
+                  <span>
+                    {selectedEvent.eventType.charAt(0).toUpperCase() +
+                      selectedEvent.eventType.slice(1).toLowerCase()}
+                  </span>
+                </div>
+              )}
+
+              <hr className="my-2" />
+              <div className="flex items-center mt-2">
+                <IconMapPin size={20} className="text-gray-400 mr-2" />
+                <span>{selectedEvent.location || "TBA"}</span>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              {selectedEvent.description && (
+                <div className="flex items-center mt-2">
+                  <IconInfoCircle size={20} className="text-gray-400 mr-2" />
+                  {selectedEvent.description}
+                </div>
+              )}
+            </div>
+
+            {/* Bottom Section: Previous/Next Buttons */}
+            <div className="flex justify-between items-center mt-6 pt-4 border-t">
+              <button
+                onClick={() => {
+                  if (getPreviousEvent(selectedEvent)) {
+                    setSelectedEvent(getPreviousEvent(selectedEvent));
+                  }
+                }}
+                className={`${
+                  !getPreviousEvent(selectedEvent)
+                    ? "opacity-30 cursor-not-allowed"
+                    : "hover:text-gray-900 focus:outline-none"
+                } `}
+                disabled={!getPreviousEvent(selectedEvent)}
+              >
+                &larr; Previous
+              </button>
+              <button
+                onClick={() => {
+                  if (getNextEvent(selectedEvent)) {
+                    setSelectedEvent(getNextEvent(selectedEvent));
+                  }
+                }}
+                className={`${
+                  !getNextEvent(selectedEvent)
+                    ? "opacity-30 cursor-not-allowed"
+                    : "hover:text-gray-900 focus:outline-none"
+                } `}
+                disabled={!getNextEvent(selectedEvent)}
+              >
+                Next &rarr;
+              </button>
+            </div>
+          </div>
+        )}
+
+        {
+          // Show placeholder if no event is selected
+          !selectedEvent && (
+            <div className="text-center text-gray-500 p-4">
+              Select an event to view more details
+            </div>
+          )
+        }
       </motion.div>
     </div>
   );

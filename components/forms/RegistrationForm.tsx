@@ -387,7 +387,7 @@ export function RegistrationForm() {
             {/* Education Information Section */}
             <hr className="my-4" />
             <h2 className="text-lg font-semibold">Education Information</h2>
-            <div className="flex space-x-4">
+            <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
               <ComboboxSelect
                 name="currentSchool"
                 label="Current School"

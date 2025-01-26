@@ -18,29 +18,25 @@ import { TimeInput } from "../customui/TimeInput";
 import { createEvent } from "@/app/actions/admin";
 import { useRouter } from "next/navigation";
 
+type FormData = z.infer<typeof formSchema>;
+
 // Define schema using Zod with coercion for the duration
 const formSchema = z.object({
-  name: z.string().min(2, {
-    message: "Event name must be at least 2 characters.",
-  }),
-  date: z.enum(["2025-04-04", "2025-04-05", "2025-04-06"], {
-    required_error: "Please select a valid date.",
-  }),
-  startTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/, {
-    message: "Invalid time format. Use HH:MM.",
-  }),
-  duration: z.coerce
-    .number()
-    .min(0.5, { message: "Minimum duration is 0.5 hours." })
-    .max(12, { message: "Maximum duration is 12 hours." }),
+  name: z
+    .string()
+    .min(2, { message: "Event name must be at least 2 characters." }),
+  date: z.enum(["2025-04-04", "2025-04-05", "2025-04-06"]),
+  startTime: z.string().regex(/^([01]\d|2[0-3]):([0-5]\d)$/),
+  duration: z.coerce.number().min(0.5).max(12),
   location: z.string().optional(),
   description: z.string(),
+  eventType: z.enum(["FOOD", "REQUIRED", "WORKSHOPS", "SPONSOR", "ACTIVITIES"]), // Add eventType
 });
 
 export function EventForm() {
   const router = useRouter();
 
-  const form = useForm({
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -49,17 +45,11 @@ export function EventForm() {
       duration: 1,
       location: "",
       description: "",
+      eventType: "FOOD", // Default value
     },
   });
 
-  const onSubmit = async (data: {
-    name: string;
-    date: string;
-    startTime: string;
-    duration: number;
-    location: string;
-    description: string;
-  }) => {
+  const onSubmit = async (data: FormData) => {
     try {
       // Construct start DateTime object from date and time
       const eventStart = createDateTime(data.date, data.startTime);
@@ -72,8 +62,9 @@ export function EventForm() {
         name: data.name,
         startDate: eventStart.toISOString(),
         endDate: eventEnd.toISOString(),
-        location: data.location,
+        location: data.location || "",
         description: data.description,
+        eventType: data.eventType, // Add eventType
       });
 
       // Reset the form and refresh the page
@@ -151,6 +142,29 @@ export function EventForm() {
                     <FormLabel>Description</FormLabel>
                     <FormControl>
                       <Input placeholder="Describe the event" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="eventType"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Event Type</FormLabel>
+                    <FormControl>
+                      <select
+                        value={field.value}
+                        onChange={field.onChange}
+                        className="border rounded p-2 w-full"
+                      >
+                        <option value="FOOD">Food</option>
+                        <option value="REQUIRED">Required</option>
+                        <option value="WORKSHOPS">Workshops</option>
+                        <option value="SPONSOR">Sponsor</option>
+                        <option value="ACTIVITIES">Activities</option>
+                      </select>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -51,19 +51,13 @@ export function ComboboxSelect({
   closeOnSelect = true,
   required = false,
   multiselect = false,
-  focusSearch = false, // Default to false
+  focusSearch = true, // Default to true
 }: ComboboxSelectProps) {
   const { control } = useFormContext();
   const [open, setOpen] = React.useState(false);
   const [inputValue, setInputValue] = React.useState("");
 
   const inputRef = React.useRef<HTMLInputElement | null>(null);
-
-  React.useEffect(() => {
-    if (open && focusSearch && inputRef.current) {
-      inputRef.current.focus(); // Automatically focus the search input
-    }
-  }, [open, focusSearch]);
 
   return (
     <FormField
@@ -123,6 +117,13 @@ export function ComboboxSelect({
                   side="bottom"
                   align="start"
                   sideOffset={4}
+                  onOpenAutoFocus={(event) => {
+                    if (!focusSearch) {
+                      event.preventDefault(); // Prevent default focus behavior
+                    } else if (inputRef.current) {
+                      inputRef.current.focus(); // Focus the input manually
+                    }
+                  }}
                 >
                   <Command shouldFilter={false}>
                     <CommandInput

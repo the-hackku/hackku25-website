@@ -1,6 +1,7 @@
-import { getEvents } from "@/app/actions/admin";
+import { fetchEvents } from "@/app/actions/events";
 import { EventForm } from "@/components/forms/eventForm";
 import ScheduleGrid from "@/components/ScheduleGrid";
+import { EventType } from "@prisma/client";
 import Link from "next/link";
 
 // Define Event type based on the structure returned by `getEvents`
@@ -10,11 +11,14 @@ interface Event {
   startDate: string; // Full datetime string
   endDate: string; // Full datetime string
   location: string | null;
+  eventType: EventType;
 }
 
 export default async function EventsPage() {
   // Fetch events data from the backend
-  const events = await getEvents();
+  const events = await fetchEvents();
+
+  console.log(events);
 
   // Pre-process the dates to keep them as full datetime strings
   const processedEvents: Event[] = events.map((event) => ({
@@ -23,6 +27,7 @@ export default async function EventsPage() {
     startDate: event.startDate.toISOString(), // Convert to ISO string
     endDate: event.endDate.toISOString(), // Convert to ISO string
     location: event.location,
+    eventType: event.eventType, // Add eventType
   }));
 
   return (

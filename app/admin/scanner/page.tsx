@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from "react";
 import ScannerComponent from "@/components/ScannerComponent";
 import { validateQrCode } from "@/app/actions/validateQrCode";
-import { getEvents } from "@/app/actions/getEvents";
+import { fetchEvents } from "@/app/actions/events";
 import {
   Select,
   SelectTrigger,
@@ -23,11 +23,11 @@ export default function ScannerPage() {
 
   // Fetch events on component mount
   useEffect(() => {
-    async function fetchEvents() {
-      const eventsList = await getEvents();
+    async function fetchEventsList() {
+      const eventsList = await fetchEvents();
       setEvents(eventsList);
     }
-    fetchEvents();
+    fetchEventsList();
   }, []);
   // Function to handle scan result and validate the QR code
   const handleScanResult = (scannedCode: string) => {
