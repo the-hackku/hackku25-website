@@ -53,10 +53,41 @@ const formatTime = (index: number) => {
   const date = new Date();
   date.setHours(hour, parseInt(minutes), 0, 0); // Set local hours and minutes
 
-  return date.toLocaleTimeString(undefined, {
-    hour: "numeric",
-    minute: "2-digit",
-  });
+  return date
+    .toLocaleTimeString(undefined, {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })
+    .toLowerCase();
+};
+
+const formatTimeForSlot = (startString: string, endString: string) => {
+  const start = new Date(startString);
+  const end = new Date(endString);
+
+  const startTime = start
+    .toLocaleTimeString(undefined, {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })
+    .toLowerCase()
+    .replace(/\s/g, ""); // Remove any spaces
+  const endTime = end
+    .toLocaleTimeString(undefined, {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })
+    .toLowerCase()
+    .replace(/\s/g, ""); // Remove any spaces
+
+  // Remove the first "am" or "pm" if both times are the same period
+  const isSamePeriod = startTime.slice(-2) === endTime.slice(-2);
+  const formattedStartTime = isSamePeriod ? startTime.slice(0, -2) : startTime;
+
+  return `${formattedStartTime} - ${endTime}`;
 };
 
 // Helper function to check if two events overlap
@@ -120,8 +151,6 @@ function buildOverlapMap(events: ScheduleEvent[]): Map<string, OverlapInfo> {
   return overlapMap;
 }
 
-// ... [Other imports and code]
-
 // Updated getOverlapStyle function
 function getOverlapStyle(
   eventIndex: number,
@@ -141,7 +170,7 @@ function getOverlapStyle(
       // Bottommost event
       return {
         left: "0%",
-        width: "70%",
+        width: "80%",
       };
     } else {
       // Topmost event
@@ -218,16 +247,28 @@ const formatEventTimeRange = (startString: string, endString: string) => {
   const end = new Date(endString);
 
   const day = start.toLocaleDateString(undefined, { weekday: "long" });
-  const startTime = start.toLocaleTimeString(undefined, {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-  const endTime = end.toLocaleTimeString(undefined, {
-    hour: "numeric",
-    minute: "2-digit",
-  });
+  const startTime = start
+    .toLocaleTimeString(undefined, {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })
+    .toLowerCase()
+    .replace(/\s/g, ""); // Remove any spaces
+  const endTime = end
+    .toLocaleTimeString(undefined, {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    })
+    .toLowerCase()
+    .replace(/\s/g, ""); // Remove any spaces
 
-  return `${day}, ${startTime} - ${endTime}`;
+  // Remove the first "am" or "pm" if both times are the same period
+  const isSamePeriod = startTime.slice(-2) === endTime.slice(-2);
+  const formattedStartTime = isSamePeriod ? startTime.slice(0, -2) : startTime;
+
+  return `${day}, ${formattedStartTime} - ${endTime}`;
 };
 
 const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
@@ -406,7 +447,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
           <div className="flex justify-start w-full gap-2">
             <Tabs value={selectedDay} onValueChange={handleDayChange}>
               <TabsList>
-                {!isMobile && <TabsTrigger value="All">All</TabsTrigger>}
+                {!isMobile && <TabsTrigger value="All">Show All</TabsTrigger>}
                 {days.map((date) => (
                   <TabsTrigger key={date} value={date}>
                     {new Date(date).toLocaleDateString(undefined, {
@@ -542,11 +583,11 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
               )}
             </tr>
           </thead>
-          <tbody>
+          <tbody onClick={() => setSelectedEvent(null)}>
             {slots.map((slotIndex) => (
               <tr key={slotIndex} className="h-8">
                 <td
-                  className={`relative border-r border-gray-300 overflow-visible ${
+                  className={`relative border-r border-gray-300 overflow-visible text-xs ${
                     slotIndex % 2 === 0 ? "" : "border-b border-solid"
                   }`}
                 >
@@ -596,9 +637,10 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                           return (
                             <div
                               key={event.id}
-                              onClick={() =>
-                                setSelectedEvent(isSelected ? null : event)
-                              }
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedEvent(isSelected ? null : event);
+                              }}
                               className={`absolute inset-0 rounded-md p-1 overflow-hidden cursor-pointer text-white
                                 transition-shadow duration-200
                                 ${colorClass}
@@ -622,8 +664,10 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                   {event.name}
                                 </p>
                                 <div className="text-xs flex items-center">
-                                  {formatTime(getRowIndex(event.startDate))} -{" "}
-                                  {formatTime(getRowIndex(event.endDate))}
+                                  {formatTimeForSlot(
+                                    event.startDate,
+                                    event.endDate
+                                  )}
                                 </div>
                               </span>
                               <div className="text-xs flex items-center">
