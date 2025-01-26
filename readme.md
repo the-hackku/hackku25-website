@@ -6,4 +6,4 @@ In the meantime, you can join our [Discord](https://discord.gg/crcQ7uTvrk) for t
 
 You can view the site [Here](https://the-hackku.github.io/hackku25-website/)
 
-We can't wait to see you at HackKU 2025!
+We can't wait to see you at HackKU 2025!!
