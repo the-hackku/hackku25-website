@@ -505,7 +505,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
             const handleMouseMove = (e: MouseEvent) => {
               const delta = e.clientX - startX;
               const newLeftWidth = Math.max(
-                parentWidth * 0.35, // Minimum 30% of the parent width
+                parentWidth * 0.5, // Minimum 30% of the parent width
                 Math.min(
                   parentWidth * 0.75, // Maximum 70% of the parent width
                   startLeftWidth + delta
