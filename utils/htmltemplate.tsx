@@ -95,10 +95,7 @@ export const htmlTemplate = (url: string, host: string): string => `
         </p>
       </div>
       <div class="footer">
-        <p>
-          Need help? Contact us at
-          <a href="mailto:support@hackku.org">support@hackku.org</a>
-        </p>
+       
         <p>© ${new Date().getFullYear()} HackKU. All rights reserved.</p>
       </div>
     </div>

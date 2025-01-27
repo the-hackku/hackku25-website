@@ -437,7 +437,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
         style={
           !isMobile
             ? {
-                flex: collapsed ? "1 1 100%" : "0 0 60%", // Full width when collapsed
+                flex: collapsed ? "1 1 100%" : "0 0 70%", // Full width when collapsed
               }
             : {}
         }
@@ -476,7 +476,6 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
 
                 {/* Event Type Filters (Multi-Select) */}
                 <div className="border-t pt-2">
-                  <p className="text-md font-semibold mb-2">Event Types:</p>
                   <div className="flex items-center mb-2">
                     <Checkbox
                       id="select-all-none"
@@ -502,9 +501,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                       htmlFor="select-all-none"
                       className="text-sm cursor-pointer"
                     >
-                      {selectedEventTypes.length === 5
-                        ? "Unselect All"
-                        : "Select All"}
+                      Toggle All
                     </label>
                   </div>
 
@@ -707,11 +704,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
             const handleMouseMove = (e: MouseEvent) => {
               const delta = e.clientX - startX;
               const newLeftWidth = Math.max(
-                parentWidth * 0.5, // Minimum 30% of the parent width
-                Math.min(
-                  parentWidth * 0.75, // Maximum 70% of the parent width
-                  startLeftWidth + delta
-                )
+                parentWidth * 0.4,
+                Math.min(parentWidth * 0.75, startLeftWidth + delta)
               );
 
               if (scheduleGridRef.current) {

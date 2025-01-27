@@ -8,19 +8,15 @@ import {
   IconMail,
   IconUser,
   IconCalendar,
-  IconHelpCircle,
   IconLogout,
+  IconBraces,
+  IconUserFilled,
 } from "@tabler/icons-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+
 import AuthButtons from "@/components/AuthButtons";
-import { TooltipProvider } from "@radix-ui/react-tooltip";
 import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import constants from "@/constants";
 
 function formatDate(dateString: string) {
   const date = new Date(dateString);
@@ -44,6 +40,12 @@ export default async function ProfilePage() {
       include: { ParticipantInfo: true },
     });
 
+    const checkIns = await prisma.checkin.findMany({
+      where: { userId: user?.id },
+      include: { event: true }, // Include event details
+      orderBy: { createdAt: "desc" },
+    });
+
     const qrCodeData = user?.ParticipantInfo
       ? String(user?.id)
       : "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
@@ -51,16 +53,13 @@ export default async function ProfilePage() {
     const fullName = participant
       ? `${participant.firstName} ${participant.lastName}`
       : null;
-    const accountCreationDate = user
-      ? formatDate(user.createdAt.toString())
-      : "N/A";
 
     return (
       <div className="container mx-auto p-4 max-w-4xl space-y-6">
-        <Card className="shadow-lg">
+        <Card className="shadow-md">
           <CardHeader className="p-6">
             <CardTitle className="text-3xl font-bold text-center p-0">
-              Your Profile
+              My Profile
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -68,9 +67,12 @@ export default async function ProfilePage() {
               <div className="flex justify-center mb-6">
                 <TabsList>
                   <TabsTrigger value="profileInfo">Profile Info</TabsTrigger>
-                  <TabsTrigger value="applicationInfo">
-                    Registration Info
-                  </TabsTrigger>
+                  {participant && (
+                    <TabsTrigger value="applicationInfo">
+                      Registration
+                    </TabsTrigger>
+                  )}
+                  <TabsTrigger value="checkins">Check-Ins</TabsTrigger>
                 </TabsList>
               </div>
 
@@ -81,55 +83,67 @@ export default async function ProfilePage() {
                   {qrCodeData && (
                     <Card className="shadow-sm relative overflow-hidden">
                       {!participant && (
-                        <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-sm z-10">
-                          <div className="bg-black/60 text-white px-2 py-2 rounded-md">
-                            <p className="text-center text-md">
+                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/60 backdrop-blur-sm z-10 p-4">
+                          <div className="bg-black/60 text-white px-4 py-3 rounded-md">
+                            <p className="text-center text-lg font-semibold">
                               <u>
-                                <Link href="register">Register</Link>
+                                <Link href="register">
+                                  Complete Your Registration
+                                </Link>
                               </u>{" "}
-                              to view your QR code.
+                              to unlock your HackerPass.
+                            </p>
+                            <p className="text-sm text-gray-300">
+                              Your HackerPass is <u>required</u> for event
+                              check-ins.
                             </p>
                           </div>
                         </div>
                       )}
                       <CardHeader>
-                        <div className="flex items-center space-x-2">
-                          <CardTitle className="text-xl font-semibold">
+                        <div className="flex justify-between items-center">
+                          <CardTitle className="text-xl font-semibold flex items-center">
+                            <IconUserFilled
+                              size={20}
+                              className="text-primary mr-2"
+                            />
                             My HackerPass
                           </CardTitle>
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger>
-                                <IconHelpCircle
-                                  className="text-gray-400 hover:text-primary cursor-pointer"
-                                  size={18}
-                                />
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>
-                                  Your HackerPass is used for checking into the
-                                  hackathon and individual events.
-                                </p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
+                          {participant && (
+                            <p className="text-sm text-primary font-semibold">
+                              Active
+                            </p>
+                          )}
                         </div>
+                        <p className="text-sm text-gray-500">
+                          Used to check-in to the hackathon and events
+                        </p>
                       </CardHeader>
-                      <CardContent className="flex flex-col items-center space-y-2">
+                      <CardContent className="flex flex-col items-center space-y-4 p-6">
+                        {/* QR Code */}
                         <div
                           className={`relative ${
-                            !participant ? "blur-sm" : ""
-                          }`}
+                            !participant ? "blur-md opacity-50" : "opacity-100"
+                          } transition-all duration-300`}
                         >
                           <QrCodeComponent qrCodeData={qrCodeData} />
                         </div>
-                        <p className="text-xs text-gray-500">
+                        {/* QR Code Data or Placeholder */}
+                        <div className="text-xs text-gray-500 ">
                           {participant ? (
                             <code>{qrCodeData}</code>
                           ) : (
-                            "nice try lol"
+                            "Your unique ID will appear here after registration."
                           )}
-                        </p>
+                        </div>
+                        {/* Action Button */}
+                        {!participant && (
+                          <Link href="/register">
+                            <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                              Register Now
+                            </button>
+                          </Link>
+                        )}
                       </CardContent>
                     </Card>
                   )}
@@ -137,10 +151,17 @@ export default async function ProfilePage() {
                   {/* User Info */}
                   <Card className="shadow-sm">
                     <CardHeader>
-                      <CardTitle className="text-xl font-semibold">
-                        Hacker Information
-                      </CardTitle>
+                      <div className="flex justify-between items-center">
+                        <CardTitle className="text-xl font-semibold flex items-center">
+                          <IconBraces size={20} className="text-primary mr-2" />
+                          My Information
+                        </CardTitle>
+                      </div>
+                      {/* <p className="text-sm text-gray-500">
+                        Contact us if this must be updated
+                      </p> */}
                     </CardHeader>
+
                     <CardContent>
                       <div className="space-y-4">
                         {fullName && (
@@ -153,10 +174,7 @@ export default async function ProfilePage() {
                           <IconMail className="text-primary" size={20} />
                           <p>{session.user.email}</p>
                         </div>
-                        <div className="flex items-center space-x-2">
-                          <IconCalendar className="text-primary" size={20} />
-                          <p>Hacker Since: {accountCreationDate}</p>
-                        </div>
+
                         <hr className="my-4 border-gray-200" />
                         <div className="flex items-center space-x-2">
                           <IconLogout className="text-primary" size={20} />
@@ -171,11 +189,17 @@ export default async function ProfilePage() {
               {/* Application Information Tab */}
               <TabsContent value="applicationInfo">
                 <div className="space-y-4 pb-4">
-                  {participant ? (
+                  {participant && (
                     <>
                       <p className="text-sm text-center text-muted-foreground mt-4">
                         If you need to update this information, please contact
-                        us at <strong>help@hackku.org</strong>
+                        us at{" "}
+                        <Link
+                          href={`mailto:${constants.supportEmail}`}
+                          className="underline"
+                        >
+                          {constants.supportEmail}
+                        </Link>
                         <hr className="my-4 border-gray-200" />
                       </p>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -209,12 +233,33 @@ export default async function ProfilePage() {
                           ))}
                       </div>
                     </>
+                  )}
+                </div>
+              </TabsContent>
+
+              {/* Check-Ins Tab */}
+              <TabsContent value="checkins">
+                <div className="space-y-4 pb-4">
+                  <h3 className="text-lg font-bold mb-4">Recent Check-Ins</h3>
+                  {checkIns.length > 0 ? (
+                    <ul className="space-y-2">
+                      {checkIns.map((checkIn) => (
+                        <li
+                          key={checkIn.id}
+                          className="p-3 border rounded-md shadow-sm bg-white"
+                        >
+                          <p className="text-md font-medium">
+                            {checkIn.event.name}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Checked in at:{" "}
+                            {new Date(checkIn.createdAt).toLocaleString()}
+                          </p>
+                        </li>
+                      ))}
+                    </ul>
                   ) : (
-                    <Link href="/register">
-                      <Button className="bg-blue-500 text-white mx-auto block">
-                        Complete your application here
-                      </Button>
-                    </Link>
+                    <p>No check-ins yet.</p>
                   )}
                 </div>
               </TabsContent>

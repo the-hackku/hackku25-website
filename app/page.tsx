@@ -7,6 +7,8 @@ import SponsorsSection from "@/components/homepage/SponsorsSection";
 import AboutSection from "@/components/homepage/AboutSection";
 import AllSvg from "@/components/homepage/svg/AllSvg";
 import FAQSection from "@/components/homepage/FAQSection";
+import { IconBrandDiscord } from "@tabler/icons-react";
+import constants from "@/constants";
 
 // import TeamSection from "@/components/homepage/TeamSection";
 
@@ -57,9 +59,14 @@ export default function HomePage() {
 
   const faqs = [
     {
-      question: "What is a hackathon?",
+      question: "What's a hackathon?",
       answer:
         "A hackathon is an event where individuals or teams come together to brainstorm, design, and build projects. It provides an environment to learn new skills, tackle real-world challenges, and create impactful solutions, with opportunities to network and compete for prizes!",
+    },
+    {
+      question: "What should I bring?",
+      answer:
+        "Bring a laptop, charger, and any hardware you plan to use. We also recommend bringing a change of clothes and toiletries.",
     },
     {
       question: "Who can participate?",
@@ -72,19 +79,14 @@ export default function HomePage() {
         "No, HackKU is free to attend! We provide meals, swag, and resources for all participants.",
     },
     {
-      question: "What should I bring?",
+      question: "Can I participate remotely?",
       answer:
-        "Bring a laptop, charger, and any hardware you plan to use. We also recommend bringing a change of clothes and toiletries.",
+        "No, HackKU is an in-person event. We believe that the best experience comes from being on-site, collaborating with others, and engaging in the full hackathon experience.",
     },
     {
       question: "Do you offer travel reimbursements?",
       answer:
         "Unfortunately, we are unable to provide travel reimbursements at this time. This may change in the future, so stay tuned!",
-    },
-    {
-      question: "Can I participate remotely?",
-      answer:
-        "No, HackKU is an in-person event. We believe that the best experience comes from being on-site, collaborating with others, and engaging in the full hackathon experience.",
     },
   ];
 
@@ -208,14 +210,25 @@ export default function HomePage() {
                 Register Now
               </motion.button>
             </Link>
-            <motion.button
+            {/* learn more button */}
+            {/* <motion.button
               onClick={() => scrollToSection("about")}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="mt-4 md:mt-0 md:ml-4 px-5 py-4 bg-gray-600 rounded-full text-3xl md:text-2xl font-agency text-white md:px-6 md:py-3"
             >
               Learn More
-            </motion.button>
+            </motion.button> */}
+            <Link href={constants.discordInvite} target="_blank">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="mt-4 md:mt-0 md:ml-4 px-5 py-4 bg-blue-500 rounded-full text-3xl md:text-2xl font-agency text-white md:px-6 md:py-3 flex items-center space-x-2"
+              >
+                <span>Discord</span>
+                <IconBrandDiscord />
+              </motion.button>
+            </Link>
           </motion.div>
         </motion.div>
 

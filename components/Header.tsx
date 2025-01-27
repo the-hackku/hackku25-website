@@ -16,6 +16,7 @@ import {
   IconQrcode,
   IconStar,
   IconScan,
+  IconUserFilled,
 } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -270,7 +271,11 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                 </TabsTrigger>
                 <TabsTrigger value="profile" asChild>
                   <Link href="/profile">
-                    <IconUser size={20} className="mr-2" />
+                    {currentTab === "profile" ? (
+                      <IconUserFilled size={20} className="mr-2" />
+                    ) : (
+                      <IconUser size={20} className="mr-2" />
+                    )}
                     {
                       // Show "Sign In" if not authenticated
                       isAuthenticated ? "Profile" : "Sign In"
@@ -279,10 +284,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                 </TabsTrigger>
                 {isAdmin && (
                   <TabsTrigger value="admin" asChild>
-                    <Link href="/admin">
-                      <IconStar size={20} className="mr-2" />
-                      Admin
-                    </Link>
+                    <Link href="/admin">Admin</Link>
                   </TabsTrigger>
                 )}
               </TabsList>
@@ -322,11 +324,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                         alt="MLH Badge"
                         width={pathname === "/schedule" ? 100 : 200}
                         height={pathname === "/schedule" ? 100 : 200}
-                        className={`w-auto ${
-                          pathname === "/schedule"
-                            ? "h-5 md:h-16"
-                            : "h-10 md:h-32"
-                        }`}
+                        className="w-auto h-24"
                       />
                     </motion.div>
                   </Link>
