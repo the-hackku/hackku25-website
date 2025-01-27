@@ -14,7 +14,6 @@ import {
   IconMenu2,
   IconUser,
   IconQrcode,
-  IconStar,
   IconScan,
   IconUserFilled,
 } from "@tabler/icons-react";

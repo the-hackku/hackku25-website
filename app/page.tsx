@@ -13,10 +13,10 @@ import constants from "@/constants";
 // import TeamSection from "@/components/homepage/TeamSection";
 
 export default function HomePage() {
-  const scrollToSection = (id: string) => {
-    const target = document.getElementById(id);
-    target?.scrollIntoView({ behavior: "smooth" });
-  };
+  // const scrollToSection = (id: string) => {
+  //   const target = document.getElementById(id);
+  //   target?.scrollIntoView({ behavior: "smooth" });
+  // };
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isMouseOver, setIsMouseOver] = useState(false);
 
@@ -98,12 +98,12 @@ export default function HomePage() {
       website: "https://www.tradebot.com",
       tier: "Kila",
     },
-    {
-      name: "Security Benefit",
-      logo: "/images/sponsors/security.png",
-      website: "https://www.securitybenefit.com",
-      tier: "Kila",
-    },
+    // {
+    //   name: "Security Benefit",
+    //   logo: "/images/sponsors/security.png",
+    //   website: "https://www.securitybenefit.com",
+    //   tier: "Kila",
+    // },
     {
       name: "Patient Safety",
       logo: "/images/sponsors/patient.png",
@@ -144,7 +144,7 @@ export default function HomePage() {
       {/* Header Section */}
       <section
         id="header"
-        className="relative w-full h-screen flex items-center justify-center md:justify-start overflow-hidden pb-40 pt-32 md:pb-96 md:pt-48 md:px-40"
+        className="relative w-full h-screen flex items-center justify-center text-center md:justify-start md:text-left overflow-hidden pb-40 pt-32 md:pb-96 md:pt-48 md:px-40"
         onMouseMove={handleMouseMove}
         onMouseLeave={resetTilt}
       >
@@ -161,7 +161,8 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-4xl md:text-lg"
+            className="text-4xl md:text-lg drop-shadow-md"
+            style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 1)" }}
           >
             APRIL 4th - 6th, 2025
           </motion.p>
@@ -172,17 +173,17 @@ export default function HomePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
             className="text-7xl md:text-8xl font-dfvn drop-shadow-lg"
-            style={{ textShadow: "2px 2px 0 black" }}
+            style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 1)" }}
           >
             HackKU25
           </motion.h1>
 
-          {/* Event Host */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-3xl md:text-3xl"
+            className="text-3xl md:text-3xl drop-shadow-md"
+            style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 0.6)" }}
           >
             @{" "}
             <Link
@@ -199,31 +200,26 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="mt-6 flex flex-col md:flex-row items-center md:items-start"
+            className="mt-6 flex flex-row justify-center md:justify-start gap-2"
           >
             <Link href="/register">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="px-5 py-4 bg-yellow-500 rounded-full text-3xl md:text-2xl text-black font-agency md:px-6 md:py-3"
+                className="px-4 py-3 bg-yellow-500 rounded-full text-2xl text-black font-agency"
               >
                 Register Now
               </motion.button>
             </Link>
-            {/* learn more button */}
-            {/* <motion.button
-              onClick={() => scrollToSection("about")}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="mt-4 md:mt-0 md:ml-4 px-5 py-4 bg-gray-600 rounded-full text-3xl md:text-2xl font-agency text-white md:px-6 md:py-3"
+            <Link
+              href={constants.discordInvite}
+              target="_blank"
+              className="ml-0"
             >
-              Learn More
-            </motion.button> */}
-            <Link href={constants.discordInvite} target="_blank">
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="mt-4 md:mt-0 md:ml-4 px-5 py-4 bg-blue-500 rounded-full text-3xl md:text-2xl font-agency text-white md:px-6 md:py-3 flex items-center space-x-2"
+                className="px-4 py-3 bg-blue-500 rounded-full text-2xl font-agency text-white flex items-center space-x-2"
               >
                 <span>Discord</span>
                 <IconBrandDiscord />

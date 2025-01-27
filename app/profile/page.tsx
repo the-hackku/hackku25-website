@@ -7,7 +7,6 @@ import Link from "next/link";
 import {
   IconMail,
   IconUser,
-  IconCalendar,
   IconLogout,
   IconBraces,
   IconUserFilled,
