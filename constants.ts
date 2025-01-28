@@ -5,7 +5,7 @@ const constants = {
   location: "The University of Kansas",
   discordInvite: "https://discord.com/invite/AJXm3k6xWq",
   instagramUrl: "https://instagram.com/hackku",
-  supportEmail: "hackku@ku.edu",
+  supportEmail: "hack@ku.edu",
 };
 
 export default constants;

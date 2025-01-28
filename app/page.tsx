@@ -9,6 +9,7 @@ import AllSvg from "@/components/homepage/svg/AllSvg";
 import FAQSection from "@/components/homepage/FAQSection";
 import { IconBrandDiscord } from "@tabler/icons-react";
 import constants from "@/constants";
+import TeamSection from "@/components/homepage/TeamSection";
 
 // import TeamSection from "@/components/homepage/TeamSection";
 
@@ -57,6 +58,114 @@ export default function HomePage() {
     },
   ];
 
+  const teamMembers = [
+    {
+      name: "James Hurd",
+      role: "Director",
+      image: "/images/team/james.jpeg",
+      linkedin: "https://www.linkedin.com/in/jameshurd2718/",
+      website: "https://jameshurd.net/",
+    },
+    {
+      name: "Joshua Lee",
+      role: "Vice Director",
+      image: "/images/team/joshua.jpeg",
+      linkedin: "https://www.linkedin.com/in/joshualee128/",
+    },
+    {
+      name: "Will Whitehead",
+      role: "Director of Technology",
+      image: "/images/team/will.jpeg",
+      linkedin: "https://l.willwhitehead.com/",
+      website: "https://willwhitehead.com/",
+    },
+    {
+      name: "Andrew Huang",
+      role: "Technology",
+      image: "/images/team/andrewhuang.jpeg",
+      linkedin: "https://www.linkedin.com/in/andrew-l-huang/",
+    },
+    {
+      name: "Trent Gould",
+      role: "Director of Sponsorship",
+      image: "/images/team/trent.png",
+      linkedin: "https://www.linkedin.com/in/trent-gould/",
+      website: "https://www.trent-gould.com/",
+    },
+    {
+      name: "Drew Meyer",
+      role: "Sponsorship",
+      image: "/images/team/drew.png",
+      linkedin: "https://www.linkedin.com/in/drewmeyer28/",
+    },
+    {
+      name: "Kevinh Nguyen",
+      role: "Sponsorship",
+      image: "/images/team/kevinh.png",
+      linkedin: "https://www.linkedin.com/in/kevinh-nguyen/",
+    },
+    {
+      name: "Anh Hoang",
+      role: "Co-Director of Media & Marketing",
+      image: "/images/team/anh.png",
+      linkedin: "https://www.linkedin.com/in/anh-hoang-ku/",
+    },
+    {
+      name: "David Westerhaus",
+      role: "Co-Director of Media & Marketing",
+      image: "/images/team/david.png",
+      linkedin: "https://www.linkedin.com/in/davidwesterhaus/",
+    },
+    {
+      name: "Ky Le",
+      role: "Media & Marketing",
+      image: "/images/team/kyle.jpeg",
+      linkedin: "",
+    },
+    {
+      name: "Katharine Swann",
+      role: "Media & Marketing",
+      image: "/images/team/katharine.png",
+      linkedin: "https://www.linkedin.com/in/katharine-swann-7379b9224/",
+    },
+    {
+      name: "Achinth Ulagapperoli",
+      role: "Media & Marketing",
+      image: "/images/team/achinth.png",
+      linkedin: "https://www.linkedin.com/in/achinth-ulagapperoli-323a52204/",
+    },
+    {
+      name: "Raven Duong",
+      role: "Director of Logistics",
+      image: "/images/team/raven.png",
+      linkedin: "https://www.linkedin.com/in/raven-duong-0128h/",
+    },
+    {
+      name: "Shayna Weinstein",
+      role: "Logistics",
+      image: "/images/team/shayna.png",
+      linkedin: "https://www.linkedin.com/in/shayna-weinstein/",
+    },
+    {
+      name: "Kieran Egan",
+      role: "Logistics & Director of Finance",
+      image: "/images/team/kieran.png",
+      linkedin: "https://www.linkedin.com/in/kieran-fo-egan/",
+    },
+    {
+      name: "Arul Sethi",
+      role: "Co-Director of Nourishment",
+      image: "/images/team/arul.png",
+      linkedin: "https://www.linkedin.com/in/arul-sethi/",
+    },
+    {
+      name: "Andrew Ha",
+      role: "Co-Director of Nourishment",
+      image: "/images/team/andrewha.png",
+      linkedin: "https://www.linkedin.com/in/andrew~ha/",
+    },
+  ];
+
   const faqs = [
     {
       question: "What's a hackathon?",
@@ -90,12 +199,18 @@ export default function HomePage() {
     },
   ];
 
-  const sponsorTiers = ["Kila", "Mega"];
+  const sponsorTiers = ["Mega", "Kila"];
   const sponsors = [
     {
       name: "Tradebot",
       logo: "/images/sponsors/tradebot.webp",
       website: "https://www.tradebot.com",
+      tier: "Kila",
+    },
+    {
+      name: "Peak Performance IT",
+      logo: "/images/sponsors/peakperformance.png",
+      website: "https://www.peakperformanceit.com/",
       tier: "Kila",
     },
     // {
@@ -209,6 +324,7 @@ export default function HomePage() {
       <AboutSection previousEvents={previousEvents} />
       <FAQSection faqs={faqs} />;
       <SponsorsSection sponsorTiers={sponsorTiers} sponsors={sponsors} />
+      <TeamSection teamMembers={teamMembers} />
     </div>
   );
 }

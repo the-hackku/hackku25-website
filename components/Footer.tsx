@@ -48,10 +48,7 @@ export default function Footer() {
         {/* Text on the right */}
         <div className="text-right">
           <p className="text-sm text-gray-500">
-            ©{new Date().getFullYear()} the{" "}
-            <Link href="/team" className="underline">
-              HackKU Team
-            </Link>
+            ©{new Date().getFullYear()} HackKU Team
           </p>
         </div>
       </div>

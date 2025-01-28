@@ -31,7 +31,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
       >
         <h2 className="text-5xl md:text-7xl font-bold mb-12 font-dfvn">FAQ</h2>
 
-        <p className="text-lg md:text-xl text-gray-700">
+        <p className="text-lg md:text-2xl text-gray-700">
           Here are some frequently asked questions about HackKU.
         </p>
 
