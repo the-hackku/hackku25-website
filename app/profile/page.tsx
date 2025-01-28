@@ -10,6 +10,10 @@ import {
   IconLogout,
   IconBraces,
   IconUserFilled,
+  IconFileText,
+  IconHistory,
+  IconCheck,
+  IconLock,
 } from "@tabler/icons-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -64,14 +68,19 @@ export default async function ProfilePage() {
           <CardContent className="space-y-4">
             <Tabs defaultValue="profileInfo" className="w-full">
               <div className="flex justify-center mb-6">
-                <TabsList>
-                  <TabsTrigger value="profileInfo">Profile Info</TabsTrigger>
-                  {participant && (
-                    <TabsTrigger value="applicationInfo">
-                      Registration
-                    </TabsTrigger>
-                  )}
-                  <TabsTrigger value="checkins">Check-Ins</TabsTrigger>
+                <TabsList aria-label="Profile sections">
+                  <TabsTrigger value="profileInfo">
+                    <IconUser size={16} className="mr-2" />
+                    Profile
+                  </TabsTrigger>
+                  <TabsTrigger value="applicationInfo" disabled={!participant}>
+                    <IconFileText size={16} className="mr-2" />
+                    Registration
+                  </TabsTrigger>
+                  <TabsTrigger value="checkins">
+                    <IconHistory size={16} className="mr-2" />
+                    Check-ins
+                  </TabsTrigger>
                 </TabsList>
               </div>
 
@@ -79,26 +88,9 @@ export default async function ProfilePage() {
               <TabsContent value="profileInfo">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* QR Code Card */}
+                  {/* QR Code Card */}
                   {qrCodeData && (
-                    <Card className="shadow-sm relative overflow-hidden">
-                      {!participant && (
-                        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/60 backdrop-blur-sm z-10 p-4">
-                          <div className="bg-black/60 text-white px-4 py-3 rounded-md">
-                            <p className="text-center text-lg font-semibold">
-                              <u>
-                                <Link href="register">
-                                  Complete Your Registration
-                                </Link>
-                              </u>{" "}
-                              to unlock your HackerPass.
-                            </p>
-                            <p className="text-sm text-gray-300">
-                              Your HackerPass is <u>required</u> for event
-                              check-ins.
-                            </p>
-                          </div>
-                        </div>
-                      )}
+                    <Card className="shadow-sm">
                       <CardHeader>
                         <div className="flex justify-between items-center">
                           <CardTitle className="text-xl font-semibold flex items-center">
@@ -119,29 +111,29 @@ export default async function ProfilePage() {
                         </p>
                       </CardHeader>
                       <CardContent className="flex flex-col items-center space-y-4 p-6">
-                        {/* QR Code */}
-                        <div
-                          className={`relative ${
-                            !participant ? "blur-md opacity-50" : "opacity-100"
-                          } transition-all duration-300`}
-                        >
-                          <QrCodeComponent qrCodeData={qrCodeData} />
-                        </div>
-                        {/* QR Code Data or Placeholder */}
-                        <div className="text-xs text-gray-500 ">
-                          {participant ? (
-                            <code>{qrCodeData}</code>
-                          ) : (
-                            "Your unique ID will appear here after registration."
-                          )}
-                        </div>
-                        {/* Action Button */}
-                        {!participant && (
-                          <Link href="/register">
-                            <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
-                              Register Now
-                            </button>
-                          </Link>
+                        {!participant ? (
+                          <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-lg bg-gray-50">
+                            <IconLock
+                              size={40}
+                              className="text-gray-400 mb-4"
+                            />
+                            <p className="text-center text-gray-600 mb-4">
+                              Complete your registration to unlock your
+                              HackerPass.
+                            </p>
+                            <Link href="/register">
+                              <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700">
+                                Register Now
+                              </button>
+                            </Link>
+                          </div>
+                        ) : (
+                          <>
+                            <QrCodeComponent qrCodeData={qrCodeData} />
+                            <p className="text-xs text-center text-muted-foreground">
+                              Present this code at check-in stations
+                            </p>
+                          </>
                         )}
                       </CardContent>
                     </Card>
@@ -245,15 +237,26 @@ export default async function ProfilePage() {
                       {checkIns.map((checkIn) => (
                         <li
                           key={checkIn.id}
-                          className="p-3 border rounded-md shadow-sm bg-white"
+                          className="p-3 border rounded-md shadow-sm bg-white hover:bg-gray-50 transition-colors"
                         >
-                          <p className="text-md font-medium">
-                            {checkIn.event.name}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            Checked in at:{" "}
-                            {new Date(checkIn.createdAt).toLocaleString()}
-                          </p>
+                          <div className="flex items-center gap-3">
+                            <div className="flex-shrink-0 text-green-600">
+                              <IconCheck size={20} />
+                            </div>
+                            <div>
+                              <p className="font-medium">
+                                {checkIn.event.name}
+                              </p>
+                              <p className="text-sm text-muted-foreground">
+                                {new Date(
+                                  checkIn.createdAt
+                                ).toLocaleDateString()}{" "}
+                                •
+                                {checkIn.event.location &&
+                                  ` ${checkIn.event.location}`}
+                              </p>
+                            </div>
+                          </div>
                         </li>
                       ))}
                     </ul>

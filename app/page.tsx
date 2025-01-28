@@ -112,33 +112,6 @@ export default function HomePage() {
     },
   ];
 
-  // const teamMembers = [
-  //   {
-  //     name: "James Hurd",
-  //     role: "Director",
-  //     image: "/images/team/james.jpeg",
-  //     linkedin: "https://www.linkedin.com/in/jameshurd2718/",
-  //   },
-  //   {
-  //     name: "Joshua Lee",
-  //     role: "Vice Director",
-  //     image: "/images/team/joshua.jpeg",
-  //     linkedin: "https://www.linkedin.com/in/joshualee128/",
-  //   },
-  //   {
-  //     name: "Will Whitehead",
-  //     role: "Technology Lead",
-  //     image: "/images/team/will.jpeg",
-  //     linkedin: "https://www.linkedin.com/in/willwhitehead122/",
-  //   },
-  //   {
-  //     name: "Andrew Huang",
-  //     role: "Tech Team",
-  //     image: "/images/team/andrew.jpeg",
-  //     linkedin: "https://www.linkedin.com/in/andrew-l-huang/",
-  //   },
-  // ];
-
   return (
     <div className="w-full min-h-screen overflow-x-hidden overflow-y-auto text-white font-agency">
       {/* Header Section */}
@@ -161,7 +134,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="text-4xl md:text-lg drop-shadow-md"
+            className="text-4xl md:text-2xl drop-shadow-md"
             style={{ textShadow: "1px 1px 2px rgba(0, 0, 0, 1)" }}
           >
             APRIL 4th - 6th, 2025
@@ -236,7 +209,6 @@ export default function HomePage() {
       <AboutSection previousEvents={previousEvents} />
       <FAQSection faqs={faqs} />;
       <SponsorsSection sponsorTiers={sponsorTiers} sponsors={sponsors} />
-      {/* <TeamSection teamMembers={teamMembers} /> */}
     </div>
   );
 }

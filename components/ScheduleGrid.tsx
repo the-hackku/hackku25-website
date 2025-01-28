@@ -20,6 +20,7 @@ import {
 import { Checkbox } from "./ui/checkbox";
 import { motion } from "framer-motion";
 import { EventType } from "@prisma/client";
+import { Input } from "./ui/input";
 
 type ScheduleEvent = {
   id: string;
@@ -275,7 +276,6 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const [selectedEvent, setSelectedEvent] = useState<ScheduleEvent | null>(
     null
   );
-
   const [favorites, setFavorites] = useState<Record<string, boolean>>({});
   const [showFavoritesOnly] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -287,6 +287,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
     "ACTIVITIES",
   ]);
   const [collapsed, setCollapsed] = useState(false);
+  const [searchQuery, setSearchQuery] = useState(""); // Add this line
 
   const scheduleGridRef = useRef<HTMLDivElement | null>(null);
 
@@ -356,19 +357,36 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const allEvents = days.flatMap((day) => groupedEvents[day]);
 
   // Filter by type
-  const typedEvents =
-    selectedEventTypes.length === 0
-      ? [] // Show no events if no types are selected
-      : allEvents.filter(
-          (ev) =>
-            ev.eventType &&
-            selectedEventTypes.includes(ev.eventType as EventType)
-        );
+  const filteredEvents = React.useMemo(() => {
+    const typedEvents =
+      selectedEventTypes.length === 0
+        ? [] // Show no events if no types are selected
+        : allEvents.filter(
+            (ev) =>
+              ev.eventType &&
+              selectedEventTypes.includes(ev.eventType as EventType)
+          );
 
-  // Filter by favorites
-  const filteredEvents = showFavoritesOnly
-    ? typedEvents.filter((ev) => favorites[ev.id])
-    : typedEvents;
+    const favoriteFiltered = showFavoritesOnly
+      ? typedEvents.filter((ev) => favorites[ev.id])
+      : typedEvents;
+
+    // Add search filter
+    return favoriteFiltered.filter((event) => {
+      const searchLower = searchQuery.toLowerCase();
+      return (
+        event.name.toLowerCase().includes(searchLower) ||
+        event.description?.toLowerCase().includes(searchLower) ||
+        event.location?.toLowerCase().includes(searchLower)
+      );
+    });
+  }, [
+    showFavoritesOnly,
+    selectedEventTypes,
+    allEvents,
+    favorites,
+    searchQuery,
+  ]); // Add searchQuery
 
   // Regroup after filtering
   const filteredGroupedEvents = filteredEvents.reduce((acc, event) => {
@@ -443,7 +461,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
         }
       >
         {/* Container for Tabs and Filter */}
-        <div className="flex justify-between items-center space-x-4 bg-white sticky top-0 z-40 pb-2">
+        <div className="flex justify-between items-center space-x-4 py-4 bg-white sticky top-0 z-40 pb-2">
           <div className="flex justify-start w-full gap-2">
             <Tabs value={selectedDay} onValueChange={handleDayChange}>
               <TabsList>
@@ -457,11 +475,30 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                 ))}
               </TabsList>
             </Tabs>
+            {!isMobile && (
+              <div className="relative flex items-center">
+                <Input
+                  type="text"
+                  placeholder="Search events..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-4 border text-sm"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <IconX size={16} />
+                  </button>
+                )}
+              </div>
+            )}
 
             {/* Popover for Filters */}
             <Popover>
               <PopoverTrigger>
-                <div className="flex items-center relative cursor-pointer p-2 border rounded-lg shadow-sm">
+                <div className="border p-2 rounded-md cursor-pointer">
                   <IconFilter size={18} />
                 </div>
               </PopoverTrigger>
@@ -478,8 +515,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                 <div className="border-t pt-2">
                   <div className="flex items-center mb-2">
                     <Checkbox
-                      id="select-all-none"
-                      checked={selectedEventTypes.length === 5} // Assume 5 is the total number of event types
+                      id="select-all"
+                      checked={selectedEventTypes.length === 5}
                       onCheckedChange={(checked) => {
                         if (checked) {
                           // Select All
@@ -491,17 +528,19 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                             "ACTIVITIES",
                           ] as EventType[]);
                         } else {
-                          // Select None
+                          // Deselect All
                           setSelectedEventTypes([]);
                         }
                       }}
                       className="mr-2"
                     />
                     <label
-                      htmlFor="select-all-none"
+                      htmlFor="select-all"
                       className="text-sm cursor-pointer"
                     >
-                      Toggle All
+                      {selectedEventTypes.length === 5
+                        ? "Deselect All"
+                        : "Select All"}
                     </label>
                   </div>
 
@@ -639,14 +678,12 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                 setSelectedEvent(isSelected ? null : event);
                               }}
                               className={`absolute inset-0 rounded-md p-1 overflow-hidden cursor-pointer text-white
-                                transition-shadow duration-200
-                                ${colorClass}
+                                transition-shadow duration-200 ${colorClass}
                                 ${
                                   isSelected
                                     ? "shadow-xl z-20"
                                     : "hover:shadow-sm shadow-sm z-10"
-                                }
-                              `}
+                                }`}
                               style={{
                                 // Vertical placement from your existing logic
                                 gridRow: `span ${rowSpan}`,
@@ -733,7 +770,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
             ? "hidden"
             : "block"
         }`}
-        animate={isMobile ? { height: selectedEvent ? "80vh" : "0vh" } : {}}
+        animate={isMobile ? { height: selectedEvent ? "65vh" : "0vh" } : {}}
         initial={isMobile ? { height: "0%", opacity: 0 } : {}}
         transition={{ duration: 0.3 }}
       >
@@ -761,7 +798,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                       onClick={() => setSelectedEvent(null)}
                       className="cursor-pointer"
                     >
-                      <IconX className="text-gray-400" />
+                      <IconX />
                     </span>
                   )}
 
@@ -795,7 +832,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
               {selectedEvent.description && (
                 <div className="flex items-center mt-2">
                   <IconInfoCircle size={20} className="text-gray-400 mr-2" />
-                  {selectedEvent.description}
+                  <span>{selectedEvent.description}</span>
                 </div>
               )}
             </div>
