@@ -97,6 +97,7 @@ export default function HomePage() {
       role: "Sponsorship",
       image: "/images/team/drew.png",
       linkedin: "https://www.linkedin.com/in/drewmeyer28/",
+      website: "https://drewku42.github.io/AI_Dev_Portfolio/",
     },
     {
       name: "Kevinh Nguyen",
