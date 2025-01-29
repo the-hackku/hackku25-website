@@ -73,6 +73,30 @@ export default function HomePage() {
       linkedin: "https://www.linkedin.com/in/joshualee128/",
     },
     {
+      name: "Raven Duong",
+      role: "Director of Logistics",
+      image: "/images/team/raven.png",
+      linkedin: "https://www.linkedin.com/in/raven-duong-0128h/",
+    },
+    {
+      name: "Shayna Weinstein",
+      role: "Logistics",
+      image: "/images/team/shayna.png",
+      linkedin: "https://www.linkedin.com/in/shayna-weinstein/",
+    },
+    {
+      name: "Sreeja Narahari",
+      role: "Logistics",
+      image: "/images/team/sreeja.png",
+      linkedin: "https://www.linkedin.com/in/sreeja-narahari/",
+    },
+    {
+      name: "Kieran Egan",
+      role: "Logistics & Director of Finance",
+      image: "/images/team/kieran.png",
+      linkedin: "https://www.linkedin.com/in/kieran-fo-egan/",
+    },
+    {
       name: "Will Whitehead",
       role: "Director of Technology",
       image: "/images/team/will.jpeg",
@@ -86,26 +110,6 @@ export default function HomePage() {
       linkedin: "https://www.linkedin.com/in/andrew-l-huang/",
     },
     {
-      name: "Trent Gould",
-      role: "Director of Sponsorship",
-      image: "/images/team/trent.png",
-      linkedin: "https://www.linkedin.com/in/trent-gould/",
-      website: "https://www.trent-gould.com/",
-    },
-    {
-      name: "Drew Meyer",
-      role: "Sponsorship",
-      image: "/images/team/drew.png",
-      linkedin: "https://www.linkedin.com/in/drewmeyer28/",
-      website: "https://drewku42.github.io/AI_Dev_Portfolio/",
-    },
-    {
-      name: "Kevinh Nguyen",
-      role: "Sponsorship",
-      image: "/images/team/kevinh.png",
-      linkedin: "https://www.linkedin.com/in/kevinh-nguyen/",
-    },
-    {
       name: "Anh Hoang",
       role: "Co-Director of Media & Marketing",
       image: "/images/team/anh.png",
@@ -116,6 +120,12 @@ export default function HomePage() {
       role: "Co-Director of Media & Marketing",
       image: "/images/team/david.png",
       linkedin: "https://www.linkedin.com/in/davidwesterhaus/",
+    },
+    {
+      name: "Sarah Moore",
+      role: "Media & Marketing",
+      image: "/images/team/sarah.png",
+      linkedin: "https://www.linkedin.com/in/semoore27/",
     },
     {
       name: "Ky Le",
@@ -135,24 +145,29 @@ export default function HomePage() {
       image: "/images/team/achinth.png",
       linkedin: "https://www.linkedin.com/in/achinth-ulagapperoli-323a52204/",
     },
+
     {
-      name: "Raven Duong",
-      role: "Director of Logistics",
-      image: "/images/team/raven.png",
-      linkedin: "https://www.linkedin.com/in/raven-duong-0128h/",
+      name: "Trent Gould",
+      role: "Director of Sponsorship",
+      image: "/images/team/trent.png",
+      linkedin: "https://www.linkedin.com/in/trent-gould/",
+      website: "https://www.trent-gould.com/",
+    },
+
+    {
+      name: "Drew Meyer",
+      role: "Sponsorship",
+      image: "/images/team/drew.png",
+      linkedin: "https://www.linkedin.com/in/drewmeyer28/",
+      website: "https://drewku42.github.io/AI_Dev_Portfolio/",
     },
     {
-      name: "Shayna Weinstein",
-      role: "Logistics",
-      image: "/images/team/shayna.png",
-      linkedin: "https://www.linkedin.com/in/shayna-weinstein/",
+      name: "Kevinh Nguyen",
+      role: "Sponsorship",
+      image: "/images/team/kevinh.png",
+      linkedin: "https://www.linkedin.com/in/kevinh-nguyen/",
     },
-    {
-      name: "Kieran Egan",
-      role: "Logistics & Director of Finance",
-      image: "/images/team/kieran.png",
-      linkedin: "https://www.linkedin.com/in/kieran-fo-egan/",
-    },
+
     {
       name: "Arul Sethi",
       role: "Co-Director of Nourishment",
