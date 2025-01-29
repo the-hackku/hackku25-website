@@ -73,6 +73,50 @@ export default function HomePage() {
       linkedin: "https://www.linkedin.com/in/joshualee128/",
     },
     {
+      name: "Anh Hoang",
+      role: "Co-Director of Media & Marketing",
+      image: "/images/team/anh.png",
+      linkedin: "https://www.linkedin.com/in/anh-hoang-ku/",
+    },
+    {
+      name: "David Westerhaus",
+      role: "Co-Director of Media & Marketing",
+      image: "/images/team/david.png",
+      linkedin: "https://www.linkedin.com/in/davidwesterhaus/",
+    },
+    {
+      name: "Sarah Moore",
+      role: "Media & Marketing",
+      image: "/images/team/sarah.png",
+      linkedin: "https://www.linkedin.com/in/semoore27/",
+    },
+    {
+      name: "Katharine Swann",
+      role: "Media & Marketing",
+      image: "/images/team/katharine.png",
+      linkedin: "https://www.linkedin.com/in/katharine-swann-7379b9224/",
+    },
+    {
+      name: "Achinth Ulagapperoli",
+      role: "Media & Marketing",
+      image: "/images/team/achinth.png",
+      linkedin: "https://www.linkedin.com/in/achinth-ulagapperoli-323a52204/",
+    },
+
+    {
+      name: "Will Whitehead",
+      role: "Director of Technology",
+      image: "/images/team/will.jpeg",
+      linkedin: "https://l.willwhitehead.com/",
+      website: "https://willwhitehead.com/",
+    },
+    {
+      name: "Andrew Huang",
+      role: "Technology",
+      image: "/images/team/andrewhuang.jpeg",
+      linkedin: "https://www.linkedin.com/in/andrew-l-huang/",
+    },
+    {
       name: "Raven Duong",
       role: "Director of Logistics",
       image: "/images/team/raven.png",
@@ -95,55 +139,6 @@ export default function HomePage() {
       role: "Logistics & Director of Finance",
       image: "/images/team/kieran.png",
       linkedin: "https://www.linkedin.com/in/kieran-fo-egan/",
-    },
-    {
-      name: "Will Whitehead",
-      role: "Director of Technology",
-      image: "/images/team/will.jpeg",
-      linkedin: "https://l.willwhitehead.com/",
-      website: "https://willwhitehead.com/",
-    },
-    {
-      name: "Andrew Huang",
-      role: "Technology",
-      image: "/images/team/andrewhuang.jpeg",
-      linkedin: "https://www.linkedin.com/in/andrew-l-huang/",
-    },
-    {
-      name: "Anh Hoang",
-      role: "Co-Director of Media & Marketing",
-      image: "/images/team/anh.png",
-      linkedin: "https://www.linkedin.com/in/anh-hoang-ku/",
-    },
-    {
-      name: "David Westerhaus",
-      role: "Co-Director of Media & Marketing",
-      image: "/images/team/david.png",
-      linkedin: "https://www.linkedin.com/in/davidwesterhaus/",
-    },
-    {
-      name: "Sarah Moore",
-      role: "Media & Marketing",
-      image: "/images/team/sarah.png",
-      linkedin: "https://www.linkedin.com/in/semoore27/",
-    },
-    {
-      name: "Ky Le",
-      role: "Media & Marketing",
-      image: "/images/team/kyle.jpeg",
-      linkedin: "",
-    },
-    {
-      name: "Katharine Swann",
-      role: "Media & Marketing",
-      image: "/images/team/katharine.png",
-      linkedin: "https://www.linkedin.com/in/katharine-swann-7379b9224/",
-    },
-    {
-      name: "Achinth Ulagapperoli",
-      role: "Media & Marketing",
-      image: "/images/team/achinth.png",
-      linkedin: "https://www.linkedin.com/in/achinth-ulagapperoli-323a52204/",
     },
 
     {
@@ -179,6 +174,12 @@ export default function HomePage() {
       role: "Co-Director of Nourishment",
       image: "/images/team/andrewha.png",
       linkedin: "https://www.linkedin.com/in/andrew~ha/",
+    },
+    {
+      name: "Ky Le",
+      role: "Media & Marketing",
+      image: "/images/team/kyle.jpeg",
+      linkedin: "",
     },
   ];
 
