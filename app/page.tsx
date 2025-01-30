@@ -242,6 +242,12 @@ export default function HomePage() {
       website: "https://www.patientsafetytech.com/",
       tier: "Mega",
     },
+    {
+      name: "Pinnacle Technology",
+      logo: "/images/sponsors/pinnacle.png",
+      website: "https://pinnaclet.com/",
+      tier: "Kila",
+    },
   ];
 
   return (
