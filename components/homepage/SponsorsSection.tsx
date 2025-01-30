@@ -22,7 +22,7 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
   return (
     <section
       id="sponsors"
-      className="w-full py-32 md:py-44 flex flex-col items-center justify-center bg-[#019757]"
+      className="w-full py-32 md:py-44 flex flex-col items-center justify-center bg-gray-50 text-gray-700"
     >
       <motion.div
         initial={{ opacity: 0, y: 50 }}
@@ -30,10 +30,10 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
         transition={{ duration: 0.6 }}
         className="max-w-2xl text-center mb-8 md:mb-12 px-4 md:px-0"
       >
-        <h2 className="text-5xl md:text-7xl font-bold mb-2 text-white font-dfvn">
+        <h2 className="text-5xl md:text-7xl font-bold mb-2 font-dfvn">
           2025 Sponsors
         </h2>
-        <p className="text-lg md:text-2xl text-white">
+        <p className="text-lg md:text-2xl">
           HackKU is supported by an incredible group of sponsors who make this
           event possible.
         </p>
@@ -50,7 +50,7 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
           }}
           className="w-full py-6 md:py-10"
         >
-          <h3 className="text-4xl md:text-5xl font-semibold mb-6 text-center text-white font-dfvn">
+          <h3 className="text-4xl md:text-5xl font-semibold mb-6 text-center font-dfvn">
             {tier} Tier
           </h3>
           <div className="flex flex-wrap justify-center gap-4 md:gap-8">

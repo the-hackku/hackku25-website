@@ -59,7 +59,7 @@ export default async function ProfilePage() {
 
     return (
       <div className="container mx-auto p-4 max-w-4xl space-y-6">
-        <Card className="shadow-md">
+        <Card className="shadow-sm">
           <CardHeader className="p-6">
             <CardTitle className="text-3xl font-bold text-center p-0">
               My Profile
