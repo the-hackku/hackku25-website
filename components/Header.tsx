@@ -16,6 +16,7 @@ import {
   IconQrcode,
   IconScan,
   IconUserFilled,
+  IconBolt,
 } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -283,7 +284,10 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                 </TabsTrigger>
                 {isAdmin && (
                   <TabsTrigger value="admin" asChild>
-                    <Link href="/admin">Admin</Link>
+                    <Link href="/admin">
+                      <IconBolt size={20} className="mr-2" />
+                      Admin
+                    </Link>
                   </TabsTrigger>
                 )}
               </TabsList>

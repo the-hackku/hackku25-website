@@ -17,7 +17,7 @@ export default function NotFound() {
       <motion.div
         whileHover={{
           scale: 1.2, // Slightly increase the size on hover
-          rotate: 10, // Add a playful rotation
+          rotate: 10,
           transition: { type: "spring", stiffness: 500 }, // Smooth bounce effect
         }}
         whileTap={{ scale: 0.9, rotate: -10 }} // Shrink and rotate back on click

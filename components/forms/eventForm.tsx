@@ -30,7 +30,7 @@ const formSchema = z.object({
   duration: z.coerce.number().min(0.5).max(12),
   location: z.string().optional(),
   description: z.string(),
-  eventType: z.enum(["FOOD", "REQUIRED", "WORKSHOPS", "SPONSOR", "ACTIVITIES"]), // Add eventType
+  eventType: z.enum(["FOOD", "REQUIRED", "WORKSHOPS", "SPONSOR", "ACTIVITIES"]),
 });
 
 export function EventForm() {
@@ -64,7 +64,7 @@ export function EventForm() {
         endDate: eventEnd.toISOString(),
         location: data.location || "",
         description: data.description,
-        eventType: data.eventType, // Add eventType
+        eventType: data.eventType,
       });
 
       // Reset the form and refresh the page

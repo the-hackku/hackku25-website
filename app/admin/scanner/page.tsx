@@ -93,7 +93,7 @@ export default function ScannerPage() {
               {
                 id: result.id, // Assume `result.id` is included in the API response
                 name: result.name || "Unknown User", // Ensure `name` is always a string
-                eventName: selectedEventRef.current || "Unknown Event", // Add event name
+                eventName: selectedEventRef.current || "Unknown Event",
                 successful: true, // Mark as successful scan
                 timestamp: new Date().toISOString(), // Use ISO string format for consistency
               },

@@ -25,7 +25,7 @@ export default async function EventsPage() {
     startDate: event.startDate.toISOString(), // Convert to ISO string
     endDate: event.endDate.toISOString(), // Convert to ISO string
     location: event.location,
-    eventType: event.eventType, // Add eventType
+    eventType: event.eventType,
   }));
 
   return (

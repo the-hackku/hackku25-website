@@ -2,7 +2,7 @@
 
 import { prisma } from "@/prisma";
 import { isAdmin } from "@/middlewares/isAdmin";
-import { EventType } from "@prisma/client";
+import { Checkin, EventType, User } from "@prisma/client";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authoptions";
 
@@ -38,26 +38,57 @@ type ValidateQrCodeResult =
 // CRUD operations for the admin dashboard
 
 // Fetch all users and return their names and emails
-export async function getUsers() {
-  await isAdmin(); // Only allow admins to access this data
+export async function getUsers(
+  page: number = 1,
+  pageSize: number = 10,
+  searchQuery: string = ""
+) {
+  await isAdmin(); // Ensure only admins can access
 
-  return await prisma.user.findMany({
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      role: true,
-      ParticipantInfo: true, // Fetch all fields from ParticipantInfo
+  const skip = (page - 1) * pageSize;
+
+  // Fetch filtered users with pagination
+  const users = await prisma.user.findMany({
+    where: {
+      OR: [
+        { email: { contains: searchQuery, mode: "insensitive" } },
+        { name: { contains: searchQuery, mode: "insensitive" } },
+      ],
+    },
+    include: {
+      ParticipantInfo: true,
+    },
+    skip,
+    take: pageSize,
+    orderBy: { createdAt: "desc" }, // Order by latest users
+  });
+
+  // Get total count for pagination
+  const totalUsers = await prisma.user.count({
+    where: {
+      OR: [
+        { email: { contains: searchQuery, mode: "insensitive" } },
+        { name: { contains: searchQuery, mode: "insensitive" } },
+      ],
     },
   });
+
+  return { users, totalUsers };
 }
 
 // Fetch all check-ins and return user names, event names, and check-in time
-export async function getCheckins() {
+export async function getCheckins(
+  page: number = 1,
+  pageSize: number = 10,
+  searchQuery: string = ""
+) {
   await isAdmin(); // Ensure only admins can access
 
-  return await prisma.checkin.findMany({
-    select: {
+  const skip = (page - 1) * pageSize;
+
+  // Fetch filtered check-ins with pagination
+  const checkins = await prisma.checkin.findMany({
+    include: {
       user: {
         select: {
           name: true,
@@ -69,9 +100,58 @@ export async function getCheckins() {
           name: true,
         },
       },
-      createdAt: true,
+    },
+    skip,
+    take: pageSize,
+    orderBy: { createdAt: "desc" }, // Order by latest check-ins
+  });
+
+  // Get total count for pagination
+  const totalCheckins = await prisma.checkin.count({
+    where: {
+      OR: [
+        { user: { name: { contains: searchQuery, mode: "insensitive" } } },
+        { user: { email: { contains: searchQuery, mode: "insensitive" } } },
+        { event: { name: { contains: searchQuery, mode: "insensitive" } } },
+      ],
     },
   });
+
+  // Transform the data to match the Checkin interface
+  const transformedCheckins = checkins.map((checkin) => ({
+    id: checkin.id,
+    userId: checkin.userId,
+    eventId: checkin.eventId,
+    createdAt: checkin.createdAt,
+    user: {
+      name: checkin.user.name,
+      email: checkin.user.email,
+    },
+    event: {
+      name: checkin.event.name,
+    },
+  }));
+
+  return { checkins: transformedCheckins, totalCheckins };
+}
+
+/**
+ * Batch update check-ins
+ */
+export async function batchUpdateCheckins(
+  changes: Record<string, Partial<Checkin>>
+) {
+  await isAdmin(); // Ensure only admins can access
+
+  const updatePromises = Object.entries(changes).map(([checkinId, fields]) =>
+    prisma.checkin.update({
+      where: { id: checkinId },
+      data: fields,
+    })
+  );
+
+  const updatedCheckins = await prisma.$transaction(updatePromises);
+  return updatedCheckins;
 }
 
 // Create a new event
@@ -110,7 +190,7 @@ export async function updateEvent(eventId: string, data: EventData) {
       endDate: new Date(data.endDate),
       location: data.location || null,
       description: data.description,
-      eventType: data.eventType, // Add eventType
+      eventType: data.eventType,
     },
     select: {
       id: true,
@@ -290,4 +370,61 @@ export async function fetchScanHistory() {
     successful: scan.successful, // Whether the scan was successful
     timestamp: scan.createdAt.toISOString(), // Ensure the timestamp is in ISO string format
   }));
+}
+
+// Update user field
+export async function updateUserField(
+  userId: string,
+  field: string,
+  value: unknown
+) {
+  await isAdmin(); // Ensure only admins can access
+  await prisma.user.update({
+    where: { id: userId },
+    data: { [field]: value },
+  });
+}
+
+// Update participant field
+export async function updateParticipantField(
+  participantId: string,
+  field: string,
+  value: unknown
+) {
+  await isAdmin(); // Ensure only admins can access
+  await prisma.participantInfo.update({
+    where: { id: participantId },
+    data: { [field]: value },
+  });
+}
+
+export async function batchUpdateUsers(changes: Record<string, Partial<User>>) {
+  await isAdmin(); // Ensure only admins can access
+
+  const updatePromises = Object.entries(changes).map(([userId, fields]) =>
+    prisma.user.update({
+      where: { id: userId },
+      data: fields,
+    })
+  );
+
+  const updatedUsers = await prisma.$transaction(updatePromises);
+  return updatedUsers;
+}
+
+// Batch update participant info
+export async function batchUpdateParticipants(
+  changes: Record<string, Partial<ParticipantInfo>>
+) {
+  await isAdmin(); // Ensure only admins can access
+
+  const updatePromises = Object.entries(changes).map(
+    ([participantId, fields]) =>
+      prisma.participantInfo.update({
+        where: { id: participantId },
+        data: fields,
+      })
+  );
+
+  await prisma.$transaction(updatePromises);
 }

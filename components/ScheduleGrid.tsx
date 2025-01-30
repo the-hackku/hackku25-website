@@ -287,7 +287,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
     "ACTIVITIES",
   ]);
   const [collapsed, setCollapsed] = useState(false);
-  const [searchQuery, setSearchQuery] = useState(""); // Add this line
+  const [searchQuery, setSearchQuery] = useState("");
 
   const scheduleGridRef = useRef<HTMLDivElement | null>(null);
 
@@ -371,7 +371,6 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
       ? typedEvents.filter((ev) => favorites[ev.id])
       : typedEvents;
 
-    // Add search filter
     return favoriteFiltered.filter((event) => {
       const searchLower = searchQuery.toLowerCase();
       return (
@@ -386,7 +385,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
     allEvents,
     favorites,
     searchQuery,
-  ]); // Add searchQuery
+  ]);
 
   // Regroup after filtering
   const filteredGroupedEvents = filteredEvents.reduce((acc, event) => {
@@ -503,8 +502,6 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                 </div>
               </PopoverTrigger>
               <PopoverContent className="p-4 bg-white shadow-lg rounded-md w-fit">
-                <h3 className="text-lg font-bold mb-3">Filter Options</h3>
-
                 {/* Display count of filtered events */}
                 <div className="text-sm text-gray-500 mb-2">
                   {filteredEvents.length} event

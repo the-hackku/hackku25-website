@@ -82,7 +82,6 @@ export function ComboboxSelect({
             const newValues = selectedValues.filter((v) => v !== value);
             field.onChange(newValues.join(", "));
           } else {
-            // Add value if not already selected
             const newValues = [...selectedValues, value];
             field.onChange(newValues.join(", "));
           }

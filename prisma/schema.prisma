@@ -24,11 +24,17 @@ enum EventType {
   ACTIVITIES
 }
 
+enum ROLE {
+  HACKER
+  ADMIN
+  VOLUNTEER
+}
+
 model User {
   id                     String          @id @default(cuid())
   name                   String?
   email                  String          @unique
-  role                   String          @default("HACKER")
+  role                   ROLE           @default(HACKER)
   emailVerified          DateTime?
   image                  String?
   accounts               Account[]
@@ -106,7 +112,7 @@ model Event {
   endDate                DateTime
   location               String?
   description            String?
-  eventType                   EventType @default(REQUIRED) // Add default value
+  eventType              EventType       @default(REQUIRED) 
   checkins               Checkin[]
   scans                  Scan[]
 
