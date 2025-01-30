@@ -1,4 +1,3 @@
-// RegistrationForm.tsx
 "use client";
 
 import { useForm, FormProvider } from "react-hook-form";
@@ -28,7 +27,10 @@ import {
   predefinedMajors,
   predefinedMinors,
   predefinedSchools,
+  raceOptions,
 } from "./predefinedOptions";
+
+const LOCAL_STORAGE_KEY = "hackku25_registration_form";
 
 export function RegistrationForm() {
   const [showChaperoneFields, setShowChaperoneFields] = useState(false);
@@ -38,7 +40,24 @@ export function RegistrationForm() {
   const form = useForm<RegistrationData>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
+    // Initialize with empty defaultValues
+    defaultValues: {},
   });
+
+  // Load saved data on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (savedData) {
+        try {
+          form.reset(JSON.parse(savedData));
+        } catch (error) {
+          console.error("Failed to parse saved form data:", error);
+          localStorage.removeItem(LOCAL_STORAGE_KEY); // Remove corrupted data
+        }
+      }
+    }
+  }, [form]);
 
   // Function to check if a field is required based on the Zod schema
   const isFieldRequired = useCallback(
@@ -101,7 +120,6 @@ export function RegistrationForm() {
 
   // Define types for select fields
   type GenderIdentity = NonNullable<RegistrationData["genderIdentity"]>;
-  type Race = NonNullable<RegistrationData["race"]>;
   type HispanicOrLatino = NonNullable<RegistrationData["hispanicOrLatino"]>;
   type TShirtSize = NonNullable<RegistrationData["tShirtSize"]>;
   type LevelOfStudy = NonNullable<RegistrationData["levelOfStudy"]>;
@@ -113,22 +131,6 @@ export function RegistrationForm() {
     { label: "Non-binary", value: "Non-binary" },
     { label: "Other", value: "Other" },
     { label: "Prefer not to Answer", value: "Prefer not to Answer" },
-  ];
-
-  const raceOptions: { label: string; value: Race }[] = [
-    { label: "Black or African American", value: "Black or African American" },
-    { label: "White", value: "White" },
-    { label: "Asian", value: "Asian" },
-    {
-      label: "Native Hawaiian or Other Pacific Islander",
-      value: "Native Hawaiian or Other Pacific Islander",
-    },
-    {
-      label: "American Indian or Alaska Native",
-      value: "American Indian or Alaska Native",
-    },
-    { label: "Other", value: "Other" },
-    { label: "Prefer not to answer", value: "Prefer not to answer" },
   ];
 
   const hispanicOrLatinoOptions: {
@@ -155,10 +157,25 @@ export function RegistrationForm() {
     { label: "Other", value: "Other" },
   ];
 
+  // Handle form validation errors
+  const onError = (errors: typeof form.formState.errors) => {
+    console.error("Validation errors:", errors);
+    toast.error("Please correct the errors and try again.");
+  };
+
+  // Save form state to localStorage whenever values change
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(values));
+    });
+    return () => subscription.unsubscribe();
+  }, [form]);
+
+  // Clear localStorage on successful submission
   const onSubmit = async (data: RegistrationData) => {
     try {
-      // Replace with your registration function
       await registerUser(data);
+      localStorage.removeItem(LOCAL_STORAGE_KEY); // Clear saved data
       router.push("/profile");
       toast.success("Registration successful!");
     } catch (error) {
@@ -167,12 +184,6 @@ export function RegistrationForm() {
         "Registration failed, please try again. Please contact support if the issue persists."
       );
     }
-  };
-
-  // Handle form validation errors
-  const onError = (errors: typeof form.formState.errors) => {
-    console.error("Validation errors:", errors);
-    toast.error("Please correct the errors and try again.");
   };
 
   // Calculate progress and check form validity
@@ -193,6 +204,8 @@ export function RegistrationForm() {
         // Special handling for boolean fields
         if (typeof value === "boolean") {
           return value ? count + 1 : count;
+        } else if (Array.isArray(value)) {
+          return value.length > 0 ? count + 1 : count;
         } else {
           return value !== undefined && value !== "" ? count + 1 : count;
         }
@@ -230,7 +243,9 @@ export function RegistrationForm() {
             HackKU25 Registration
           </CardTitle>
 
-          <span className="text-sm font-medium">{progress}% Complete</span>
+          <span className="text-sm font-medium">
+            {progress}% Complete (Saved)
+          </span>
         </div>
         <Progress value={progress} className="w-full h-2 my-6" />
 

@@ -139,3 +139,48 @@ export const predefinedMinors = [
     value: "Global & International Studies",
   },
 ];
+
+export const raceOptions = [
+  { label: "Black or African American", value: "Black or African American" },
+  { label: "White", value: "White" },
+  { label: "Asian", value: "Asian" },
+  {
+    label: "Native Hawaiian or Other Pacific Islander",
+    value: "Native Hawaiian or Other Pacific Islander",
+  },
+  {
+    label: "American Indian or Alaska Native",
+    value: "American Indian or Alaska Native",
+  },
+  { label: "Other", value: "Other" },
+  { label: "Prefer not to answer", value: "Prefer not to answer" },
+];
+
+export const genderIdentityOptions = [
+  { label: "Male", value: "Male" },
+  { label: "Female", value: "Female" },
+  { label: "Non-binary", value: "Non-binary" },
+  { label: "Other", value: "Other" },
+  { label: "Prefer not to Answer", value: "Prefer not to Answer" },
+];
+
+export const hispanicOrLatinoOptions = [
+  { label: "Yes", value: "Yes" },
+  { label: "No", value: "No" },
+  { label: "Prefer not to answer", value: "Prefer not to answer" },
+];
+
+export const tShirtSizeOptions = [
+  { label: "Small", value: "S" },
+  { label: "Medium", value: "M" },
+  { label: "Large", value: "L" },
+  { label: "XL", value: "XL" },
+  { label: "XXL", value: "XXL" },
+];
+
+export const levelOfStudyOptions = [
+  { label: "Undergraduate", value: "Undergraduate" },
+  { label: "Graduate", value: "Graduate" },
+  { label: "High School", value: "High School" },
+  { label: "Other", value: "Other" },
+];
