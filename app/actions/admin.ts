@@ -38,37 +38,54 @@ type ValidateQrCodeResult =
 // CRUD operations for the admin dashboard
 
 // Fetch all users and return their names and emails
+// app/actions/admin.ts
 export async function getUsers(
   page: number = 1,
-  pageSize: number = 10,
+  pageSize: number = 20,
   searchQuery: string = ""
 ) {
-  await isAdmin(); // Ensure only admins can access
+  await isAdmin();
 
   const skip = (page - 1) * pageSize;
 
-  // Fetch filtered users with pagination
   const users = await prisma.user.findMany({
     where: {
       OR: [
         { email: { contains: searchQuery, mode: "insensitive" } },
-        { name: { contains: searchQuery, mode: "insensitive" } },
+        {
+          ParticipantInfo: {
+            OR: [
+              { firstName: { contains: searchQuery, mode: "insensitive" } },
+              { lastName: { contains: searchQuery, mode: "insensitive" } },
+            ],
+          },
+        },
       ],
     },
     include: {
       ParticipantInfo: true,
+      _count: {
+        select: { checkinsAsUser: true },
+      },
     },
     skip,
     take: pageSize,
-    orderBy: { createdAt: "desc" }, // Order by latest users
+    orderBy: { createdAt: "desc" },
   });
 
-  // Get total count for pagination
   const totalUsers = await prisma.user.count({
     where: {
       OR: [
         { email: { contains: searchQuery, mode: "insensitive" } },
         { name: { contains: searchQuery, mode: "insensitive" } },
+        {
+          ParticipantInfo: {
+            OR: [
+              { firstName: { contains: searchQuery, mode: "insensitive" } },
+              { lastName: { contains: searchQuery, mode: "insensitive" } },
+            ],
+          },
+        },
       ],
     },
   });
@@ -79,20 +96,18 @@ export async function getUsers(
 // Fetch all check-ins and return user names, event names, and check-in time
 export async function getCheckins(
   page: number = 1,
-  pageSize: number = 10,
+  pageSize: number = 20,
   searchQuery: string = ""
 ) {
-  await isAdmin(); // Ensure only admins can access
+  await isAdmin();
 
   const skip = (page - 1) * pageSize;
 
-  // Fetch filtered check-ins with pagination
   const checkins = await prisma.checkin.findMany({
     include: {
       user: {
-        select: {
-          name: true,
-          email: true,
+        include: {
+          ParticipantInfo: true,
         },
       },
       event: {
@@ -103,10 +118,9 @@ export async function getCheckins(
     },
     skip,
     take: pageSize,
-    orderBy: { createdAt: "desc" }, // Order by latest check-ins
+    orderBy: { createdAt: "desc" },
   });
 
-  // Get total count for pagination
   const totalCheckins = await prisma.checkin.count({
     where: {
       OR: [
@@ -117,7 +131,6 @@ export async function getCheckins(
     },
   });
 
-  // Transform the data to match the Checkin interface
   const transformedCheckins = checkins.map((checkin) => ({
     id: checkin.id,
     userId: checkin.userId,
@@ -126,6 +139,12 @@ export async function getCheckins(
     user: {
       name: checkin.user.name,
       email: checkin.user.email,
+      participantInfo: checkin.user.ParticipantInfo
+        ? {
+            firstName: checkin.user.ParticipantInfo.firstName,
+            lastName: checkin.user.ParticipantInfo.lastName,
+          }
+        : null,
     },
     event: {
       name: checkin.event.name,
@@ -134,7 +153,6 @@ export async function getCheckins(
 
   return { checkins: transformedCheckins, totalCheckins };
 }
-
 /**
  * Batch update check-ins
  */
@@ -410,6 +428,59 @@ export async function batchUpdateUsers(changes: Record<string, Partial<User>>) {
 
   const updatedUsers = await prisma.$transaction(updatePromises);
   return updatedUsers;
+}
+
+// app/actions/admin.ts
+export async function getEventById(eventId: string) {
+  try {
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+      select: {
+        id: true,
+        name: true,
+        startDate: true,
+        endDate: true,
+        location: true,
+        description: true,
+        eventType: true,
+      },
+    });
+
+    if (!event) {
+      throw new Error("Event not found");
+    }
+
+    return event;
+  } catch (error) {
+    console.error("Failed to fetch event:", error);
+    throw new Error("Failed to fetch event details");
+  }
+}
+
+export async function getUserById(userId: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        ParticipantInfo: true,
+        checkinsAsUser: {
+          include: {
+            event: true,
+          },
+          orderBy: { createdAt: "desc" }, // Sort check-ins by most recent
+        },
+      },
+    });
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  } catch (error) {
+    console.error("Failed to fetch user:", error);
+    throw new Error("Failed to fetch user details");
+  }
 }
 
 // Batch update participant info

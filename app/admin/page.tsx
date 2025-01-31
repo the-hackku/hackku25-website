@@ -1,20 +1,28 @@
 "use client";
 
-import React from "react";
-import Link from "next/link";
-
-// shadcn/ui tabs components
+import React, { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-
-// Your generic data container
 import { GenericDataContainer } from "@/components/admin/GenericDataContainer";
-
-// Column definitions & server actions for Users
-import { getUsers, batchUpdateUsers, getCheckins } from "@/app/actions/admin";
+import {
+  getUsers,
+  batchUpdateUsers,
+  getCheckins,
+  batchUpdateCheckins,
+} from "@/app/actions/admin";
 import { ColumnDef } from "@tanstack/react-table";
 import { ROLE } from "@prisma/client";
+import { UserDetailsDialog } from "@/components/admin/UserDetailsDialog";
+import { EventDetailsDialog } from "@/components/admin/EventDetailsDialog"; // Import EventDetailsDialog
+import Link from "next/link";
+import { format } from "date-fns";
+import { ParticipantInfo } from "@prisma/client";
+import { IconArrowUpRight } from "@tabler/icons-react";
 
-/** Example user interface */
+// Extend the User type to include relations or additional fields
+interface ExtendedUser extends User {
+  ParticipantInfo?: ParticipantInfo | null;
+  checkinsAsUser?: Checkin[];
+}
 interface User {
   id: string;
   email: string;
@@ -22,70 +30,135 @@ interface User {
   name?: string | null;
 }
 
-/** Example columns for users */
-const userColumns: ColumnDef<User>[] = [
-  {
-    id: "email",
-    header: "Email",
-    accessorFn: (row) => row.email,
-  },
-  {
-    id: "role",
-    header: "Role",
-    accessorFn: (row) => row.role,
-  },
-];
-
-/**
- * Example Checkin interface + columns
- * If you have a checkins model:
- */
 interface Checkin {
   id: string;
   userId: string;
   eventId: string;
-  createdAt: Date; // Use `createdAt` instead of `timestamp`
+  createdAt: Date;
   user: {
     name: string | null;
     email: string;
+    participantInfo?: {
+      firstName: string;
+      lastName: string;
+    } | null;
   };
   event: {
     name: string;
   };
 }
-const checkinColumns: ColumnDef<Checkin>[] = [
-  {
-    id: "userId",
-    header: "User ID",
-    accessorFn: (row) => row.userId,
-  },
-  {
-    id: "eventId",
-    header: "Event ID",
-    accessorFn: (row) => row.eventId,
-  },
-  {
-    id: "timestamp",
-    header: "Timestamp",
-    accessorFn: (row) => row.createdAt.toISOString(),
-  },
-];
 
-/**
- * Main Admin Tabs Page:
- * Shows four tabs:
- * 1) Users - Renders GenericDataContainer for users
- * 2) Check-ins - Renders GenericDataContainer for checkins
- * 3) Events - Link to /admin/events
- * 4) Scanner - Link to /admin/scanner
- */
 export default function AdminTabsPage() {
+  const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+
+  const [selectedEventId, setSelectedEventId] = useState<string | null>(null); // Track event selection
+
+  const userColumns: ColumnDef<ExtendedUser>[] = [
+    {
+      id: "name",
+      header: "Name",
+      cell: ({ row }) => {
+        const user = row.original;
+        return (
+          <div className="flex items-center">
+            <button
+              onClick={() => setSelectedUserId(user.id)}
+              className={
+                "hover:underline text-left flex flex-row items-center " +
+                (user.ParticipantInfo ? "" : "text-red-300")
+              }
+            >
+              {user.ParticipantInfo
+                ? `${user.ParticipantInfo.firstName} ${user.ParticipantInfo.lastName}`
+                : "Unknown"}
+              <IconArrowUpRight size={12} className="ml-1" />
+            </button>
+          </div>
+        );
+      },
+    },
+    {
+      id: "email",
+      header: "Email",
+      cell: ({ row }) => {
+        return row.original.email;
+      },
+    },
+    {
+      id: "role",
+      header: "Role",
+      accessorFn: (row) => row.role,
+      meta: {
+        selectOptions: Object.values(ROLE).map((role) => ({
+          value: role,
+          label: role,
+        })),
+      },
+    },
+  ];
+
+  const checkinColumns: ColumnDef<Checkin>[] = [
+    {
+      id: "user",
+      header: "User",
+      cell: ({ row }) => {
+        const checkin = row.original;
+        const userName = checkin.user.participantInfo
+          ? `${checkin.user.participantInfo.firstName} ${checkin.user.participantInfo.lastName}`
+          : checkin.user.name || "Unknown";
+
+        return (
+          <button
+            onClick={() => setSelectedUserId(checkin.userId)} // Show user details dialog
+            className="hover:underline text-left"
+          >
+            {userName}
+          </button>
+        );
+      },
+    },
+    {
+      id: "event",
+      header: "Event",
+      cell: ({ row }) => {
+        const checkin = row.original;
+        return (
+          <button
+            onClick={() => setSelectedEventId(checkin.eventId)} // Show event details dialog
+            className="hover:underline text-left"
+          >
+            {checkin.event.name}
+          </button>
+        );
+      },
+    },
+    {
+      id: "timestamp",
+      header: "Time",
+      cell: ({ row }) => {
+        const date = new Date(row.original.createdAt);
+        return format(date, "MMMM d, yyyy, h:mm a");
+      },
+    },
+  ];
+
   return (
     <div className="container mx-auto max-w-5xl py-8">
       <h1 className="text-2xl font-semibold mb-4">Admin Dashboard</h1>
 
+      {/* User Details Dialog */}
+      <UserDetailsDialog
+        userId={selectedUserId}
+        onOpenChange={(open) => !open && setSelectedUserId(null)}
+      />
+
+      {/* Event Details Dialog */}
+      <EventDetailsDialog
+        eventId={selectedEventId}
+        onOpenChange={(open) => !open && setSelectedEventId(null)} // Reset event ID when closed
+      />
+
       <Tabs defaultValue="users">
-        {/* --- Tabs Navigation --- */}
         <TabsList className="mb-4">
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="checkins">Check-ins</TabsTrigger>
@@ -93,12 +166,10 @@ export default function AdminTabsPage() {
           <TabsTrigger value="scanner">Scanner</TabsTrigger>
         </TabsList>
 
-        {/* --- Tab: Users --- */}
         <TabsContent value="users">
           <GenericDataContainer<User>
             title="Users"
             fetchFunction={async (page, pageSize, searchQuery) => {
-              // Our getUsers server action returns { users, totalUsers }
               const { users, totalUsers } = await getUsers(
                 page,
                 pageSize,
@@ -107,16 +178,14 @@ export default function AdminTabsPage() {
               return { data: users, total: totalUsers };
             }}
             updateFunction={async (editedData) => {
-              // We expect batchUpdateUsers to handle changes
               await batchUpdateUsers(editedData);
             }}
             columns={userColumns}
-            pageSize={10}
+            pageSize={20}
             debounceTime={250}
           />
         </TabsContent>
 
-        {/* --- Tab: Check-ins --- */}
         <TabsContent value="checkins">
           <GenericDataContainer<Checkin>
             title="Check-ins"
@@ -132,17 +201,11 @@ export default function AdminTabsPage() {
               await batchUpdateCheckins(editedData);
             }}
             columns={checkinColumns}
-            pageSize={10}
             debounceTime={250}
           />
         </TabsContent>
 
-        {/* --- Tab: Events --- */}
         <TabsContent value="events">
-          {/* 
-            Option A: Link directly to a dedicated AdminEvents page (which might 
-            also be a GenericDataContainer but with different columns and fetch/update logic).
-          */}
           <div className="flex flex-col items-start space-y-2">
             <p className="text-sm text-muted-foreground">
               Manage your events in a separate page:
@@ -153,7 +216,6 @@ export default function AdminTabsPage() {
           </div>
         </TabsContent>
 
-        {/* --- Tab: Scanner --- */}
         <TabsContent value="scanner">
           <div className="flex flex-col items-start space-y-2">
             <p className="text-sm text-muted-foreground">
@@ -167,13 +229,4 @@ export default function AdminTabsPage() {
       </Tabs>
     </div>
   );
-}
-
-/** Example placeholder batchUpdateCheckins function */
-async function batchUpdateCheckins(
-  editedData: Record<string, Partial<Checkin>>
-) {
-  console.log("batchUpdateCheckins called with:", editedData);
-  // Put your actual logic here or call your server action
-  // e.g. await prisma.checkin.updateMany(...)
 }

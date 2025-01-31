@@ -9,7 +9,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { useSearchablePaginatedData } from "@/hooks/useSearchablePaginatedData";
 import { useBatchEditing } from "@/hooks/useBatchEditing";
 import { EditableTable } from "./EditableTable";
-import { IconLoader } from "@tabler/icons-react";
+import { IconLoader, IconX } from "@tabler/icons-react";
 
 interface GenericDataContainerProps<T extends { id: string }> {
   /** A function to fetch data from your server/database, returning { data, total } */
@@ -147,6 +147,14 @@ export function GenericDataContainer<T extends { id: string }>({
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pr-10"
           />
+          {searchQuery && !loading && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute inset-y-0 right-0 flex items-center pr-3"
+            >
+              <IconX className="h-5 w-5" />
+            </button>
+          )}
           {loading && (
             <div className="absolute inset-y-0 right-0 flex items-center pr-3">
               <IconLoader className="animate-spin h-5 w-5" />
@@ -156,13 +164,18 @@ export function GenericDataContainer<T extends { id: string }>({
 
         {/* Action Buttons */}
         <div className="space-x-2">
-          <Button
-            variant="outline"
-            onClick={revert}
-            disabled={totalChanges === 0}
-          >
-            Revert
-          </Button>
+          {
+            // Only show Revert button if there are changes
+            totalChanges > 0 && (
+              <Button
+                variant="outline"
+                onClick={revert}
+                disabled={totalChanges === 0}
+              >
+                Revert
+              </Button>
+            )
+          }
           <Button
             variant={totalChanges === 0 ? "outline" : "default"}
             color={totalChanges === 0 ? "gray" : "yellow"}
