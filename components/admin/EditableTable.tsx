@@ -15,6 +15,7 @@ export type SelectOption = {
 
 // Extend ColumnDef meta type to include select configuration
 declare module "@tanstack/table-core" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface ColumnMeta<TData, TValue> {
     selectOptions?: SelectOption[];
   }
