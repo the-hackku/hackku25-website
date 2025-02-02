@@ -202,3 +202,9 @@ model ParticipantInfo {
   createdAt              DateTime        @default(now())
   updatedAt              DateTime        @updatedAt
 }
+
+//model ReimbursementInfo {
+  //id                     String          @id @default(cuid())
+  //userId                 String          @unique // One-to-one relation with User
+
+//}
