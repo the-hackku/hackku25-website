@@ -207,4 +207,28 @@ model ParticipantInfo {
   //id                     String          @id @default(cuid())
   //userId                 String          @unique // One-to-one relation with User
 
+  // Personal Information
+  //firstName              String
+  //lastName               String
+  //phoneNumber            String
+  //email                  String
+
+  // Address
+  // address               String
+  // address2              String
+  // city                  String
+  // state                 String
+  // zipCode               String
+  // country               String
+
+  // Transportation
+  // transportationType    String
+
+  // Distance 
+  // distance              String
+
+  // Estimated Ticket/Gas payment
+  //gasPrice               Float
+
 //}
+
