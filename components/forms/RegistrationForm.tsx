@@ -180,39 +180,40 @@ export function RegistrationForm() {
 
   // Clear localStorage on successful submission
   const onSubmit = async (data: RegistrationData) => {
-    try {
-      const file = fileInputRef.current?.files?.[0];
-      let resumeUrl = null;
+    await toast.promise(
+      (async () => {
+        const file = fileInputRef.current?.files?.[0];
+        let resumeUrl = null;
 
-      if (file) {
-        const formData = new FormData();
-        formData.append("file", file);
+        if (file) {
+          const formData = new FormData();
+          formData.append("file", file);
 
-        const response = await fetch(
-          `/api/upload?filename=${encodeURIComponent(file.name)}`,
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
+          const response = await fetch(
+            `/api/upload?filename=${encodeURIComponent(file.name)}`,
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
 
-        if (!response.ok) throw new Error("File upload failed");
+          if (!response.ok) throw new Error("File upload failed");
 
-        console.log(response);
-        const result = await response.json();
-        resumeUrl = result.downloadUrl;
-        console.log(resumeUrl);
+          const result = await response.json();
+          resumeUrl = result.downloadUrl;
+        }
+
+        // Send form data along with the resume URL
+        await registerUser({ ...data }, resumeUrl);
+      })(),
+      {
+        loading: "Submitting registration...",
+        success: "Registration successful!",
+        error: "Registration failed. Please try again.",
       }
+    );
 
-      // Send form data along with the resume URL
-      await registerUser({ ...data }, resumeUrl);
-
-      toast.success("Registration successful!");
-      router.push("/profile");
-    } catch (error) {
-      console.error("Registration failed:", error);
-      toast.error("Registration failed. Please try again.");
-    }
+    router.refresh();
   };
 
   // Calculate progress and check form validity
@@ -619,7 +620,7 @@ export function RegistrationForm() {
             </div>
             <Button
               type="submit"
-              disabled={form.formState.isSubmitting || !form.formState.isValid}
+              disabled={form.formState.isSubmitting}
               className="w-full bg-blue-500 hover:bg-blue-600 text-white"
             >
               Register!

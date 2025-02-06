@@ -42,6 +42,7 @@ function transformUserData(user: UserWithParticipantInfo): string[] {
     user.ParticipantInfo.age?.toString() ?? "N/A",
     user.ParticipantInfo.genderIdentity ?? "N/A",
     user.ParticipantInfo.race ?? "N/A",
+    user.ParticipantInfo.resumeUrl ?? "N/A",
     user.ParticipantInfo.hispanicOrLatino ?? "N/A",
     user.ParticipantInfo.countryOfResidence ?? "N/A",
     user.ParticipantInfo.levelOfStudy ?? "N/A",

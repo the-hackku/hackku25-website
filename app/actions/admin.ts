@@ -2,7 +2,7 @@
 
 import { prisma } from "@/prisma";
 import { isAdmin } from "@/middlewares/isAdmin";
-import { Checkin, EventType, User } from "@prisma/client";
+import { Checkin, EventType, TravelReimbursement, User } from "@prisma/client";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authoptions";
 
@@ -467,8 +467,9 @@ export async function getUserById(userId: string) {
           include: {
             event: true,
           },
-          orderBy: { createdAt: "desc" }, // Sort check-ins by most recent
+          orderBy: { createdAt: "desc" },
         },
+        TravelReimbursement: true, // Include reimbursements
       },
     });
 
@@ -498,4 +499,85 @@ export async function batchUpdateParticipants(
   );
 
   await prisma.$transaction(updatePromises);
+}
+
+export async function getReimbursements(
+  page: number = 1,
+  pageSize: number = 20,
+  searchQuery: string = ""
+) {
+  await isAdmin();
+
+  const skip = (page - 1) * pageSize;
+
+  const reimbursements = await prisma.travelReimbursement.findMany({
+    where: {
+      OR: [
+        {
+          transportationMethod: { contains: searchQuery, mode: "insensitive" },
+        },
+        { address: { contains: searchQuery, mode: "insensitive" } },
+        {
+          user: {
+            ParticipantInfo: {
+              OR: [
+                { firstName: { contains: searchQuery, mode: "insensitive" } },
+                { lastName: { contains: searchQuery, mode: "insensitive" } },
+              ],
+            },
+          },
+        },
+      ],
+    },
+    include: {
+      user: {
+        include: {
+          ParticipantInfo: true,
+        },
+      },
+    },
+    skip,
+    take: pageSize,
+    orderBy: { createdAt: "desc" },
+  });
+
+  const totalReimbursements = await prisma.travelReimbursement.count({
+    where: {
+      OR: [
+        {
+          transportationMethod: { contains: searchQuery, mode: "insensitive" },
+        },
+        { address: { contains: searchQuery, mode: "insensitive" } },
+        {
+          user: {
+            ParticipantInfo: {
+              OR: [
+                { firstName: { contains: searchQuery, mode: "insensitive" } },
+                { lastName: { contains: searchQuery, mode: "insensitive" } },
+              ],
+            },
+          },
+        },
+      ],
+    },
+  });
+
+  return { reimbursements, totalReimbursements };
+}
+
+export async function batchUpdateReimbursements(
+  changes: Record<string, Partial<TravelReimbursement>>
+) {
+  await isAdmin();
+
+  const updatePromises = Object.entries(changes).map(
+    ([reimbursementId, fields]) =>
+      prisma.travelReimbursement.update({
+        where: { id: reimbursementId },
+        data: fields,
+      })
+  );
+
+  const updatedReimbursements = await prisma.$transaction(updatePromises);
+  return updatedReimbursements;
 }

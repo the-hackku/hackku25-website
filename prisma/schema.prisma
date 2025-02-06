@@ -9,22 +9,23 @@ datasource db {
 }
 
 model User {
-  id              String           @id @default(cuid())
-  name            String?
-  email           String           @unique
-  role            ROLE             @default(HACKER)
-  emailVerified   DateTime?
-  image           String?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  accounts        Account[]
-  Authenticator   Authenticator[]
-  checkinsAsAdmin Checkin[]        @relation("AdminCheckin")
-  checkinsAsUser  Checkin[]        @relation("UserCheckedIn")
-  ParticipantInfo ParticipantInfo?
-  scansAsAdmin    Scan[]           @relation("AdminScanner")
-  scansAsUser     Scan[]           @relation("UserScanned")
-  sessions        Session[]
+  id                  String                @id @default(cuid())
+  name                String?
+  email               String                @unique
+  role                ROLE                  @default(HACKER)
+  emailVerified       DateTime?
+  image               String?
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  accounts            Account[]
+  Authenticator       Authenticator[]
+  checkinsAsAdmin     Checkin[]             @relation("AdminCheckin")
+  checkinsAsUser      Checkin[]             @relation("UserCheckedIn")
+  ParticipantInfo     ParticipantInfo?
+  scansAsAdmin        Scan[]                @relation("AdminScanner")
+  scansAsUser         Scan[]                @relation("UserScanned")
+  sessions            Session[]
+  TravelReimbursement TravelReimbursement[]
 }
 
 model Account {
@@ -124,7 +125,7 @@ model ParticipantInfo {
   lastName              String
   phoneNumber           String
   age                   Int
-  resumeUrl             String? 
+  resumeUrl             String?
   genderIdentity        String
   race                  String
   hispanicOrLatino      String
@@ -149,6 +150,21 @@ model ParticipantInfo {
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
   user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model TravelReimbursement {
+  id                   String   @id @default(cuid())
+  userId               String
+  transportationMethod String
+  address              String
+  distance             Float
+  estimatedCost        Float
+  reason               String
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId]) // Ensures a user doesn't submit duplicate reimbursements for the same address.
 }
 
 enum EventType {

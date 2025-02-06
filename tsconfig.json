@@ -26,7 +26,9 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "scripts/fromsheets.js"
+    "scripts/fromsheets.js",
+    "app/reimbursement",
+    "app/reimbursement"
   ],
   "exclude": ["node_modules"]
 }

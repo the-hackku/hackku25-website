@@ -1,4 +1,3 @@
-// app/actions/registerUser.ts (or wherever you define your server actions)
 "use server";
 
 import { PrismaClient } from "@prisma/client";
@@ -37,7 +36,7 @@ export async function registerUser(data: RegistrationData, resumeUrl?: string) {
       lastName: data.lastName,
       phoneNumber: data.phoneNumber,
       age: data.age,
-      resumeUrl: resumeUrl ?? "testing",
+      resumeUrl: resumeUrl ?? "",
       genderIdentity: data.genderIdentity ?? "",
       race: data.race ?? "",
       hispanicOrLatino: data.hispanicOrLatino ?? "",
@@ -77,4 +76,46 @@ export async function registerUser(data: RegistrationData, resumeUrl?: string) {
   revalidatePath("/profile");
 
   return { success: true };
+}
+
+export async function submitTravelReimbursement({
+  transportationMethod,
+  address,
+  distance,
+  estimatedCost,
+  reason,
+}: {
+  transportationMethod: string;
+  address: string;
+  distance: number;
+  estimatedCost: number;
+  reason: string;
+}) {
+  // Authenticate the user.
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    throw new Error("User not authenticated");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Save the reimbursement request.
+  const reimbursement = await prisma.travelReimbursement.create({
+    data: {
+      userId: user.id,
+      transportationMethod,
+      address,
+      distance,
+      estimatedCost,
+      reason,
+    },
+  });
+
+  return { success: true, reimbursement };
 }

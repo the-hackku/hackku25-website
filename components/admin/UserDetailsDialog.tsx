@@ -28,12 +28,32 @@ interface Checkin {
   createdAt: string; // We will store `createdAt` as string when it is passed to the front-end
 }
 
+interface TravelReimbursement {
+  id: string;
+  transportationMethod: string;
+  address: string;
+  distance: number;
+  estimatedCost: number;
+  reason: string;
+  createdAt: string;
+}
+
+interface ParticipantInfo {
+  firstName: string;
+  lastName: string;
+  phoneNumber?: string;
+  currentSchool?: string;
+  major?: string;
+  dietaryRestrictions?: string;
+}
+
 interface User {
   name: string | null;
   email: string;
   role: string;
   checkinsAsUser: Checkin[];
   ParticipantInfo?: ParticipantInfo | null;
+  TravelReimbursement?: TravelReimbursement[]; // Add this
 }
 
 export function UserDetailsDialog({
@@ -120,9 +140,69 @@ export function UserDetailsDialog({
                   <CardHeader>
                     <CardTitle>Participant Information</CardTitle>
                   </CardHeader>
-                  <CardContent className="grid grid-cols-2 gap-4"></CardContent>
+                  <CardContent className="grid grid-cols-2 gap-4">
+                    <div>
+                      <p className="font-medium">Phone Number:</p>
+                      <p>{userDetails.ParticipantInfo.phoneNumber || "N/A"}</p>
+                    </div>
+                    <div>
+                      <p className="font-medium">Current School:</p>
+                      <p>
+                        {userDetails.ParticipantInfo.currentSchool || "N/A"}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="font-medium">Major:</p>
+                      <p>{userDetails.ParticipantInfo.major || "N/A"}</p>
+                    </div>
+                    <div>
+                      <p className="font-medium">Dietary Restrictions:</p>
+                      <p>
+                        {userDetails.ParticipantInfo.dietaryRestrictions ||
+                          "None"}
+                      </p>
+                    </div>
+                  </CardContent>
                 </Card>
               )}
+              {userDetails.TravelReimbursement &&
+                userDetails.TravelReimbursement.length > 0 && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Reimbursement Information</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {userDetails.TravelReimbursement.map((reimbursement) => (
+                        <div key={reimbursement.id}>
+                          <p>
+                            <strong>Transport:</strong>{" "}
+                            {reimbursement.transportationMethod}
+                          </p>
+                          <p>
+                            <strong>Address:</strong> {reimbursement.address}
+                          </p>
+                          <p>
+                            <strong>Distance:</strong> {reimbursement.distance}{" "}
+                            miles
+                          </p>
+                          <p>
+                            <strong>Estimated Cost:</strong> $
+                            {reimbursement.estimatedCost.toFixed(2)}
+                          </p>
+                          <p>
+                            <strong>Reason:</strong> {reimbursement.reason}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Submitted on:{" "}
+                            {new Date(
+                              reimbursement.createdAt
+                            ).toLocaleDateString()}
+                          </p>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                )}
 
               <Card>
                 <CardHeader>

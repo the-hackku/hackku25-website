@@ -14,10 +14,9 @@ import {
   IconHistory,
   IconCheck,
   IconLock,
+  IconExternalLink,
 } from "@tabler/icons-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-import AuthButtons from "@/components/AuthButtons";
 import { redirect } from "next/navigation";
 import constants from "@/constants";
 
@@ -40,8 +39,12 @@ export default async function ProfilePage() {
   try {
     const user = await prisma.user.findUnique({
       where: { email: session.user?.email ?? undefined },
-      include: { ParticipantInfo: true },
+      include: { ParticipantInfo: true, TravelReimbursement: true },
     });
+
+    const reimbursement = user?.TravelReimbursement[0]?.createdAt;
+
+    console.log(reimbursement);
 
     const checkIns = await prisma.checkin.findMany({
       where: { userId: user?.id },
@@ -148,9 +151,6 @@ export default async function ProfilePage() {
                           My Information
                         </CardTitle>
                       </div>
-                      {/* <p className="text-sm text-gray-500">
-                        Contact us if this must be updated
-                      </p> */}
                     </CardHeader>
 
                     <CardContent>
@@ -167,9 +167,41 @@ export default async function ProfilePage() {
                         </div>
 
                         <hr className="my-4 border-gray-200" />
+                        {user?.ParticipantInfo &&
+                          (reimbursement ? (
+                            <div className="flex items-center space-x-2">
+                              <IconCheck className="text-primary" size={20} />
+                              <p>
+                                Reimbursement Submitted on{" "}
+                                {new Date(reimbursement).toLocaleDateString()}
+                              </p>
+                            </div>
+                          ) : (
+                            <div className="flex items-center space-x-2 hover:underline">
+                              <IconFileText
+                                className="text-primary"
+                                size={20}
+                              />
+                              <p>
+                                <Link
+                                  href={`/reimbursement`}
+                                  className="flex flex-row items-center gap-2"
+                                >
+                                  Apply for Travel Reimbursement
+                                  <IconExternalLink size={16} />
+                                </Link>
+                              </p>
+                            </div>
+                          ))}
                         <div className="flex items-center space-x-2">
                           <IconLogout className="text-primary" size={20} />
-                          <AuthButtons isAuthenticated />
+                          <Link
+                            href="signout"
+                            className="hover:underline"
+                            passHref
+                          >
+                            Sign Out
+                          </Link>
                         </div>
                       </div>
                     </CardContent>

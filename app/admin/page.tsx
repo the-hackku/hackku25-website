@@ -8,9 +8,11 @@ import {
   batchUpdateUsers,
   getCheckins,
   batchUpdateCheckins,
+  getReimbursements,
+  batchUpdateReimbursements,
 } from "@/app/actions/admin";
 import { ColumnDef } from "@tanstack/react-table";
-import { ROLE } from "@prisma/client";
+import { ROLE, TravelReimbursement } from "@prisma/client";
 import { UserDetailsDialog } from "@/components/admin/UserDetailsDialog";
 import { EventDetailsDialog } from "@/components/admin/EventDetailsDialog"; // Import EventDetailsDialog
 import Link from "next/link";
@@ -28,6 +30,15 @@ interface User {
   email: string;
   role: ROLE;
   name?: string | null;
+}
+
+interface ExtendedTravelReimbursement extends TravelReimbursement {
+  user: {
+    ParticipantInfo?: {
+      firstName: string;
+      lastName: string;
+    } | null;
+  };
 }
 
 interface Checkin {
@@ -97,6 +108,54 @@ export default function AdminTabsPage() {
     },
   ];
 
+  const reimbursementColumns: ColumnDef<ExtendedTravelReimbursement>[] = [
+    {
+      id: "user",
+      header: "User",
+      cell: ({ row }) => {
+        const reimbursement = row.original;
+        const participantInfo = reimbursement.user?.ParticipantInfo;
+        const userName = participantInfo
+          ? `${participantInfo.firstName} ${participantInfo.lastName}`
+          : "Unknown";
+
+        return (
+          <button
+            onClick={() => setSelectedUserId(reimbursement.userId)}
+            className="hover:underline text-left"
+          >
+            {userName}
+          </button>
+        );
+      },
+    },
+    {
+      id: "transportationMethod",
+      header: "Transport",
+      accessorFn: (row) => row.transportationMethod,
+    },
+    {
+      id: "address",
+      header: "Address",
+      accessorFn: (row) => row.address,
+    },
+    {
+      id: "distance",
+      header: "Distance (miles)",
+      accessorFn: (row) => row.distance,
+    },
+    {
+      id: "estimatedCost",
+      header: "Estimated Cost ($)",
+      accessorFn: (row) => row.estimatedCost,
+    },
+    {
+      id: "reason",
+      header: "Reason",
+      accessorFn: (row) => row.reason,
+    },
+  ];
+
   const checkinColumns: ColumnDef<Checkin>[] = [
     {
       id: "user",
@@ -162,6 +221,7 @@ export default function AdminTabsPage() {
         <TabsList className="mb-4">
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="checkins">Check-ins</TabsTrigger>
+          <TabsTrigger value="reimbursements">Reimbursements</TabsTrigger>
           <TabsTrigger value="events">Events</TabsTrigger>
           <TabsTrigger value="scanner">Scanner</TabsTrigger>
         </TabsList>
@@ -201,6 +261,22 @@ export default function AdminTabsPage() {
               await batchUpdateCheckins(editedData);
             }}
             columns={checkinColumns}
+            debounceTime={250}
+          />
+        </TabsContent>
+
+        <TabsContent value="reimbursements">
+          <GenericDataContainer<ExtendedTravelReimbursement>
+            title="Reimbursements"
+            fetchFunction={async (page, pageSize, searchQuery) => {
+              const { reimbursements, totalReimbursements } =
+                await getReimbursements(page, pageSize, searchQuery);
+              return { data: reimbursements, total: totalReimbursements };
+            }}
+            updateFunction={async (editedData) => {
+              await batchUpdateReimbursements(editedData);
+            }}
+            columns={reimbursementColumns}
             debounceTime={250}
           />
         </TabsContent>
