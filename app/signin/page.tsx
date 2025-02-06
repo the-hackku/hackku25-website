@@ -12,6 +12,7 @@ import {
   IconBrandDiscordFilled,
   IconBrandGithubFilled,
   IconBrandGoogleFilled,
+  IconLoader,
 } from "@tabler/icons-react";
 
 interface SignInForm {
@@ -20,9 +21,12 @@ interface SignInForm {
 
 const SignInPage = () => {
   const [emailSent, setEmailSent] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [resendTimer, setResendTimer] = useState(60);
+  // This state will hold the name of the provider that is currently loading.
+  const [activeLoadingButton, setActiveLoadingButton] = useState<
+    "google" | "discord" | "github" | "email" | "resend" | null
+  >(null);
   const router = useRouter();
   const {
     register,
@@ -34,14 +38,17 @@ const SignInPage = () => {
   const { status } = useSession();
 
   const handleGoogleSignIn = () => {
+    setActiveLoadingButton("google");
     signIn("google", { callbackUrl: "/register" });
   };
 
   const handleGitHubSignIn = () => {
+    setActiveLoadingButton("github");
     signIn("github", { callbackUrl: "/register" });
   };
 
   const handleDiscordSignIn = () => {
+    setActiveLoadingButton("discord");
     signIn("discord", { callbackUrl: "/register" });
   };
 
@@ -66,7 +73,6 @@ const SignInPage = () => {
 
   const sendMagicLink = async (email: string) => {
     setError(null);
-    setLoading(true);
     try {
       const result = await signIn("email", {
         email,
@@ -89,16 +95,18 @@ const SignInPage = () => {
       setError("An unexpected error occurred.");
       toast.error("An unexpected error occurred.");
     } finally {
-      setLoading(false);
+      setActiveLoadingButton(null);
     }
   };
 
   const onSubmit = async (data: SignInForm) => {
+    setActiveLoadingButton("email");
     await sendMagicLink(data.email);
   };
 
   const handleResend = async () => {
     if (email && resendTimer === 0) {
+      setActiveLoadingButton("resend");
       await sendMagicLink(email);
     } else {
       setError("Please wait before resending the magic link.");
@@ -131,30 +139,48 @@ const SignInPage = () => {
             {/* Google, Discord, GitHub Sign-In Buttons */}
             <div className="flex flex-col gap-3 mb-6">
               <Button
-                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base  text-white rounded-md transition hover:shadow-lg"
-                style={{ backgroundColor: "#4285F4" }}
                 onClick={handleGoogleSignIn}
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base bg-[#4285F4] text-white rounded-md transition hover:shadow-lg"
+                style={{ backgroundColor: "#4285F4" }}
               >
-                <IconBrandGoogleFilled className="h-5 w-5" />
-                Continue with Google
+                {activeLoadingButton === "google" ? (
+                  <IconLoader className="animate-spin h-5 w-5" />
+                ) : (
+                  <IconBrandGoogleFilled className="h-5 w-5" />
+                )}
+                {activeLoadingButton === "google"
+                  ? "Loading..."
+                  : "Continue with Google"}
               </Button>
 
               <Button
-                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base  text-white rounded-md transition hover:shadow-lg"
-                style={{ backgroundColor: "#5865F2" }}
                 onClick={handleDiscordSignIn}
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base text-white rounded-md transition hover:shadow-lg"
+                style={{ backgroundColor: "#5865F2" }}
               >
-                <IconBrandDiscordFilled className="h-5 w-5" />
-                Continue with Discord
+                {activeLoadingButton === "discord" ? (
+                  <IconLoader className="animate-spin h-5 w-5" />
+                ) : (
+                  <IconBrandDiscordFilled className="h-5 w-5" />
+                )}
+                {activeLoadingButton === "discord"
+                  ? "Loading..."
+                  : "Continue with Discord"}
               </Button>
 
               <Button
-                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base  text-white rounded-md transition hover:shadow-lg"
-                style={{ backgroundColor: "#24292E" }}
                 onClick={handleGitHubSignIn}
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base text-white rounded-md transition hover:shadow-lg"
+                style={{ backgroundColor: "#24292E" }}
               >
-                <IconBrandGithubFilled className="h-5 w-5" />
-                Continue with GitHub
+                {activeLoadingButton === "github" ? (
+                  <IconLoader className="animate-spin h-5 w-5" />
+                ) : (
+                  <IconBrandGithubFilled className="h-5 w-5" />
+                )}
+                {activeLoadingButton === "github"
+                  ? "Loading..."
+                  : "Continue with GitHub"}
               </Button>
             </div>
 
@@ -189,10 +215,17 @@ const SignInPage = () => {
 
               <Button
                 type="submit"
+                disabled={activeLoadingButton !== null || !email}
                 className="w-full py-3 text-sm sm:text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-md transition hover:shadow-md"
-                disabled={loading || !email}
               >
-                {loading ? "Sending..." : "Send Magic Link"}
+                {activeLoadingButton === "email" ? (
+                  <>
+                    <IconLoader className="animate-spin h-5 w-5 mr-2" />
+                    Sending...
+                  </>
+                ) : (
+                  "Send Magic Link"
+                )}
               </Button>
             </form>
 
@@ -220,14 +253,19 @@ const SignInPage = () => {
             <div className="flex justify-center mt-6 gap-4">
               <Button
                 onClick={handleResend}
+                disabled={activeLoadingButton !== null || resendTimer > 0}
                 className="py-3 text-sm sm:text-base bg-blue-600 hover:bg-blue-700 text-white rounded-md transition hover:shadow-md"
-                disabled={loading || resendTimer > 0}
               >
-                {loading
-                  ? "Resending..."
-                  : resendTimer > 0
-                  ? `Resend in ${resendTimer}s`
-                  : "Resend Link"}
+                {activeLoadingButton === "resend" ? (
+                  <>
+                    <IconLoader className="animate-spin h-5 w-5 mr-2" />
+                    Resending...
+                  </>
+                ) : resendTimer > 0 ? (
+                  `Resend in ${resendTimer}s`
+                ) : (
+                  "Resend Link"
+                )}
               </Button>
               <Button
                 onClick={handleChangeEmail}

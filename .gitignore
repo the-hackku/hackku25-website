@@ -12,9 +12,7 @@ it didnt work:
 
 # db
 dev.db
-/migrations
-prisma/dev.db
-prisma/migrations
+
 
 # env
 env.local

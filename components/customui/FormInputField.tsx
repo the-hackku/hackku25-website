@@ -16,6 +16,7 @@ interface FormInputFieldProps {
   placeholder?: string;
   required?: boolean;
   type?: string;
+  inputRef?: React.Ref<HTMLInputElement>;
   formatValue?: (value: string) => string;
 }
 
@@ -25,6 +26,7 @@ export function FormInputField({
   placeholder,
   required = false,
   type = "text", // Default to text
+  inputRef,
   formatValue,
 }: FormInputFieldProps) {
   const { control } = useFormContext();
@@ -41,6 +43,7 @@ export function FormInputField({
           </FormLabel>
           <FormControl>
             <Input
+              ref={inputRef}
               type={type} // Use the type dynamically
               placeholder={placeholder}
               value={formatValue ? formatValue(field.value) : field.value || ""}

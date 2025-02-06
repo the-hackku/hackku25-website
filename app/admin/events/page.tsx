@@ -14,7 +14,7 @@ interface Event {
   eventType: EventType;
 }
 
-export default async function EventsPage() {
+export default async function AdminEventsPage() {
   // Fetch events data from the backend
   const events = await fetchEvents();
 

@@ -1,19 +1,154 @@
-
-// SQLITE DATABASE
-// datasource db {
-//   provider = "sqlite"
-//   url      = env("DATABASE_URL") 
-// }
-
-// VERCEL DATABASE
-datasource db {
-  provider = "postgresql"
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
-}
-
 generator client {
   provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id              String           @id @default(cuid())
+  name            String?
+  email           String           @unique
+  role            ROLE             @default(HACKER)
+  emailVerified   DateTime?
+  image           String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  accounts        Account[]
+  Authenticator   Authenticator[]
+  checkinsAsAdmin Checkin[]        @relation("AdminCheckin")
+  checkinsAsUser  Checkin[]        @relation("UserCheckedIn")
+  ParticipantInfo ParticipantInfo?
+  scansAsAdmin    Scan[]           @relation("AdminScanner")
+  scansAsUser     Scan[]           @relation("UserScanned")
+  sessions        Session[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+model Authenticator {
+  credentialID         String  @unique
+  userId               String
+  providerAccountId    String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+  user                 User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, credentialID])
+}
+
+model Event {
+  id          String    @id @default(cuid())
+  name        String
+  startDate   DateTime
+  endDate     DateTime
+  location    String?
+  description String?
+  eventType   EventType @default(REQUIRED)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  checkins    Checkin[]
+  scans       Scan[]
+}
+
+model Scan {
+  id         String   @id @default(cuid())
+  userId     String
+  eventId    String
+  adminId    String
+  checkinId  String?
+  successful Boolean
+  createdAt  DateTime @default(now())
+  admin      User     @relation("AdminScanner", fields: [adminId], references: [id])
+  checkin    Checkin? @relation(fields: [checkinId], references: [id])
+  event      Event    @relation(fields: [eventId], references: [id])
+  user       User     @relation("UserScanned", fields: [userId], references: [id])
+}
+
+model Checkin {
+  id        String   @id @default(cuid())
+  userId    String
+  eventId   String
+  adminId   String
+  createdAt DateTime @default(now())
+  admin     User     @relation("AdminCheckin", fields: [adminId], references: [id])
+  event     Event    @relation(fields: [eventId], references: [id])
+  user      User     @relation("UserCheckedIn", fields: [userId], references: [id])
+  Scan      Scan[]
+}
+
+model ParticipantInfo {
+  id                    String   @id @default(cuid())
+  userId                String   @unique
+  firstName             String
+  lastName              String
+  phoneNumber           String
+  age                   Int
+  resumeUrl             String? 
+  genderIdentity        String
+  race                  String
+  hispanicOrLatino      String
+  countryOfResidence    String
+  isHighSchoolStudent   Boolean
+  currentSchool         String?
+  levelOfStudy          String?
+  major                 String?
+  minor                 String?
+  previousHackathons    Int?
+  tShirtSize            String
+  dietaryRestrictions   String?
+  specialAccommodations String?
+  chaperoneFirstName    String?
+  chaperoneLastName     String?
+  chaperoneEmail        String?
+  chaperonePhoneNumber  String?
+  agreeHackKUCode       Boolean
+  agreeMLHCode          Boolean
+  shareWithMLH          Boolean
+  receiveEmails         Boolean
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 enum EventType {
@@ -28,177 +163,4 @@ enum ROLE {
   HACKER
   ADMIN
   VOLUNTEER
-}
-
-model User {
-  id                     String          @id @default(cuid())
-  name                   String?
-  email                  String          @unique
-  role                   ROLE           @default(HACKER)
-  emailVerified          DateTime?
-  image                  String?
-  accounts               Account[]
-  sessions               Session[]
-  scansAsUser            Scan[]          @relation("UserScanned")
-  scansAsAdmin           Scan[]          @relation("AdminScanner")
-  checkinsAsUser         Checkin[]       @relation("UserCheckedIn")
-  checkinsAsAdmin        Checkin[]       @relation("AdminCheckin")
-  Authenticator          Authenticator[]
-
-  createdAt              DateTime        @default(now())
-  updatedAt              DateTime        @updatedAt
-
-  ParticipantInfo        ParticipantInfo?  
-}
-
-model Account {
-  userId                 String
-  type                   String
-  provider               String
-  providerAccountId      String
-  refresh_token          String?
-  access_token           String?
-  expires_at             Int?
-  token_type             String?
-  scope                  String?
-  id_token               String?
-  session_state          String?
-
-  createdAt              DateTime        @default(now())
-  updatedAt              DateTime        @updatedAt
-
-  user                   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@id([provider, providerAccountId])
-}
-
-model Session {
-  sessionToken           String          @unique
-  userId                 String
-  expires                DateTime
-  user                   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt              DateTime        @default(now())
-  updatedAt              DateTime        @updatedAt
-}
-
-model VerificationToken {
-  identifier             String
-  token                  String
-  expires                DateTime
-
-  @@id([identifier, token])
-}
-
-model Authenticator {
-  credentialID           String          @unique
-  userId                 String
-  providerAccountId      String
-  credentialPublicKey    String
-  counter                Int
-  credentialDeviceType   String
-  credentialBackedUp     Boolean
-  transports             String?
-
-  user                   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@id([userId, credentialID])
-}
-
-model Event {
-  id                     String          @id @default(cuid())
-  name                   String
-  startDate              DateTime
-  endDate                DateTime
-  location               String?
-  description            String?
-  eventType              EventType       @default(REQUIRED) 
-  checkins               Checkin[]
-  scans                  Scan[]
-
-  createdAt              DateTime        @default(now())
-  updatedAt              DateTime        @updatedAt
-}
-
-model Scan {
-  id        String    @id @default(cuid())
-  userId    String
-  eventId   String
-  adminId   String
-  checkinId String?   // Nullable reference to Checkin
-  successful Boolean  // Whether the scan resulted in a check-in
-
-  user      User      @relation(fields: [userId], references: [id], name: "UserScanned")
-  admin     User      @relation(fields: [adminId], references: [id], name: "AdminScanner")
-  event     Event     @relation(fields: [eventId], references: [id])
-  checkin   Checkin?  @relation(fields: [checkinId], references: [id])
-
-  createdAt DateTime  @default(now())
-
-}
-
-model Checkin {
-  id        String    @id @default(cuid())
-  userId    String
-  eventId   String
-  adminId   String
-
-  user      User      @relation(fields: [userId], references: [id], name: "UserCheckedIn")
-  admin     User      @relation(fields: [adminId], references: [id], name: "AdminCheckin")
-  event     Event     @relation(fields: [eventId], references: [id])
-
-  createdAt DateTime  @default(now())
-
-  Scan Scan[]
-}
-
-
-model ParticipantInfo {
-  id                     String          @id @default(cuid())
-  userId                 String          @unique // One-to-one relation with User
-
-  // Personal Information
-  firstName              String
-  lastName               String
-  phoneNumber            String
-
-  // Demographic Information
-  age                    Int
-  genderIdentity         String          // Male, Female, Non-binary, Prefer not to answer, Other
-  race                   String          // Store as a comma-separated string if multiple options are selected
-  hispanicOrLatino       String          // Yes, No, Prefer not to answer
-  countryOfResidence     String
-
-  // School Information
-  isHighSchoolStudent   Boolean         // Whether the participant is a high school student
-  currentSchool          String?         // School of the participant
-  levelOfStudy           String?         // e.g., High School, Undergraduate, Graduate
-  major                  String?         // Major(s), stored as a semicolon-separated string
-  minor                  String?         // Minor(s), stored as a semicolon-separated string
-
-  // Experience Information
-  previousHackathons     Int?            // Number of hackathons previously attended
-
-  // T-shirt and Dietary Information
-  tShirtSize             String          // S, M, L, XL, XXL, Other
-  dietaryRestrictions    String?
-  specialAccommodations  String?
-
-  // Chaperone Information (for minors)
-  chaperoneFirstName     String?
-  chaperoneLastName      String?
-  chaperoneEmail         String?
-  chaperonePhoneNumber   String?
-
-  // Agreements
-  agreeHackKUCode        Boolean         // Agreed to HackKU Code of Conduct
-  agreeMLHCode           Boolean         // Agreed to MLH Code of Conduct
-  shareWithMLH           Boolean         // Permission to share with MLH
-  receiveEmails          Boolean         // Receive MLH emails
-
-  // Relations
-  user                   User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt              DateTime        @default(now())
-  updatedAt              DateTime        @updatedAt
 }

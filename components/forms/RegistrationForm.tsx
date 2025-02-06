@@ -4,7 +4,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -34,6 +34,7 @@ const LOCAL_STORAGE_KEY = "hackku25_registration_form";
 
 export function RegistrationForm() {
   const [showChaperoneFields, setShowChaperoneFields] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [progress, setProgress] = useState(0);
   const router = useRouter();
 
@@ -50,10 +51,12 @@ export function RegistrationForm() {
       const savedData = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (savedData) {
         try {
-          form.reset(JSON.parse(savedData));
+          const parsedData = JSON.parse(savedData);
+          delete parsedData.resume; // Ensure 'resume' is not included
+          form.reset(parsedData);
         } catch (error) {
           console.error("Failed to parse saved form data:", error);
-          localStorage.removeItem(LOCAL_STORAGE_KEY); // Remove corrupted data
+          localStorage.removeItem(LOCAL_STORAGE_KEY);
         }
       }
     }
@@ -166,7 +169,11 @@ export function RegistrationForm() {
   // Save form state to localStorage whenever values change
   useEffect(() => {
     const subscription = form.watch((values) => {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(values));
+      const { ...valuesWithoutFile } = values; // Exclude 'resume'
+      localStorage.setItem(
+        LOCAL_STORAGE_KEY,
+        JSON.stringify(valuesWithoutFile)
+      );
     });
     return () => subscription.unsubscribe();
   }, [form]);
@@ -174,15 +181,37 @@ export function RegistrationForm() {
   // Clear localStorage on successful submission
   const onSubmit = async (data: RegistrationData) => {
     try {
-      await registerUser(data);
-      localStorage.removeItem(LOCAL_STORAGE_KEY); // Clear saved data
-      router.push("/profile");
+      const file = fileInputRef.current?.files?.[0];
+      let resumeUrl = null;
+
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const response = await fetch(
+          `/api/upload?filename=${encodeURIComponent(file.name)}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        if (!response.ok) throw new Error("File upload failed");
+
+        console.log(response);
+        const result = await response.json();
+        resumeUrl = result.downloadUrl;
+        console.log(resumeUrl);
+      }
+
+      // Send form data along with the resume URL
+      await registerUser({ ...data }, resumeUrl);
+
       toast.success("Registration successful!");
+      router.push("/profile");
     } catch (error) {
-      console.error("Failed to register:", error);
-      toast.error(
-        "Registration failed, please try again. Please contact support if the issue persists."
-      );
+      console.error("Registration failed:", error);
+      toast.error("Registration failed. Please try again.");
     }
   };
 
@@ -389,6 +418,13 @@ export function RegistrationForm() {
                 closeOnSelect
               />
             )}
+            <FormInputField
+              name="resume"
+              label="Upload Resume (PDF)"
+              type="file"
+              required={false}
+              inputRef={fileInputRef}
+            />
 
             {/* Chaperone Information */}
             {showChaperoneFields && (

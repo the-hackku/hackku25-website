@@ -120,9 +120,7 @@ export function UserDetailsDialog({
                   <CardHeader>
                     <CardTitle>Participant Information</CardTitle>
                   </CardHeader>
-                  <CardContent className="grid grid-cols-2 gap-4">
-                    {/* Add participant info fields here if necessary */}
-                  </CardContent>
+                  <CardContent className="grid grid-cols-2 gap-4"></CardContent>
                 </Card>
               )}
 

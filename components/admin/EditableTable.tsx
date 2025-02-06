@@ -7,7 +7,6 @@ import { EditableCell } from "./EditableCell";
 import { EditableSelectCell } from "./EditableSelectCell";
 import { TableComponent } from "./Table";
 
-// Add type for select options
 export type SelectOption = {
   value: string;
   label: string;

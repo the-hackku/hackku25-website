@@ -26,6 +26,7 @@ export const formSchema = z
       .int()
       .min(14, "You must be at least 14 years old.")
       .max(100, "You must be at most 100 years old."),
+    resumeUrl: z.string().optional(),
 
     genderIdentity: z
       .enum(["Male", "Female", "Non-binary", "Other", "Prefer not to Answer"])
