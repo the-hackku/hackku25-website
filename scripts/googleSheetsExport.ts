@@ -12,7 +12,9 @@ import type {
 dotenv.config();
 
 // Replace with your own Google Sheet ID and desired range:
-const SHEET_ID = "1Xwv7RBzU2VFX_xXCNxEpOi-StvNJV5DsiqkIYEQWQD4";
+const REGISTER_SHEET_ID = "1Xwv7RBzU2VFX_xXCNxEpOi-StvNJV5DsiqkIYEQWQD4";
+const REIMBURSEMENT_SHEET_ID = "1PJtuLuQx_hXm0FudyyyVccDE7_1FDh-2G4JwZTdvIDo";
+
 const RANGE = "Sheet1!A1";
 
 const serviceAccountKey = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
@@ -66,7 +68,9 @@ function transformUserData(user: UserWithParticipantInfo): string[] {
   ];
 }
 
-export async function exportToGoogleSheet(user: UserWithParticipantInfo) {
+export async function exportRegistrationToGoogleSheet(
+  user: UserWithParticipantInfo
+) {
   try {
     const sheetsApi = google.sheets({ version: "v4", auth });
 
@@ -74,7 +78,7 @@ export async function exportToGoogleSheet(user: UserWithParticipantInfo) {
 
     // Append data to the Google Sheet, starting at the correct position
     await sheetsApi.spreadsheets.values.append({
-      spreadsheetId: SHEET_ID,
+      spreadsheetId: REGISTER_SHEET_ID,
       range: RANGE, // Refers to the entire sheet, starting from the first available row
       valueInputOption: "RAW",
       insertDataOption: "INSERT_ROWS", // Ensures rows are inserted correctly
@@ -86,5 +90,51 @@ export async function exportToGoogleSheet(user: UserWithParticipantInfo) {
     console.log("User successfully added to Google Sheet!");
   } catch (error) {
     console.error("Error exporting data to Google Sheet:", error);
+  }
+}
+
+export async function exportReimbursementToGoogleSheet(
+  email: string,
+  reimbursement: {
+    transportationMethod: string;
+    address: string;
+    distance: number;
+    estimatedCost: number;
+    reason: string;
+    createdAt: Date;
+  }
+) {
+  try {
+    const sheetsApi = google.sheets({ version: "v4", auth });
+
+    // Transform data into a format suitable for Google Sheets
+    const reimbursementData = [
+      email ?? "N/A",
+      reimbursement.transportationMethod ?? "N/A",
+      reimbursement.address ?? "N/A",
+      reimbursement.distance !== undefined
+        ? reimbursement.distance.toString()
+        : "N/A",
+      reimbursement.estimatedCost !== undefined
+        ? reimbursement.estimatedCost.toString()
+        : "N/A",
+      reimbursement.reason ?? "N/A",
+      reimbursement.createdAt ? reimbursement.createdAt.toISOString() : "N/A",
+    ];
+
+    // Append the reimbursement data to the Google Sheet
+    await sheetsApi.spreadsheets.values.append({
+      spreadsheetId: REIMBURSEMENT_SHEET_ID,
+      range: RANGE,
+      valueInputOption: "RAW",
+      insertDataOption: "INSERT_ROWS",
+      requestBody: {
+        values: [reimbursementData],
+      },
+    });
+
+    console.log("Reimbursement successfully added to Google Sheet!");
+  } catch (error) {
+    console.error("Error exporting reimbursement data:", error);
   }
 }

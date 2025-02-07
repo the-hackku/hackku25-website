@@ -15,11 +15,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { submitTravelReimbursement } from "../actions/register";
 import { toast } from "sonner";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/authoptions";
 import { IconLoader } from "@tabler/icons-react";
 
 // Schema validation
@@ -227,8 +225,8 @@ export default function ReimbursementForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Why do you wish to attend HackkU '25 and what do you hope to
-                  get out of the event?
+                  Why do you wish to attend HackkU &apos;25 and what do you hope
+                  to get out of the event?
                 </FormLabel>
                 <FormControl>
                   <textarea

@@ -5,7 +5,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authoptions";
 import { revalidatePath } from "next/cache";
 import {
-  exportToGoogleSheet,
+  exportRegistrationToGoogleSheet,
+  exportReimbursementToGoogleSheet,
   UserWithParticipantInfo,
 } from "@/scripts/googleSheetsExport";
 import { RegistrationData } from "@/app/actions/schemas";
@@ -67,7 +68,7 @@ export async function registerUser(data: RegistrationData, resumeUrl?: string) {
       ...user,
       ParticipantInfo: participantInfo,
     };
-    await exportToGoogleSheet(userWithInfo);
+    await exportRegistrationToGoogleSheet(userWithInfo);
   } catch (error) {
     console.error("Error updating Google Sheet:", error);
   }
@@ -116,6 +117,13 @@ export async function submitTravelReimbursement({
       reason,
     },
   });
+
+  // Export to Google Sheets
+  try {
+    await exportReimbursementToGoogleSheet(user.email, reimbursement);
+  } catch (error) {
+    console.error("Error exporting reimbursement to Google Sheet:", error);
+  }
 
   return { success: true, reimbursement };
 }
