@@ -1,16 +1,28 @@
-const { google } = require("googleapis");
-const { PrismaClient } = require("@prisma/client");
+// to run: npx ts-node scripts/fromsheets.ts
 
-const fs = require("fs");
-const path = require("path");
-const dotenv = require("dotenv");
+//uncomment the following lines to run the script,
 
-dotenv.config();
+// const { google } = require("googleapis");
+// const { PrismaClient } = require("@prisma/client");
 
+// const fs = require("fs");
+// const path = require("path");
+// const dotenv = require("dotenv");
+
+import { google } from "googleapis";
+import { PrismaClient, ROLE } from "@prisma/client";
+
+import fs from "fs";
+import path from "path";
+import dotenv from "dotenv";
+
+// COMMENT THESE LINES WHEN RUNNING LOCALLY
 // to run: npx ts-node scripts/fromsheets.ts
 
 const prisma = new PrismaClient();
 const sheets = google.sheets("v4");
+
+dotenv.config();
 
 const SHEET_ID = "1uQU6qW8arcfmzfpvhcQbimYE85-nYR1Znr0vZNQEDPM"; // Replace with your Google Sheet ID
 const RANGE = "Sheet1!A:AG"; // Adjust range if needed
@@ -71,7 +83,7 @@ interface ParticipantInfo {
 
 interface TransformedData {
   email: string;
-  role: string;
+  role: ROLE;
   ParticipantInfo: {
     create: ParticipantInfo;
   };

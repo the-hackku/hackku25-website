@@ -2,7 +2,13 @@
 
 import { prisma } from "@/prisma";
 import { isAdmin } from "@/middlewares/isAdmin";
-import { Checkin, EventType, TravelReimbursement, User } from "@prisma/client";
+import {
+  Checkin,
+  EventType,
+  ParticipantInfo,
+  TravelReimbursement,
+  User,
+} from "@prisma/client";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authoptions";
 
