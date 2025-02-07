@@ -127,20 +127,21 @@ const SignInPage = () => {
       {!emailSent ? (
         <Card className="border rounded-lg p-4 shadow-sm">
           <CardHeader>
-            <CardTitle className="text-center text-lg sm:text-xl">
+            <CardTitle className="text-center text-xl sm:text-xl">
               Sign In or Sign Up
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-center text-gray-600 text-sm sm:text-base mb-6">
-              Continue to your account or create a new one in seconds.
+            <p className="text-center text-muted-foreground text-sm mb-6">
+              Registered on the <b>Google Form</b>? Sign in with the same email
+              or use an OAuth provider below to link your account.
             </p>
 
             {/* Google, Discord, GitHub Sign-In Buttons */}
             <div className="flex flex-col gap-3 mb-6">
               <Button
                 onClick={handleGoogleSignIn}
-                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base bg-[#4285F4] text-white rounded-md transition hover:shadow-lg"
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base bg-[#4285F4] text-white rounded-md transition hover:brightness-90"
                 style={{ backgroundColor: "#4285F4" }}
               >
                 {activeLoadingButton === "google" ? (
@@ -155,7 +156,7 @@ const SignInPage = () => {
 
               <Button
                 onClick={handleDiscordSignIn}
-                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base text-white rounded-md transition hover:shadow-lg"
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base text-white rounded-md transition hover:brightness-90"
                 style={{ backgroundColor: "#5865F2" }}
               >
                 {activeLoadingButton === "discord" ? (
@@ -170,7 +171,7 @@ const SignInPage = () => {
 
               <Button
                 onClick={handleGitHubSignIn}
-                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base text-white rounded-md transition hover:shadow-lg"
+                className="w-full flex items-center justify-center gap-2 py-3 text-sm sm:text-base text-white rounded-md transition hover:brightness-80"
                 style={{ backgroundColor: "#24292E" }}
               >
                 {activeLoadingButton === "github" ? (
