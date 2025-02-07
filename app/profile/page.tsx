@@ -193,12 +193,14 @@ export default async function ProfilePage() {
                               </p>
                             </div>
                           ))}
-                        <div className="flex items-center space-x-2">
-                          <IconLogout className="text-primary" size={20} />
+                        <div className="flex items-center gap-2">
+                          <IconLogout
+                            className="text-primary ml-[2px]"
+                            size={20}
+                          />
                           <Link
-                            href="signout"
-                            className="hover:underline"
-                            passHref
+                            href="/signout"
+                            className="flex flex-row items-center gap-2 hover:underline"
                           >
                             Sign Out
                           </Link>
