@@ -246,8 +246,8 @@ export default function ReimbursementForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Why do you wish to attend HackkU &apos;25 and what do you hope
-                  to get out of the event?
+                  Why do you wish to attend HackKU and what do you hope to get
+                  out of the event?
                 </FormLabel>
                 <FormControl>
                   <textarea

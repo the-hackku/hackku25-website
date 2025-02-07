@@ -151,10 +151,11 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
           {/* Mobile Menu */}
           <header className="lg:hidden">
             <div className="flex items-center">
-              <Link href="/profile" passHref>
-                <IconQrcode size={32} />
-              </Link>
-
+              {isAuthenticated && (
+                <Link href="/profile" passHref>
+                  <IconQrcode size={32} />
+                </Link>
+              )}
               <Sheet>
                 <SheetTrigger asChild>
                   <Button variant="ghost">

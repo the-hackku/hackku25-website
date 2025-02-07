@@ -10,6 +10,7 @@ import {
   batchUpdateCheckins,
   getReimbursements,
   batchUpdateReimbursements,
+  backupRegistrationScript,
 } from "@/app/actions/admin";
 import { ColumnDef } from "@tanstack/react-table";
 import { ROLE, TravelReimbursement } from "@prisma/client";
@@ -19,6 +20,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { ParticipantInfo } from "@prisma/client";
 import { IconArrowUpRight } from "@tabler/icons-react";
+import { Button } from "@/components/ui/button";
 
 // Extend the User type to include relations or additional fields
 interface ExtendedUser extends User {
@@ -58,6 +60,10 @@ interface Checkin {
     name: string;
   };
 }
+
+const handleBackup = async () => {
+  backupRegistrationScript();
+};
 
 export default function AdminTabsPage() {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -224,6 +230,7 @@ export default function AdminTabsPage() {
           <TabsTrigger value="reimbursements">Reimbursements</TabsTrigger>
           <TabsTrigger value="events">Events</TabsTrigger>
           <TabsTrigger value="scanner">Scanner</TabsTrigger>
+          <TabsTrigger value="redbutton">red button</TabsTrigger>
         </TabsList>
 
         <TabsContent value="users">
@@ -300,6 +307,14 @@ export default function AdminTabsPage() {
             <Link href="/admin/scanner" className="underline text-blue-600">
               Go to Scanner
             </Link>
+          </div>
+        </TabsContent>
+        <TabsContent value="redbutton">
+          <div className="flex flex-col items-start space-y-2">
+            <p className="text-sm text-muted-foreground">
+              batch backup to google form
+            </p>
+            <Button onClick={handleBackup}>Batch Backup</Button>
           </div>
         </TabsContent>
       </Tabs>

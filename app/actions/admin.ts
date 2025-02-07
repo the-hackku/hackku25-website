@@ -11,6 +11,7 @@ import {
 } from "@prisma/client";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/authoptions";
+import { batchBackupRegistration } from "@/scripts/googleSheetsExport";
 
 // Type for the Event data used in creating or updating events// Type for the Event data used in creating or updating events
 
@@ -586,4 +587,14 @@ export async function batchUpdateReimbursements(
 
   const updatedReimbursements = await prisma.$transaction(updatePromises);
   return updatedReimbursements;
+}
+
+export async function backupRegistrationScript() {
+  try {
+    await batchBackupRegistration();
+    return { success: true, message: "Backup completed successfully!" };
+  } catch (error) {
+    console.error("Backup failed:", error);
+    return { success: false, message: "Backup failed!" };
+  }
 }

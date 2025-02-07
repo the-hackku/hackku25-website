@@ -8,6 +8,7 @@ import type {
   User as PrismaUser,
   ParticipantInfo as PrismaParticipantInfo,
 } from "@prisma/client";
+import { prisma } from "@/prisma";
 
 dotenv.config();
 
@@ -136,5 +137,50 @@ export async function exportReimbursementToGoogleSheet(
     console.log("Reimbursement successfully added to Google Sheet!");
   } catch (error) {
     console.error("Error exporting reimbursement data:", error);
+  }
+}
+
+export async function batchBackupRegistration() {
+  try {
+    const sheetsApi = google.sheets({ version: "v4", auth });
+
+    // Fetch all users with their ParticipantInfo
+    const users = await prisma.user.findMany({
+      include: {
+        ParticipantInfo: true,
+      },
+    });
+
+    // Type guard to ensure TypeScript knows ParticipantInfo is not null
+    const hasParticipantInfo = (
+      user: PrismaUser & { ParticipantInfo: PrismaParticipantInfo | null }
+    ): user is UserWithParticipantInfo => user.ParticipantInfo !== null;
+
+    // Filter and map
+    const rows = users
+      .filter(hasParticipantInfo) // TypeScript now knows ParticipantInfo is not null
+      .map(transformUserData);
+
+    if (rows.length === 0) {
+      console.log("No users with participant info to export.");
+      return;
+    }
+
+    // Append data to the Google Sheet
+    await sheetsApi.spreadsheets.values.append({
+      spreadsheetId: REGISTER_SHEET_ID,
+      range: RANGE,
+      valueInputOption: "RAW",
+      insertDataOption: "INSERT_ROWS",
+      requestBody: {
+        values: rows,
+      },
+    });
+
+    console.log("Batch backup of registrations completed successfully!");
+  } catch (error) {
+    console.error("Error during batch backup:", error);
+  } finally {
+    await prisma.$disconnect();
   }
 }

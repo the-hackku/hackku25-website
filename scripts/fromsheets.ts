@@ -24,8 +24,8 @@ const sheets = google.sheets("v4");
 
 dotenv.config();
 
-const SHEET_ID = "1uQU6qW8arcfmzfpvhcQbimYE85-nYR1Znr0vZNQEDPM"; // Replace with your Google Sheet ID
-const RANGE = "Sheet1!A:AG"; // Adjust range if needed
+const SHEET_ID = "1mXvz5Qc_Sb7pLFznVAisc20c0IYI--R5pThx7dvDFgQ"; // Replace with your Google Sheet ID
+const RANGE = "Form Responses 1!A:AG";
 
 // Authenticate with Google Sheets API
 const auth = new google.auth.GoogleAuth({
