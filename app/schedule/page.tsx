@@ -1,7 +1,8 @@
 // app/schedule/page.tsx
-import ScheduleGrid from "@/components/ScheduleGrid";
-import { prisma } from "@/prisma";
-import { Event } from "@prisma/client";
+
+// import ScheduleGrid from "@/components/ScheduleGrid";
+// import { prisma } from "@/prisma";
+// import { Event } from "@prisma/client";
 
 // // Server-side function to fetch events data
 // async function getEvents(): Promise<Event[]> {

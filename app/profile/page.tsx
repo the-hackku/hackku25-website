@@ -76,7 +76,11 @@ export default async function ProfilePage() {
                     <IconUser size={16} className="mr-2" />
                     Profile
                   </TabsTrigger>
-                  <TabsTrigger value="applicationInfo" disabled={!participant}>
+                  <TabsTrigger
+                    value="applicationInfo"
+                    disabled={!participant}
+                    className="hidden sm:flex"
+                  >
                     <IconFileText size={16} className="mr-2" />
                     Registration
                   </TabsTrigger>

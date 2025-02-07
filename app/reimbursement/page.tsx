@@ -19,6 +19,7 @@ import { useRouter } from "next/navigation";
 import { submitTravelReimbursement } from "../actions/register";
 import { toast } from "sonner";
 import { IconLoader } from "@tabler/icons-react";
+import Link from "next/link";
 
 // Schema validation
 const reimbursementSchema = z.object({
@@ -32,12 +33,16 @@ const reimbursementSchema = z.object({
   ]),
   address: z.string().min(5, { message: "Address is required." }),
   distance: z.preprocess(
-    (val) => Number(val),
-    z.number().positive({ message: "Distance must be positive." })
+    (val) => (val === "" ? undefined : Number(val)),
+    z
+      .number({ required_error: "Distance is required." })
+      .positive({ message: "Distance must be positive." })
   ),
   estimatedCost: z.preprocess(
-    (val) => Number(val),
-    z.number().nonnegative({ message: "Estimated cost must be non-negative." })
+    (val) => (val === "" ? undefined : Number(val)),
+    z
+      .number({ required_error: "Estimated cost is required." })
+      .nonnegative({ message: "Estimated cost must be non-negative." })
   ),
   reason: z.string().min(10, {
     message: "Reason must be at least 10 characters.",
@@ -62,8 +67,8 @@ export default function ReimbursementForm() {
     defaultValues: {
       transportationMethod: "Car",
       address: "",
-      distance: 0,
-      estimatedCost: 0,
+      distance: undefined,
+      estimatedCost: undefined,
       reason: "",
     },
   });
@@ -139,7 +144,10 @@ export default function ReimbursementForm() {
               <FormItem>
                 <FormLabel>What is your transportation method?</FormLabel>
                 <FormControl>
-                  <select {...field} className="border p-2 rounded w-full">
+                  <select
+                    {...field}
+                    className="border p-1 rounded w-full text-md"
+                  >
                     <option value="Car">Car</option>
                     <option value="Bus">Bus</option>
                     <option value="Train">Train</option>
@@ -178,16 +186,28 @@ export default function ReimbursementForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  What is the distance between your starting location and KU
-                  Engineering? <br /> (1536 W 15th St, Lawrence, KS)
+                  <div className="flex flex-wrap gap-1">
+                    <span>Distance to KU Engineering in miles?</span>
+                    <Link
+                      href="https://g.co/kgs/25TjzVB"
+                      target="_blank"
+                      className="underline break-words pb-1"
+                    >
+                      (1536 W 15th St, Lawrence, KS)
+                    </Link>
+                  </div>
                 </FormLabel>
                 <FormControl>
                   <Input
+                    placeholder="Enter distance in miles"
                     type="number"
                     step="0.1"
                     {...field}
                     onChange={(e) => {
-                      const formattedValue = removeLeadingZeros(e.target.value);
+                      const formattedValue = e.target.value.replace(
+                        /^0+(?=\d)/,
+                        ""
+                      );
                       field.onChange(formattedValue);
                     }}
                   />
@@ -205,6 +225,7 @@ export default function ReimbursementForm() {
                 <FormLabel>Estimated Ticket/Gas Cost ($)</FormLabel>
                 <FormControl>
                   <Input
+                    placeholder="Enter estimated cost in dollars"
                     type="number"
                     step="0.01"
                     {...field}
