@@ -244,13 +244,17 @@ export default async function ProfilePage() {
                               label={
                                 key === "createdAt"
                                   ? "Registration Date"
+                                  : key === "shareWithMLH"
+                                  ? "Share with MLH"
                                   : key
                                       .replace(/([A-Z])/g, " $1")
                                       .replace(/^./, (str) => str.toUpperCase())
                               }
                               value={
                                 key === "createdAt"
-                                  ? formatDate(String(value))
+                                  ? formatDate(String(value)) +
+                                    " " +
+                                    formatTimeFromDate(String(value))
                                   : String(value)
                               }
                             />
