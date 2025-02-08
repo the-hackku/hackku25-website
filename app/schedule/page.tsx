@@ -39,7 +39,7 @@ export default async function SchedulePage() {
       <>
         <div className="text-center text-3xl ">Schedule coming soon!</div>
         <div className="text-center text-sm text-muted-foreground mt-3">
-          Checkin starts at 6:00pm on Friday, April 4th
+          Check-in starts at 5:00pm on Friday, April 4th
         </div>
       </>
     </div>

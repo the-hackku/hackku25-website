@@ -372,6 +372,7 @@ export async function validateQrCode(
 }
 
 export async function fetchScanHistory() {
+  isAdmin(); // Ensure only admins can access
   const history = await prisma.scan.findMany({
     include: {
       user: {
@@ -439,6 +440,7 @@ export async function batchUpdateUsers(changes: Record<string, Partial<User>>) {
 
 // app/actions/admin.ts
 export async function getEventById(eventId: string) {
+  isAdmin(); // Ensure only admins can access
   try {
     const event = await prisma.event.findUnique({
       where: { id: eventId },
@@ -465,6 +467,7 @@ export async function getEventById(eventId: string) {
 }
 
 export async function getUserById(userId: string) {
+  isAdmin(); // Ensure only admins can access
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -590,6 +593,7 @@ export async function batchUpdateReimbursements(
 }
 
 export async function backupRegistrationScript() {
+  isAdmin();
   try {
     await batchBackupRegistration();
     return { success: true, message: "Backup completed successfully!" };

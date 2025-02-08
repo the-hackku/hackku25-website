@@ -13,10 +13,7 @@ import { prisma } from "@/prisma";
 dotenv.config();
 
 // Replace with your own Google Sheet ID and desired range:
-const REGISTER_SHEET_ID = "1Xwv7RBzU2VFX_xXCNxEpOi-StvNJV5DsiqkIYEQWQD4";
-const REIMBURSEMENT_SHEET_ID = "1PJtuLuQx_hXm0FudyyyVccDE7_1FDh-2G4JwZTdvIDo";
-
-const RANGE = "Sheet1!A1";
+const SHEET_ID = "1Xwv7RBzU2VFX_xXCNxEpOi-StvNJV5DsiqkIYEQWQD4";
 
 const serviceAccountKey = process.env.GOOGLE_SERVICE_ACCOUNT_KEY;
 if (!serviceAccountKey) {
@@ -79,8 +76,8 @@ export async function exportRegistrationToGoogleSheet(
 
     // Append data to the Google Sheet, starting at the correct position
     await sheetsApi.spreadsheets.values.append({
-      spreadsheetId: REGISTER_SHEET_ID,
-      range: RANGE, // Refers to the entire sheet, starting from the first available row
+      spreadsheetId: SHEET_ID,
+      range: "Registration!A1", // Refers to the entire sheet, starting from the first available row
       valueInputOption: "RAW",
       insertDataOption: "INSERT_ROWS", // Ensures rows are inserted correctly
       requestBody: {
@@ -125,8 +122,8 @@ export async function exportReimbursementToGoogleSheet(
 
     // Append the reimbursement data to the Google Sheet
     await sheetsApi.spreadsheets.values.append({
-      spreadsheetId: REIMBURSEMENT_SHEET_ID,
-      range: RANGE,
+      spreadsheetId: SHEET_ID,
+      range: "Reimbursement!A1",
       valueInputOption: "RAW",
       insertDataOption: "INSERT_ROWS",
       requestBody: {
@@ -143,6 +140,10 @@ export async function exportReimbursementToGoogleSheet(
 export async function batchBackupRegistration() {
   try {
     const sheetsApi = google.sheets({ version: "v4", auth });
+
+    // Generate the sheet name using the current date
+    const dateString = new Date().toISOString().split("T")[0]; // Format: YYYY-MM-DD
+    const newSheetTitle = `${dateString} Registration Backup`;
 
     // Fetch all users with their ParticipantInfo
     const users = await prisma.user.findMany({
@@ -166,10 +167,39 @@ export async function batchBackupRegistration() {
       return;
     }
 
-    // Append data to the Google Sheet
+    // Check if the sheet already exists
+    const sheetMetadata = await sheetsApi.spreadsheets.get({
+      spreadsheetId: SHEET_ID,
+    });
+
+    const existingSheets = sheetMetadata.data.sheets?.map(
+      (sheet) => sheet.properties?.title
+    );
+
+    // If the sheet does not exist, create it
+    if (!existingSheets?.includes(newSheetTitle)) {
+      await sheetsApi.spreadsheets.batchUpdate({
+        spreadsheetId: SHEET_ID,
+        requestBody: {
+          requests: [
+            {
+              addSheet: {
+                properties: {
+                  title: newSheetTitle,
+                },
+              },
+            },
+          ],
+        },
+      });
+
+      console.log(`Created new sheet: ${newSheetTitle}`);
+    }
+
+    // Append data to the new sheet
     await sheetsApi.spreadsheets.values.append({
-      spreadsheetId: REGISTER_SHEET_ID,
-      range: RANGE,
+      spreadsheetId: SHEET_ID,
+      range: `${newSheetTitle}!A1`,
       valueInputOption: "RAW",
       insertDataOption: "INSERT_ROWS",
       requestBody: {
@@ -177,7 +207,9 @@ export async function batchBackupRegistration() {
       },
     });
 
-    console.log("Batch backup of registrations completed successfully!");
+    console.log(
+      `Batch backup of registrations completed successfully in ${newSheetTitle}!`
+    );
   } catch (error) {
     console.error("Error during batch backup:", error);
   } finally {

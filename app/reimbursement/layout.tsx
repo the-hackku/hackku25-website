@@ -21,9 +21,10 @@ export default async function ReimbursemenrLayout({
     include: { TravelReimbursement: true },
   });
 
-  const reimbursement = user?.TravelReimbursement[0]?.createdAt;
+  const reimbursement = user?.TravelReimbursement;
+  const reimbursementDate = reimbursement ? reimbursement.createdAt : null;
 
-  if (reimbursement) {
+  if (reimbursementDate) {
     redirect("/profile");
   }
 

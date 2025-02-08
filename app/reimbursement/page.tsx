@@ -135,6 +135,21 @@ export default function ReimbursementForm() {
         Travel Reimbursement Request
       </h2>
 
+      <div className="text-sm">
+        <p>
+          HackKU 25 offers travel reimbursements for eligible non-KU students
+          traveling 75+ miles (driving) or 250+ miles (flying) to the KU School
+          of Engineering. Reimbursements cover gas, bus, or flight tickets and
+          are awarded on a first-come, first-serve basis. Approved applicants
+          must attend HackKU in person, submit and present a project, and
+          provide valid receipts.
+        </p>
+        <p className="py-2">
+          Application Deadline:{" "}
+          <span className="bg-yellow-300">March 15, 2025, at 11:59 PM CST</span>
+        </p>
+      </div>
+      <hr className="my-4" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           <FormField
@@ -171,8 +186,8 @@ export default function ReimbursementForm() {
                   <Input
                     placeholder="Start typing your address..."
                     {...field}
-                    ref={addressInputRef} // ✅ Correct usage of ref
-                    onChange={(e) => field.onChange(e.target.value)} // ✅ Ensure controlled input
+                    ref={addressInputRef}
+                    onChange={(e) => field.onChange(e.target.value)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -276,6 +291,10 @@ export default function ReimbursementForm() {
               "Submit Request"
             )}
           </Button>
+          <p className="text-sm text-muted-foreground">
+            By submitting this form, you agree to the above terms and certify
+            that the information provided is accurate and complete.
+          </p>
         </form>
       </Form>
     </div>

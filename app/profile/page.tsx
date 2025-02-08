@@ -42,9 +42,8 @@ export default async function ProfilePage() {
       include: { ParticipantInfo: true, TravelReimbursement: true },
     });
 
-    const reimbursement = user?.TravelReimbursement[0]?.createdAt;
-
-    console.log(reimbursement);
+    const reimbursement = user?.TravelReimbursement;
+    const reimbursementDate = reimbursement ? reimbursement.createdAt : null;
 
     const checkIns = await prisma.checkin.findMany({
       where: { userId: user?.id },
@@ -172,12 +171,14 @@ export default async function ProfilePage() {
 
                         <hr className="my-4 border-gray-200" />
                         {user?.ParticipantInfo &&
-                          (reimbursement ? (
+                          (reimbursementDate ? (
                             <div className="flex items-center space-x-2">
                               <IconCheck className="text-primary" size={20} />
                               <p>
                                 Reimbursement Submitted on{" "}
-                                {new Date(reimbursement).toLocaleDateString()}
+                                {new Date(
+                                  reimbursementDate
+                                ).toLocaleDateString()}
                               </p>
                             </div>
                           ) : (
@@ -197,6 +198,7 @@ export default async function ProfilePage() {
                               </p>
                             </div>
                           ))}
+
                         <div className="flex items-center gap-2">
                           <IconLogout
                             className="text-primary ml-[2px]"
