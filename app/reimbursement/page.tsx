@@ -262,7 +262,7 @@ export default function ReimbursementForm() {
               <FormItem>
                 <FormLabel>
                   Why do you wish to attend HackKU and what do you hope to get
-                  out of the event?
+                  out of the event? (min 10 characters)
                 </FormLabel>
                 <FormControl>
                   <textarea

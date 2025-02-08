@@ -102,6 +102,12 @@ export default function HomePage() {
       image: "/images/team/achinth.png",
       linkedin: "https://www.linkedin.com/in/achinth-ulagapperoli-323a52204/",
     },
+    {
+      name: "Ky Le",
+      role: "Media & Marketing",
+      image: "/images/team/ky.png",
+      linkedin: "",
+    },
 
     {
       name: "Will Whitehead",
@@ -174,12 +180,6 @@ export default function HomePage() {
       role: "Co-Director of Nourishment",
       image: "/images/team/andrewha.png",
       linkedin: "https://www.linkedin.com/in/andrew~ha/",
-    },
-    {
-      name: "Ky Le",
-      role: "Media & Marketing",
-      image: "/images/team/kyle.jpeg",
-      linkedin: "",
     },
   ];
 

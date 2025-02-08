@@ -19,7 +19,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { redirect } from "next/navigation";
 import constants from "@/constants";
-import { formatDate, formatTimeFromDate } from "@/utils/dateUtils";
+import LocalDateTime from "@/components/localDateTime";
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
@@ -168,9 +168,9 @@ export default async function ProfilePage() {
                               <IconCheck className="text-primary" size={20} />
                               <p>
                                 Reimbursement Submitted on{" "}
-                                {new Date(
-                                  reimbursementDate
-                                ).toLocaleDateString()}
+                                <LocalDateTime
+                                  dateString={reimbursementDate.toString()}
+                                />
                               </p>
                             </div>
                           ) : (
@@ -251,11 +251,14 @@ export default async function ProfilePage() {
                                       .replace(/^./, (str) => str.toUpperCase())
                               }
                               value={
-                                key === "createdAt"
-                                  ? formatDate(String(value)) +
-                                    " " +
-                                    formatTimeFromDate(String(value))
-                                  : String(value)
+                                key === "createdAt" ? (
+                                  <LocalDateTime
+                                    dateString={String(value)}
+                                    showTime
+                                  />
+                                ) : (
+                                  String(value)
+                                )
                               }
                             />
                           ))}
@@ -285,8 +288,12 @@ export default async function ProfilePage() {
                                 {checkIn.event.name}
                               </p>
                               <p className="text-sm text-muted-foreground">
-                                {formatDate(checkIn.createdAt)} •{" "}
-                                {formatTimeFromDate(checkIn.createdAt)}
+                                <p>
+                                  <LocalDateTime
+                                    showTime
+                                    dateString={checkIn.createdAt.toString()}
+                                  />
+                                </p>
                                 {checkIn.event.location &&
                                   ` ${checkIn.event.location}`}
                               </p>
@@ -324,7 +331,7 @@ export default async function ProfilePage() {
   }
 }
 
-function InfoItem({ label, value }: { label: string; value: string }) {
+function InfoItem({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="space-y-1">
       <p className="text-sm font-medium text-muted-foreground">{label}</p>
