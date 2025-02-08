@@ -19,15 +19,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { redirect } from "next/navigation";
 import constants from "@/constants";
-
-function formatDate(dateString: string) {
-  const date = new Date(dateString);
-  return date.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
+import { formatDate, formatTimeFromDate } from "@/utils/dateUtils";
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions);
@@ -243,7 +235,8 @@ export default async function ProfilePage() {
                               key !== "userId" &&
                               key !== "updatedAt" &&
                               key !== "agreeHackKUCode" &&
-                              key !== "agreeMLHCode"
+                              key !== "agreeMLHCode" &&
+                              key !== "resumeUrl"
                           )
                           .map(([key, value]) => (
                             <InfoItem
@@ -288,10 +281,8 @@ export default async function ProfilePage() {
                                 {checkIn.event.name}
                               </p>
                               <p className="text-sm text-muted-foreground">
-                                {new Date(
-                                  checkIn.createdAt
-                                ).toLocaleDateString()}{" "}
-                                •
+                                {formatDate(checkIn.createdAt)} •{" "}
+                                {formatTimeFromDate(checkIn.createdAt)}
                                 {checkIn.event.location &&
                                   ` ${checkIn.event.location}`}
                               </p>
