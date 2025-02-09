@@ -5,7 +5,7 @@ import EmailProvider from "next-auth/providers/email";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import DiscordProvider from "next-auth/providers/discord";
-import type { NextAuthOptions, Session } from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import { htmlTemplate } from "@/utils/htmltemplate";
 
 const transporter = nodemailer.createTransport(process.env.EMAIL_SERVER);
@@ -17,6 +17,8 @@ export const authOptions: NextAuthOptions = {
       from: "HackKU <auth@hackku.org>",
       maxAge: 5 * 60, // Token expires after 5 minutes
       sendVerificationRequest: async ({ identifier, url, provider }) => {
+        console.log("📨 Triggered sendVerificationRequest for:", identifier);
+
         const { host } = new URL(url);
         try {
           const result = await transporter.sendMail({
@@ -25,9 +27,17 @@ export const authOptions: NextAuthOptions = {
             subject: `Your sign-in link for HackKU`,
             html: htmlTemplate(url, host),
           });
-          console.log("Email sent: ", result.messageId);
+          console.log("✅ Email sent:", result.messageId);
         } catch (error) {
-          console.error("Error sending email: ", error);
+          if (error instanceof Error) {
+            console.error("❌ Error sending email:", {
+              message: error.message,
+
+              stack: error.stack,
+            });
+          } else {
+            console.error("❌ Unexpected error:", error);
+          }
         }
       },
     }),
@@ -45,77 +55,16 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ account, profile }) {
-      const email = profile?.email;
+    async signIn({ account, profile, user, email, credentials }) {
+      console.log("🔍 signIn callback triggered with:", {
+        account,
+        profile,
+        user,
+        email,
+        credentials,
+      });
 
-      if (!email) {
-        // Reject sign-in if no email is provided (edge case)
-        return false;
-      }
-
-      try {
-        // Find an existing user with the same email
-        const existingUser = await prisma.user.findUnique({
-          where: { email },
-        });
-
-        if (existingUser) {
-          // Check if the current account belongs to this user
-          if (!account) {
-            return false;
-          }
-
-          const existingAccount = await prisma.account.findUnique({
-            where: {
-              provider_providerAccountId: {
-                provider: account.provider,
-                providerAccountId: account.providerAccountId,
-              },
-            },
-          });
-
-          if (!existingAccount) {
-            // If no account exists for this provider, link it
-            await prisma.account.create({
-              data: {
-                userId: existingUser.id,
-                type: account.type,
-                provider: account.provider,
-                providerAccountId: account.providerAccountId,
-                access_token: account.access_token,
-                refresh_token: account.refresh_token,
-                expires_at: account.expires_at,
-                token_type: account.token_type,
-                scope: account.scope,
-                id_token: account.id_token,
-              },
-            });
-          }
-
-          // Return the existing user (effectively merging the accounts)
-          return true;
-        }
-      } catch (error) {
-        console.error("Error linking accounts:", error);
-        return false;
-      }
-
-      // Allow sign-in for new users (user not found)
-      return true;
-    },
-
-    async session({
-      session,
-      user,
-    }: {
-      session: Session;
-      user: { id: string; role?: string };
-    }) {
-      if (session.user) {
-        session.user.id = user.id;
-        session.user.role = user.role || "HACKER";
-      }
-      return session;
+      return true; // Ensure sign-in is allowed
     },
   },
 
