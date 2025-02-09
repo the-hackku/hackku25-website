@@ -131,7 +131,7 @@ export default function HomePage() {
     {
       name: "Shayna Weinstein",
       role: "Logistics",
-      image: "/images/team/shayna.png",
+      image: "/images/team/shayna.jpg",
       linkedin: "https://www.linkedin.com/in/shayna-weinstein/",
     },
     {
