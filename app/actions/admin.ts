@@ -250,12 +250,12 @@ export async function validateQrCode(
 
   // Ensure the user is an admin or volunteer
   isAdminOrVolunteer();
-  /*if (!session || !(session.user.role == "ADMIN" || session.user.role == "VOLUNTEER")) {
+  if (!session || !(session.user.role == "ADMIN" || session.user.role == "VOLUNTEER")) {
     return {
       success: false,
       message: "You are not authorized to perform this action.",
     };
-  }*/
+  }
 
   // Fetch the admin user
   const admin = await prisma.user.findUnique({
