@@ -248,8 +248,8 @@ export async function validateQrCode(
 ): Promise<ValidateQrCodeResult> {
   const session = await getServerSession(authOptions);
 
-  // Ensure the user is an admin
-  if (!session || session.user.role !== "ADMIN") {
+  // Ensure the user is an admin or volunteer
+  if (!session || !(session.user.role == "ADMIN" || session.user.role == "VOLUNTEER")) {
     return {
       success: false,
       message: "You are not authorized to perform this action.",
