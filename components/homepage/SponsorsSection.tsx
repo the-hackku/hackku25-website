@@ -48,7 +48,7 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
             duration: 0.25,
             delay: index * 0.1, // Offset start times
           }}
-          className="w-full py-3 md:py-8"
+          className="w-full py-3 md:pt-10 md:pb-4"
         >
           <h3 className="text-4xl md:text-4xl font-semibold mb-2 text-center font-dfvn">
             {tier} Tier

@@ -80,7 +80,7 @@
     "tar": "^7.4.3",
     "undici": "^7.3.0",
     "vaul": "^1.1.1",
-    "vercel": "^41.0.2",
+    "vercel": "^41.0.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {
