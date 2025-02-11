@@ -14,7 +14,7 @@ import {
   IconHistory,
   IconCheck,
   IconLock,
-  IconExternalLink,
+  // IconExternalLink,
 } from "@tabler/icons-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { redirect } from "next/navigation";
@@ -34,8 +34,8 @@ export default async function ProfilePage() {
       include: { ParticipantInfo: true, TravelReimbursement: true },
     });
 
-    const reimbursement = user?.TravelReimbursement;
-    const reimbursementDate = reimbursement ? reimbursement.createdAt : null;
+    // const reimbursement = user?.TravelReimbursement;
+    // const reimbursementDate = reimbursement ? reimbursement.createdAt : null;
 
     const checkIns = await prisma.checkin.findMany({
       where: { userId: user?.id },
@@ -162,7 +162,7 @@ export default async function ProfilePage() {
                         </div>
 
                         <hr className="my-4 border-gray-200" />
-                        {user?.ParticipantInfo &&
+                        {/* {user?.ParticipantInfo &&
                           (reimbursementDate ? (
                             <div className="flex items-center space-x-2">
                               <IconCheck className="text-primary" size={20} />
@@ -189,7 +189,7 @@ export default async function ProfilePage() {
                                 </Link>
                               </p>
                             </div>
-                          ))}
+                          ))} */}
 
                         <div className="flex items-center gap-2">
                           <IconLogout

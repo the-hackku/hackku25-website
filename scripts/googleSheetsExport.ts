@@ -77,7 +77,7 @@ export async function exportRegistrationToGoogleSheet(
     // Append data to the Google Sheet, starting at the correct position
     await sheetsApi.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: "Registration!A1", // Refers to the entire sheet, starting from the first available row
+      range: "Live Registration Data!A1", // Refers to the entire sheet, starting from the first available row
       valueInputOption: "RAW",
       insertDataOption: "INSERT_ROWS", // Ensures rows are inserted correctly
       requestBody: {

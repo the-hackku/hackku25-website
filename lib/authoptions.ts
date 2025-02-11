@@ -63,8 +63,19 @@ export const authOptions: NextAuthOptions = {
         email,
         credentials,
       });
+      return true; // Allow sign-in
+    },
 
-      return true; // Ensure sign-in is allowed
+    async session({ session, user }) {
+      console.log("🗂️ Session callback triggered with:", { session, user });
+
+      // Attach the role to the session
+      if (session.user) {
+        session.user.id = user.id;
+        session.user.role = user.role || "HACKER"; // Default role is HACKER if undefined
+      }
+
+      return session;
     },
   },
 
