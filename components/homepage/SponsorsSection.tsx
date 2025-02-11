@@ -22,7 +22,7 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
   return (
     <section
       id="sponsors"
-      className="w-full py-32 md:py-44 flex flex-col items-center justify-center bg-gray-50 text-gray-700"
+      className="w-full py-32 md:py-44 flex flex-col items-center justify-center bg-gray-50 text-black"
     >
       <motion.div
         initial={{ opacity: 0, y: 50 }}
@@ -45,12 +45,12 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{
-            duration: 0.6,
-            delay: index * 0.3, // Offset start times
+            duration: 0.25,
+            delay: index * 0.1, // Offset start times
           }}
-          className="w-full py-6 md:py-10"
+          className="w-full py-3 md:py-8"
         >
-          <h3 className="text-4xl md:text-5xl font-semibold mb-6 text-center font-dfvn">
+          <h3 className="text-4xl md:text-4xl font-semibold mb-2 text-center font-dfvn">
             {tier} Tier
           </h3>
           <div className="flex flex-wrap justify-center gap-4 md:gap-8">
@@ -70,8 +70,8 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
                   <Image
                     src={sponsor.logo}
                     alt={sponsor.name}
-                    width={200}
-                    height={200}
+                    width={400 / (index + 1)}
+                    height={400 / (index + 1)}
                     className="object-contain h-auto cursor-pointer transition-all duration-100"
                   />
                 </motion.a>
