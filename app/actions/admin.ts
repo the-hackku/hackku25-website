@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@/prisma";
-import { isAdmin } from "@/middlewares/isAdmin";
+import { isAdmin, isAdminOrVolunteer } from "@/middlewares/isAdmin";
 import {
   Checkin,
   EventType,
@@ -246,15 +246,8 @@ export async function validateQrCode(
   scannedCode: string,
   eventId: string
 ): Promise<ValidateQrCodeResult> {
-  const session = await getServerSession(authOptions);
-
-  // Ensure the user is an admin
-  if (!session || session.user.role !== "ADMIN") {
-    return {
-      success: false,
-      message: "You are not authorized to perform this action.",
-    };
-  }
+  // Ensure the user is an admin or volunteer
+  const session = await isAdminOrVolunteer();
 
   // Fetch the admin user
   const admin = await prisma.user.findUnique({
