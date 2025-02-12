@@ -119,7 +119,7 @@ export default function HomePage() {
     {
       name: "Andrew Huang",
       role: "Technology",
-      image: "/images/team/andrewhuang.jpeg",
+      image: "/images/team/andrewhuang.png",
       linkedin: "https://www.linkedin.com/in/andrew-l-huang/",
     },
     {
