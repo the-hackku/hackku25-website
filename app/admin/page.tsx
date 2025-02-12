@@ -230,7 +230,7 @@ export default function AdminTabsPage() {
           <TabsTrigger value="reimbursements">Reimbursements</TabsTrigger>
           <TabsTrigger value="events">Events</TabsTrigger>
           <TabsTrigger value="scanner">Scanner</TabsTrigger>
-          <TabsTrigger value="redbutton">red button</TabsTrigger>
+          <TabsTrigger value="redbutton">Admin Actions</TabsTrigger>
         </TabsList>
 
         <TabsContent value="users">
@@ -310,11 +310,10 @@ export default function AdminTabsPage() {
           </div>
         </TabsContent>
         <TabsContent value="redbutton">
-          <div className="flex flex-col items-start space-y-2">
-            <p className="text-sm text-muted-foreground">
-              batch backup to google form
-            </p>
-            <Button onClick={handleBackup}>Batch Backup</Button>
+          <div className="flex flex-row items-start space-y-2">
+            <Button onClick={handleBackup}>
+              Batch Backup Registration Data
+            </Button>
           </div>
         </TabsContent>
       </Tabs>

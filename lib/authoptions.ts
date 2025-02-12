@@ -17,17 +17,14 @@ export const authOptions: NextAuthOptions = {
       from: "HackKU <auth@hackku.org>",
       maxAge: 5 * 60, // Token expires after 5 minutes
       sendVerificationRequest: async ({ identifier, url, provider }) => {
-        console.log("📨 Triggered sendVerificationRequest for:", identifier);
-
         const { host } = new URL(url);
         try {
-          const result = await transporter.sendMail({
+          await transporter.sendMail({
             to: identifier,
             from: provider.from,
             subject: `Your sign-in link for HackKU`,
             html: htmlTemplate(url, host),
           });
-          console.log("✅ Email sent:", result.messageId);
         } catch (error) {
           if (error instanceof Error) {
             console.error("❌ Error sending email:", {
@@ -67,8 +64,6 @@ export const authOptions: NextAuthOptions = {
     },
 
     async session({ session, user }) {
-      console.log("🗂️ Session callback triggered with:", { session, user });
-
       // Attach the role to the session
       if (session.user) {
         session.user.id = user.id;

@@ -9,8 +9,6 @@ import {
   TravelReimbursement,
   User,
 } from "@prisma/client";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/authoptions";
 import { batchBackupRegistration } from "@/scripts/googleSheetsExport";
 
 // Type for the Event data used in creating or updating events// Type for the Event data used in creating or updating events

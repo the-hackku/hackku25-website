@@ -85,7 +85,6 @@ export function GenericDataContainer<T extends { id: string }>({
       page !== prevPageRef.current ||
       searchQuery !== prevSearchQueryRef.current
     ) {
-      console.log(`${title}: Page or search query changed. Updating items.`);
       setItems(data);
       setEdited({}); // Clear any residual edits
       prevPageRef.current = page;
@@ -102,12 +101,10 @@ export function GenericDataContainer<T extends { id: string }>({
 
     try {
       toast.message(`Saving changes for ${title}...`);
-      console.log(`${title}: Initiating save for edits:`, edited);
 
       // Optimistically assume the save will succeed
       await updateFunction(edited);
 
-      console.log(`${title}: Save successful. Clearing edited state.`);
       // Clear edited changes since save was successful
       setEdited({});
       toast.dismiss();
@@ -115,7 +112,6 @@ export function GenericDataContainer<T extends { id: string }>({
 
       // Refetch data to synchronize with backend
       await fetchData();
-      console.log(`${title}: Data refetched after successful save.`);
     } catch (err) {
       console.error(`${title}: Error saving changes:`, err);
       toast.error(`Failed to save ${title} changes.`);
@@ -127,7 +123,6 @@ export function GenericDataContainer<T extends { id: string }>({
 
   /** Revert local changes */
   function revert() {
-    console.log(`${title}: Reverting all local changes.`);
     revertAll(data);
   }
 
@@ -194,11 +189,6 @@ export function GenericDataContainer<T extends { id: string }>({
         edited={edited}
         onCellChange={(rowId, field, newValue) => {
           handleChange(rowId, field, newValue);
-          console.log(
-            `${title}: Cell changed: Row ${rowId}, Field ${String(
-              field
-            )}, New Value ${newValue}`
-          );
         }}
       />
 

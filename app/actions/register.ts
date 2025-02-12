@@ -27,8 +27,6 @@ export async function registerUser(data: RegistrationData, resumeUrl?: string) {
     throw new Error("User not found");
   }
 
-  console.log(resumeUrl);
-
   // Create the participant record including the blob URL.
   const participantInfo = await prisma.participantInfo.create({
     data: {

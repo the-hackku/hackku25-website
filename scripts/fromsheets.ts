@@ -196,7 +196,7 @@ async function migrateData() {
         fs.appendFileSync(
           failedEntriesLogPath,
           `Failed to process user with email ${userData.email}.\nError: ${
-            (error as any).message
+            (error as Error).message
           }\nData: ${JSON.stringify(userData, null, 2)}\n\n`
         );
       }

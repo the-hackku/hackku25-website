@@ -11,21 +11,17 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getUserById } from "@/app/actions/admin";
 import { IconLoader } from "@tabler/icons-react";
+import LocalDateTime from "@/components/localDateTime";
 
 interface UserDetailsDialogProps {
   userId: string | null;
   onOpenChange: (open: boolean) => void;
 }
 
-interface ParticipantInfo {
-  firstName: string;
-  lastName: string;
-}
-
 interface Checkin {
   id: string;
-  event: { name: string };
-  createdAt: string; // We will store `createdAt` as string when it is passed to the front-end
+  event: { name: string; location?: string | null };
+  createdAt: string;
 }
 
 interface TravelReimbursement {
@@ -39,12 +35,7 @@ interface TravelReimbursement {
 }
 
 interface ParticipantInfo {
-  firstName: string;
-  lastName: string;
-  phoneNumber?: string;
-  currentSchool?: string;
-  major?: string;
-  dietaryRestrictions?: string;
+  [key: string]: string | number | boolean | null | undefined;
 }
 
 interface User {
@@ -53,7 +44,16 @@ interface User {
   role: string;
   checkinsAsUser: Checkin[];
   ParticipantInfo?: ParticipantInfo | null;
-  TravelReimbursement?: TravelReimbursement[]; // Add this
+  TravelReimbursement?: TravelReimbursement | null;
+}
+
+function InfoItem({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="space-y-1">
+      <p className="text-sm font-medium text-muted-foreground">{label}</p>
+      <p className="text-sm">{value}</p>
+    </div>
+  );
 }
 
 export function UserDetailsDialog({
@@ -69,10 +69,35 @@ export function UserDetailsDialog({
         setIsLoading(true);
         try {
           const user = await getUserById(userId);
-          //   TODO FIX THIS
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          setUserDetails(user);
+
+          const transformedUser = {
+            ...user,
+            checkinsAsUser: user.checkinsAsUser.map((checkin) => ({
+              ...checkin,
+              createdAt: new Date(checkin.createdAt).toISOString(),
+            })),
+            TravelReimbursement: user.TravelReimbursement
+              ? {
+                  ...user.TravelReimbursement,
+                  createdAt: new Date(
+                    user.TravelReimbursement.createdAt
+                  ).toISOString(),
+                }
+              : null,
+            ParticipantInfo: user.ParticipantInfo
+              ? {
+                  ...user.ParticipantInfo,
+                  createdAt: new Date(
+                    user.ParticipantInfo.createdAt
+                  ).toISOString(),
+                  updatedAt: new Date(
+                    user.ParticipantInfo.updatedAt
+                  ).toISOString(),
+                }
+              : null,
+          };
+
+          setUserDetails(transformedUser);
         } catch (error) {
           console.error("Failed to fetch user details:", error);
           setUserDetails(null);
@@ -112,26 +137,19 @@ export function UserDetailsDialog({
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="grid grid-cols-2 gap-4">
-                  <div>
-                    <p className="font-medium">Name:</p>
-                    <p>
-                      {userDetails.ParticipantInfo
-                        ? `${userDetails.ParticipantInfo.firstName} ${userDetails.ParticipantInfo.lastName}`
-                        : userDetails.name || "No Name Found"}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Email:</p>
-                    <p>{userDetails.email}</p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Role:</p>
-                    <Badge variant="outline">{userDetails.role}</Badge>
-                  </div>
-                  <div>
-                    <p className="font-medium">Total Check-ins:</p>
-                    <p>{userDetails.checkinsAsUser.length}</p>
-                  </div>
+                  <InfoItem
+                    label="Name"
+                    value={userDetails.name || "No Name Found"}
+                  />
+                  <InfoItem label="Email" value={userDetails.email} />
+                  <InfoItem
+                    label="Role"
+                    value={<Badge variant="outline">{userDetails.role}</Badge>}
+                  />
+                  <InfoItem
+                    label="Total Check-ins"
+                    value={userDetails.checkinsAsUser.length}
+                  />
                 </CardContent>
               </Card>
 
@@ -141,94 +159,77 @@ export function UserDetailsDialog({
                     <CardTitle>Participant Information</CardTitle>
                   </CardHeader>
                   <CardContent className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="font-medium">Phone Number:</p>
-                      <p>{userDetails.ParticipantInfo.phoneNumber || "N/A"}</p>
-                    </div>
-                    <div>
-                      <p className="font-medium">Current School:</p>
-                      <p>
-                        {userDetails.ParticipantInfo.currentSchool || "N/A"}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="font-medium">Major:</p>
-                      <p>{userDetails.ParticipantInfo.major || "N/A"}</p>
-                    </div>
-                    <div>
-                      <p className="font-medium">Dietary Restrictions:</p>
-                      <p>
-                        {userDetails.ParticipantInfo.dietaryRestrictions ||
-                          "None"}
-                      </p>
-                    </div>
+                    {Object.entries(userDetails.ParticipantInfo)
+                      .filter(
+                        ([key, value]) =>
+                          value &&
+                          value !== "N/A" &&
+                          !["id", "userId", "updatedAt"].includes(key)
+                      )
+                      .map(([key, value]) => (
+                        <InfoItem key={key} label={key} value={String(value)} />
+                      ))}
                   </CardContent>
                 </Card>
               )}
-              {userDetails.TravelReimbursement &&
-                userDetails.TravelReimbursement.length > 0 && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle>Reimbursement Information</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                      {userDetails.TravelReimbursement.map((reimbursement) => (
-                        <div key={reimbursement.id}>
-                          <p>
-                            <strong>Transport:</strong>{" "}
-                            {reimbursement.transportationMethod}
-                          </p>
-                          <p>
-                            <strong>Address:</strong> {reimbursement.address}
-                          </p>
-                          <p>
-                            <strong>Distance:</strong> {reimbursement.distance}{" "}
-                            miles
-                          </p>
-                          <p>
-                            <strong>Estimated Cost:</strong> $
-                            {reimbursement.estimatedCost.toFixed(2)}
-                          </p>
-                          <p>
-                            <strong>Reason:</strong> {reimbursement.reason}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            Submitted on:{" "}
-                            {new Date(
-                              reimbursement.createdAt
-                            ).toLocaleDateString()}
-                          </p>
-                        </div>
+
+              {userDetails.TravelReimbursement && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Reimbursement Information</CardTitle>
+                  </CardHeader>
+                  <CardContent className="grid grid-cols-2 gap-4">
+                    {Object.entries(userDetails.TravelReimbursement)
+                      .filter(([key]) => key !== "id" && key !== "userId")
+                      .map(([key, value]) => (
+                        <InfoItem
+                          key={key}
+                          label={key}
+                          value={
+                            key === "createdAt" ? (
+                              <LocalDateTime
+                                dateString={String(value)}
+                                showTime
+                              />
+                            ) : (
+                              String(value)
+                            )
+                          }
+                        />
                       ))}
-                    </CardContent>
-                  </Card>
-                )}
+                  </CardContent>
+                </Card>
+              )}
 
               <Card>
                 <CardHeader>
                   <CardTitle>Check-in History</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-2">
-                    {userDetails.checkinsAsUser.length > 0 ? (
-                      userDetails.checkinsAsUser.map((checkin) => (
-                        <div key={checkin.id} className="border p-4 rounded">
-                          <div className="flex justify-between">
-                            <div>
-                              <p className="font-medium">
-                                {checkin.event.name}
-                              </p>
-                              <p className="text-sm text-gray-500">
-                                {new Date(checkin.createdAt).toLocaleString()}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <p className="text-gray-500">No check-in history</p>
-                    )}
-                  </div>
+                  {userDetails.checkinsAsUser.length > 0 ? (
+                    userDetails.checkinsAsUser.map((checkin) => (
+                      <div key={checkin.id} className="border p-4 rounded">
+                        <InfoItem label="Event" value={checkin.event.name} />
+                        <InfoItem
+                          label="Date"
+                          value={
+                            <LocalDateTime
+                              dateString={checkin.createdAt}
+                              showTime
+                            />
+                          }
+                        />
+                        {checkin.event.location && (
+                          <InfoItem
+                            label="Location"
+                            value={checkin.event.location}
+                          />
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-500">No check-in history</p>
+                  )}
                 </CardContent>
               </Card>
             </div>
