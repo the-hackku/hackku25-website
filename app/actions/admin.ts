@@ -246,16 +246,8 @@ export async function validateQrCode(
   scannedCode: string,
   eventId: string
 ): Promise<ValidateQrCodeResult> {
-  const session = await getServerSession(authOptions);
-
   // Ensure the user is an admin or volunteer
-  isAdminOrVolunteer();
-  if (!session || !(session.user.role == "ADMIN" || session.user.role == "VOLUNTEER")) {
-    return {
-      success: false,
-      message: "You are not authorized to perform this action.",
-    };
-  }
+  const session = await isAdminOrVolunteer();
 
   // Fetch the admin user
   const admin = await prisma.user.findUnique({

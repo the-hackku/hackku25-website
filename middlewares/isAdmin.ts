@@ -16,4 +16,5 @@ export async function isAdminOrVolunteer(){
   if(!session || !(session.user.role == "ADMIN" || session.user.role == "VOLUNTEER")) {
     throw new Error("You are not authorized to perform this action.");
   }
+  return session;
 }
