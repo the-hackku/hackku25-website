@@ -1,302 +1,220 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import Script from "next/script";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
-import { submitTravelReimbursement } from "../actions/register";
-import { toast } from "sonner";
-import { IconLoader } from "@tabler/icons-react";
 import Link from "next/link";
 
-// Schema validation
-const reimbursementSchema = z.object({
-  transportationMethod: z.enum([
-    "Car",
-    "Bus",
-    "Train",
-    "Airplane",
-    "Rideshare",
-    "Other",
-  ]),
-  address: z.string().min(5, { message: "Address is required." }),
-  distance: z.preprocess(
-    (val) => (val === "" ? undefined : Number(val)),
-    z
-      .number({ required_error: "Distance is required." })
-      .positive({ message: "Distance must be positive." })
-  ),
-  estimatedCost: z.preprocess(
-    (val) => (val === "" ? undefined : Number(val)),
-    z
-      .number({ required_error: "Estimated cost is required." })
-      .nonnegative({ message: "Estimated cost must be non-negative." })
-  ),
-  reason: z.string().min(10, {
-    message: "Reason must be at least 10 characters.",
-  }),
-});
-
-declare global {
-  interface Window {
-    google: typeof google;
-  }
-}
-
-type ReimbursementFormData = z.infer<typeof reimbursementSchema>;
-
-export default function ReimbursementForm() {
-  const router = useRouter();
-  const addressInputRef = useRef<HTMLInputElement>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const form = useForm<ReimbursementFormData>({
-    resolver: zodResolver(reimbursementSchema),
-    defaultValues: {
-      transportationMethod: "Car",
-      address: "",
-      distance: undefined,
-      estimatedCost: undefined,
-      reason: "",
-    },
-  });
-
-  const removeLeadingZeros = (value: string) => {
-    return value.replace(/^0+(?=\d)/, "");
-  };
-
-  // Initialize autocomplete when script finishes loading
-  const handleScriptLoad = () => {
-    if (addressInputRef.current && window.google) {
-      const autocomplete = new window.google.maps.places.Autocomplete(
-        addressInputRef.current,
-        {
-          types: ["address"],
-          componentRestrictions: { country: "us" },
-        }
-      );
-
-      autocomplete.addListener("place_changed", () => {
-        const place = autocomplete.getPlace();
-        form.setValue("address", place.formatted_address || "");
-      });
-    }
-  };
-
-  const onSubmit = async (data: ReimbursementFormData) => {
-    try {
-      setIsSubmitting(true);
-
-      await toast.promise(
-        submitTravelReimbursement({
-          transportationMethod: data.transportationMethod,
-          address: data.address,
-          distance: data.distance,
-          estimatedCost: data.estimatedCost,
-          reason: data.reason,
-        }),
-        {
-          loading: "Submitting reimbursement request...",
-          success: "Reimbursement request submitted successfully!",
-          error: "Failed to submit reimbursement request.",
-        }
-      );
-
-      router.refresh();
-    } catch (error) {
-      console.error("Submission failed:", error);
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
+export default function TravelReimbursementInfo() {
   return (
-    <div className="max-w-xl mx-auto p-6 bg-white my-6">
-      {/* Load the Google Maps script and initialize autocomplete in onLoad */}
-      <Script
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`}
-        strategy="lazyOnload"
-        onLoad={handleScriptLoad}
-      />
-
-      <h2 className="text-xl font-semibold text-center mb-4">
-        Travel Reimbursement Request
+    <div className="max-w-3xl mx-auto p-6 bg-white my-6 border-gray-200 rounded-lg md:shadow-sm  md:border">
+      <h2 className="text-2xl font-bold text-center mb-4">
+        HackKU 2025 - Travel Reimbursement Guidelines
       </h2>
 
-      <div className="text-sm">
-        <p>
-          HackKU 25 offers travel reimbursements for eligible non-KU students
-          traveling 75+ miles (driving) or 250+ miles (flying) to the KU School
-          of Engineering. Reimbursements cover gas, bus, or flight tickets and
-          are awarded on a first-come, first-serve basis. Approved applicants
-          must attend HackKU in person, submit and present a project, and
-          provide valid receipts.
-        </p>
-        <p className="py-2">
-          Application Deadline:{" "}
-          <span className="bg-yellow-300">March 15, 2025, at 11:59 PM CST</span>
-        </p>
-      </div>
-      <hr className="my-4" />
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="transportationMethod"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>What is your transportation method?</FormLabel>
-                <FormControl>
-                  <select
-                    {...field}
-                    className="border p-1 rounded w-full text-md"
-                  >
-                    <option value="Car">Car</option>
-                    <option value="Bus">Bus</option>
-                    <option value="Train">Train</option>
-                    <option value="Airplane">Airplane</option>
-                    <option value="Rideshare">Rideshare</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <p className="text-sm mb-4">
+        We&apos;re excited for you to join us at HackKU 2025! Below you&apos;ll
+        find all the information you need regarding travel reimbursement,
+        eligibility requirements, and how to apply.
+      </p>
 
-          <FormField
-            control={form.control}
-            name="address"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Where are you traveling from?</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Start typing your address..."
-                    {...field}
-                    ref={addressInputRef}
-                    onChange={(e) => field.onChange(e.target.value)}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <hr className="border-gray-300 my-4" />
 
-          <FormField
-            control={form.control}
-            name="distance"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  <div className="flex flex-wrap gap-1">
-                    <span>Distance to KU Engineering in miles?</span>
-                    <Link
-                      href="https://g.co/kgs/25TjzVB"
-                      target="_blank"
-                      className="underline break-words pb-1"
-                    >
-                      (1536 W 15th St, Lawrence, KS)
-                    </Link>
-                  </div>
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter distance in miles"
-                    type="number"
-                    step="0.1"
-                    {...field}
-                    onChange={(e) => {
-                      const formattedValue = e.target.value.replace(
-                        /^0+(?=\d)/,
-                        ""
-                      );
-                      field.onChange(formattedValue);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <section>
+        <h3 className="text-lg font-semibold mb-2">Apply</h3>
+        <ul className="list-disc pl-5 text-sm space-y-1">
+          <li>
+            <strong>Individual Applications:</strong> If you&apos;re applying
+            with a team,{" "}
+            <strong>each member must submit an individual application</strong>{" "}
+            for travel reimbursement.
+          </li>
+          <li>
+            <strong>Deadline:</strong> Make sure to submit your travel
+            reimbursement application before{" "}
+            <span className="bg-yellow-300">March 15, 2025 (11:59 PM CST)</span>
+            .
+          </li>
+        </ul>
+      </section>
 
-          <FormField
-            control={form.control}
-            name="estimatedCost"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Estimated Ticket/Gas Cost ($)</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter estimated cost in dollars"
-                    type="number"
-                    step="0.01"
-                    {...field}
-                    onChange={(e) => {
-                      const formattedValue = removeLeadingZeros(e.target.value);
-                      field.onChange(formattedValue);
-                    }}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <hr className="border-gray-300 my-4" />
 
-          <FormField
-            control={form.control}
-            name="reason"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Why do you wish to attend HackKU and what do you hope to get
-                  out of the event? (min 10 characters)
-                </FormLabel>
-                <FormControl>
-                  <textarea
-                    {...field}
-                    className="border p-2 rounded w-full"
-                    placeholder="Why do you want to attend HackKU?"
-                    rows={4}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      <section>
+        <h3 className="text-lg font-semibold mb-2">Eligibility</h3>
+        <ol className="list-decimal pl-5 text-sm space-y-1">
+          <li>
+            You must be a <strong>non-KU student</strong>.
+          </li>
+          <li>
+            Your travel must exceed one of the following distances:
+            <ul className="list-disc pl-5">
+              <li>
+                <strong>250+ miles</strong> if you&apos;re flying
+              </li>
+              <li>
+                <strong>75+ miles</strong> if you&apos;re driving
+              </li>
+            </ul>
+          </li>
+          <li>
+            The University of Kansas School of Engineering is located at{" "}
+            <strong>1536 W 15th St, Lawrence, KS 66045</strong>.
+          </li>
+        </ol>
+      </section>
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isSubmitting || !form.formState.isValid}
-          >
-            {isSubmitting ? (
-              <>
-                <IconLoader className="animate-spin" size={20} />
-                Submitting...
-              </>
-            ) : (
-              "Submit Request"
-            )}
-          </Button>
-          <p className="text-sm text-muted-foreground">
-            By submitting this form, you agree to the above terms and certify
-            that the information provided is accurate and complete.
+      <hr className="border-gray-300 my-4" />
+
+      <section>
+        <h3 className="text-lg font-semibold mb-2">Terms of Reimbursement</h3>
+        <ul className="list-disc pl-5 text-sm space-y-1">
+          <li>
+            <strong>Written Permission:</strong> Unless you have explicit,
+            written permission from{" "}
+            <a href="mailto:hackku@ku.edu" className="underline">
+              hackku@ku.edu
+            </a>
+            , you must adhere to the guidelines below.
+          </li>
+          <li>
+            <strong>Policy Changes:</strong> HackKU reserves the right to modify
+            these terms at will.
+          </li>
+          <li>
+            <strong>First-Come, First-Serve:</strong> All travel assistance is
+            granted on a first-come, first-serve basis.
+          </li>
+          <li>
+            <strong>Approval Email:</strong> You will receive a notification
+            from the HackKU team if your travel reimbursement is approved.
+          </li>
+          <li>
+            <strong>Decision Timeline:</strong> Notification by March 22, 2025.
+          </li>
+          <li>
+            <strong>Allowed Expenses:</strong> Reimbursement can only be used
+            for gas, bus tickets, or flight tickets.
+          </li>
+        </ul>
+      </section>
+
+      <hr className="border-gray-300 my-4" />
+
+      <section>
+        <h3 className="text-lg font-semibold mb-2">Reimbursement Categories</h3>
+
+        <div className="space-y-2 text-sm">
+          <p>
+            <strong>1. Gas Reimbursements:</strong>
           </p>
-        </form>
-      </Form>
+          <ul className="list-disc pl-5">
+            <li>
+              <strong>Typical Cap:</strong> Generally capped at $50 per person.
+            </li>
+            <li>
+              <strong>Group Travel:</strong> $50 per person, up to $200 total
+              (4+ people subject to discretion).
+            </li>
+            <li>
+              <strong>Acceptance Email:</strong> States the exact amount you
+              qualify for. Full reimbursement is not guaranteed.
+            </li>
+          </ul>
+
+          <p>
+            <strong>2. Bus Reimbursements:</strong>
+          </p>
+          <ul className="list-disc pl-5">
+            <li>
+              <strong>Reimbursement Limit:</strong> Up to $50 for a bus ticket
+              (e.g., Greyhound).
+            </li>
+            <li>
+              <strong>No Provided Service:</strong> HackKU does not provide bus
+              services from any university to our campus.
+            </li>
+          </ul>
+
+          <p>
+            <strong>3. Flight Reimbursements:</strong>
+          </p>
+          <ul className="list-disc pl-5">
+            <li>
+              <strong>Case-by-Case Basis:</strong> Typically $50-$150; larger
+              amounts considered for team travel.
+            </li>
+            <li>
+              <strong>Encouraged to Apply with a Team:</strong> Group
+              applications are recommended.
+            </li>
+            <li>
+              <strong>Acceptance Email:</strong> Confirms the amount you qualify
+              for. Full reimbursement is not guaranteed.
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <hr className="border-gray-300 my-4" />
+
+      <section>
+        <h3 className="text-lg font-semibold mb-2">Reimbursement Process</h3>
+        <ol className="list-decimal pl-5 text-sm space-y-1">
+          <li>
+            <strong>Verification of Attendance:</strong> Processing starts April
+            11, 2025, after confirming project submission and presentation.
+          </li>
+          <li>
+            <strong>Payment Method:</strong> A form will be sent to confirm
+            reimbursement details and upload receipts.
+          </li>
+          <li>
+            <strong>Processing Time:</strong> Reimbursements sent via ACH or
+            check, taking up to 3 weeks for delivery.
+          </li>
+        </ol>
+      </section>
+
+      <hr className="border-gray-300 my-4" />
+
+      <section>
+        <h3 className="text-lg font-semibold mb-2">Timeline</h3>
+        <ul className="list-disc pl-5 text-sm space-y-1">
+          <li>
+            <strong>Application Closes:</strong> March 15, 2025 (11:59 PM CST).
+          </li>
+          <li>
+            <strong>Approval Notification:</strong> March 16 - March 22, 2025.
+          </li>
+          <li>
+            <strong>Recommended Travel Dates:</strong> April 3 - April 7, 2025.
+          </li>
+          <li>
+            <strong>Receipts Submission Deadline:</strong> April 10, 2025.
+          </li>
+          <li>
+            <strong>Reimbursal Period:</strong> April 11 - May 2, 2025.
+          </li>
+        </ul>
+      </section>
+
+      <hr className="border-gray-300 my-4" />
+
+      <p className="text-sm text-muted-foreground">
+        If you have any questions or concerns, please email us at{" "}
+        <a href="mailto:hackku@ku.edu" className="underline">
+          hackku@ku.edu
+        </a>
+        . We&apos;re here to help make your HackKU experience as smooth as
+        possible!
+      </p>
+
+      <div className="mt-6">
+        <Link href="/reimbursement/form">
+          <Button className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
+            Apply for Reimbursement
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }

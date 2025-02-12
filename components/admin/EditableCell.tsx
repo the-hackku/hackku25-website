@@ -22,14 +22,9 @@ export const EditableCell = ({
 
   const handleBlur = () => {
     setIsEditing(false);
-
-    console.log("Blurred! Local Value:", localValue, "Original Value:", value);
-
     if (localValue !== String(value)) {
-      console.log("✅ Updating state:", localValue);
       onChange(localValue);
     } else {
-      console.log("❌ No change detected");
     }
   };
 

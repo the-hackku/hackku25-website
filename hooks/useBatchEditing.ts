@@ -12,19 +12,12 @@ export function useBatchEditing<T extends { id: string }>(originalData: T[]) {
   useEffect(() => {
     setItems(originalData);
     setEdited({});
-    console.log("Original data changed. Resetting items and edited state.");
   }, [originalData]);
 
   // Handle cell changes
   const handleChange = (itemId: string, field: keyof T, newValue: unknown) => {
     const originalItem = originalData.find((i) => i.id === itemId);
     const originalValue = originalItem ? originalItem[field] : undefined;
-
-    console.log(
-      `Handling change: Row ${itemId}, Field ${String(
-        field
-      )}, New Value ${newValue}`
-    );
 
     // If new value is same as original, remove from edited
     if (String(newValue) === String(originalValue)) {
@@ -38,7 +31,6 @@ export function useBatchEditing<T extends { id: string }>(originalData: T[]) {
         } else {
           updated[itemId] = changesForItem;
         }
-        console.log(`Removed edit for Row ${itemId}, Field ${String(field)}`);
         return updated;
       });
     } else {
@@ -57,16 +49,12 @@ export function useBatchEditing<T extends { id: string }>(originalData: T[]) {
     setItems((prevItems) =>
       prevItems.map((i) => (i.id === itemId ? { ...i, [field]: newValue } : i))
     );
-    console.log(
-      `Updated local items for Row ${itemId}, Field ${String(field)}`
-    );
   };
 
   // Revert all local changes to the original data
   const revertAll = (originalData: T[]) => {
     setItems(originalData);
     setEdited({});
-    console.log("Reverting all changes.");
   };
 
   // Utility function: count total changes
