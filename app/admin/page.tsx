@@ -21,6 +21,8 @@ import { format } from "date-fns";
 import { ParticipantInfo } from "@prisma/client";
 import { IconArrowUpRight } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
+import AnalyticsChart from "@/components/admin/charts/AnalyticsChart";
+import CombinedDashboard from "@/components/admin/charts/combinedDashboard";
 
 // Extend the User type to include relations or additional fields
 interface ExtendedUser extends User {
@@ -223,13 +225,13 @@ export default function AdminTabsPage() {
         onOpenChange={(open) => !open && setSelectedEventId(null)} // Reset event ID when closed
       />
 
-      <Tabs defaultValue="users">
+      <Tabs defaultValue="analytics">
         <TabsList className="mb-4">
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="checkins">Check-ins</TabsTrigger>
           <TabsTrigger value="reimbursements">Reimbursements</TabsTrigger>
           <TabsTrigger value="events">Events</TabsTrigger>
-          <TabsTrigger value="scanner">Scanner</TabsTrigger>
           <TabsTrigger value="redbutton">Admin Actions</TabsTrigger>
         </TabsList>
 
@@ -315,6 +317,10 @@ export default function AdminTabsPage() {
               Batch Backup Registration Data
             </Button>
           </div>
+        </TabsContent>
+        <TabsContent value="analytics">
+          <AnalyticsChart />
+          <CombinedDashboard />
         </TabsContent>
       </Tabs>
     </div>

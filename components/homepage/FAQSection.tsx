@@ -8,9 +8,11 @@ import {
 import Link from "next/link";
 import constants from "@/constants";
 
+import { ReactNode } from "react";
+
 interface FAQ {
   question: string;
-  answer: string;
+  answer: ReactNode; // Allows JSX elements inside FAQ answers
 }
 
 interface FAQSectionProps {

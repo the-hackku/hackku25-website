@@ -211,8 +211,16 @@ export default function HomePage() {
     },
     {
       question: "Do you offer travel reimbursements?",
-      answer:
-        "We offer travel reimbursements for participants who are traveling from outside of Lawrence, KS. Please stay tuned more information.",
+      answer: (
+        <>
+          Yes! We offer travel reimbursements for participants who are traveling
+          from outside of Lawrence, KS. Visit the{" "}
+          <Link href="/reimbursement" className="underline">
+            Reimbursments Page
+          </Link>{" "}
+          to learn more and apply.
+        </>
+      ),
     },
   ];
 
