@@ -214,7 +214,7 @@ export default function TravelReimbursementInfo() {
             </li>
             <li>
               Your flight ticket must include your first and last name as on
-              your application, show a round trip to MCL (Kansas City
+              your application, show a round trip to MCI (Kansas City
               International Airport), and be dated within 04/03/2025 –
               04/07/2025.
             </li>

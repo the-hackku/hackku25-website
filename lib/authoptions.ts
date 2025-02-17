@@ -52,25 +52,58 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ account, profile, user, email, credentials }) {
+    async signIn({ account, profile, user, email }) {
       console.log("🔍 signIn callback triggered with:", {
         account,
         profile,
         user,
         email,
-        credentials,
       });
-      return true; // Allow sign-in
-    },
 
-    async session({ session, user }) {
-      // Attach the role to the session
-      if (session.user) {
-        session.user.id = user.id;
-        session.user.role = user.role || "HACKER"; // Default role is HACKER if undefined
+      if (!account) return true; // Continue if no account
+
+      if (account.provider !== "email") {
+        // Ensure the email exists and is a string
+        const userEmail = user.email ?? profile?.email;
+        if (!userEmail || typeof userEmail !== "string") return false;
+
+        // Check if a user already exists with this email
+        const existingUser = await prisma.user.findUnique({
+          where: { email: userEmail },
+          include: { accounts: true },
+        });
+
+        if (existingUser) {
+          // Ensure OAuth account is linked
+          const linkedAccount = existingUser.accounts.find(
+            (acc) => acc.provider === account.provider
+          );
+
+          if (!linkedAccount) {
+            // If account not linked, create an OAuth account entry
+            await prisma.account.create({
+              data: {
+                userId: existingUser.id,
+                provider: account.provider,
+                providerAccountId: account.providerAccountId,
+                type: account.type,
+                access_token: account.access_token,
+                refresh_token: account.refresh_token,
+                expires_at: account.expires_at,
+                token_type: account.token_type,
+                scope: account.scope,
+                id_token: account.id_token,
+                session_state: account.session_state,
+              },
+            });
+
+            console.log(`✅ Linked ${account.provider} to existing user`);
+          }
+          return true; // Allow sign-in
+        }
       }
 
-      return session;
+      return true; // Default allow sign-in
     },
   },
 
