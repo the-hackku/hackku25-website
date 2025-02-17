@@ -26,15 +26,7 @@ export const authOptions: NextAuthOptions = {
             html: htmlTemplate(url, host),
           });
         } catch (error) {
-          if (error instanceof Error) {
-            console.error("❌ Error sending email:", {
-              message: error.message,
-
-              stack: error.stack,
-            });
-          } else {
-            console.error("❌ Unexpected error:", error);
-          }
+          console.error("❌ Error sending email:", error);
         }
       },
     }),
@@ -52,35 +44,33 @@ export const authOptions: NextAuthOptions = {
     }),
   ],
   callbacks: {
-    async signIn({ account, profile, user, email }) {
+    async signIn({ account, profile, user }) {
       console.log("🔍 signIn callback triggered with:", {
         account,
         profile,
         user,
-        email,
       });
 
       if (!account) return true; // Continue if no account
 
       if (account.provider !== "email") {
-        // Ensure the email exists and is a string
         const userEmail = user.email ?? profile?.email;
         if (!userEmail || typeof userEmail !== "string") return false;
 
-        // Check if a user already exists with this email
+        // Check if user exists
         const existingUser = await prisma.user.findUnique({
           where: { email: userEmail },
           include: { accounts: true },
         });
 
         if (existingUser) {
-          // Ensure OAuth account is linked
+          // Check if OAuth is already linked
           const linkedAccount = existingUser.accounts.find(
             (acc) => acc.provider === account.provider
           );
 
           if (!linkedAccount) {
-            // If account not linked, create an OAuth account entry
+            // Link OAuth account to the existing user
             await prisma.account.create({
               data: {
                 userId: existingUser.id,
@@ -105,36 +95,27 @@ export const authOptions: NextAuthOptions = {
 
       return true; // Default allow sign-in
     },
-  },
 
-  adapter: {
-    ...PrismaAdapter(prisma),
-    async useVerificationToken({ identifier, token }) {
-      const verificationToken = await prisma.verificationToken.findUnique({
-        where: { identifier_token: { identifier, token } },
-      });
-
-      if (!verificationToken) {
-        return null; // Invalid token
-      }
-
-      // Check expiration
-      const now = new Date();
-      if (verificationToken.expires < now) {
-        await prisma.verificationToken.delete({
-          where: {
-            identifier_token: {
-              identifier: verificationToken.identifier,
-              token,
-            },
-          },
+    async session({ session }) {
+      if (session.user) {
+        // Attach user ID and role to the session
+        const dbUser = await prisma.user.findUnique({
+          where: { email: session.user.email },
+          select: { id: true, role: true },
         });
-        return null; // Token expired
+
+        if (dbUser) {
+          session.user.id = dbUser.id;
+          session.user.role = dbUser.role || "HACKER"; // Default role if undefined
+        }
       }
 
-      return verificationToken; // Allow unlimited uses within expiration
+      return session;
     },
   },
+
+  adapter: PrismaAdapter(prisma),
+
   pages: {
     signIn: "/signin",
   },
