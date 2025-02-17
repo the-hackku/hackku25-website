@@ -70,8 +70,8 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
                   <Image
                     src={sponsor.logo}
                     alt={sponsor.name}
-                    width={400 / (index + 1)}
-                    height={400 / (index + 1)}
+                    width={350 / (index + 1)}
+                    height={350 / (index + 1)}
                     className="object-contain h-auto cursor-pointer transition-all duration-100"
                   />
                 </motion.a>
