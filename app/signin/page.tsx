@@ -249,7 +249,8 @@ const SignInPage = () => {
               We have sent a magic link to <strong>{email}</strong>.
             </p>
             <p className="text-center text-gray-600 mt-2 text-sm sm:text-base">
-              Please check your inbox and click the link to sign in.
+              Please check your inbox and click the link to sign in. Emails sent
+              to <b>@ku.edu</b> emails may take longer to arrive.
             </p>
             <div className="flex justify-center mt-6 gap-4">
               <Button

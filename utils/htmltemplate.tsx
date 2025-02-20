@@ -1,6 +1,9 @@
-// utils/emailTemplate.tsx
-
-export const htmlTemplate = (url: string, host: string): string => `
+export const htmlTemplate = (
+  url: string,
+  host: string,
+  message: string,
+  timestamp: string
+): string => `
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -75,9 +78,7 @@ export const htmlTemplate = (url: string, host: string): string => `
       </div>
       <div class="content">
         <h1>Sign in to HackKU</h1>
-        <p>
-          Hello! Thank you for using our platform. To sign in or to create your account, simply click the button below:
-        </p>
+        <p>${message}</p>
         <a href="${url}" class="button" style="
             display: inline-block;
             margin: 20px 0;
@@ -91,16 +92,16 @@ export const htmlTemplate = (url: string, host: string): string => `
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         ">Sign in</a>
         <p>
+          This request was generated at ${timestamp}.
+        </p>
+        <p>
           If you didn't request this, please ignore this email or let us know if you have any concerns.
         </p>
       </div>
       <div class="footer">
-       
         <p>© ${new Date().getFullYear()} HackKU. All rights reserved.</p>
       </div>
     </div>
   </body>
 </html>
 `;
-
-export default htmlTemplate;

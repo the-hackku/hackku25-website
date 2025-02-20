@@ -18,12 +18,36 @@ export const authOptions: NextAuthOptions = {
       maxAge: 5 * 60, // Token expires after 5 minutes
       sendVerificationRequest: async ({ identifier, url, provider }) => {
         const { host } = new URL(url);
+
+        // Randomized elements
+        const messages = [
+          "Click the button below to sign in:",
+          "Here is your secure sign-in link:",
+          "Access your HackKU account by clicking below:",
+          "To continue, click the sign-in button:",
+        ];
+        const subjects = [
+          "Your HackKU Sign-in Link 🔑",
+          "Secure Login for HackKU",
+          "Sign in to HackKU Now",
+          "Your HackKU Access Link",
+        ];
+
+        const timestamp = new Date().toLocaleString("en-US", {
+          timeZone: "America/Chicago",
+        });
+        const randomMessage =
+          messages[Math.floor(Math.random() * messages.length)];
+        const randomSubject =
+          subjects[Math.floor(Math.random() * subjects.length)];
+        const randomizedUrl = `${url}&t=${Date.now()}`; // Adds slight variation to the URL
+
         try {
           await transporter.sendMail({
             to: identifier,
             from: provider.from,
-            subject: `Your sign-in link for HackKU`,
-            html: htmlTemplate(url, host),
+            subject: randomSubject,
+            html: htmlTemplate(randomizedUrl, host, randomMessage, timestamp),
           });
         } catch (error) {
           console.error("❌ Error sending email:", error);
