@@ -59,17 +59,22 @@ const SignInPage = () => {
   }, [status, router]);
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (emailSent && resendTimer > 0) {
-      timer = setInterval(() => {
-        setResendTimer((prev) => prev - 1);
-      }, 1000);
-    }
+    if (!emailSent) return;
 
-    return () => {
-      if (timer) clearInterval(timer);
+    const storedTime = localStorage.getItem("resendStartTime");
+    const startTime = storedTime ? parseInt(storedTime, 10) : Date.now();
+    localStorage.setItem("resendStartTime", startTime.toString());
+
+    const updateTimer = () => {
+      const elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+      setResendTimer(Math.max(60 - elapsedTime, 0));
     };
-  }, [emailSent, resendTimer]);
+
+    updateTimer(); // Update immediately
+    const interval = setInterval(updateTimer, 1000);
+
+    return () => clearInterval(interval);
+  }, [emailSent]);
 
   const sendMagicLink = async (email: string) => {
     setError(null);
@@ -99,9 +104,9 @@ const SignInPage = () => {
     }
   };
 
-  const onSubmit = async (data: SignInForm) => {
+  const onSubmit = async () => {
     setActiveLoadingButton("email");
-    await sendMagicLink(data.email);
+    await sendMagicLink(email);
   };
 
   const handleResend = async () => {

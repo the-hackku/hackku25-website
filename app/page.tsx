@@ -227,9 +227,27 @@ export default function HomePage() {
   const sponsorTiers = ["Tera", "Giga", "Mega", "Kila"];
   const sponsors = [
     {
+      name: "Security Benefit",
+      logo: "/images/sponsors/security.png",
+      website: "https://www.securitybenefit.com",
+      tier: "Tera",
+    },
+    {
+      name: "Everly",
+      logo: "/images/sponsors/everly.png",
+      website: "https://www.everlylife.com/",
+      tier: "Tera",
+    },
+    {
       name: "Pella",
       logo: "/images/sponsors/pella.png",
       website: "https://www.pella.com/",
+      tier: "Giga",
+    },
+    {
+      name: "Ripple",
+      logo: "/images/sponsors/ripple.png",
+      website: "https://ripple.com/",
       tier: "Giga",
     },
     {
@@ -244,18 +262,7 @@ export default function HomePage() {
       website: "https://www.peakperformanceit.com/",
       tier: "Kila",
     },
-    {
-      name: "Security Benefit",
-      logo: "/images/sponsors/security.png",
-      website: "https://www.securitybenefit.com",
-      tier: "Tera",
-    },
-    {
-      name: "Everly",
-      logo: "/images/sponsors/everly.png",
-      website: "https://www.everlylife.com/",
-      tier: "Tera",
-    },
+
     {
       name: "Patient Safety",
       logo: "/images/sponsors/patient.png",

@@ -8,12 +8,14 @@ import DiscordProvider from "next-auth/providers/discord";
 import type { NextAuthOptions } from "next-auth";
 import { htmlTemplate } from "@/utils/htmltemplate";
 
-const transporter = nodemailer.createTransport(process.env.EMAIL_SERVER);
+const transporter = nodemailer.createTransport(
+  process.env.MAILGUN_EMAIL_SERVER
+);
 
 export const authOptions: NextAuthOptions = {
   providers: [
     EmailProvider({
-      server: process.env.EMAIL_SERVER,
+      server: process.env.MAILGUN_EMAIL_SERVER,
       from: "HackKU <auth@hackku.org>",
       maxAge: 5 * 60, // Token expires after 5 minutes
       sendVerificationRequest: async ({ identifier, url, provider }) => {
@@ -49,6 +51,7 @@ export const authOptions: NextAuthOptions = {
             subject: randomSubject,
             html: htmlTemplate(randomizedUrl, host, randomMessage, timestamp),
           });
+          console.log("✅ Email sent to:", identifier);
         } catch (error) {
           console.error("❌ Error sending email:", error);
         }
