@@ -53,7 +53,7 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
           <h3 className="text-4xl md:text-4xl font-semibold mb-2 text-center font-dfvn">
             {tier} Tier
           </h3>
-          <div className="flex flex-wrap justify-center gap-4 md:gap-8">
+          <div className="flex flex-wrap justify-center gap-4 md:gap-12">
             {sponsors
               .filter((sponsor) => sponsor.tier === tier)
               .map((sponsor) => (
@@ -70,8 +70,8 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
                   <Image
                     src={sponsor.logo}
                     alt={sponsor.name}
-                    width={350 / (index + 1)}
-                    height={350 / (index + 1)}
+                    width={400 / (index * 0.5 + 1.5)}
+                    height={400 / (index * 0.5 + 1.5)}
                     className="object-contain h-auto cursor-pointer transition-all duration-100"
                   />
                 </motion.a>

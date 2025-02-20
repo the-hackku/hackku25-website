@@ -251,6 +251,12 @@ export default function HomePage() {
       tier: "Tera",
     },
     {
+      name: "Everly",
+      logo: "/images/sponsors/everly.png",
+      website: "https://www.everlylife.com/",
+      tier: "Tera",
+    },
+    {
       name: "Patient Safety",
       logo: "/images/sponsors/patient.png",
       website: "https://www.patientsafetytech.com/",

@@ -26,6 +26,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useSession } from "next-auth/react";
+import OneKUPopup from "./OneKUPopup";
 
 const Header = ({ isAdmin }: { isAdmin: boolean }) => {
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
@@ -121,6 +122,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
     `}
     >
       <div className="container mx-auto max-w-7xl">
+        <OneKUPopup />
         <div className="flex items-center justify-between">
           {/* Left Section */}
           <AnimatePresence>
