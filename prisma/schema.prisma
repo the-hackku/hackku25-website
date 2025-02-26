@@ -17,8 +17,9 @@ model User {
   image                String?
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @updatedAt
-  travelReimbursementId String? @unique
-  travelReimbursement   TravelReimbursement?
+  travelReimbursementId String? 
+  travelReimbursement  TravelReimbursement? @relation(fields: [travelReimbursementId], references: [id], onDelete: SetNull, name: "travelReimbursement")
+  
   accounts             Account[]
   Authenticator        Authenticator[]
   checkinsAsAdmin      Checkin[]            @relation("AdminCheckin")
@@ -27,9 +28,14 @@ model User {
   scansAsAdmin         Scan[]               @relation("AdminScanner")
   scansAsUser          Scan[]               @relation("UserScanned")
   sessions             Session[]
-  reimbursementGroupMemberships ReimbursementGroupMember[]
-  createdReimbursementGroups ReimbursementGroup[] @relation("CreatorReimbursementGroup")
+
+  reimbursementInvites ReimbursementInvite[]
+
+  // References the reimbursement created by this user (if they are the leader)
+  createdReimbursement TravelReimbursement? @relation("creator")
 }
+
+
 
 model Account {
   userId            String
@@ -157,39 +163,41 @@ model ParticipantInfo {
 
 model TravelReimbursement {
   id                   String   @id @default(cuid())
-  userId               String?  @unique
-  user                 User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  reimbursementGroupId String?  @unique  // Only the group leader submits this
-  reimbursementGroup   ReimbursementGroup? @relation(fields: [reimbursementGroupId], references: [id], onDelete: Cascade)
+  userId               String   @unique
   transportationMethod String
   address              String
   reason               String
   distance             Float
   estimatedCost        Float
   createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  updatedAt            DateTime @default(now())
+
+  creator              User     @relation(fields: [userId], references: [id], onDelete: Cascade, name: "creator")
+  members              User[]   @relation("travelReimbursement") 
+  invites              ReimbursementInvite[]
 }
 
-model ReimbursementGroup {
-  id        String   @id @default(cuid())
-  creatorId String  
-  createdAt DateTime @default(now())
-  creator User @relation("CreatorReimbursementGroup", fields: [creatorId], references: [id], onDelete: Cascade)
-  members ReimbursementGroupMember[]
-  reimbursement TravelReimbursement?
+
+
+model ReimbursementInvite {
+  id                 String   @id @default(cuid())
+  reimbursementId    String
+  userId            String
+  status            InviteStatus @default(PENDING)
+  createdAt         DateTime @default(now())
+
+  user              User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reimbursement     TravelReimbursement   @relation(fields: [reimbursementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, reimbursementId]) // Prevents duplicate invites
 }
 
-model ReimbursementGroupMember {
-  id                   String  @id @default(cuid())
-  userId               String  
-  reimbursementGroupId String  
-  status               ReimbursementGroupStatus @default(PENDING) // User's status in the group
-  joinedAt             DateTime @default(now())
-  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  group ReimbursementGroup @relation(fields: [reimbursementGroupId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, reimbursementGroupId]) // Ensures a user is in only one group
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
 }
+
 
 
 enum EventType {
@@ -204,10 +212,4 @@ enum ROLE {
   HACKER
   ADMIN
   VOLUNTEER
-}
-
-enum ReimbursementGroupStatus {
-  PENDING 
-  ACCEPTED 
-  DECLINED 
 }

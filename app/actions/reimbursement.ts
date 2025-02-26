@@ -1,6 +1,6 @@
 "use server";
 
-import { PrismaClient, ReimbursementGroupStatus } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authoptions";
 import { exportReimbursementToGoogleSheet } from "@/scripts/googleSheetsExport";
@@ -68,7 +68,6 @@ export async function submitTravelReimbursement({
   groupMemberEmails?: string[];
   isGroup: boolean;
 }) {
-  // Authenticate the user.
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
     throw new Error("User not authenticated");
@@ -83,7 +82,7 @@ export async function submitTravelReimbursement({
   }
 
   if (!isGroup) {
-    // SOLO APPLICATION
+    // 🚀 **Solo Application**
     const reimbursement = await prisma.travelReimbursement.create({
       data: {
         userId: user.id,
@@ -95,11 +94,16 @@ export async function submitTravelReimbursement({
       },
     });
 
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { travelReimbursementId: reimbursement.id },
+    });
+
     await exportReimbursementToGoogleSheet(reimbursement);
 
     return { success: true, reimbursement };
   } else {
-    // GROUP APPLICATION - LEADER CREATES GROUP
+    // 🚀 **Group Application**
     if (!groupMemberEmails || groupMemberEmails.length === 0) {
       throw new Error("At least one group member must be added.");
     }
@@ -107,74 +111,25 @@ export async function submitTravelReimbursement({
       throw new Error("A group can have a maximum of 10 members.");
     }
 
-    // Ensure users are not in another reimbursement group
+    // **Ensure users are not already linked to a reimbursement**
     const existingMembers = await prisma.user.findMany({
       where: {
         email: { in: [...groupMemberEmails, user.email] },
-        reimbursementGroupMemberships: {
-          some: { status: ReimbursementGroupStatus.ACCEPTED },
-        },
+        travelReimbursementId: { not: null },
       },
     });
 
     if (existingMembers.length > 0) {
       throw new Error(
-        `Some users are already in an accepted reimbursement group.`
+        `Some users already have a travel reimbursement assigned.`
       );
     }
 
     return await prisma.$transaction(async (prisma) => {
-      // Create Reimbursement Group
-      const group = await prisma.reimbursementGroup.create({
-        data: {
-          creatorId: user.id,
-        },
-      });
-
-      // Fetch invited members
-      const members = await prisma.user.findMany({
-        where: {
-          email: { in: groupMemberEmails },
-        },
-      });
-
-      // Prepare all members including the leader
-      const allMembers = [
-        ...members.map((member) => ({
-          userId: member.id,
-          reimbursementGroupId: group.id,
-          status: ReimbursementGroupStatus.PENDING, // Members must accept invite
-        })),
-        {
-          userId: user.id, // Add the leader
-          reimbursementGroupId: group.id,
-          status: ReimbursementGroupStatus.ACCEPTED, // Leader automatically accepts
-        },
-      ];
-
-      // Add all members to the reimbursement group
-      await prisma.reimbursementGroupMember.createMany({
-        data: allMembers,
-      });
-
-      // Fetch the group again to ensure members exist before exporting
-      const fullGroup = await prisma.reimbursementGroup.findUnique({
-        where: { id: group.id },
-        include: {
-          members: {
-            include: {
-              user: {
-                select: { email: true },
-              },
-            },
-          },
-        },
-      });
-
-      // Create the reimbursement request for the group
+      // **Create the reimbursement entry for the group**
       const reimbursement = await prisma.travelReimbursement.create({
         data: {
-          reimbursementGroupId: group.id,
+          userId: user.id, // **Group leader**
           transportationMethod,
           address,
           distance,
@@ -183,10 +138,30 @@ export async function submitTravelReimbursement({
         },
       });
 
-      // ✅ Pass full group object to ensure members are included
-      await exportReimbursementToGoogleSheet({ ...reimbursement, fullGroup });
+      // **Assign the leader to this reimbursement immediately**
+      await prisma.user.update({
+        where: { id: user.id },
+        data: { travelReimbursementId: reimbursement.id },
+      });
 
-      return { success: true, reimbursement, groupId: group.id };
+      // **Fetch invited members**
+      const members = await prisma.user.findMany({
+        where: {
+          email: { in: groupMemberEmails },
+        },
+      });
+
+      // **Create invites for members**
+      const invites = members.map((member) => ({
+        userId: member.id,
+        reimbursementId: reimbursement.id,
+      }));
+
+      await prisma.reimbursementInvite.createMany({ data: invites });
+
+      await exportReimbursementToGoogleSheet(reimbursement);
+
+      return { success: true, reimbursement };
     });
   }
 }
@@ -194,41 +169,67 @@ export async function submitTravelReimbursement({
 /**
  * Handle group invitation responses (ACCEPT or DECLINE).
  */
-export async function handleGroupInvite(groupId: string, accept: boolean) {
+export async function handleGroupInvite(
+  reimbursementId: string,
+  accept: boolean
+) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
     throw new Error("User not authenticated");
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
+  return await prisma.$transaction(async (prisma) => {
+    // Fetch user inside the transaction to prevent stale reads
+    const user = await prisma.user.findUnique({
+      where: { email: session.user.email },
+      select: { id: true, travelReimbursementId: true },
+    });
+
+    if (!user) {
+      throw new Error("User not found.");
+    }
+
+    // Fetch the invite within the transaction
+    const invite = await prisma.reimbursementInvite.findFirst({
+      where: {
+        userId: user.id,
+        reimbursementId,
+        status: "PENDING",
+      },
+    });
+
+    if (!invite) {
+      throw new Error("No pending invite found for this reimbursement.");
+    }
+
+    if (accept) {
+      // Re-check the latest state of travelReimbursementId to prevent conflicts
+      if (
+        user.travelReimbursementId &&
+        user.travelReimbursementId !== reimbursementId
+      ) {
+        throw new Error(
+          "You are already part of another travel reimbursement. Leave that one first."
+        );
+      }
+
+      // Assign the reimbursement **only if still null** (after fresh fetch)
+      if (!user.travelReimbursementId) {
+        await prisma.user.update({
+          where: { id: user.id, travelReimbursementId: undefined }, // Ensure idempotency
+          data: { travelReimbursementId: reimbursementId },
+        });
+      }
+    }
+
+    // Update invite status
+    await prisma.reimbursementInvite.update({
+      where: { id: invite.id },
+      data: { status: accept ? "ACCEPTED" : "DECLINED" },
+    });
+
+    return { success: true, status: accept ? "ACCEPTED" : "DECLINED" };
   });
-
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  const membership = await prisma.reimbursementGroupMember.findFirst({
-    where: {
-      userId: user.id,
-      reimbursementGroupId: groupId,
-    },
-  });
-
-  if (!membership) {
-    throw new Error("No pending invite found.");
-  }
-
-  await prisma.reimbursementGroupMember.update({
-    where: { id: membership.id },
-    data: {
-      status: accept
-        ? ReimbursementGroupStatus.ACCEPTED
-        : ReimbursementGroupStatus.DECLINED,
-    },
-  });
-
-  return { success: true, status: accept ? "ACCEPTED" : "DECLINED" };
 }
 
 export async function updateTravelReimbursement({
@@ -246,31 +247,11 @@ export async function updateTravelReimbursement({
   estimatedCost: number;
   reason: string;
 }) {
-  // 1. Authenticate user
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
     throw new Error("Not authenticated");
   }
 
-  // 2. Fetch the reimbursement
-  const reimbursement = await prisma.travelReimbursement.findUnique({
-    where: { id: reimbursementId },
-    include: {
-      reimbursementGroup: {
-        select: { creatorId: true },
-      },
-      user: {
-        select: { email: true, id: true },
-      },
-    },
-  });
-  if (!reimbursement) {
-    throw new Error("Reimbursement not found");
-  }
-
-  // 3. Ensure user can edit
-  //    For a solo request, the user must match reimbursement.userId
-  //    For a group request, the user must match reimbursementGroup.creatorId
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
   });
@@ -278,24 +259,16 @@ export async function updateTravelReimbursement({
     throw new Error("User not found");
   }
 
-  const isSolo = !!reimbursement.userId;
-  const isGroup = !!reimbursement.reimbursementGroupId;
+  // **Ensure user is the creator of the reimbursement**
+  const reimbursement = await prisma.travelReimbursement.findUnique({
+    where: { id: reimbursementId },
+  });
 
-  let canEdit = false;
-  if (isSolo && reimbursement.userId === user.id) {
-    canEdit = true;
-  } else if (
-    isGroup &&
-    reimbursement.reimbursementGroup?.creatorId === user.id
-  ) {
-    // Only group leader can edit
-    canEdit = true;
-  }
-  if (!canEdit) {
+  if (!reimbursement || reimbursement.userId !== user.id) {
     throw new Error("You do not have permission to edit this reimbursement.");
   }
 
-  // 4. Perform the update
+  // **Perform the update**
   const updated = await prisma.travelReimbursement.update({
     where: { id: reimbursementId },
     data: {
@@ -308,4 +281,24 @@ export async function updateTravelReimbursement({
   });
 
   return { success: true, reimbursement: updated };
+}
+
+export async function getReimbursementDetails() {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    throw new Error("User not authenticated");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: {
+      travelReimbursement: true,
+    },
+  });
+
+  if (!user?.travelReimbursement) {
+    return null;
+  }
+
+  return user.travelReimbursement;
 }

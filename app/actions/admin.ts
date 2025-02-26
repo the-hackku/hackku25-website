@@ -519,7 +519,7 @@ export async function getReimbursements(
         },
         { address: { contains: searchQuery, mode: "insensitive" } },
         {
-          user: {
+          creator: {
             ParticipantInfo: {
               OR: [
                 { firstName: { contains: searchQuery, mode: "insensitive" } },
@@ -531,19 +531,15 @@ export async function getReimbursements(
       ],
     },
     include: {
-      user: {
+      creator: {
         include: {
           ParticipantInfo: true,
         },
       },
-      reimbursementGroup: {
+      invites: {
         include: {
-          members: {
-            include: {
-              user: {
-                select: { email: true },
-              },
-            },
+          user: {
+            select: { email: true, travelReimbursementId: true },
           },
         },
       },
@@ -561,7 +557,7 @@ export async function getReimbursements(
         },
         { address: { contains: searchQuery, mode: "insensitive" } },
         {
-          user: {
+          creator: {
             ParticipantInfo: {
               OR: [
                 { firstName: { contains: searchQuery, mode: "insensitive" } },

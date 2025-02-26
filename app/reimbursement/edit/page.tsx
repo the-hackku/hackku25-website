@@ -3,12 +3,11 @@
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
-// Import the server actions
-import { updateTravelReimbursement } from "@/app/actions/reimbursement";
+// Import server actions
 import {
-  getUserWithReimbursement,
-  userHasReimbursement,
-} from "@/app/actions/hasReimbursement";
+  updateTravelReimbursement,
+  getReimbursementDetails,
+} from "@/app/actions/reimbursement";
 import { IconLoader } from "@tabler/icons-react";
 
 /**
@@ -33,56 +32,25 @@ export default function EditReimbursementPage() {
   );
   const [error, setError] = useState<string | null>(null);
 
-  // On mount, load user data & existing reimbursement
+  // ✅ On mount, load existing reimbursement using server action
   useEffect(() => {
     (async () => {
       try {
-        const user = await getUserWithReimbursement();
-        const hasReimb = await userHasReimbursement(user);
-        if (!hasReimb) {
-          setError("No existing reimbursement found to edit.");
+        const existingReimbursement = await getReimbursementDetails();
 
+        if (!existingReimbursement) {
+          setError("No existing reimbursement found to edit.");
           return;
         }
 
-        // Find the reimbursement (solo or group)
-        let existing: ReimbursementData | null = null;
-        if (user.travelReimbursement) {
-          existing = {
-            reimbursementId: user.travelReimbursement.id, // Ensure the correct key name
-            transportationMethod: user.travelReimbursement.transportationMethod,
-            address: user.travelReimbursement.address,
-            distance: user.travelReimbursement.distance,
-            estimatedCost: user.travelReimbursement.estimatedCost,
-            reason: user.travelReimbursement.reason,
-          };
-        } else {
-          // Check for group reimbursement
-          const membershipWithReimb = user.reimbursementGroupMemberships.find(
-            (m) => m.group?.reimbursement
-          );
-          if (membershipWithReimb?.group.reimbursement) {
-            existing = {
-              reimbursementId: membershipWithReimb.group.reimbursement.id,
-              transportationMethod:
-                membershipWithReimb.group.reimbursement.transportationMethod,
-              address: membershipWithReimb.group.reimbursement.address,
-              distance: membershipWithReimb.group.reimbursement.distance,
-              estimatedCost:
-                membershipWithReimb.group.reimbursement.estimatedCost,
-              reason: membershipWithReimb.group.reimbursement.reason,
-            };
-          }
-        }
-
-        if (!existing) {
-          setError("No existing reimbursement found to edit.");
-
-          return;
-        }
-
-        // Set local state with existing reimbursement
-        setReimbursement(existing);
+        setReimbursement({
+          reimbursementId: existingReimbursement.id,
+          transportationMethod: existingReimbursement.transportationMethod,
+          address: existingReimbursement.address,
+          distance: existingReimbursement.distance,
+          estimatedCost: existingReimbursement.estimatedCost,
+          reason: existingReimbursement.reason,
+        });
       } catch (err) {
         console.error("Error loading reimbursement:", err);
         setError("Failed to load existing reimbursement.");
@@ -90,7 +58,9 @@ export default function EditReimbursementPage() {
     })();
   }, []);
 
-  // Form submission
+  /**
+   * ✅ Handle Form Submission
+   */
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!reimbursement) return;
@@ -101,6 +71,8 @@ export default function EditReimbursementPage() {
         const result = await updateTravelReimbursement(reimbursement);
         if (result.success) {
           router.push("/profile");
+        } else {
+          setError("Update failed.");
         }
       } catch (err) {
         console.error("Update failed:", err);

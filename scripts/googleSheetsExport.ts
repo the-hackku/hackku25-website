@@ -99,46 +99,21 @@ export async function exportReimbursementToGoogleSheet(reimbursement: {
   reason: string;
   createdAt: Date;
   userId?: string | null;
-  reimbursementGroupId?: string | null;
-  fullGroup?: { members: { user: { email: string } }[] } | null;
 }) {
   try {
     const sheetsApi = google.sheets({ version: "v4", auth });
 
     let emails = "N/A"; // Default in case there's an issue
 
-    if (reimbursement.fullGroup) {
-      // If we have the full group, use it directly
-      emails = reimbursement.fullGroup.members
-        .map((member) => member.user.email)
-        .join(", ");
-    } else if (reimbursement.reimbursementGroupId) {
-      // Fetch group members if not already provided
-      const group = await prisma.reimbursementGroup.findUnique({
-        where: { id: reimbursement.reimbursementGroupId },
-        include: {
-          members: {
-            include: {
-              user: {
-                select: { email: true },
-              },
-            },
-          },
-        },
-      });
-
-      if (group && group.members.length > 0) {
-        emails = group.members.map((member) => member.user.email).join(", ");
-      }
-    } else if (reimbursement.userId) {
-      // Solo reimbursement, fetch user's email
-      const user = await prisma.user.findUnique({
-        where: { id: reimbursement.userId },
+    if (reimbursement.userId) {
+      // Fetch all users linked to this reimbursement (Group + Leader)
+      const members = await prisma.user.findMany({
+        where: { travelReimbursementId: reimbursement.userId },
         select: { email: true },
       });
 
-      if (user) {
-        emails = user.email;
+      if (members.length > 0) {
+        emails = members.map((member) => member.email).join(", ");
       }
     }
 

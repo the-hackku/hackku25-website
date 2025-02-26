@@ -1,4 +1,4 @@
-// app/profile/page.tsx
+/* app/profile/page.tsx */
 import { redirect } from "next/navigation";
 import LocalDateTime from "@/components/localDateTime";
 import QrCodeComponent from "@/components/UserQRCode";
@@ -19,10 +19,7 @@ import {
   IconEdit,
 } from "@tabler/icons-react";
 
-// 1) Import Prisma
 import { prisma } from "@/prisma";
-
-// 2) Reimbursement helpers & types
 import {
   getUserWithReimbursement,
   userHasReimbursement,
@@ -30,49 +27,36 @@ import {
 import type { UserWithReimbursement } from "@/app/actions/hasReimbursement";
 
 /**
- * Helper function to check if user can edit the existing reimbursement:
- *  - If they have a solo reimbursement ( user.travelReimbursement.userId === user.id )
- *  - Or if they are a group leader ( group.creatorId === user.id ).
+ * Helper: can the user edit the existing reimbursement?
  */
 function canEditReimbursement(user: UserWithReimbursement): boolean {
-  // If user has a solo reimbursement, check userId
+  // ✅ Solo reimbursement check
   if (user.travelReimbursement && user.travelReimbursement.userId === user.id) {
     return true;
   }
-
-  // Otherwise, check if user is group leader
-  const membershipWithGroupReimb = user.reimbursementGroupMemberships.find(
-    (m) => m.group?.reimbursement
-  );
-  if (
-    membershipWithGroupReimb &&
-    membershipWithGroupReimb.group.creatorId === user.id
-  ) {
+  // ✅ Group leader check (creator of reimbursement)
+  if (user.createdReimbursement) {
     return true;
   }
-
   return false;
 }
 
 /**
- * Main Profile Page
+ * Profile Page
  */
 export default async function ProfilePage() {
-  // 1. Load user with reimbursement logic
+  // 1. Load user with reimbursement
   const userSession = await getUserWithReimbursement().catch((err) => {
     console.error("Error fetching user with reimbursement:", err);
     redirect("/signin");
   });
+  if (!userSession) redirect("/signin");
 
-  if (!userSession) {
-    redirect("/signin");
-  }
-
-  // 2. Single calls for reimbursement logic
+  // 2. Check if user has any reimbursement, and if they can edit
   const hasReimb = await userHasReimbursement(userSession);
   const canEdit = hasReimb && canEditReimbursement(userSession);
 
-  // 3. Fetch check-ins (server side)
+  // 3. Grab check-ins
   const checkIns = await prisma.checkin.findMany({
     where: { userId: userSession.id },
     include: { event: true },
@@ -87,8 +71,25 @@ export default async function ProfilePage() {
 
   // HackerPass / QR code
   const qrCodeData = participant
-    ? userSession.id // user ID for scanning
-    : "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; // fallback
+    ? userSession.id
+    : "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+
+  const pendingInvites = await prisma.reimbursementInvite.findMany({
+    where: {
+      userId: userSession.id,
+      status: "PENDING",
+    },
+    include: {
+      reimbursement: {
+        select: {
+          userId: true, // Group leader's ID
+          creator: { select: { email: true } }, // Group leader's email
+        },
+      },
+    },
+  });
+  // We'll show accepted members in the GroupReimbursementCard,
+  // so no need to handle them here.
 
   return (
     <div className="container mx-auto p-4 max-w-4xl space-y-6">
@@ -107,14 +108,6 @@ export default async function ProfilePage() {
                   <IconUser size={16} className="mr-2" />
                   Profile
                 </TabsTrigger>
-                {/* <TabsTrigger
-                  value="applicationInfo"
-                  disabled={!participant}
-                  className="hidden sm:flex"
-                >
-                  <IconFileText size={16} className="mr-2" />
-                  Registration
-                </TabsTrigger> */}
                 <TabsTrigger value="checkins">
                   <IconHistory size={16} className="mr-2" />
                   Check-ins
@@ -122,7 +115,6 @@ export default async function ProfilePage() {
               </TabsList>
             </div>
 
-            {/* Profile Info Tab */}
             <TabsContent value="profileInfo">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* HackerPass Card */}
@@ -195,7 +187,7 @@ export default async function ProfilePage() {
                         <IconMail className="text-primary" size={20} />
                         <p>{userSession.email}</p>
                       </div>
-                      {/* Sign Out Link */}
+
                       <div className="flex items-center gap-2 text-red-500">
                         <IconLogout
                           className="text-primary ml-[2px]"
@@ -211,10 +203,9 @@ export default async function ProfilePage() {
 
                       <hr className="my-4 border-gray-200" />
 
-                      {/* Reimbursement Info */}
+                      {/* If user has Reimbursement */}
                       {participant && hasReimb ? (
                         <div className="flex flex-col space-y-2">
-                          {/* Optional Edit Link if canEdit */}
                           {canEdit && (
                             <div className="flex items-center gap-2">
                               <IconEdit
@@ -231,7 +222,6 @@ export default async function ProfilePage() {
                           )}
                         </div>
                       ) : (
-                        // If not applied yet, show link
                         participant && (
                           <div className="flex items-center space-x-2 hover:underline">
                             <IconFileText className="text-primary" size={20} />
@@ -249,43 +239,88 @@ export default async function ProfilePage() {
                       )}
                     </div>
 
-                    {/* If user is group leader or in a group, show group details */}
-                    {userSession?.reimbursementGroupMemberships?.some(
-                      (m) => m.group?.reimbursement
-                    ) && <GroupReimbursementCard user={userSession} />}
+                    {/* If the user is a group leader, show invite statuses */}
+                    {userSession.createdReimbursement && (
+                      <div className="p-4 mt-4 border-l-4 border-blue-400 bg-blue-50">
+                        <h3 className="text-md font-semibold mb-2">
+                          Group Invite Status
+                        </h3>
+                        {userSession.createdReimbursement.invites.length > 0 ? (
+                          <ul>
+                            {userSession.createdReimbursement.invites.map(
+                              (invite) => (
+                                <li key={invite.id} className="mb-2">
+                                  {invite.user.ParticipantInfo
+                                    ? `${invite.user.ParticipantInfo.firstName} ${invite.user.ParticipantInfo.lastName}`
+                                    : invite.user.email}{" "}
+                                  -{" "}
+                                  <span
+                                    className={
+                                      invite.status === "ACCEPTED"
+                                        ? "text-green-600"
+                                        : invite.status === "PENDING"
+                                        ? "text-yellow-600"
+                                        : "text-red-600"
+                                    }
+                                  >
+                                    {invite.status}
+                                  </span>
+                                </li>
+                              )
+                            )}
+                          </ul>
+                        ) : (
+                          <p>No invites sent yet.</p>
+                        )}
+                      </div>
+                    )}
 
-                    {/* If user has pending invites (not the group they created) */}
-                    {userSession.reimbursementGroupMemberships
-                      ?.filter((m) => m.status === "PENDING")
-                      .map((membership) => (
-                        <div
-                          key={membership.id}
-                          className="p-4 border rounded-md mt-4"
-                        >
-                          <h3 className="text-lg font-semibold">
-                            Reimbursement Group Invite
+                    {/* [Line B] Show group if the user has an accepted membership with a reimbursement */}
+                    {pendingInvites.length > 0 && (
+                      <div className="p-4 mt-4 border-l-4 border-yellow-400 bg-yellow-50">
+                        <h3 className="text-md font-semibold mb-2">
+                          Pending Group Invite
+                        </h3>
+                        {pendingInvites.map((invite) => (
+                          <div key={invite.id} className="mb-3">
+                            <p>
+                              Group Leader: {invite.reimbursement.creator.email}
+                            </p>
+                            <Link
+                              href="/reimbursement/invite"
+                              className="text-blue-600 underline text-sm"
+                            >
+                              Accept / Decline
+                            </Link>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    {/* [NEW] Show reimbursement group if user accepted an invite */}
+                    {userSession.travelReimbursement &&
+                      !userSession.createdReimbursement && (
+                        <div className="p-4 mt-4 border-l-4 border-green-400 bg-green-50">
+                          <h3 className="text-md font-semibold mb-2">
+                            Reimbursement Group
                           </h3>
                           <p>
-                            Group Leader Email: {membership.group.creator.email}
+                            <span className="font-medium">Group Leader:</span>{" "}
+                            {userSession.travelReimbursement.creator?.email ||
+                              "Unknown"}
                           </p>
                           <Link
-                            href="/reimbursement/invite"
-                            className="text-blue-600 underline"
+                            href="/reimbursement/edit"
+                            className="text-blue-600 underline text-sm mt-2 block"
                           >
-                            Accept / Decline Invite
+                            View Reimbursement Details
                           </Link>
                         </div>
-                      ))}
+                      )}
                   </CardContent>
                 </Card>
               </div>
             </TabsContent>
 
-            {/* <TabsContent value="applicationInfo">
-              
-            </TabsContent> */}
-
-            {/* Check-ins Tab */}
             <TabsContent value="checkins">
               <div className="space-y-4 pb-4">
                 <h3 className="text-lg font-bold mb-4">Recent Check-Ins</h3>
@@ -323,77 +358,6 @@ export default async function ProfilePage() {
           </Tabs>
         </CardContent>
       </Card>
-    </div>
-  );
-}
-
-/**
- * A card that shows the group members' statuses
- * and additional info if you're the group leader.
- */
-function GroupReimbursementCard({ user }: { user: UserWithReimbursement }) {
-  // Find the group membership that has a reimbursement
-  const membershipWithGroupReimb = user.reimbursementGroupMemberships.find(
-    (m) => m.group?.reimbursement
-  );
-  if (!membershipWithGroupReimb) return null;
-
-  const group = membershipWithGroupReimb.group;
-  // 1. Check if user is the group leader
-  const isLeader = group.creatorId === user.id;
-
-  // 2. Count how many have accepted vs. total
-  const totalMembers = group.members.length;
-  const acceptedCount = group.members.filter(
-    (m) => m.status === "ACCEPTED"
-  ).length;
-
-  return (
-    <div className="p-4 border rounded-md mt-4">
-      <h3 className="text-lg font-semibold">My Reimbursement Group</h3>
-
-      {isLeader ? (
-        <>
-          <p className="text-sm">You are the group leader. </p>
-          <p className="text-sm">
-            {" "}
-            {acceptedCount === totalMembers
-              ? "All members have accepted."
-              : `Waiting for ${totalMembers - acceptedCount} members to accept.
-        `}
-          </p>
-        </>
-      ) : (
-        <p className="text-sm text-blue-600">You are a member of this group.</p>
-      )}
-
-      <ul className="mt-2 space-y-2">
-        {group.members.map((member) => {
-          const memberUser = member.user;
-          const status = member.status; // 'PENDING' | 'ACCEPTED' | 'DECLINED'
-          const name = memberUser.email;
-
-          return (
-            <li
-              key={member.id}
-              className="flex items-center justify-between bg-white p-2 border rounded"
-            >
-              <span>{name === user.email ? "You" : name}</span>
-              <span
-                className={
-                  status === "ACCEPTED"
-                    ? "text-green-600"
-                    : status === "PENDING"
-                    ? "text-yellow-600"
-                    : "text-red-600"
-                }
-              >
-                {status}
-              </span>
-            </li>
-          );
-        })}
-      </ul>
     </div>
   );
 }

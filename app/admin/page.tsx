@@ -38,20 +38,19 @@ interface User {
 }
 
 interface ExtendedTravelReimbursement extends TravelReimbursement {
-  user: {
+  creator: {
+    id: string;
+    email: string;
     ParticipantInfo?: {
       firstName: string;
       lastName: string;
     } | null;
-    email: string;
   };
-  reimbursementGroup?: {
-    members: {
-      user: {
-        email: string;
-      };
-    }[];
-  } | null;
+  invites: {
+    user: {
+      email: string;
+    };
+  }[];
 }
 
 interface Checkin {
@@ -150,37 +149,20 @@ export default function AdminTabsPage() {
   const reimbursementColumns: ColumnDef<ExtendedTravelReimbursement>[] = [
     {
       id: "user",
-      header: "User(s)",
+      header: "User",
       cell: ({ row }) => {
         const reimbursement = row.original;
-
-        // If it's a group reimbursement, fetch all group members
-        if (reimbursement.reimbursementGroup) {
-          const emails = reimbursement.reimbursementGroup.members
-            .map((member) => member.user.email)
-            .join(", ");
-          return (
-            <button
-              onClick={() => setSelectedUserId(reimbursement.userId)}
-              className="hover:underline text-left"
-            >
-              {emails}
-            </button>
-          );
-        }
-
-        // If it's an individual reimbursement
-        const participantInfo = reimbursement.user?.ParticipantInfo;
+        const participantInfo = reimbursement.creator?.ParticipantInfo;
         const userName = participantInfo
           ? `${participantInfo.firstName} ${participantInfo.lastName}`
           : "Unknown";
 
         return (
           <button
-            onClick={() => setSelectedUserId(reimbursement.userId)}
+            onClick={() => setSelectedUserId(reimbursement.creator.id)}
             className="hover:underline text-left"
           >
-            {userName}
+            {userName} ({reimbursement.creator.email})
           </button>
         );
       },
@@ -284,7 +266,6 @@ export default function AdminTabsPage() {
           <TabsTrigger value="events">Events</TabsTrigger>
           <TabsTrigger value="actions">Admin Actions</TabsTrigger>
         </TabsList>
-
         <TabsContent value="users">
           <GenericDataContainer<User>
             title="Users"
@@ -304,7 +285,6 @@ export default function AdminTabsPage() {
             debounceTime={250}
           />
         </TabsContent>
-
         <TabsContent value="checkins">
           <GenericDataContainer<Checkin>
             title="Check-ins"
@@ -323,7 +303,6 @@ export default function AdminTabsPage() {
             debounceTime={250}
           />
         </TabsContent>
-
         <TabsContent value="reimbursements">
           <GenericDataContainer<ExtendedTravelReimbursement>
             title="Reimbursements"
@@ -331,30 +310,27 @@ export default function AdminTabsPage() {
               const { reimbursements, totalReimbursements } =
                 await getReimbursements(page, pageSize, searchQuery);
 
+              // ✅ Ensure `creator` is included correctly
               const formattedReimbursements: ExtendedTravelReimbursement[] =
                 reimbursements.map((reimbursement) => ({
                   ...reimbursement,
-                  user: {
-                    ParticipantInfo: reimbursement.user?.ParticipantInfo
+                  creator: {
+                    id: reimbursement.creator.id,
+                    email: reimbursement.creator.email,
+                    ParticipantInfo: reimbursement.creator.ParticipantInfo
                       ? {
                           firstName:
-                            reimbursement.user.ParticipantInfo.firstName,
-                          lastName: reimbursement.user.ParticipantInfo.lastName,
+                            reimbursement.creator.ParticipantInfo.firstName,
+                          lastName:
+                            reimbursement.creator.ParticipantInfo.lastName,
                         }
                       : null,
-                    email: reimbursement.user?.email || "Unknown",
                   },
-                  reimbursementGroup: reimbursement.reimbursementGroup
-                    ? {
-                        members: reimbursement.reimbursementGroup.members.map(
-                          (member) => ({
-                            user: {
-                              email: member.user.email,
-                            },
-                          })
-                        ),
-                      }
-                    : null,
+                  invites: reimbursement.invites.map((invite) => ({
+                    user: {
+                      email: invite.user.email,
+                    },
+                  })),
                 }));
 
               return {
@@ -369,7 +345,7 @@ export default function AdminTabsPage() {
             debounceTime={250}
           />
         </TabsContent>
-
+        ; ; ;
         <TabsContent value="events">
           <div className="flex flex-col items-start space-y-2">
             <p className="text-sm text-muted-foreground">
@@ -380,7 +356,6 @@ export default function AdminTabsPage() {
             </Link>
           </div>
         </TabsContent>
-
         <TabsContent value="scanner">
           <div className="flex flex-col items-start space-y-2">
             <p className="text-sm text-muted-foreground">

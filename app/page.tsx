@@ -264,6 +264,12 @@ export default function HomePage() {
       tier: "Mega",
     },
     {
+      name: "Niantic 8th Wall",
+      logo: "/images/sponsors/niantic.svg",
+      website: "https://www.8thwall.com/niantic",
+      tier: "Kila",
+    },
+    {
       name: "Peak Performance IT",
       logo: "/images/sponsors/peakperformance.png",
       website: "https://www.peakperformanceit.com/",

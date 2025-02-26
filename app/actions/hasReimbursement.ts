@@ -5,93 +5,54 @@ import { authOptions } from "@/lib/authoptions";
 import type {
   User,
   TravelReimbursement,
-  ReimbursementGroup,
-  ReimbursementGroupMember,
-  ParticipantInfo, // <-- Import the ParticipantInfo type
+  ReimbursementInvite,
+  ParticipantInfo,
 } from "@prisma/client";
 
 /**
  * User object including necessary relations.
  */
 export type UserWithReimbursement = User & {
-  /**
-   * Because you include `ParticipantInfo: true` in your Prisma query,
-   * we must explicitly add it to this extended type.
-   */
   ParticipantInfo?: ParticipantInfo | null;
-
-  travelReimbursement?: TravelReimbursement & {
-    reimbursementGroup?: ReimbursementGroup & {
-      members: (ReimbursementGroupMember & {
-        user: {
-          id: string;
-          email: string;
-          /**
-           * Each user in the group can also have ParticipantInfo
-           */
-          ParticipantInfo?: { firstName: string; lastName: string } | null;
-        };
-      })[];
-    };
-  };
-  reimbursementGroupMemberships: (ReimbursementGroupMember & {
-    group: ReimbursementGroup & {
-      creator: { id: string; email: string };
-      members: (ReimbursementGroupMember & {
-        user: {
-          id: string;
-          email: string;
-          ParticipantInfo?: { firstName: string; lastName: string } | null;
-        };
-      })[];
-      reimbursement?: TravelReimbursement | null;
+  travelReimbursement?:
+    | (TravelReimbursement & {
+        creator?: { email: string } | null; // ✅ Ensure `creator` is included
+      })
+    | null;
+  reimbursementInvites: (ReimbursementInvite & {
+    reimbursement: {
+      id: string;
+      userId: string;
+      creator?: { email: string } | null;
     };
   })[];
+  createdReimbursement:
+    | (TravelReimbursement & {
+        invites: (ReimbursementInvite & {
+          user: {
+            email: string;
+            ParticipantInfo?: { firstName: string; lastName: string } | null;
+          };
+        })[];
+      })
+    | null;
 };
 
 /**
- * Checks if the user has ANY valid reimbursement:
- * - Solo (travelReimbursement directly on user)
- * - OR is in a group that has a reimbursement, and their membership is ACCEPTED.
+ * Checks if the user has a valid reimbursement:
+ * - Solo reimbursement (user.travelReimbursement)
+ * - OR has accepted an invite to a group reimbursement.
  */
 export async function userHasReimbursement(
-  user: UserWithReimbursement
+  user: UserWithReimbursement | null
 ): Promise<boolean> {
-  if (user.travelReimbursement) return true;
-
-  return user.reimbursementGroupMemberships.some(
-    (membership) =>
-      membership.status === "ACCEPTED" &&
-      membership.group?.reimbursement !== null
-  );
-}
-
-/**
- * Returns the reimbursement submission date if available:
- * - If solo, return the user's travelReimbursement date.
- * - If group, return the group's reimbursement date.
- * - Otherwise, return null.
- */
-export async function getReimbursementDate(
-  user: UserWithReimbursement
-): Promise<Date | null> {
-  if (user.travelReimbursement) {
-    return user.travelReimbursement.createdAt;
-  }
-
-  const acceptedMembershipWithReimb = user.reimbursementGroupMemberships.find(
-    (membership) =>
-      membership.status === "ACCEPTED" &&
-      membership.group?.reimbursement !== null
-  );
-
-  return acceptedMembershipWithReimb?.group.reimbursement?.createdAt ?? null;
+  return !!user?.travelReimbursement;
 }
 
 /**
  * Fetches the user and includes reimbursement details.
  */
-export async function getUserWithReimbursement(): Promise<UserWithReimbursement> {
+export async function getUserWithReimbursement(): Promise<UserWithReimbursement | null> {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
     throw new Error("User not authenticated");
@@ -100,20 +61,24 @@ export async function getUserWithReimbursement(): Promise<UserWithReimbursement>
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
     include: {
-      // Because we include ParticipantInfo, we must reflect that in our type
       ParticipantInfo: true,
       travelReimbursement: {
         include: {
-          reimbursementGroup: {
+          creator: {
+            select: { email: true }, // ✅ Fetch the creator's email
+          },
+        },
+      },
+      createdReimbursement: {
+        // Ensure we fetch the reimbursement the user created
+        include: {
+          invites: {
             include: {
-              members: {
-                include: {
-                  user: {
-                    select: {
-                      id: true,
-                      email: true,
-                      ParticipantInfo: true,
-                    },
+              user: {
+                select: {
+                  email: true,
+                  ParticipantInfo: {
+                    select: { firstName: true, lastName: true },
                   },
                 },
               },
@@ -121,25 +86,15 @@ export async function getUserWithReimbursement(): Promise<UserWithReimbursement>
           },
         },
       },
-      reimbursementGroupMemberships: {
+      reimbursementInvites: {
         include: {
-          group: {
-            include: {
+          reimbursement: {
+            select: {
+              id: true, // ✅ Ensure we fetch the reimbursement ID
+              userId: true, // ✅ Fetch the creator's user ID
               creator: {
-                select: { id: true, email: true },
+                select: { email: true }, // ✅ Fetch the creator's email
               },
-              members: {
-                include: {
-                  user: {
-                    select: {
-                      id: true,
-                      email: true,
-                      ParticipantInfo: true,
-                    },
-                  },
-                },
-              },
-              reimbursement: true,
             },
           },
         },
@@ -147,33 +102,43 @@ export async function getUserWithReimbursement(): Promise<UserWithReimbursement>
     },
   });
 
-  if (!user) {
-    throw new Error("User not found");
+  return user;
+}
+
+/**
+ * Fetch the reimbursement details for the logged-in user.
+ */
+export async function getReimbursementDetails(): Promise<TravelReimbursement | null> {
+  const user = await getUserWithReimbursement();
+  if (!user?.travelReimbursement) {
+    return null;
   }
 
-  // Cast `user` as our extended type
-  return user as UserWithReimbursement;
+  return user.travelReimbursement;
 }
 
 /**
  * Get the user's reimbursement summary.
- * Returns:
- * - Whether they have a reimbursement (`hasReimbursement`).
- * - The date it was submitted (`reimbursementDate`).
- * - Whether they are a leader (`isGroupLeader`) of a group.
- * - Any pending invitations (`pendingInvites`).
  */
 export async function getUserReimbursementStatus() {
   const user = await getUserWithReimbursement();
 
-  const hasReimbursement = userHasReimbursement(user);
-  const reimbursementDate = getReimbursementDate(user);
+  // ✅ Handle null user case before calling `userHasReimbursement`
+  if (!user) {
+    return {
+      user: null,
+      hasReimbursement: false,
+      reimbursementDate: null,
+      isGroupLeader: false,
+      pendingInvites: [],
+    };
+  }
 
-  const isGroupLeader =
-    user.travelReimbursement?.reimbursementGroup?.creatorId === user.id;
-
-  const pendingInvites = user.reimbursementGroupMemberships.filter(
-    (m) => m.status === "PENDING"
+  const hasReimbursement = await userHasReimbursement(user);
+  const reimbursementDate = user.travelReimbursement?.createdAt ?? null;
+  const isGroupLeader = user.travelReimbursement?.userId == user.id;
+  const pendingInvites = user.reimbursementInvites.filter(
+    (invite) => invite.status === "PENDING"
   );
 
   return {

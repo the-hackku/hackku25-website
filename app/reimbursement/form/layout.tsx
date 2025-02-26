@@ -3,32 +3,31 @@ import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/authoptions";
 import { prisma } from "@/prisma";
 
-export default async function ReimbursemenrLayout({
+export default async function ReimbursementLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const session = await getServerSession(authOptions);
 
-  // If the user is not authenticated, redirect to the signin page
-  if (!session) {
+  // 🚀 If the user is not authenticated, redirect to the signin page
+  if (!session?.user?.email) {
     redirect("/signin");
   }
 
-  // Fetch user details from the database to check if they are already registered
   const user = await prisma.user.findUnique({
-    where: { email: session.user?.email ?? undefined },
+    where: { email: session.user.email },
     include: { travelReimbursement: true, ParticipantInfo: true },
   });
 
-  const reimbursement = user?.travelReimbursement;
-  const participantInfo = user?.ParticipantInfo;
-  const reimbursementDate = reimbursement ? reimbursement.createdAt : null;
-
-  if (reimbursementDate || !participantInfo) {
+  if (!user?.ParticipantInfo) {
     redirect("/profile");
   }
 
-  // If not registered, show the registration form
+  if (user.travelReimbursement) {
+    redirect("/reimbursement/edit"); // Redirect to edit page instead of profile
+  }
+
+  // 🚀 If they haven't applied yet, show the reimbursement form
   return <div className="mb-10">{children}</div>;
 }

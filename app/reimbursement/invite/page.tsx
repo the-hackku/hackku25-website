@@ -1,4 +1,3 @@
-// app/reimbursement/invite/page.tsx
 "use client";
 
 import { useEffect, useState, useTransition } from "react";
@@ -10,75 +9,111 @@ import Link from "next/link";
 import { IconLoader, IconCheck, IconX } from "@tabler/icons-react";
 
 /**
- * The shape of each pending invite membership
- * (You can skip a dedicated type if you prefer `any` or do a broader approach.)
+ * ✅ Corrected Invite Type - Matches Server Response
  */
 interface InviteMembership {
   id: string;
-  reimbursementGroupId: string;
-  group: {
+  reimbursementId: string;
+  reimbursement: {
     id: string;
-    creator: {
+    creator?: {
       email: string;
-    };
+    } | null;
   };
-  status: string; // Add this line
+  status: "PENDING" | "ACCEPTED" | "DECLINED";
 }
 
 export default function InviteListPage() {
   const router = useRouter();
-  const [memberships, setMemberships] = useState<InviteMembership[] | null>(
-    null
-  );
+  const [invites, setInvites] = useState<InviteMembership[]>([]);
   const [loading, setLoading] = useState(true);
-  const [isPending, startTransition] = useTransition(); // for button loading state
+  const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
-  // On mount, fetch user data & filter for pending invites
+  /**
+   * ✅ Fetch Pending Group Invites
+   */
   useEffect(() => {
     (async () => {
       try {
-        const user = await getUserWithReimbursement(); // server action or other approach
-        // Filter the user's memberships to those with status="PENDING"
-        const pending =
-          user.reimbursementGroupMemberships?.filter(
-            (m: InviteMembership) => m.status === "PENDING"
-          ) ?? [];
-        setMemberships(pending);
-      } catch (err: unknown) {
+        const user = await getUserWithReimbursement();
+        if (!user) {
+          setError("User data could not be loaded.");
+          setLoading(false);
+          return;
+        }
+
+        // ✅ Map reimbursement invites to correct structure
+        const pendingInvites: InviteMembership[] =
+          user.reimbursementInvites
+            ?.filter((invite) => invite.status === "PENDING")
+            .map((invite) => ({
+              id: invite.id,
+              reimbursementId: invite.reimbursement.id,
+              reimbursement: {
+                id: invite.reimbursement.id,
+                creator: invite.reimbursement.creator
+                  ? { email: invite.reimbursement.creator.email }
+                  : { email: "Unknown" }, // Handle missing creator safely
+              },
+              status: invite.status,
+            })) || [];
+
+        setInvites(pendingInvites);
+      } catch (err) {
         console.error("Error fetching invites:", err);
-        setError("Failed to fetch invites");
+        setError("Failed to fetch invites.");
       } finally {
         setLoading(false);
       }
     })();
   }, []);
 
-  // Accept/Decline logic
-  async function handleInviteResponse(groupId: string, accept: boolean) {
+  /**
+   * ✅ Accept/Decline Group Invite
+   */
+  async function handleInviteResponse(
+    reimbursementId: string,
+    accept: boolean
+  ) {
     setError(null);
     startTransition(async () => {
       try {
-        await handleGroupInvite(groupId, accept);
-        // Refresh data or redirect
+        await handleGroupInvite(reimbursementId, accept);
+
+        // ✅ Refresh user data to update pending invites
         const updatedUser = await getUserWithReimbursement();
-        const pending =
-          updatedUser.reimbursementGroupMemberships?.filter(
-            (m: InviteMembership) => m.status === "PENDING"
-          ) ?? [];
-        setMemberships(pending);
+        if (!updatedUser) {
+          setError("Failed to reload user data.");
+          return;
+        }
+
+        const updatedInvites: InviteMembership[] =
+          updatedUser.reimbursementInvites
+            ?.filter((invite) => invite.status === "PENDING")
+            .map((invite) => ({
+              id: invite.id,
+              reimbursementId: invite.reimbursement.id,
+              reimbursement: {
+                id: invite.reimbursement.id,
+                creator: invite.reimbursement.creator
+                  ? { email: invite.reimbursement.creator.email }
+                  : { email: "Unknown" }, // Handle missing creator safely
+              },
+              status: invite.status,
+            })) || [];
+
+        setInvites(updatedInvites);
         router.push("/profile");
-      } catch (err: unknown) {
+      } catch (err) {
         console.error("Failed to handle invite:", err);
-        setError("Failed to process invite");
+        setError("Failed to process invite.");
       }
     });
   }
 
-  if (loading) {
-    return <div className="p-4 text-center">Loading invites...</div>;
-  }
-  if (error) {
+  if (loading) return <div className="p-4 text-center">Loading invites...</div>;
+  if (error)
     return (
       <div className="p-4 text-center text-red-500">
         Error: {error}
@@ -87,25 +122,28 @@ export default function InviteListPage() {
         </Link>
       </div>
     );
-  }
 
   return (
     <div className="max-w-lg mx-auto p-4">
       <Card>
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
-            <span>Reimbursement Group Invites</span>
+            Reimbursement Group Invites
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {memberships && memberships.length > 0 ? (
-            memberships.map((invite) => (
+          {invites.length > 0 ? (
+            invites.map((invite) => (
               <div key={invite.id} className="border p-3 rounded mb-4">
-                <p>Leader: {invite.group.creator.email}</p>
+                <p>
+                  Leader: {invite.reimbursement.creator?.email || "Unknown"}
+                </p>
                 <div className="flex gap-3 mt-2">
                   <button
                     disabled={isPending}
-                    onClick={() => handleInviteResponse(invite.group.id, true)}
+                    onClick={() =>
+                      handleInviteResponse(invite.reimbursement.id, true)
+                    }
                     className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 flex items-center gap-2"
                   >
                     {isPending ? (
@@ -117,7 +155,9 @@ export default function InviteListPage() {
                   </button>
                   <button
                     disabled={isPending}
-                    onClick={() => handleInviteResponse(invite.group.id, false)}
+                    onClick={() =>
+                      handleInviteResponse(invite.reimbursement.id, false)
+                    }
                     className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 flex items-center gap-2"
                   >
                     {isPending ? (
