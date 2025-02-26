@@ -9,23 +9,26 @@ datasource db {
 }
 
 model User {
-  id                  String               @id @default(cuid())
-  name                String?
-  email               String               @unique
-  role                ROLE                 @default(HACKER)
-  emailVerified       DateTime?
-  image               String?
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  accounts            Account[]
-  Authenticator       Authenticator[]
-  checkinsAsAdmin     Checkin[]            @relation("AdminCheckin")
-  checkinsAsUser      Checkin[]            @relation("UserCheckedIn")
-  ParticipantInfo     ParticipantInfo?
-  scansAsAdmin        Scan[]               @relation("AdminScanner")
-  scansAsUser         Scan[]               @relation("UserScanned")
-  sessions            Session[]
-  TravelReimbursement TravelReimbursement?
+  id                   String               @id @default(cuid())
+  name                 String?
+  email                String               @unique
+  role                 ROLE                 @default(HACKER)
+  emailVerified        DateTime?
+  image                String?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  travelReimbursementId String? @unique
+  travelReimbursement   TravelReimbursement?
+  accounts             Account[]
+  Authenticator        Authenticator[]
+  checkinsAsAdmin      Checkin[]            @relation("AdminCheckin")
+  checkinsAsUser       Checkin[]            @relation("UserCheckedIn")
+  ParticipantInfo      ParticipantInfo?
+  scansAsAdmin         Scan[]               @relation("AdminScanner")
+  scansAsUser          Scan[]               @relation("UserScanned")
+  sessions             Session[]
+  reimbursementGroupMemberships ReimbursementGroupMember[]
+  createdReimbursementGroups ReimbursementGroup[] @relation("CreatorReimbursementGroup")
 }
 
 model Account {
@@ -154,16 +157,40 @@ model ParticipantInfo {
 
 model TravelReimbursement {
   id                   String   @id @default(cuid())
-  userId               String   @unique
+  userId               String?  @unique
+  user                 User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reimbursementGroupId String?  @unique  // Only the group leader submits this
+  reimbursementGroup   ReimbursementGroup? @relation(fields: [reimbursementGroupId], references: [id], onDelete: Cascade)
   transportationMethod String
   address              String
+  reason               String
   distance             Float
   estimatedCost        Float
-  reason               String
   createdAt            DateTime @default(now())
   updatedAt            DateTime @updatedAt
-  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model ReimbursementGroup {
+  id        String   @id @default(cuid())
+  creatorId String  
+  createdAt DateTime @default(now())
+  creator User @relation("CreatorReimbursementGroup", fields: [creatorId], references: [id], onDelete: Cascade)
+  members ReimbursementGroupMember[]
+  reimbursement TravelReimbursement?
+}
+
+model ReimbursementGroupMember {
+  id                   String  @id @default(cuid())
+  userId               String  
+  reimbursementGroupId String  
+  status               ReimbursementGroupStatus @default(PENDING) // User's status in the group
+  joinedAt             DateTime @default(now())
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group ReimbursementGroup @relation(fields: [reimbursementGroupId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, reimbursementGroupId]) // Ensures a user is in only one group
+}
+
 
 enum EventType {
   FOOD
@@ -177,4 +204,10 @@ enum ROLE {
   HACKER
   ADMIN
   VOLUNTEER
+}
+
+enum ReimbursementGroupStatus {
+  PENDING 
+  ACCEPTED 
+  DECLINED 
 }

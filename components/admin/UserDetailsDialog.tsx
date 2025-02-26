@@ -76,11 +76,11 @@ export function UserDetailsDialog({
               ...checkin,
               createdAt: new Date(checkin.createdAt).toISOString(),
             })),
-            TravelReimbursement: user.TravelReimbursement
+            TravelReimbursement: user.travelReimbursement
               ? {
-                  ...user.TravelReimbursement,
+                  ...user.travelReimbursement,
                   createdAt: new Date(
-                    user.TravelReimbursement.createdAt
+                    user.travelReimbursement.createdAt
                   ).toISOString(),
                 }
               : null,

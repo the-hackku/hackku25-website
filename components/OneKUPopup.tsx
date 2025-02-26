@@ -17,15 +17,8 @@ const OneKUPopup = () => {
   useEffect(() => {
     const hasSeenPopup = localStorage.getItem("oneku_popup_seen");
 
-    // Get the current date
-    const currentDate = new Date();
-    const targetDate = new Date("2025-02-20T00:00:00");
-
     // Show popup only if it's Feb 20, 2025, and the user hasn't seen it yet
-    if (
-      !hasSeenPopup &&
-      currentDate.toDateString() === targetDate.toDateString()
-    ) {
+    if (!hasSeenPopup) {
       setOpen(true);
       localStorage.setItem("oneku_popup_seen", "true");
     }
@@ -42,7 +35,7 @@ const OneKUPopup = () => {
           </DialogDescription>
         </DialogHeader>
         <Link
-          href="https://onedayoneku.org/pages/odoku-student-orgs?referral_id=679d2285a2281757f2670b19"
+          href="https://onedayoneku.org/campaign_search?search=hackku&?referral_id=679d2285a2281757f2670b19"
           target="_blank"
         >
           <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white">

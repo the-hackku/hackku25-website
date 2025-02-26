@@ -17,6 +17,7 @@ import {
   IconScan,
   IconUserFilled,
   IconBolt,
+  IconStar,
 } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -26,7 +27,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useSession } from "next-auth/react";
-import OneKUPopup from "./OneKUPopup";
 
 const Header = ({ isAdmin }: { isAdmin: boolean }) => {
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
@@ -122,7 +122,6 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
     `}
     >
       <div className="container mx-auto max-w-7xl">
-        <OneKUPopup />
         <div className="flex items-center justify-between">
           {/* Left Section */}
           <AnimatePresence>
@@ -200,14 +199,24 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                       </SheetClose>
                     </Link>
                     {isAdmin && (
-                      <Link href="/admin/scanner" passHref>
-                        <SheetClose asChild>
-                          <span className="flex items-center text-xl">
-                            <IconScan size={24} className="mr-2" />
-                            Scan Hackers
-                          </span>
-                        </SheetClose>
-                      </Link>
+                      <>
+                        <Link href="/admin" passHref>
+                          <SheetClose asChild>
+                            <span className="flex items-center text-xl">
+                              <IconStar size={24} className="mr-2" />
+                              Admin Panel
+                            </span>
+                          </SheetClose>
+                        </Link>
+                        <Link href="/admin/scanner" passHref>
+                          <SheetClose asChild>
+                            <span className="flex items-center text-xl">
+                              <IconScan size={24} className="mr-2" />
+                              Scan Hackers
+                            </span>
+                          </SheetClose>
+                        </Link>
+                      </>
                     )}
                   </nav>
                 </SheetContent>

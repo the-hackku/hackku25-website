@@ -18,13 +18,14 @@ export default async function ReimbursemenrLayout({
   // Fetch user details from the database to check if they are already registered
   const user = await prisma.user.findUnique({
     where: { email: session.user?.email ?? undefined },
-    include: { TravelReimbursement: true },
+    include: { travelReimbursement: true, ParticipantInfo: true },
   });
 
-  const reimbursement = user?.TravelReimbursement;
+  const reimbursement = user?.travelReimbursement;
+  const participantInfo = user?.ParticipantInfo;
   const reimbursementDate = reimbursement ? reimbursement.createdAt : null;
 
-  if (reimbursementDate) {
+  if (reimbursementDate || !participantInfo) {
     redirect("/profile");
   }
 

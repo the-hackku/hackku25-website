@@ -197,7 +197,7 @@ export default function HomePage() {
     {
       question: "Who can participate?",
       answer:
-        "Students and recent graduates are welcome to participate. No prior experience is necessary! All High school students will require a chaperone.",
+        "Current students are welcome to participate. No prior experience is necessary! All High school students will require a chaperone.",
     },
     {
       question: "Is there a cost to attend?",
@@ -227,15 +227,15 @@ export default function HomePage() {
   const sponsorTiers = ["Tera", "Giga", "Mega", "Kila"];
   const sponsors = [
     {
-      name: "Security Benefit",
-      logo: "/images/sponsors/security.png",
-      website: "https://www.securitybenefit.com",
-      tier: "Tera",
-    },
-    {
       name: "Everly",
       logo: "/images/sponsors/everly.png",
       website: "https://www.everlylife.com/",
+      tier: "Tera",
+    },
+    {
+      name: "Security Benefit",
+      logo: "/images/sponsors/security.png",
+      website: "https://www.securitybenefit.com",
       tier: "Tera",
     },
     {
@@ -250,19 +250,13 @@ export default function HomePage() {
       website: "https://ripple.com/",
       tier: "Giga",
     },
-    {
-      name: "Tradebot",
-      logo: "/images/sponsors/tradebot.webp",
-      website: "https://www.tradebot.com",
-      tier: "Kila",
-    },
-    {
-      name: "Peak Performance IT",
-      logo: "/images/sponsors/peakperformance.png",
-      website: "https://www.peakperformanceit.com/",
-      tier: "Kila",
-    },
 
+    {
+      name: "Garmin",
+      logo: "/images/sponsors/garmin.svg",
+      website: "https://www.garmin.com/en-US/",
+      tier: "Mega",
+    },
     {
       name: "Patient Safety",
       logo: "/images/sponsors/patient.png",
@@ -270,9 +264,21 @@ export default function HomePage() {
       tier: "Mega",
     },
     {
+      name: "Peak Performance IT",
+      logo: "/images/sponsors/peakperformance.png",
+      website: "https://www.peakperformanceit.com/",
+      tier: "Kila",
+    },
+    {
       name: "Pinnacle Technology",
       logo: "/images/sponsors/pinnacle.png",
       website: "https://pinnaclet.com/",
+      tier: "Kila",
+    },
+    {
+      name: "Tradebot",
+      logo: "/images/sponsors/tradebot.webp",
+      website: "https://www.tradebot.com",
       tier: "Kila",
     },
   ];

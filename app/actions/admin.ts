@@ -470,7 +470,7 @@ export async function getUserById(userId: string) {
           },
           orderBy: { createdAt: "desc" },
         },
-        TravelReimbursement: true, // Include reimbursements
+        travelReimbursement: true, // Include reimbursements
       },
     });
 
@@ -534,6 +534,17 @@ export async function getReimbursements(
       user: {
         include: {
           ParticipantInfo: true,
+        },
+      },
+      reimbursementGroup: {
+        include: {
+          members: {
+            include: {
+              user: {
+                select: { email: true },
+              },
+            },
+          },
         },
       },
     },

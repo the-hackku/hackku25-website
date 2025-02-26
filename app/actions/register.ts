@@ -6,7 +6,6 @@ import { authOptions } from "@/lib/authoptions";
 import { revalidatePath } from "next/cache";
 import {
   exportRegistrationToGoogleSheet,
-  exportReimbursementToGoogleSheet,
   UserWithParticipantInfo,
 } from "@/scripts/googleSheetsExport";
 import { RegistrationData } from "@/app/actions/schemas";
@@ -75,53 +74,4 @@ export async function registerUser(data: RegistrationData, resumeUrl?: string) {
   revalidatePath("/profile");
 
   return { success: true };
-}
-
-export async function submitTravelReimbursement({
-  transportationMethod,
-  address,
-  distance,
-  estimatedCost,
-  reason,
-}: {
-  transportationMethod: string;
-  address: string;
-  distance: number;
-  estimatedCost: number;
-  reason: string;
-}) {
-  // Authenticate the user.
-  const session = await getServerSession(authOptions);
-  if (!session?.user?.email) {
-    throw new Error("User not authenticated");
-  }
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
-
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  // Save the reimbursement request.
-  const reimbursement = await prisma.travelReimbursement.create({
-    data: {
-      userId: user.id,
-      transportationMethod,
-      address,
-      distance,
-      estimatedCost,
-      reason,
-    },
-  });
-
-  // Export to Google Sheets
-  try {
-    await exportReimbursementToGoogleSheet(user.email, reimbursement);
-  } catch (error) {
-    console.error("Error exporting reimbursement to Google Sheet:", error);
-  }
-
-  return { success: true, reimbursement };
 }

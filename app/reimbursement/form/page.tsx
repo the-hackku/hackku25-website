@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import Script from "next/script";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,38 +16,68 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { submitTravelReimbursement } from "@/app/actions/register";
 import { toast } from "sonner";
 import { IconLoader } from "@tabler/icons-react";
 import Link from "next/link";
+import { debounce } from "lodash";
+
+// Import the server actions
+import {
+  submitTravelReimbursement,
+  searchUsersByEmail,
+} from "@/app/actions/reimbursement";
 
 // Schema validation
-const reimbursementSchema = z.object({
-  transportationMethod: z.enum([
-    "Car",
-    "Bus",
-    "Train",
-    "Airplane",
-    "Rideshare",
-    "Other",
-  ]),
-  address: z.string().min(5, { message: "Address is required." }),
-  distance: z.preprocess(
-    (val) => (val === "" ? undefined : Number(val)),
-    z
-      .number({ required_error: "Distance is required." })
-      .positive({ message: "Distance must be positive." })
-  ),
-  estimatedCost: z.preprocess(
-    (val) => (val === "" ? undefined : Number(val)),
-    z
-      .number({ required_error: "Estimated cost is required." })
-      .nonnegative({ message: "Estimated cost must be non-negative." })
-  ),
-  reason: z.string().min(10, {
-    message: "Reason must be at least 10 characters.",
-  }),
-});
+const reimbursementSchema = z
+  .object({
+    isGroup: z.boolean().default(false),
+    transportationMethod: z.enum([
+      "Car",
+      "Bus",
+      "Train",
+      "Airplane",
+      "Rideshare",
+      "Other",
+    ]),
+    address: z.string().min(5, { message: "Address is required." }),
+    distance: z.preprocess(
+      (val) => (val === "" ? undefined : Number(val)),
+      z
+        .number({ required_error: "Distance is required." })
+        .positive({ message: "Distance must be positive." })
+    ),
+    estimatedCost: z.preprocess(
+      (val) => (val === "" ? undefined : Number(val)),
+      z
+        .number({ required_error: "Estimated cost is required." })
+        .nonnegative({ message: "Estimated cost must be non-negative." })
+    ),
+    reason: z.string().min(10, {
+      message: "Reason must be at least 10 characters.",
+    }),
+    groupMembers: z
+      .array(
+        z.object({
+          id: z.string(),
+          email: z.string().email(),
+          name: z.string(),
+        })
+      )
+      .default([]),
+  })
+  .refine(
+    (data) => {
+      // If applying as a group, at least one other person must be in the group
+      if (data.isGroup && data.groupMembers.length < 1) {
+        return false;
+      }
+      return true;
+    },
+    {
+      message:
+        "If applying as a group, you must add at least one group member.",
+    }
+  );
 
 declare global {
   interface Window {
@@ -62,9 +92,27 @@ export default function ReimbursementForm() {
   const addressInputRef = useRef<HTMLInputElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Toggle for group or individual
+  const [isGroup, setIsGroup] = useState(false);
+
+  // List of group members (for group leaders)
+  const [groupMembers, setGroupMembers] = useState<
+    { id: string; email: string; name: string }[]
+  >([]);
+
+  // Search state
+  const [searchResults, setSearchResults] = useState<
+    { id: string; email: string; name: string }[]
+  >([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  // New flag to indicate a search has been performed
+  const [hasSearched, setHasSearched] = useState(false);
+
   const form = useForm<ReimbursementFormData>({
     resolver: zodResolver(reimbursementSchema),
     defaultValues: {
+      isGroup: false,
       transportationMethod: "Car",
       address: "",
       distance: undefined,
@@ -73,11 +121,54 @@ export default function ReimbursementForm() {
     },
   });
 
+  // Utility to remove leading zeros from cost/distance
   const removeLeadingZeros = (value: string) => {
     return value.replace(/^0+(?=\d)/, "");
   };
 
-  // Initialize autocomplete when script finishes loading
+  // Memoized debounced search function using useMemo
+  const debouncedSearch = useMemo(
+    () =>
+      debounce(async (query: string) => {
+        if (query.length < 3) {
+          setSearchResults([]);
+          setHasSearched(false);
+          return;
+        }
+        try {
+          setIsSearching(true);
+          const users = await searchUsersByEmail(query);
+          setSearchResults(users);
+          setHasSearched(true);
+        } catch (error) {
+          console.error("Search failed:", error);
+        } finally {
+          setIsSearching(false);
+        }
+      }, 300),
+    []
+  );
+
+  // Add group member
+  const handleAddMember = (user: {
+    id: string;
+    email: string;
+    name: string;
+  }) => {
+    // Prevent duplicates
+    if (groupMembers.some((m) => m.id === user.id)) return;
+    // Limit to 10 members
+    if (groupMembers.length >= 10) {
+      toast.error("A group can have a maximum of 10 members.");
+      return;
+    }
+    setGroupMembers([...groupMembers, user]);
+    setSearchQuery("");
+    setSearchResults([]);
+    setHasSearched(false);
+  };
+
+  // Initialize autocomplete for address
   const handleScriptLoad = () => {
     if (addressInputRef.current && window.google) {
       const autocomplete = new window.google.maps.places.Autocomplete(
@@ -95,10 +186,13 @@ export default function ReimbursementForm() {
     }
   };
 
+  // Form submission
+  // Form submission
   const onSubmit = async (data: ReimbursementFormData) => {
-    try {
-      setIsSubmitting(true);
+    setIsSubmitting(true);
 
+    try {
+      // Use toast.promise to track submission
       await toast.promise(
         submitTravelReimbursement({
           transportationMethod: data.transportationMethod,
@@ -106,6 +200,8 @@ export default function ReimbursementForm() {
           distance: data.distance,
           estimatedCost: data.estimatedCost,
           reason: data.reason,
+          isGroup,
+          groupMemberEmails: groupMembers.map((m) => m.email),
         }),
         {
           loading: "Submitting reimbursement request...",
@@ -113,18 +209,18 @@ export default function ReimbursementForm() {
           error: "Failed to submit reimbursement request.",
         }
       );
-
-      router.refresh();
     } catch (error) {
       console.error("Submission failed:", error);
+      toast.error("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
+      router.push("/profile");
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white my-6 rounded-lg md:shadow-sm  md:border">
-      {/* Load the Google Maps script and initialize autocomplete in onLoad */}
+    <div className="max-w-3xl mx-auto p-6 bg-white my-6 rounded-lg md:shadow-sm md:border">
+      {/* Google Maps Autocomplete for address */}
       <Script
         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_API_KEY}&libraries=places`}
         strategy="lazyOnload"
@@ -138,7 +234,7 @@ export default function ReimbursementForm() {
       <div className="text-sm">
         <p className="py-2">
           Application Deadline:{" "}
-          <span className="bg-yellow-300">March 15, 2025, at 11:59 PM CST</span>
+          <span className="bg-yellow-200">March 15, 2025, at 11:59 PM CST</span>
           . View more details{" "}
           <Link href="/reimbursement" className="underline">
             here
@@ -147,8 +243,110 @@ export default function ReimbursementForm() {
         </p>
       </div>
       <hr className="my-4" />
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          {/* Toggle for Individual vs. Group */}
+          <div className="flex gap-2 items-center justify-start mb-4">
+            <label className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                checked={isGroup}
+                onChange={() => setIsGroup(!isGroup)}
+              />
+              <span>I am applying on behalf of a group</span>
+            </label>
+          </div>
+
+          {/* Group Members Section */}
+          {isGroup && (
+            <>
+              <div className="space-y-2 mb-4">
+                <p className="bg-yellow-200">
+                  You are now applying on behalf of a group. Please add group
+                  members below. They must accept the invitation to join the
+                  group via email or profile. All dollar amounts should be the
+                  total for the group.
+                </p>
+                <FormLabel>Add Group Members (up to 10)</FormLabel>
+                <Input
+                  placeholder="Search by email..."
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    debouncedSearch(e.target.value);
+                  }}
+                />
+
+                {/* Loading indicator */}
+                {isSearching && (
+                  <div className="flex items-center gap-2 text-sm text-gray-500 mt-2">
+                    <IconLoader className="animate-spin" size={16} />
+                    Searching...
+                  </div>
+                )}
+
+                {/* Show "no user found" message only if a search has been performed */}
+                {!isSearching &&
+                  hasSearched &&
+                  searchResults.length === 0 &&
+                  searchQuery.length >= 3 && (
+                    <div className="mt-2 text-sm text-red-500">
+                      No user found. Are you sure they registered?
+                    </div>
+                  )}
+
+                {/* Show results if found */}
+                {searchResults.length > 0 && (
+                  <div className="border bg-gray-50 rounded p-2 mt-2">
+                    {searchResults.map((user) => (
+                      <div
+                        key={user.id}
+                        className="flex justify-between items-center py-1"
+                      >
+                        <span>
+                          {user.name} ({user.email})
+                        </span>
+                        <Button size="sm" onClick={() => handleAddMember(user)}>
+                          Add
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {groupMembers.length > 0 && (
+                  <div className="mt-2">
+                    <h4 className="font-semibold">Selected Members:</h4>
+                    {groupMembers.map((member) => (
+                      <div
+                        key={member.id}
+                        className="flex items-center justify-between sm:justify-start py-1"
+                      >
+                        <span>
+                          {member.name} ({member.email})
+                        </span>
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={() =>
+                            setGroupMembers(
+                              groupMembers.filter((m) => m.id !== member.id)
+                            )
+                          }
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+              <hr className="my-8" />
+            </>
+          )}
+
+          {/* Transportation Method */}
           <FormField
             control={form.control}
             name="transportationMethod"
@@ -173,6 +371,7 @@ export default function ReimbursementForm() {
             )}
           />
 
+          {/* Address */}
           <FormField
             control={form.control}
             name="address"
@@ -192,6 +391,7 @@ export default function ReimbursementForm() {
             )}
           />
 
+          {/* Distance */}
           <FormField
             control={form.control}
             name="distance"
@@ -229,6 +429,7 @@ export default function ReimbursementForm() {
             )}
           />
 
+          {/* Estimated Cost */}
           <FormField
             control={form.control}
             name="estimatedCost"
@@ -252,6 +453,7 @@ export default function ReimbursementForm() {
             )}
           />
 
+          {/* Reason */}
           <FormField
             control={form.control}
             name="reason"
@@ -274,6 +476,7 @@ export default function ReimbursementForm() {
             )}
           />
 
+          {/* Submit Button */}
           <Button
             type="submit"
             className="w-full"

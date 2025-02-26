@@ -23,6 +23,7 @@ import { IconArrowUpRight } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
 import AnalyticsChart from "@/components/admin/charts/AnalyticsChart";
 import CombinedDashboard from "@/components/admin/charts/combinedDashboard";
+import { exportEmails, exportParticipantEmails } from "@/scripts/emailExporter";
 
 // Extend the User type to include relations or additional fields
 interface ExtendedUser extends User {
@@ -42,7 +43,15 @@ interface ExtendedTravelReimbursement extends TravelReimbursement {
       firstName: string;
       lastName: string;
     } | null;
+    email: string;
   };
+  reimbursementGroup?: {
+    members: {
+      user: {
+        email: string;
+      };
+    }[];
+  } | null;
 }
 
 interface Checkin {
@@ -65,6 +74,28 @@ interface Checkin {
 
 const handleBackup = async () => {
   backupRegistrationScript();
+};
+
+const downloadFile = (fileName: string, content: string) => {
+  const blob = new Blob([content], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+};
+
+const handleDownloadUserEmails = async () => {
+  const emails = await exportEmails();
+  downloadFile("all_emails.txt", emails);
+};
+
+const handleDownloadRegistrantEmails = async () => {
+  const emails = await exportParticipantEmails();
+  downloadFile("participant_emails.txt", emails);
 };
 
 export default function AdminTabsPage() {
@@ -119,9 +150,26 @@ export default function AdminTabsPage() {
   const reimbursementColumns: ColumnDef<ExtendedTravelReimbursement>[] = [
     {
       id: "user",
-      header: "User",
+      header: "User(s)",
       cell: ({ row }) => {
         const reimbursement = row.original;
+
+        // If it's a group reimbursement, fetch all group members
+        if (reimbursement.reimbursementGroup) {
+          const emails = reimbursement.reimbursementGroup.members
+            .map((member) => member.user.email)
+            .join(", ");
+          return (
+            <button
+              onClick={() => setSelectedUserId(reimbursement.userId)}
+              className="hover:underline text-left"
+            >
+              {emails}
+            </button>
+          );
+        }
+
+        // If it's an individual reimbursement
         const participantInfo = reimbursement.user?.ParticipantInfo;
         const userName = participantInfo
           ? `${participantInfo.firstName} ${participantInfo.lastName}`
@@ -230,9 +278,11 @@ export default function AdminTabsPage() {
           <TabsTrigger value="analytics">Analytics</TabsTrigger>
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="checkins">Check-ins</TabsTrigger>
+        </TabsList>
+        <TabsList className="mb-4">
           <TabsTrigger value="reimbursements">Reimbursements</TabsTrigger>
           <TabsTrigger value="events">Events</TabsTrigger>
-          <TabsTrigger value="redbutton">Admin Actions</TabsTrigger>
+          <TabsTrigger value="actions">Admin Actions</TabsTrigger>
         </TabsList>
 
         <TabsContent value="users">
@@ -280,7 +330,37 @@ export default function AdminTabsPage() {
             fetchFunction={async (page, pageSize, searchQuery) => {
               const { reimbursements, totalReimbursements } =
                 await getReimbursements(page, pageSize, searchQuery);
-              return { data: reimbursements, total: totalReimbursements };
+
+              const formattedReimbursements: ExtendedTravelReimbursement[] =
+                reimbursements.map((reimbursement) => ({
+                  ...reimbursement,
+                  user: {
+                    ParticipantInfo: reimbursement.user?.ParticipantInfo
+                      ? {
+                          firstName:
+                            reimbursement.user.ParticipantInfo.firstName,
+                          lastName: reimbursement.user.ParticipantInfo.lastName,
+                        }
+                      : null,
+                    email: reimbursement.user?.email || "Unknown",
+                  },
+                  reimbursementGroup: reimbursement.reimbursementGroup
+                    ? {
+                        members: reimbursement.reimbursementGroup.members.map(
+                          (member) => ({
+                            user: {
+                              email: member.user.email,
+                            },
+                          })
+                        ),
+                      }
+                    : null,
+                }));
+
+              return {
+                data: formattedReimbursements,
+                total: totalReimbursements,
+              };
             }}
             updateFunction={async (editedData) => {
               await batchUpdateReimbursements(editedData);
@@ -311,10 +391,16 @@ export default function AdminTabsPage() {
             </Link>
           </div>
         </TabsContent>
-        <TabsContent value="redbutton">
-          <div className="flex flex-row items-start space-y-2">
+        <TabsContent value="actions">
+          <div className="flex flex-col items-start space-y-2">
             <Button onClick={handleBackup}>
               Batch Backup Registration Data
+            </Button>
+            <Button onClick={handleDownloadUserEmails}>
+              Download User Emails
+            </Button>
+            <Button onClick={handleDownloadRegistrantEmails}>
+              Download Registrant Emails
             </Button>
           </div>
         </TabsContent>

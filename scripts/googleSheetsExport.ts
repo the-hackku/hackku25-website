@@ -91,23 +91,60 @@ export async function exportRegistrationToGoogleSheet(
   }
 }
 
-export async function exportReimbursementToGoogleSheet(
-  email: string,
-  reimbursement: {
-    transportationMethod: string;
-    address: string;
-    distance: number;
-    estimatedCost: number;
-    reason: string;
-    createdAt: Date;
-  }
-) {
+export async function exportReimbursementToGoogleSheet(reimbursement: {
+  transportationMethod: string;
+  address: string;
+  distance: number;
+  estimatedCost: number;
+  reason: string;
+  createdAt: Date;
+  userId?: string | null;
+  reimbursementGroupId?: string | null;
+  fullGroup?: { members: { user: { email: string } }[] } | null;
+}) {
   try {
     const sheetsApi = google.sheets({ version: "v4", auth });
 
+    let emails = "N/A"; // Default in case there's an issue
+
+    if (reimbursement.fullGroup) {
+      // If we have the full group, use it directly
+      emails = reimbursement.fullGroup.members
+        .map((member) => member.user.email)
+        .join(", ");
+    } else if (reimbursement.reimbursementGroupId) {
+      // Fetch group members if not already provided
+      const group = await prisma.reimbursementGroup.findUnique({
+        where: { id: reimbursement.reimbursementGroupId },
+        include: {
+          members: {
+            include: {
+              user: {
+                select: { email: true },
+              },
+            },
+          },
+        },
+      });
+
+      if (group && group.members.length > 0) {
+        emails = group.members.map((member) => member.user.email).join(", ");
+      }
+    } else if (reimbursement.userId) {
+      // Solo reimbursement, fetch user's email
+      const user = await prisma.user.findUnique({
+        where: { id: reimbursement.userId },
+        select: { email: true },
+      });
+
+      if (user) {
+        emails = user.email;
+      }
+    }
+
     // Transform data into a format suitable for Google Sheets
     const reimbursementData = [
-      email ?? "N/A",
+      emails, // Comma-separated emails if group, solo email otherwise
       reimbursement.transportationMethod ?? "N/A",
       reimbursement.address ?? "N/A",
       reimbursement.distance !== undefined
@@ -131,9 +168,9 @@ export async function exportReimbursementToGoogleSheet(
       },
     });
 
-    console.log("Reimbursement successfully added to Google Sheet!");
+    console.log("✅ Reimbursement successfully added to Google Sheet!");
   } catch (error) {
-    console.error("Error exporting reimbursement data:", error);
+    console.error("❌ Error exporting reimbursement data:", error);
   }
 }
 
