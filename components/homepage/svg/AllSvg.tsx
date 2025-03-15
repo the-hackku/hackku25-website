@@ -28,19 +28,14 @@ const AllSvg: React.FC<SvgProps> = () => {
   }, []);
 
   if (!viewBox) {
-    return (
-      <div className="w-full h-full flex items-center justify-center">
-        {" "}
-        Loading...{" "}
-      </div>
-    );
+    return <div className="w-full h-full" />;
   }
 
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox={viewBox}
-      className="w-full "
+      className="w-full bg-transparent"
     >
       <path
         d="M2662.51 -26.5162H-364.563V943.291H2662.51V-26.5162Z"

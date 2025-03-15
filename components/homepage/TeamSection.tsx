@@ -99,11 +99,11 @@ const TeamSection: React.FC<TeamSectionProps> = ({ teamMembers }) => {
           className="overflow-x-auto scrollbar-hide pb-4 w-full"
           onScroll={updateScrollState}
         >
-          <div className="grid grid-flow-col grid-rows-2 auto-cols-min gap-0 md:gap-4 py-5 w-max mx-auto">
+          <div className="grid grid-flow-col grid-rows-2 auto-cols-min gap-x-2 gap-y-4 md:gap-x-4 py-5 w-max mx-auto">
             {teamMembers.map((member) => (
               <div
                 key={member.name}
-                className="flex flex-col items-center text-center w-48 md:w-56"
+                className="flex flex-col items-center text-center w-44 md:w-56"
               >
                 <motion.div
                   className="w-32 h-32 md:w-40 md:h-40 mb-4 relative"

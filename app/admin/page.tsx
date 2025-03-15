@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { GenericDataContainer } from "@/components/admin/GenericDataContainer";
 import {
@@ -11,6 +11,7 @@ import {
   getReimbursements,
   batchUpdateReimbursements,
   backupRegistrationScript,
+  getTotalRegistrationNumber,
 } from "@/app/actions/admin";
 import { ColumnDef } from "@tanstack/react-table";
 import { ROLE, TravelReimbursement } from "@prisma/client";
@@ -99,8 +100,23 @@ const handleDownloadRegistrantEmails = async () => {
 
 export default function AdminTabsPage() {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
-
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null); // Track event selection
+  const [totalRegistrations, setTotalRegistrations] = useState<number | null>(
+    null
+  );
+
+  useEffect(() => {
+    const fetchTotalRegistrations = async () => {
+      try {
+        const total = await getTotalRegistrationNumber();
+        setTotalRegistrations(total);
+      } catch (error) {
+        console.error("Error fetching total registration number:", error);
+      }
+    };
+
+    fetchTotalRegistrations();
+  }, []);
 
   const userColumns: ColumnDef<ExtendedUser>[] = [
     {
@@ -243,6 +259,20 @@ export default function AdminTabsPage() {
     <div className="container mx-auto max-w-5xl py-8">
       <h1 className="text-2xl font-semibold mb-4">Admin Dashboard</h1>
 
+      {/* Add total registrations display */}
+      <div className="mb-4 p-4 border rounded-lg flex flex-row">
+        <h2 className="text-xl font-semibold">
+          Total Registrations:{" "}
+          {totalRegistrations !== null ? totalRegistrations : "Loading..."}
+        </h2>
+      </div>
+      <Link
+        href="https://docs.google.com/spreadsheets/d/1Xwv7RBzU2VFX_xXCNxEpOi-StvNJV5DsiqkIYEQWQD4/edit?gid=0#gid=0"
+        target="_blank"
+      >
+        <Button className="bg-green-600 mb-4">Go to Google Sheet</Button>
+      </Link>
+
       {/* User Details Dialog */}
       <UserDetailsDialog
         userId={selectedUserId}
@@ -266,6 +296,7 @@ export default function AdminTabsPage() {
           <TabsTrigger value="events">Events</TabsTrigger>
           <TabsTrigger value="actions">Admin Actions</TabsTrigger>
         </TabsList>
+
         <TabsContent value="users">
           <GenericDataContainer<User>
             title="Users"
@@ -345,7 +376,6 @@ export default function AdminTabsPage() {
             debounceTime={250}
           />
         </TabsContent>
-        ; ; ;
         <TabsContent value="events">
           <div className="flex flex-col items-start space-y-2">
             <p className="text-sm text-muted-foreground">

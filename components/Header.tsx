@@ -30,6 +30,7 @@ import { useSession } from "next-auth/react";
 
 const Header = ({ isAdmin }: { isAdmin: boolean }) => {
   const [scrollDirection, setScrollDirection] = useState<"up" | "down">("up");
+  const [hasLoaded, setHasLoaded] = useState(false);
   const { status } = useSession();
 
   const isAuthenticated = status === "authenticated";
@@ -65,6 +66,11 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isMobile]);
+
+  // Mark as loaded after the first render
+  useEffect(() => {
+    setHasLoaded(true);
+  }, []);
 
   // Decide header position & background
   let headerPosition = "sticky";
@@ -129,7 +135,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
               <motion.div
                 key="logo"
                 className="w-1/3 flex items-center"
-                initial={{ opacity: 0, y: -100 }}
+                initial={hasLoaded ? { y: -100, opacity: 0 } : false}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -100 }}
                 transition={{ duration: 0.25 }}
@@ -142,6 +148,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                       height={75}
                       alt="HackKU Logo"
                       className="w-auto h-12 md:h-10"
+                      priority={true}
                     />
                   </motion.div>
                 </Link>
@@ -314,7 +321,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                 className={`hidden lg:flex w-1/3 justify-end space-x-4 ${
                   isHomePage ? "drop-shadow-lg" : "drop-shadow-sm"
                 }`}
-                initial={{ opacity: 0, y: -100 }}
+                initial={hasLoaded ? { y: -100, opacity: 0 } : false} // No animation on load
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -100 }}
                 transition={{ duration: 0.25 }}
@@ -340,6 +347,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                         width={pathname === "/schedule" ? 100 : 200}
                         height={pathname === "/schedule" ? 100 : 200}
                         className="w-auto h-24"
+                        priority={true}
                       />
                     </motion.div>
                   </Link>

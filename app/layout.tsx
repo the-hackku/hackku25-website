@@ -9,6 +9,7 @@ import { getServerSession } from "next-auth";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import Providers from "@/providers/ProgressBarProvider";
+import { Analytics } from "@vercel/analytics/react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -45,7 +46,7 @@ export default async function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          forcedTheme="light"
+          defaultTheme="light"
           disableTransitionOnChange
         >
           <NextAuthProvider session={session}>
@@ -55,6 +56,7 @@ export default async function RootLayout({
                 <main className="flex-grow">{children}</main>
                 <Footer />
                 <Toaster />
+                <Analytics />
               </div>
             </Providers>
           </NextAuthProvider>

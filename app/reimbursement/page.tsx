@@ -24,10 +24,9 @@ export default function TravelReimbursementInfo() {
         <h3 className="text-lg font-semibold mb-2">Apply</h3>
         <ul className="list-disc pl-5 text-sm space-y-1">
           <li>
-            <strong>Individual Applications:</strong> If you’re applying with a
-            team,{" "}
-            <strong>each member must submit an individual application</strong>{" "}
-            for travel reimbursement.
+            <strong>Individual Applications:</strong> If you are applying with a
+            team, the team lead should submit a single application for the
+            group.
           </li>
           <li>
             <strong>Deadline:</strong> Make sure to submit your travel

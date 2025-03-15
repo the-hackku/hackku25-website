@@ -101,6 +101,8 @@ export async function submitTravelReimbursement({
 
     await exportReimbursementToGoogleSheet(reimbursement);
 
+    revalidatePath("/profile");
+
     return { success: true, reimbursement };
   } else {
     // 🚀 **Group Application**
@@ -239,6 +241,7 @@ export async function updateTravelReimbursement({
   distance,
   estimatedCost,
   reason,
+  groupMemberEmails, // New parameter for updated group members
 }: {
   reimbursementId: string;
   transportationMethod: string;
@@ -246,6 +249,7 @@ export async function updateTravelReimbursement({
   distance: number;
   estimatedCost: number;
   reason: string;
+  groupMemberEmails?: string[]; // Allow passing new members
 }) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.email) {
@@ -259,16 +263,23 @@ export async function updateTravelReimbursement({
     throw new Error("User not found");
   }
 
-  // **Ensure user is the creator of the reimbursement**
+  // **Fetch the existing reimbursement with current invites**
   const reimbursement = await prisma.travelReimbursement.findUnique({
     where: { id: reimbursementId },
+    include: {
+      invites: {
+        include: {
+          user: true, // Get user details
+        },
+      },
+    },
   });
 
-  if (!reimbursement || reimbursement.userId !== user.id) {
+  if (!reimbursement) {
     throw new Error("You do not have permission to edit this reimbursement.");
   }
 
-  // **Perform the update**
+  // **Update reimbursement details**
   const updated = await prisma.travelReimbursement.update({
     where: { id: reimbursementId },
     data: {
@@ -280,6 +291,38 @@ export async function updateTravelReimbursement({
     },
   });
 
+  // **Handle inviting new group members**
+  if (groupMemberEmails && groupMemberEmails.length > 0) {
+    // Get existing invited emails
+    const existingInviteEmails = reimbursement.invites.map(
+      (invite) => invite.user.email
+    );
+
+    // Filter out users who are already invited
+    const newMembersToInvite = groupMemberEmails.filter(
+      (email) => !existingInviteEmails.includes(email)
+    );
+
+    // Find users to invite (ensuring they're not already in another reimbursement)
+    const usersToInvite = await prisma.user.findMany({
+      where: {
+        email: { in: newMembersToInvite },
+        travelReimbursementId: null, // Ensure they're not part of another reimbursement
+      },
+      select: { id: true, email: true },
+    });
+
+    // **Create new invites only if there are new users**
+    if (usersToInvite.length > 0) {
+      await prisma.reimbursementInvite.createMany({
+        data: usersToInvite.map((user) => ({
+          userId: user.id,
+          reimbursementId,
+        })),
+      });
+    }
+  }
+  revalidatePath("/profile");
   return { success: true, reimbursement: updated };
 }
 
@@ -292,7 +335,23 @@ export async function getReimbursementDetails() {
   const user = await prisma.user.findUnique({
     where: { email: session.user.email },
     select: {
-      travelReimbursement: true,
+      travelReimbursement: {
+        include: {
+          invites: {
+            include: {
+              user: {
+                select: {
+                  id: true,
+                  email: true,
+                  ParticipantInfo: {
+                    select: { firstName: true, lastName: true },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     },
   });
 
@@ -300,5 +359,290 @@ export async function getReimbursementDetails() {
     return null;
   }
 
-  return user.travelReimbursement;
+  return {
+    ...user.travelReimbursement,
+    isGroup: user.travelReimbursement.invites.length > 0, // Derived property
+    groupMembers: user.travelReimbursement.invites.map((invite) => ({
+      id: invite.user.id,
+      email: invite.user.email,
+      name: `${invite.user.ParticipantInfo?.firstName ?? ""} ${
+        invite.user.ParticipantInfo?.lastName ?? ""
+      }`,
+    })),
+  };
+}
+
+import type {
+  User,
+  TravelReimbursement,
+  ReimbursementInvite,
+  ParticipantInfo,
+} from "@prisma/client";
+import { revalidatePath } from "next/cache";
+
+/**
+ * User object including necessary relations.
+ */
+export type UserWithReimbursement = User & {
+  ParticipantInfo?: ParticipantInfo | null;
+  travelReimbursement?:
+    | (TravelReimbursement & {
+        creator?: { email: string } | null; // ✅ Ensure `creator` is included
+      })
+    | null;
+  reimbursementInvites: (ReimbursementInvite & {
+    reimbursement: {
+      id: string;
+      userId: string;
+      creator?: { email: string } | null;
+    };
+  })[];
+  createdReimbursement:
+    | (TravelReimbursement & {
+        invites: (ReimbursementInvite & {
+          user: {
+            email: string;
+            ParticipantInfo?: { firstName: string; lastName: string } | null;
+          };
+        })[];
+      })
+    | null;
+};
+
+/**
+ * Checks if the user has a valid reimbursement:
+ * - Solo reimbursement (user.travelReimbursement)
+ * - OR has accepted an invite to a group reimbursement.
+ */
+export async function userHasReimbursement(
+  user: UserWithReimbursement | null
+): Promise<boolean> {
+  return !!user?.travelReimbursement;
+}
+
+/**
+ * Fetches the user and includes reimbursement details.
+ */
+export async function getUserWithReimbursement(): Promise<UserWithReimbursement | null> {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    throw new Error("User not authenticated");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    include: {
+      ParticipantInfo: true,
+      travelReimbursement: {
+        include: {
+          creator: {
+            select: { email: true }, // ✅ Fetch the creator's email
+          },
+        },
+      },
+      createdReimbursement: {
+        // Ensure we fetch the reimbursement the user created
+        include: {
+          invites: {
+            include: {
+              user: {
+                select: {
+                  email: true,
+                  ParticipantInfo: {
+                    select: { firstName: true, lastName: true },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      reimbursementInvites: {
+        include: {
+          reimbursement: {
+            select: {
+              id: true, // ✅ Ensure we fetch the reimbursement ID
+              userId: true, // ✅ Fetch the creator's user ID
+              creator: {
+                select: { email: true }, // ✅ Fetch the creator's email
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  return user;
+}
+
+/**
+ * Get the user's reimbursement summary.
+ */
+export async function getUserReimbursementStatus() {
+  const user = await getUserWithReimbursement();
+
+  // ✅ Handle null user case before calling `userHasReimbursement`
+  if (!user) {
+    return {
+      user: null,
+      hasReimbursement: false,
+      reimbursementDate: null,
+      isGroupLeader: false,
+      pendingInvites: [],
+    };
+  }
+
+  const hasReimbursement = await userHasReimbursement(user);
+  const reimbursementDate = user.travelReimbursement?.createdAt ?? null;
+  const isGroupLeader = user.travelReimbursement?.userId == user.id;
+  const pendingInvites = user.reimbursementInvites.filter(
+    (invite) => invite.status === "PENDING"
+  );
+
+  return {
+    user,
+    hasReimbursement,
+    reimbursementDate,
+    isGroupLeader,
+    pendingInvites,
+  };
+}
+
+export async function deleteTravelReimbursement(reimbursementId: string) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    throw new Error("User not authenticated");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  // Ensure the user is the owner of the reimbursement
+  const reimbursement = await prisma.travelReimbursement.findUnique({
+    where: { id: reimbursementId },
+  });
+
+  if (!reimbursement || reimbursement.userId !== user.id) {
+    throw new Error("You do not have permission to delete this reimbursement.");
+  }
+
+  // Delete reimbursement
+  await prisma.travelReimbursement.delete({
+    where: { id: reimbursementId },
+  });
+
+  return { success: true };
+}
+
+export async function inviteUserToReimbursement(
+  reimbursementId: string,
+  userId: string
+) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    throw new Error("User not authenticated");
+  }
+
+  const invitingUser = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    include: { travelReimbursement: true },
+  });
+
+  if (
+    !invitingUser?.travelReimbursement ||
+    invitingUser.travelReimbursement.id !== reimbursementId
+  ) {
+    throw new Error(
+      "You do not have permission to invite members to this reimbursement."
+    );
+  }
+
+  const reimbursement = await prisma.travelReimbursement.findUnique({
+    where: { id: reimbursementId },
+    include: { invites: true, members: true },
+  });
+
+  if (!reimbursement) {
+    throw new Error("Reimbursement request not found.");
+  }
+
+  // Check if the user is already invited
+  const alreadyInvited = reimbursement.invites.some(
+    (invite) => invite.userId === userId
+  );
+  if (alreadyInvited) {
+    throw new Error("User has already been invited.");
+  }
+
+  // Ensure the user isn't in another reimbursement
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { travelReimbursementId: true },
+  });
+
+  if (user?.travelReimbursementId) {
+    throw new Error("User is already part of another reimbursement.");
+  }
+
+  // Create the invite
+  await prisma.reimbursementInvite.create({
+    data: {
+      userId,
+      reimbursementId,
+    },
+  });
+
+  return { success: true };
+}
+
+/**
+ * Fetch users who have been invited to a reimbursement request.
+ */
+export async function getInvitedUsers(reimbursementId: string) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.email) {
+    throw new Error("User not authenticated");
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    include: { travelReimbursement: true },
+  });
+
+  if (
+    !user?.travelReimbursement ||
+    user.travelReimbursement.id !== reimbursementId
+  ) {
+    throw new Error("You do not have permission to view this reimbursement.");
+  }
+
+  // Fetch invited users
+  const invitedUsers = await prisma.reimbursementInvite.findMany({
+    where: { reimbursementId, status: "PENDING" },
+    include: {
+      user: {
+        select: {
+          id: true,
+          email: true,
+          ParticipantInfo: {
+            select: { firstName: true, lastName: true },
+          },
+        },
+      },
+    },
+  });
+
+  return invitedUsers.map((invite) => ({
+    id: invite.user.id,
+    email: invite.user.email,
+    name: `${invite.user.ParticipantInfo?.firstName ?? ""} ${
+      invite.user.ParticipantInfo?.lastName ?? ""
+    }`,
+  }));
 }

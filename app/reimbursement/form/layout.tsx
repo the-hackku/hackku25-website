@@ -25,7 +25,7 @@ export default async function ReimbursementLayout({
   }
 
   if (user.travelReimbursement) {
-    redirect("/reimbursement/edit"); // Redirect to edit page instead of profile
+    redirect("/profile");
   }
 
   // 🚀 If they haven't applied yet, show the reimbursement form

@@ -98,28 +98,22 @@ export async function exportReimbursementToGoogleSheet(reimbursement: {
   estimatedCost: number;
   reason: string;
   createdAt: Date;
-  userId?: string | null;
+  userId: string; // This is the creator's userId
 }) {
   try {
     const sheetsApi = google.sheets({ version: "v4", auth });
 
-    let emails = "N/A"; // Default in case there's an issue
+    // ✅ Fetch the email of the user who created the reimbursement
+    const creator = await prisma.user.findUnique({
+      where: { id: reimbursement.userId },
+      select: { email: true },
+    });
 
-    if (reimbursement.userId) {
-      // Fetch all users linked to this reimbursement (Group + Leader)
-      const members = await prisma.user.findMany({
-        where: { travelReimbursementId: reimbursement.userId },
-        select: { email: true },
-      });
+    const email = creator?.email ?? "N/A"; // Default to "N/A" if not found
 
-      if (members.length > 0) {
-        emails = members.map((member) => member.email).join(", ");
-      }
-    }
-
-    // Transform data into a format suitable for Google Sheets
+    // ✅ Transform data into a format suitable for Google Sheets
     const reimbursementData = [
-      emails, // Comma-separated emails if group, solo email otherwise
+      email, // Only the creator's email
       reimbursement.transportationMethod ?? "N/A",
       reimbursement.address ?? "N/A",
       reimbursement.distance !== undefined
@@ -132,7 +126,7 @@ export async function exportReimbursementToGoogleSheet(reimbursement: {
       reimbursement.createdAt ? reimbursement.createdAt.toISOString() : "N/A",
     ];
 
-    // Append the reimbursement data to the Google Sheet
+    // ✅ Append the reimbursement data to the Google Sheet
     await sheetsApi.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
       range: "Reimbursement!A1",

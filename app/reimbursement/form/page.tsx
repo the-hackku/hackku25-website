@@ -15,7 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { IconLoader } from "@tabler/icons-react";
 import Link from "next/link";
@@ -88,7 +87,6 @@ declare global {
 type ReimbursementFormData = z.infer<typeof reimbursementSchema>;
 
 export default function ReimbursementForm() {
-  const router = useRouter();
   const addressInputRef = useRef<HTMLInputElement>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -214,7 +212,6 @@ export default function ReimbursementForm() {
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
-      router.push("/profile");
     }
   };
 

@@ -3,7 +3,7 @@
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { handleGroupInvite } from "@/app/actions/reimbursement";
-import { getUserWithReimbursement } from "@/app/actions/hasReimbursement";
+import { getUserWithReimbursement } from "@/app/actions/reimbursement";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import Link from "next/link";
 import { IconLoader, IconCheck, IconX } from "@tabler/icons-react";

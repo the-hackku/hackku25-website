@@ -600,3 +600,9 @@ export async function backupRegistrationScript() {
     return { success: false, message: "Backup failed!" };
   }
 }
+
+export async function getTotalRegistrationNumber() {
+  isAdmin();
+  const totalRegistrations = await prisma.participantInfo.count();
+  return totalRegistrations;
+}

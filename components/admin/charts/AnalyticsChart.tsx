@@ -41,7 +41,7 @@ export default function AnalyticsChart() {
   const [rawData, setRawData] = useState<DataPoint[]>([]);
   const [aggregation, setAggregation] = useState<"hourly" | "daily">("daily"); // ✅ Separate hourly/daily
   const [chartType, setChartType] = useState<"area" | "bar">("bar"); // ✅ Area for cumulative, Bar for raw
-  const [daysBack, setDaysBack] = useState(7); // Default: Last 7 days
+  const [daysBack, setDaysBack] = useState(14); // Default: Last 7 days
 
   const endDate = new Date(); // Always today
   const startDate = subDays(endDate, daysBack); // Calculate based on selection

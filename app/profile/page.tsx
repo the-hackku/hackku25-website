@@ -23,8 +23,8 @@ import { prisma } from "@/prisma";
 import {
   getUserWithReimbursement,
   userHasReimbursement,
-} from "@/app/actions/hasReimbursement";
-import type { UserWithReimbursement } from "@/app/actions/hasReimbursement";
+} from "../actions/reimbursement";
+import type { UserWithReimbursement } from "../actions/reimbursement";
 
 /**
  * Helper: can the user edit the existing reimbursement?
@@ -216,7 +216,7 @@ export default async function ProfilePage() {
                                 href="/reimbursement/edit"
                                 className="flex flex-row items-center gap-2 hover:underline"
                               >
-                                View / Edit My Reimbursement
+                                View/Edit My Travel Reimbursement
                               </Link>
                             </div>
                           )}
@@ -240,40 +240,42 @@ export default async function ProfilePage() {
                     </div>
 
                     {/* If the user is a group leader, show invite statuses */}
-                    {userSession.createdReimbursement && (
-                      <div className="p-4 mt-4 border-l-4 border-blue-400 bg-blue-50">
-                        <h3 className="text-md font-semibold mb-2">
-                          Group Invite Status
-                        </h3>
-                        {userSession.createdReimbursement.invites.length > 0 ? (
-                          <ul>
-                            {userSession.createdReimbursement.invites.map(
-                              (invite) => (
-                                <li key={invite.id} className="mb-2">
-                                  {invite.user.ParticipantInfo
-                                    ? `${invite.user.ParticipantInfo.firstName} ${invite.user.ParticipantInfo.lastName}`
-                                    : invite.user.email}{" "}
-                                  -{" "}
-                                  <span
-                                    className={
-                                      invite.status === "ACCEPTED"
-                                        ? "text-green-600"
-                                        : invite.status === "PENDING"
-                                        ? "text-yellow-600"
-                                        : "text-red-600"
-                                    }
-                                  >
-                                    {invite.status}
-                                  </span>
-                                </li>
-                              )
-                            )}
-                          </ul>
-                        ) : (
-                          <p>No invites sent yet.</p>
-                        )}
-                      </div>
-                    )}
+                    {userSession.createdReimbursement &&
+                      userSession.createdReimbursement.invites.length > 0 && (
+                        <div className="p-4 mt-4 border-l-4 border-blue-400 bg-blue-50">
+                          <h3 className="text-md font-semibold mb-2">
+                            Reimbursement Group Invites:
+                          </h3>
+                          {userSession.createdReimbursement.invites.length >
+                          0 ? (
+                            <ul>
+                              {userSession.createdReimbursement.invites.map(
+                                (invite) => (
+                                  <li key={invite.id} className="mb-2">
+                                    {invite.user.ParticipantInfo
+                                      ? `${invite.user.ParticipantInfo.firstName} ${invite.user.ParticipantInfo.lastName}`
+                                      : invite.user.email}{" "}
+                                    -{" "}
+                                    <span
+                                      className={
+                                        invite.status === "ACCEPTED"
+                                          ? "text-green-600"
+                                          : invite.status === "PENDING"
+                                          ? "text-yellow-600"
+                                          : "text-red-600"
+                                      }
+                                    >
+                                      {invite.status}
+                                    </span>
+                                  </li>
+                                )
+                              )}
+                            </ul>
+                          ) : (
+                            <p>No invites sent yet.</p>
+                          )}
+                        </div>
+                      )}
 
                     {/* [Line B] Show group if the user has an accepted membership with a reimbursement */}
                     {pendingInvites.length > 0 && (
