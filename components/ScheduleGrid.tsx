@@ -28,7 +28,7 @@ type ScheduleEvent = {
   startDate: string;
   endDate: string;
   location: string | null;
-  description?: string;
+  description: string | null;
   eventType: EventType;
 };
 
@@ -247,7 +247,11 @@ const formatEventTimeRange = (startString: string, endString: string) => {
   const start = new Date(startString);
   const end = new Date(endString);
 
-  const day = start.toLocaleDateString(undefined, { weekday: "long" });
+  const day = start.toLocaleDateString(undefined, {
+    weekday: "long",
+    month: "short",
+    day: "numeric",
+  });
   const startTime = start
     .toLocaleTimeString(undefined, {
       hour: "numeric",
@@ -468,7 +472,9 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                 {days.map((date) => (
                   <TabsTrigger key={date} value={date}>
                     {new Date(date).toLocaleDateString(undefined, {
-                      weekday: "long",
+                      weekday: "short",
+                      month: "short",
+                      day: "numeric",
                     })}
                   </TabsTrigger>
                 ))}

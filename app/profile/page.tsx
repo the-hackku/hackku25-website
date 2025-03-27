@@ -19,7 +19,7 @@ import {
   IconEdit,
 } from "@tabler/icons-react";
 
-import { prisma } from "@/prisma";
+import { prisma } from "@/lib/prisma";
 import {
   getUserWithReimbursement,
   userHasReimbursement,

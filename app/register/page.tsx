@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/lib/authoptions";
-import { prisma } from "@/prisma";
+import { prisma } from "@/lib/prisma";
 import { RegistrationForm } from "@/components/forms/RegistrationForm";
 
 export default async function RegisterPage() {

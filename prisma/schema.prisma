@@ -177,7 +177,15 @@ model TravelReimbursement {
   invites              ReimbursementInvite[]
 }
 
-
+model ReservationRequest {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  teamName             String
+  memberEmails         String
+  outOfState           Boolean
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @default(now())
+}
 
 model ReimbursementInvite {
   id                 String   @id @default(cuid())

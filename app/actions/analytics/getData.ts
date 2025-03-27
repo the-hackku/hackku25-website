@@ -1,6 +1,6 @@
 "use server";
 
-import { prisma } from "@/prisma";
+import { prisma } from "@/lib/prisma";
 import { cleanText } from "@/utils/textCleaning";
 
 // Fetch raw dietary restrictions (NO PROCESSING)

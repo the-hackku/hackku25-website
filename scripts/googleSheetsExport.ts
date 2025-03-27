@@ -7,8 +7,9 @@ import dotenv from "dotenv";
 import type {
   User as PrismaUser,
   ParticipantInfo as PrismaParticipantInfo,
+  ReservationRequest,
 } from "@prisma/client";
-import { prisma } from "@/prisma";
+import { prisma } from "@/lib/prisma";
 
 dotenv.config();
 
@@ -220,5 +221,44 @@ export async function batchBackupRegistration() {
     console.error("Error during batch backup:", error);
   } finally {
     await prisma.$disconnect();
+  }
+}
+
+// NEW: Export a single reservation request to the "ReservationRequests" page in your spreadsheet
+export async function exportReservationRequestToGoogleSheet(
+  reservation: ReservationRequest
+) {
+  const sheetsApi = google.sheets({ version: "v4", auth });
+  try {
+    // 1) Fetch the user’s email for clarity
+    const user = await prisma.user.findUnique({
+      where: { id: reservation.userId },
+      select: { email: true },
+    });
+    const email = user?.email ?? "N/A";
+
+    // 2) Build an array of data you want to store in the sheet
+    const reservationData = [
+      email,
+      reservation.teamName,
+      reservation.memberEmails,
+      reservation.outOfState ? "Yes" : "No",
+      reservation.createdAt ? reservation.createdAt.toISOString() : "N/A",
+    ];
+
+    // 3) Append the data as a new row in the "ReservationRequests" sheet (tab)
+    await sheetsApi.spreadsheets.values.append({
+      spreadsheetId: SHEET_ID,
+      range: "ReservationRequests!A1", // The new tab name. Must match the sheet title exactly.
+      valueInputOption: "RAW",
+      insertDataOption: "INSERT_ROWS",
+      requestBody: {
+        values: [reservationData],
+      },
+    });
+
+    console.log("✅ Reservation request successfully added to Google Sheet!");
+  } catch (error) {
+    console.error("❌ Error exporting reservation request data:", error);
   }
 }

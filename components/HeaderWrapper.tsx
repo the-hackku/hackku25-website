@@ -1,6 +1,6 @@
 import RegisterAlert from "./RegisterAlert";
 import Header from "./Header";
-import { prisma } from "@/prisma";
+import { prisma } from "@/lib/prisma";
 import { authOptions } from "@/lib/authoptions";
 import { getServerSession } from "next-auth";
 

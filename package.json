@@ -41,6 +41,7 @@
     "@vercel/redwood": "^2.1.12",
     "@vercel/routing-utils": "^4.0.0",
     "@vercel/static-build": "^1.2.1",
+    "adm-zip": "^0.5.16",
     "chart.js": "^4.4.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
@@ -60,6 +61,7 @@
     "next-auth": "^4.24.7",
     "next-nprogress-bar": "^2.3.13",
     "next-themes": "^0.3.0",
+    "node-fetch": "^3.3.2",
     "nodemailer": "^6.9.15",
     "notion-client": "^7.1.4",
     "path-to-regexp": "^8.2.0",
@@ -89,6 +91,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.7",
     "@types/fast-levenshtein": "^0.0.4",
     "@types/google.maps": "^3.58.1",
     "@types/leaflet": "^1.9.12",

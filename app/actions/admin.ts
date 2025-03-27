@@ -1,11 +1,12 @@
 "use server";
 
-import { prisma } from "@/prisma";
+import { prisma } from "@/lib/prisma";
 import { isAdmin, isAdminOrVolunteer } from "@/middlewares/isAdmin";
 import {
   Checkin,
   EventType,
   ParticipantInfo,
+  Prisma,
   TravelReimbursement,
   User,
 } from "@prisma/client";
@@ -362,6 +363,126 @@ export async function validateQrCode(
   };
 }
 
+// app/actions/admin.ts
+
+/**
+ * Manually check in a user by userId and eventId.
+ */
+export async function manualCheckIn(
+  userId: string,
+  eventId: string
+): Promise<{
+  success: boolean;
+  message: string;
+  isHighSchoolStudent?: boolean;
+  name?: string;
+  chaperoneInfo?: {
+    chaperoneName: string;
+    chaperoneEmail: string;
+    chaperonePhone: string;
+  };
+}> {
+  // Ensure the user performing this action is either admin or volunteer
+  const session = await isAdminOrVolunteer();
+
+  // Find the admin user (the staff or volunteer performing the check)
+  const admin = await prisma.user.findUnique({
+    where: { email: session.user.email },
+    select: { id: true },
+  });
+
+  if (!admin) {
+    return {
+      success: false,
+      message: "Admin/Volunteer not found.",
+    };
+  }
+
+  // Fetch the user by userId
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      ParticipantInfo: {
+        select: {
+          firstName: true,
+          lastName: true,
+          isHighSchoolStudent: true,
+          chaperoneFirstName: true,
+          chaperoneLastName: true,
+          chaperoneEmail: true,
+          chaperonePhoneNumber: true,
+        },
+      },
+    },
+  });
+
+  if (!user) {
+    // Could optionally create a failed 'scan' record or 'manualCheckIn' record
+    return {
+      success: false,
+      message: "No matching user found for the given userId.",
+    };
+  }
+
+  // Check if the user is already checked in for this event
+  const existingCheckin = await prisma.checkin.findFirst({
+    where: { userId: user.id, eventId },
+  });
+
+  if (existingCheckin) {
+    return {
+      success: false,
+      message: "User has already been checked in for this event.",
+    };
+  }
+
+  // If not checked in yet, proceed with a check-in
+  await prisma.$transaction([
+    prisma.checkin.create({
+      data: {
+        userId: user.id,
+        adminId: admin.id,
+        eventId: eventId,
+      },
+    }),
+    prisma.scan.create({
+      data: {
+        userId: user.id,
+        adminId: admin.id,
+        eventId: eventId,
+        successful: true,
+      },
+    }),
+  ]);
+
+  const fullName = user.ParticipantInfo
+    ? `${user.ParticipantInfo.firstName} ${user.ParticipantInfo.lastName}`.trim()
+    : "Participant";
+
+  const isHighSchoolStudent =
+    user.ParticipantInfo?.isHighSchoolStudent || false;
+
+  let chaperoneInfo;
+  if (isHighSchoolStudent) {
+    chaperoneInfo = {
+      chaperoneName: `${user.ParticipantInfo?.chaperoneFirstName ?? ""} ${
+        user.ParticipantInfo?.chaperoneLastName ?? ""
+      }`.trim(),
+      chaperoneEmail: user.ParticipantInfo?.chaperoneEmail ?? "N/A",
+      chaperonePhone: user.ParticipantInfo?.chaperonePhoneNumber ?? "N/A",
+    };
+  }
+
+  return {
+    success: true,
+    message: `Successfully checked in ${fullName}`,
+    name: fullName,
+    isHighSchoolStudent,
+    chaperoneInfo,
+  };
+}
+
 export async function fetchScanHistory() {
   isAdmin(); // Ensure only admins can access
   const history = await prisma.scan.findMany({
@@ -605,4 +726,47 @@ export async function getTotalRegistrationNumber() {
   isAdmin();
   const totalRegistrations = await prisma.participantInfo.count();
   return totalRegistrations;
+}
+export async function searchUsers(searchQuery: string) {
+  await isAdminOrVolunteer();
+  const trimmed = searchQuery.trim();
+
+  // Basic conditions for email and individual name fields.
+  const conditions: Prisma.UserWhereInput[] = [
+    { email: { contains: trimmed, mode: "insensitive" } },
+    {
+      ParticipantInfo: {
+        firstName: { contains: trimmed, mode: "insensitive" },
+      },
+    },
+    {
+      ParticipantInfo: { lastName: { contains: trimmed, mode: "insensitive" } },
+    },
+  ];
+
+  // If query contains a space, assume it's "firstName lastName" and add an AND condition.
+  if (trimmed.includes(" ")) {
+    const [first, last] = trimmed.split(" ", 2);
+    conditions.push({
+      ParticipantInfo: {
+        AND: [
+          { firstName: { contains: first, mode: "insensitive" } },
+          { lastName: { contains: last, mode: "insensitive" } },
+        ],
+      },
+    });
+  }
+
+  const users = await prisma.user.findMany({
+    where: { OR: conditions },
+    include: { ParticipantInfo: true },
+    take: 50,
+  });
+
+  return users.map((user) => ({
+    id: user.id,
+    email: user.email,
+    firstName: user.ParticipantInfo?.firstName ?? "",
+    lastName: user.ParticipantInfo?.lastName ?? "",
+  }));
 }

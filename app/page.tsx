@@ -214,11 +214,7 @@ export default function HomePage() {
       answer: (
         <>
           Yes! We offer travel reimbursements for participants who are traveling
-          from outside of Lawrence, KS. Visit the{" "}
-          <Link href="/reimbursement" className="underline">
-            Reimbursments Page
-          </Link>{" "}
-          to learn more and apply.
+          from outside of Lawrence, KS.
         </>
       ),
     },
@@ -260,6 +256,12 @@ export default function HomePage() {
       name: "H&R Block",
       logo: "/images/sponsors/hrblock.png",
       website: "https://www.hrblock.com/",
+      tier: "Mega",
+    },
+    {
+      name: "Payit",
+      logo: "/images/sponsors/payit.png",
+      website: "https://payitgov.com/",
       tier: "Mega",
     },
     {

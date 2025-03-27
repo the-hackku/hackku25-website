@@ -11,6 +11,7 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
+import ManualCheckin from "@/components/admin/ManualCheckin";
 
 export default function ScannerPage() {
   const [backgroundColor, setBackgroundColor] = useState("inherit");
@@ -181,6 +182,8 @@ export default function ScannerPage() {
           </div>
         </div>
       </div>
+
+      <ManualCheckin />
 
       {/* Scan History Section with static background */}
       <div className="bg-white border-t">

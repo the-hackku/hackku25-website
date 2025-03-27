@@ -1,53 +1,68 @@
-// app/schedule/page.tsx
+import ScheduleGrid from "@/components/ScheduleGrid";
+import BeginnerWorkshops from "@/components/BeginnerWorkshops";
+import { prisma } from "@/lib/prisma";
+import { Event } from "@prisma/client";
 
-// import ScheduleGrid from "@/components/ScheduleGrid";
-// import { prisma } from "@/prisma";
-// import { Event } from "@prisma/client";
-
-// // Server-side function to fetch events data
-// async function getEvents(): Promise<Event[]> {
-//   const events = await prisma.event.findMany({
-//     select: {
-//       id: true,
-//       name: true,
-//       location: true,
-//       startDate: true,
-//       endDate: true,
-//       createdAt: true,
-//       updatedAt: true,
-//       description: true,
-//       eventType: true,
-//     },
-//   });
-
-//   return events;
-// }
+/**
+ * Fetch events from your database
+ */
+async function getEvents(): Promise<Event[]> {
+  const events = await prisma.event.findMany({
+    select: {
+      id: true,
+      name: true,
+      location: true,
+      startDate: true,
+      endDate: true,
+      createdAt: true,
+      updatedAt: true,
+      description: true,
+      eventType: true,
+    },
+  });
+  return events;
+}
 
 export default async function SchedulePage() {
-  // const events = await getEvents();
+  const events = await getEvents();
 
-  // // Convert date to string and include it in the formatted events
-  // const formattedEvents = events.map((event) => ({
-  //   ...event,
-  //   startDate: event.startDate.toISOString(),
-  //   endDate: event.endDate.toISOString(),
-  //   description: event.description ?? undefined, // Ensure description is string or undefined
-  // }));
+  // Convert date fields to ISO strings (so that they are serializable on the client)
+  const formattedEvents = events.map((event) => ({
+    ...event,
+    startDate: event.startDate.toISOString(),
+    endDate: event.endDate.toISOString(),
+  }));
 
-  return (
-    <div className="container mx-auto py-10 items-center">
-      <>
-        <div className="text-center text-3xl ">Schedule coming soon!</div>
-        <div className="text-center text-sm text-muted-foreground mt-3">
-          Check-in starts at 5:00pm on Friday, April 4th
-        </div>
-      </>
-    </div>
+  // Decide how to identify "beginner workshops" vs. "normal" events.
+  // For example, let's assume anything before April 4, 2025 is "beginner" content:
+  const cutoffDate = new Date("2025-04-04T00:00:00.000Z");
+
+  // Filter out beginner workshops
+  const beginnerWorkshops = formattedEvents.filter(
+    (ev) => new Date(ev.startDate) < cutoffDate
   );
 
-  // return (
-  //   <div className="container mx-auto py:md:py-6">
-  //     <ScheduleGrid schedule={formattedEvents} />
-  //   </div>
+  // Filter out the rest (main schedule)
+  const mainScheduleEvents = formattedEvents.filter(
+    (ev) => new Date(ev.startDate) >= cutoffDate
+  );
+
+  // You could also filter by eventType, for instance:
+  // const beginnerWorkshops = formattedEvents.filter(
+  //   (ev) =>
+  //     new Date(ev.startDate) < cutoffDate && ev.eventType === "WORKSHOPS"
   // );
+
+  return (
+    <div className="container mx-auto py-4">
+      {/* Pass only the main schedule events to the big schedule */}
+      <BeginnerWorkshops schedule={beginnerWorkshops} />
+      <h2 className="text-2xl font-bold mt-8 flex justify-center">
+        Weekend Schedule:
+      </h2>
+
+      <ScheduleGrid schedule={mainScheduleEvents} />
+      {/* Pass only the "beginner" events to the simpler layout */}
+    </div>
+  );
 }

@@ -181,6 +181,8 @@ export function EventForm() {
                   <FormItem>
                     <FormLabel>Event Date</FormLabel>
                     <FormControl>
+                      {/* add cutom date input here */}
+
                       <RadioGroup
                         value={field.value}
                         onValueChange={field.onChange}
