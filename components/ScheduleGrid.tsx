@@ -3,8 +3,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   IconFilter,
-  IconHeart,
-  IconHeartFilled,
   IconMapPin,
   IconInfoCircle,
   IconTag,
@@ -18,7 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Checkbox } from "./ui/checkbox";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { EventType } from "@prisma/client";
 import { Input } from "./ui/input";
 
@@ -173,79 +171,28 @@ function getOverlapStyle(
   eventIndex: number,
   groupSize: number
 ): React.CSSProperties {
-  // Single event in the group
-  if (groupSize === 1) {
-    return {
-      left: "0%",
-      width: "100%",
-    };
-  }
-
-  // Exactly two events in the group
-  if (groupSize === 2) {
-    if (eventIndex === 0) {
-      // Bottommost event
-      return {
-        left: "0%",
-        width: "80%",
-      };
-    } else {
-      // Topmost event
-      return {
-        left: "50%",
-        width: "45%",
-      };
-    }
-  }
-
-  // Exactly three events in the group
-  if (groupSize === 3) {
-    switch (eventIndex) {
-      case 0:
-        // Bottommost event
-        return {
-          left: "0%",
-          width: "50%",
-        };
-      case 1:
-        // Middle event
-        return {
-          left: "30%",
-          width: "60%",
-        };
-      case 2:
-        // Topmost event
-        return {
-          left: "60%",
-          width: "35%",
-        };
-      default:
-        // Fallback for unexpected indices
-        return {
-          left: "0%",
-          width: "100%",
-        };
-    }
-  }
-
-  // For groups with more than three events, distribute them evenly
   const widthPercent = 100 / groupSize;
   const leftPercent = widthPercent * eventIndex;
+
   return {
     left: `${leftPercent}%`,
     width: `${widthPercent}%`,
+    zIndex: 10,
   };
 }
 
-// ... [Rest of the component code]
-
 // Calculate the number of rows to span based on event duration
-const getRowSpan = (startString: string, endString: string) => {
+const getRowSpan = (
+  startString: string,
+  endString: string
+): { span: number; duration: number } => {
   const start = new Date(startString);
   const end = new Date(endString);
   const durationInMinutes = (end.getTime() - start.getTime()) / (1000 * 60);
-  // Each slot is 30 minutes
-  return Math.max(1, durationInMinutes / 30);
+  return {
+    span: Math.max(1, durationInMinutes / 30),
+    duration: durationInMinutes,
+  };
 };
 
 // Format event time range as "Day, StartTime - EndTime"
@@ -282,11 +229,69 @@ const formatEventTimeRange = (startString: string, endString: string) => {
   return `${day}, ${formattedStartTime} - ${endTime}`;
 };
 
+const MobileEventDrawer = ({
+  event,
+  onClose,
+}: {
+  event: ScheduleEvent | null;
+  onClose: () => void;
+}) => {
+  if (!event) return null;
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        exit={{ y: "100%" }}
+        transition={{ duration: 0.2 }}
+        className="fixed inset-x-0 bottom-0 z-50 h-[50vh] overflow-hidden shadow-2xl p-5 bg-gray-200"
+      >
+        <div className="fixed inset-x-0 bottom-0 z-50 h-[50vh] overflow-hidden shadow-2xl p-5 bg-gray-200">
+          <div className="flex justify-between items-center mb-2">
+            <h2 className="text-lg font-bold">{event.name}</h2>
+            <button onClick={onClose}>
+              <IconX />
+            </button>
+          </div>
+
+          <p className="text-sm text-gray-500 mb-2">
+            {formatEventTimeRange(event.startDate, event.endDate)}
+          </p>
+
+          {event.eventType && (
+            <div className="flex items-center mb-2">
+              <IconTag size={16} className="text-gray-400 mr-2" />
+              <span className="text-sm capitalize">
+                {event.eventType.toLowerCase()}
+              </span>
+            </div>
+          )}
+
+          {event.location && (
+            <div className="flex items-start mb-2">
+              <IconMapPin size={14} className="text-gray-400 mr-2 mt-0.5" />
+              <span className="text-sm">{event.location}</span>
+            </div>
+          )}
+
+          {event.description && (
+            <div className="flex items-start">
+              <IconInfoCircle size={14} className="text-gray-400 mr-2 mt-0.5" />
+              <p className="text-sm whitespace-pre-wrap">{event.description}</p>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
+};
+
 const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const [selectedEvent, setSelectedEvent] = useState<ScheduleEvent | null>(
     null
   );
-  const [favorites, setFavorites] = useState<Record<string, boolean>>({});
+  const [favorites] = useState<Record<string, boolean>>({});
   const [showFavoritesOnly] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [selectedEventTypes, setSelectedEventTypes] = useState<EventType[]>([
@@ -351,11 +356,6 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
     if (day !== "All") {
       setSelectedEvent(null);
     }
-  };
-
-  // Toggle favorite status for an event
-  const toggleFavorite = (id: string) => {
-    setFavorites((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
   /**
@@ -673,10 +673,14 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                             getRowIndex(event.startDate, baseHour) === slotIndex
                         )
                         .map((event) => {
-                          const rowSpan = getRowSpan(
+                          const { span: rowSpan, duration } = getRowSpan(
                             event.startDate,
                             event.endDate
                           );
+                          const descriptionLineClamp = Math.floor(
+                            duration / 30
+                          ); // 1 line per 10 minutes
+
                           const isSelected = selectedEvent?.id === event.id;
                           const colorClass = event.eventType
                             ? eventTypeColors[event.eventType]
@@ -703,26 +707,39 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                 e.stopPropagation();
                                 setSelectedEvent(isSelected ? null : event);
                               }}
-                              className={`absolute inset-0 z-10 rounded-md p-1 overflow-hidden cursor-pointer text-white transition duration-200
+                              className={`absolute inset-0 z-10 rounded-md p-1 overflow-hidden cursor-pointer text-white
                                 ${colorClass}
                                 ${
                                   isSelected
-                                    ? "ring-2 ring-white/80 shadow-xl after:absolute after:inset-0 after:bg-black after:opacity-10"
+                                    ? "ring-2 ring-white/80 shadow-xl after:absolute after:inset-0 after:bg-black after:opacity-5"
                                     : ""
                                 }
+                                
                               `}
                               style={{
                                 gridRow: `span ${rowSpan}`,
                                 height: `${rowSpan * 3}rem`, // for h-12
                                 position: "absolute",
                                 ...overlapStyle,
-                                boxShadow: `inset 0 0 0 .5px ${
-                                  eventTypeDarkerColors[event.eventType]
-                                }`,
+                                boxShadow: isSelected
+                                  ? `inset 0 0 0 2px ${
+                                      eventTypeDarkerColors[event.eventType] ||
+                                      "black"
+                                    }`
+                                  : `inset 0 0 0 0.5px ${
+                                      eventTypeDarkerColors[event.eventType] ||
+                                      "black"
+                                    }`,
                               }}
                             >
                               {/* Event content */}
-                              <span className="inline-flex flex-wrap md:flex-row flex-col items-center text-left">
+                              <span
+                                className={`inline-flex flex-wrap items-start text-left ${
+                                  overlapInfo && overlapInfo.groupSize > 1
+                                    ? "flex-col"
+                                    : "flex-row items-center"
+                                }`}
+                              >
                                 <p className="text-sm font-bold whitespace-normal break-words mr-1">
                                   {event.name}
                                 </p>
@@ -748,7 +765,14 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                   size={12}
                                   className="mr-1 flex-shrink-0 mt-0.5"
                                 />
-                                <span className="truncate">
+                                <span
+                                  className="overflow-hidden text-ellipsis"
+                                  style={{
+                                    display: "-webkit-box",
+                                    WebkitLineClamp: descriptionLineClamp,
+                                    WebkitBoxOrient: "vertical",
+                                  }}
+                                >
                                   {event.description || "TBA"}
                                 </span>
                               </div>
@@ -806,149 +830,156 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
       )}
 
       {/* RIGHT SECTION: Event Details */}
-      <motion.div
-        className={`relative w-full ${
-          isMobile
-            ? " overflow-visible  inset-x-0 absolute bottom-0"
-            : collapsed
-            ? "hidden"
-            : "block"
-        }`}
-        animate={isMobile ? { height: selectedEvent ? "65vh" : "0vh" } : {}}
-        initial={isMobile ? { height: "0%", opacity: 0 } : {}}
-        transition={{ duration: 0.3 }}
-      >
-        {selectedEvent && (
-          <div
-            className="p-4 w-full rounded-lg shadow-sm border md:h-full flex flex-col justify-between"
-            style={{
-              borderColor: selectedEvent.eventType
-                ? eventTypeDarkerColors[selectedEvent.eventType]
-                : "#e5e7eb",
-              borderWidth: "2px",
-              backgroundColor: selectedEvent.eventType
-                ? `${eventTypeDarkerColors[selectedEvent.eventType]}1A` // 1A = 10% alpha in hex
-                : "white",
-            }}
-          >
-            {/* Top Section: Event Details */}
-            <div>
-              <h2 className="text-xl font-bold flex justify-between">
-                {selectedEvent.name}
-                <span className="flex items-center gap-2">
-                  {/* Favorite Toggle */}
-                  <span
-                    onClick={() => toggleFavorite(selectedEvent.id)}
-                    className="cursor-pointer"
-                  >
-                    {favorites[selectedEvent.id] ? (
-                      <IconHeartFilled className="text-red-400" />
-                    ) : (
-                      <IconHeart className="text-gray-400" />
+      {isMobile ? (
+        <MobileEventDrawer
+          event={selectedEvent}
+          onClose={() => setSelectedEvent(null)}
+        />
+      ) : (
+        <motion.div
+          className={`relative w-full ${
+            isMobile
+              ? " overflow-visible  inset-x-0 absolute bottom-0"
+              : collapsed
+              ? "hidden"
+              : "block"
+          }`}
+          animate={isMobile ? { height: selectedEvent ? "65vh" : "0vh" } : {}}
+          initial={isMobile ? { height: "0%", opacity: 0 } : {}}
+          transition={{ duration: 0.3 }}
+        >
+          {selectedEvent && (
+            <div
+              className="p-4 w-full rounded-lg shadow-sm border md:h-full flex flex-col justify-between"
+              style={{
+                borderColor: selectedEvent.eventType
+                  ? eventTypeDarkerColors[selectedEvent.eventType]
+                  : "#e5e7eb",
+                borderWidth: "2px",
+                backgroundColor: selectedEvent.eventType
+                  ? `${eventTypeDarkerColors[selectedEvent.eventType]}1A` // 1A = 10% alpha in hex
+                  : "white",
+              }}
+            >
+              {/* Top Section: Event Details */}
+              <div>
+                <h2 className="text-xl font-bold flex justify-between">
+                  {selectedEvent.name}
+                  <span className="flex items-center gap-2">
+                    {isMobile && (
+                      <span
+                        onClick={() => setSelectedEvent(null)}
+                        className="cursor-pointer"
+                      >
+                        <IconX />
+                      </span>
                     )}
+                    {/* Close Button */}
                   </span>
+                </h2>
 
-                  {isMobile && (
-                    <span
-                      onClick={() => setSelectedEvent(null)}
-                      className="cursor-pointer"
-                    >
-                      <IconX />
-                    </span>
+                <p className="text-sm text-gray-500">
+                  {formatEventTimeRange(
+                    selectedEvent.startDate,
+                    selectedEvent.endDate
                   )}
+                </p>
 
-                  {/* Close Button */}
-                </span>
-              </h2>
-
-              <p className="text-sm text-gray-500">
-                {formatEventTimeRange(
-                  selectedEvent.startDate,
-                  selectedEvent.endDate
+                {/* Display Event Type */}
+                {selectedEvent.eventType && (
+                  <div className="flex items-center mt-2">
+                    <IconTag size={20} className="text-gray-400 mr-2" />
+                    <span>
+                      {selectedEvent.eventType.charAt(0).toUpperCase() +
+                        selectedEvent.eventType.slice(1).toLowerCase()}
+                    </span>
+                  </div>
                 )}
-              </p>
 
-              {/* Display Event Type */}
-              {selectedEvent.eventType && (
-                <div className="flex items-center mt-2">
-                  <IconTag size={20} className="text-gray-400 mr-2" />
-                  <span>
-                    {selectedEvent.eventType.charAt(0).toUpperCase() +
-                      selectedEvent.eventType.slice(1).toLowerCase()}
-                  </span>
-                </div>
-              )}
-
-              <hr className="my-2" />
-              <div className="flex items-center mt-2">
-                <IconMapPin
-                  size={20}
-                  className="text-gray-400 mr-2 flex-shrink-0 mt-0.5"
+                <hr
+                  className="my-2 border-t opacity-40"
+                  style={{
+                    borderColor: selectedEvent.eventType
+                      ? eventTypeDarkerColors[selectedEvent.eventType]
+                      : "#e5e7eb", // fallback border color
+                  }}
                 />
-                <span className="text-sm overflow-hidden text-ellipsis break-words">
-                  {selectedEvent.location || "TBA"}
-                </span>
-              </div>
-              {selectedEvent.description && (
-                <div className="flex items-start mt-2">
-                  <IconInfoCircle
+
+                <div className="flex items-center mt-2">
+                  <IconMapPin
                     size={20}
                     className="text-gray-400 mr-2 flex-shrink-0 mt-0.5"
                   />
-                  <div className="text-sm overflow-hidden max-h-40 overflow-y-auto pr-1">
-                    {selectedEvent.description}
+                  <span className="text-sm overflow-hidden text-ellipsis break-words">
+                    {selectedEvent.location || "TBA"}
+                  </span>
+                </div>
+                {selectedEvent.description && (
+                  <div className="flex items-start mt-2">
+                    <IconInfoCircle
+                      size={20}
+                      className="text-gray-400 mr-2 flex-shrink-0 mt-0.5"
+                    />
+                    <div
+                      className="text-sm overflow-y-scroll pr-1"
+                      style={{
+                        maxHeight: isMobile ? "40px" : "40vh", // Adjust as needed
+                      }}
+                    >
+                      {selectedEvent.description}
+                    </div>
                   </div>
+                )}
+              </div>
+
+              {/* Bottom Section: Previous/Next Buttons */}
+              {!isMobile && (
+                <div className="flex justify-between items-center mt-6 pt-4 border-t">
+                  <button
+                    onClick={() => {
+                      if (getPreviousEvent(selectedEvent)) {
+                        setSelectedEvent(getPreviousEvent(selectedEvent));
+                      }
+                    }}
+                    className={`${
+                      !getPreviousEvent(selectedEvent)
+                        ? "opacity-30 cursor-not-allowed"
+                        : "hover:text-gray-900 focus:outline-none"
+                    } `}
+                    disabled={!getPreviousEvent(selectedEvent)}
+                  >
+                    &larr; Previous
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (getNextEvent(selectedEvent)) {
+                        setSelectedEvent(getNextEvent(selectedEvent));
+                      }
+                    }}
+                    className={`${
+                      !getNextEvent(selectedEvent)
+                        ? "opacity-30 cursor-not-allowed"
+                        : "hover:text-gray-900 focus:outline-none"
+                    } `}
+                    disabled={!getNextEvent(selectedEvent)}
+                  >
+                    Next &rarr;
+                  </button>
                 </div>
               )}
             </div>
+          )}
 
-            {/* Bottom Section: Previous/Next Buttons */}
-            {!isMobile && (
-              <div className="flex justify-between items-center mt-6 pt-4 border-t">
-                <button
-                  onClick={() => {
-                    if (getPreviousEvent(selectedEvent)) {
-                      setSelectedEvent(getPreviousEvent(selectedEvent));
-                    }
-                  }}
-                  className={`${
-                    !getPreviousEvent(selectedEvent)
-                      ? "opacity-30 cursor-not-allowed"
-                      : "hover:text-gray-900 focus:outline-none"
-                  } `}
-                  disabled={!getPreviousEvent(selectedEvent)}
-                >
-                  &larr; Previous
-                </button>
-                <button
-                  onClick={() => {
-                    if (getNextEvent(selectedEvent)) {
-                      setSelectedEvent(getNextEvent(selectedEvent));
-                    }
-                  }}
-                  className={`${
-                    !getNextEvent(selectedEvent)
-                      ? "opacity-30 cursor-not-allowed"
-                      : "hover:text-gray-900 focus:outline-none"
-                  } `}
-                  disabled={!getNextEvent(selectedEvent)}
-                >
-                  Next &rarr;
-                </button>
+          {
+            // Show placeholder if no event is selected
+            !selectedEvent && !isMobile && (
+              <div className="text-center text-gray-500 p-4">
+                Select an event to view more details
               </div>
-            )}
-          </div>
-        )}
-
-        {
-          // Show placeholder if no event is selected
-          !selectedEvent && !isMobile && (
-            <div className="text-center text-gray-500 p-4">
-              Select an event to view more details
-            </div>
-          )
-        }
-      </motion.div>
+            )
+          }
+        </motion.div>
+      )}
     </div>
   );
 };

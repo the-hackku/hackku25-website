@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useSearchParams } from "next/navigation"; // updated import
+import { useSearchParams } from "next/navigation";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 
 const tableOfContents = [
   { title: "Wi-Fi", id: "wifi" },
+  { title: "What to Bring", id: "what-to-bring" },
   { title: "Discord", id: "discord" },
   { title: "Travel", id: "travel" },
   { title: "Schedule", id: "schedule" },
@@ -142,6 +143,48 @@ export default function HackKUInfoPage() {
             campus-wide. Please contact an organizer if you are having issues
             using the Wi-Fi.
           </p>
+        </SectionContainer>
+
+        <SectionContainer id="what-to-bring" title="🧳 What to Bring">
+          <p className="mb-4">
+            Here’s a handy checklist to help you pack for HackKU25! Be prepared
+            for comfort, productivity, and overnight hacking!
+          </p>
+
+          <ul className="list-disc list-inside space-y-2">
+            <li>
+              <strong>Tech & Tools:</strong>
+              <ul className="list-disc list-inside ml-6">
+                <li>Laptop</li>
+                <li>Headphones/earbuds</li>
+                <li>Chargers & extension cords</li>
+                <li>Notebook and pens/pencils</li>
+                <li>Any specific hardware or devices (e.g., Raspberry Pi)</li>
+                <li>Mouse</li>
+              </ul>
+            </li>
+
+            <li>
+              <strong>Comfort:</strong>
+              <ul className="list-disc list-inside ml-6">
+                <li>Comfortable clothing (layers are great!)</li>
+                <li>Pillows, blankets, or sleeping bag</li>
+                <li>Reusable water bottle</li>
+                <li>18+ chaperone for minors</li>
+              </ul>
+            </li>
+
+            <li>
+              <strong>Personal Care:</strong>
+              <ul className="list-disc list-inside ml-6">
+                <li>Toothbrush and toothpaste</li>
+                <li>Deodorant</li>
+                <li>Toiletries</li>
+                <li>Towel (if applicable)</li>
+                <li>Medications (if applicable)</li>
+              </ul>
+            </li>
+          </ul>
         </SectionContainer>
 
         <SectionContainer id="discord" title="👾 Discord">
@@ -293,43 +336,6 @@ export default function HackKUInfoPage() {
             </li>
             <li>
               Your code must be made public on GitHub for judging purposes.
-            </li>
-          </ul>
-          <h3 className="text-xl font-medium mt-4 mb-2">
-            Submission & Judging
-          </h3>
-          <ul className="list-disc list-inside ml-6 mb-4">
-            <li>
-              All projects will be submitted via Devpost. The Devpost link is
-              available TBD.
-            </li>
-            <li>
-              Teams competing for prizes will give a short (5-minute), in-person
-              demo of their project to judges.
-            </li>
-            <li>
-              All teams are encouraged to demo, even if your project is not
-              complete. There is no downside to demoing your project! This is a
-              chance to show off what you accomplished and learned during
-              HackKU.
-            </li>
-            <li>
-              Judging decisions will be confidentially handled by the judges
-              assigned to your project and will be based on your Github code,
-              Devpost submission, and your In-Person Demo.
-            </li>
-          </ul>
-
-          <h4 className="text-lg font-medium mt-4 mb-2">
-            Submission Deadlines
-          </h4>
-          <ul className="list-disc list-inside ml-6">
-            <li>
-              <strong>7:30AM on Sunday, April 6th</strong> - Devpost team
-              registration deadline
-            </li>
-            <li>
-              <strong>8AM on Sunday, April 6th</strong> - Final project deadline
             </li>
           </ul>
         </SectionContainer>
