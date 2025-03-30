@@ -191,14 +191,14 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                         </span>
                       </SheetClose>
                     </Link>
-                    {/* <Link href="/info" passHref>
+                    <Link href="/info" passHref>
                       <SheetClose asChild>
                         <span className="flex items-center text-xl">
                           <IconInfoCircle size={24} className="mr-2" />
-                          HackerDoc
+                          Info
                         </span>
                       </SheetClose>
-                    </Link> */}
+                    </Link>
                     <hr className="my-4" />
                     <Link href="/profile" passHref>
                       <SheetClose asChild>

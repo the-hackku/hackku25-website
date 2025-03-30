@@ -36,6 +36,17 @@ export default async function SchedulePage() {
     description: event.description,
   }));
 
+  // Decide how to identify "beginner workshops" vs. "normal" events.
+  // For example, let's assume anything before April 4, 2025 is "beginner" content:
+  const cutoffDate = new Date("2025-04-04T00:00:00.000Z");
+
+  // Filter out beginner workshops
+
+  // Filter out the rest (main schedule)
+  const mainScheduleEvents = formattedEvents.filter(
+    (ev) => new Date(ev.startDate) >= cutoffDate
+  );
+
   return (
     <>
       <div>
@@ -44,7 +55,7 @@ export default async function SchedulePage() {
       <h1 className="text-2xl font-bold mb-4">Events</h1>
       <EventForm />
       {/* Render the Schedule Grid */}
-      <ScheduleGrid schedule={formattedEvents} />
+      <ScheduleGrid schedule={mainScheduleEvents} />
     </>
   );
 }

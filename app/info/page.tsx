@@ -295,6 +295,43 @@ export default function HackKUInfoPage() {
               Your code must be made public on GitHub for judging purposes.
             </li>
           </ul>
+          <h3 className="text-xl font-medium mt-4 mb-2">
+            Submission & Judging
+          </h3>
+          <ul className="list-disc list-inside ml-6 mb-4">
+            <li>
+              All projects will be submitted via Devpost. The Devpost link is
+              available TBD.
+            </li>
+            <li>
+              Teams competing for prizes will give a short (5-minute), in-person
+              demo of their project to judges.
+            </li>
+            <li>
+              All teams are encouraged to demo, even if your project is not
+              complete. There is no downside to demoing your project! This is a
+              chance to show off what you accomplished and learned during
+              HackKU.
+            </li>
+            <li>
+              Judging decisions will be confidentially handled by the judges
+              assigned to your project and will be based on your Github code,
+              Devpost submission, and your In-Person Demo.
+            </li>
+          </ul>
+
+          <h4 className="text-lg font-medium mt-4 mb-2">
+            Submission Deadlines
+          </h4>
+          <ul className="list-disc list-inside ml-6">
+            <li>
+              <strong>7:30AM on Sunday, April 6th</strong> - Devpost team
+              registration deadline
+            </li>
+            <li>
+              <strong>8AM on Sunday, April 6th</strong> - Final project deadline
+            </li>
+          </ul>
         </SectionContainer>
 
         <SectionContainer

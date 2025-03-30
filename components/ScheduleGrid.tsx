@@ -40,20 +40,25 @@ type ScheduleGridProps = {
 const eventTypeColors: Record<EventType, string> = {
   FOOD: "bg-orange-400",
   REQUIRED: "bg-red-400",
-  WORKSHOPS: "bg-green-400",
+  WORKSHOPS: "bg-green-500",
   SPONSOR: "bg-blue-400",
   ACTIVITIES: "bg-purple-400",
 };
 
+const eventTypeDarkerColors: Record<EventType, string> = {
+  FOOD: "#f97316", // darker than bg-orange-400
+  REQUIRED: "#ef4444", // darker than bg-red-400
+  WORKSHOPS: "#16a34a", // darker than bg-green-500
+  SPONSOR: "#3b82f6", // darker than bg-blue-400
+  ACTIVITIES: "#8b5cf6", // darker than bg-purple-400
+};
+
 // Helper function to map slot index to a readable time format (e.g., "7:00 AM", "7:30 AM", etc.)
-const formatTime = (index: number) => {
-  const hour = Math.floor(index / 2) + 6; // Start from 7 AM
+const formatTime = (index: number, baseHour: number) => {
+  const hour = Math.floor(index / 2) + baseHour;
   const minutes = index % 2 === 0 ? "00" : "30";
-
-  // Use a Date object to ensure consistent local time formatting
   const date = new Date();
-  date.setHours(hour, parseInt(minutes), 0, 0); // Set local hours and minutes
-
+  date.setHours(hour, parseInt(minutes), 0, 0);
   return date
     .toLocaleTimeString(undefined, {
       hour: "numeric",
@@ -61,6 +66,17 @@ const formatTime = (index: number) => {
       hour12: true,
     })
     .toLowerCase();
+};
+
+const getRowIndex = (dateString: string, baseHour: number) => {
+  const date = new Date(dateString);
+  let hours = date.getHours();
+  const minutes = date.getMinutes();
+  // If the hour is less than the base, assume the time is past midnight.
+  if (hours < baseHour) {
+    hours += 24;
+  }
+  return (hours - baseHour) * 2 + (minutes >= 30 ? 1 : 0);
 };
 
 const formatTimeForSlot = (startString: string, endString: string) => {
@@ -222,16 +238,6 @@ function getOverlapStyle(
 }
 
 // ... [Rest of the component code]
-
-// Calculate the start row for the event based on its start time
-const getRowIndex = (dateString: string) => {
-  const date = new Date(dateString); // Ensure this parses as local time
-  const hours = date.getHours(); // Local hours
-  const minutes = date.getMinutes(); // Local minutes
-
-  // Adjust for the grid start time (7 AM local time)
-  return (hours - 6) * 2 + (minutes >= 30 ? 1 : 0);
-};
 
 // Calculate the number of rows to span based on event duration
 const getRowSpan = (startString: string, endString: string) => {
@@ -414,14 +420,29 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
       ? filteredEvents
       : filteredGroupedEvents[selectedDay] || [];
 
-  const earliestEventIndex = dayEvents.length
-    ? Math.min(...dayEvents.map((event) => getRowIndex(event.startDate)))
+  // Use dayEvents (which is filteredEvents in "All" view or events for a specific day)
+  // to determine the base hour (earliest start hour).
+  const baseHour = dayEvents.length
+    ? Math.min(
+        ...dayEvents.map((event) => new Date(event.startDate).getHours())
+      )
+    : 6; // fallback if no events
+
+  // Determine the first and last row indexes based on event start/end times.
+  const firstEventSlotIndex = dayEvents.length
+    ? Math.min(
+        ...dayEvents.map((event) => getRowIndex(event.startDate, baseHour))
+      )
     : 0;
+  const lastEventSlotIndex = dayEvents.length
+    ? Math.max(
+        ...dayEvents.map((event) => getRowIndex(event.endDate, baseHour))
+      )
+    : firstEventSlotIndex;
 
-  const firstEventSlotIndex = Math.max(0, earliestEventIndex - 2);
-
+  // Generate slots only for the range where events occur.
   const slots = Array.from(
-    { length: 38 - firstEventSlotIndex },
+    { length: lastEventSlotIndex - firstEventSlotIndex + 1 },
     (_, i) => i + firstEventSlotIndex
   );
 
@@ -458,7 +479,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
         style={
           !isMobile
             ? {
-                flex: collapsed ? "1 1 100%" : "0 0 70%", // Full width when collapsed
+                flex: collapsed ? "1 1 100%" : "0 0 75%", // Full width when collapsed
               }
             : {}
         }
@@ -598,8 +619,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
         {/* Schedule Grid Table */}
 
         <table className="table-fixed w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-100">
+          <thead className="sticky top-0 bg-gray-100 z-10">
+            <tr>
               <th className="w-16"></th>
               {selectedDay === "All" ? (
                 days.map((date) => (
@@ -622,15 +643,16 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
               )}
             </tr>
           </thead>
+
           <tbody onClick={() => setSelectedEvent(null)}>
             {slots.map((slotIndex) => (
-              <tr key={slotIndex} className="h-8">
+              <tr key={slotIndex} className="h-12">
                 <td
                   className={`relative border-r border-gray-300 overflow-visible text-xs ${
                     slotIndex % 2 === 0 ? "" : "border-b border-solid"
                   }`}
                 >
-                  {slotIndex % 2 === 0 ? formatTime(slotIndex) : ""}
+                  {slotIndex % 2 === 0 ? formatTime(slotIndex, baseHour) : ""}
                 </td>
                 {(selectedDay === "All" ? days : [selectedDay]).map((day) => {
                   const dayOverlapMap = overlapMaps[day]; // get the overlap map for this day
@@ -647,7 +669,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                     >
                       {filteredGroupedEvents[day]
                         ?.filter(
-                          (event) => getRowIndex(event.startDate) === slotIndex
+                          (event) =>
+                            getRowIndex(event.startDate, baseHour) === slotIndex
                         )
                         .map((event) => {
                           const rowSpan = getRowSpan(
@@ -680,36 +703,54 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                 e.stopPropagation();
                                 setSelectedEvent(isSelected ? null : event);
                               }}
-                              className={`absolute inset-0 rounded-md p-1 overflow-hidden cursor-pointer text-white
-                                transition-shadow duration-200 ${colorClass}
+                              className={`absolute inset-0 z-10 rounded-md p-1 overflow-hidden cursor-pointer text-white transition duration-200
+                                ${colorClass}
                                 ${
                                   isSelected
-                                    ? "shadow-xl z-20"
-                                    : "hover:shadow-sm shadow-sm z-10"
-                                }`}
+                                    ? "ring-2 ring-white/80 shadow-xl after:absolute after:inset-0 after:bg-black after:opacity-10"
+                                    : ""
+                                }
+                              `}
                               style={{
-                                // Vertical placement from your existing logic
                                 gridRow: `span ${rowSpan}`,
-                                height: `${rowSpan * 2}rem`,
-                                // Horizontal placement from overlap logic
-                                position: "absolute", // ensure absolute so `left`/`width` apply
+                                height: `${rowSpan * 3}rem`, // for h-12
+                                position: "absolute",
                                 ...overlapStyle,
+                                boxShadow: `inset 0 0 0 .5px ${
+                                  eventTypeDarkerColors[event.eventType]
+                                }`,
                               }}
                             >
-                              <span className="flex-col gap-0">
-                                <p className="text-sm font-bold">
+                              {/* Event content */}
+                              <span className="inline-flex flex-wrap md:flex-row flex-col items-center text-left">
+                                <p className="text-sm font-bold whitespace-normal break-words mr-1">
                                   {event.name}
                                 </p>
-                                <div className="text-xs flex items-center">
+                                <div className="text-xs text-white/90 whitespace-nowrap">
                                   {formatTimeForSlot(
                                     event.startDate,
                                     event.endDate
                                   )}
                                 </div>
                               </span>
-                              <div className="text-xs flex items-center">
-                                <IconMapPin size={12} className="mr-1" />
-                                {event.location || "TBA"}
+
+                              <div className="text-xs flex items-start">
+                                <IconMapPin
+                                  size={12}
+                                  className="mr-1 flex-shrink-0 mt-0.5"
+                                />
+                                <span className="truncate">
+                                  {event.location || "TBA"}
+                                </span>
+                              </div>
+                              <div className="text-xs flex items-start">
+                                <IconInfoCircle
+                                  size={12}
+                                  className="mr-1 flex-shrink-0 mt-0.5"
+                                />
+                                <span className="truncate">
+                                  {event.description || "TBA"}
+                                </span>
                               </div>
                             </div>
                           );
@@ -778,7 +819,18 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
         transition={{ duration: 0.3 }}
       >
         {selectedEvent && (
-          <div className="p-4 bg-white w-full rounded-lg shadow-sm border border- md:h-full flex flex-col justify-between">
+          <div
+            className="p-4 w-full rounded-lg shadow-sm border md:h-full flex flex-col justify-between"
+            style={{
+              borderColor: selectedEvent.eventType
+                ? eventTypeDarkerColors[selectedEvent.eventType]
+                : "#e5e7eb",
+              borderWidth: "2px",
+              backgroundColor: selectedEvent.eventType
+                ? `${eventTypeDarkerColors[selectedEvent.eventType]}1A` // 1A = 10% alpha in hex
+                : "white",
+            }}
+          >
             {/* Top Section: Event Details */}
             <div>
               <h2 className="text-xl font-bold flex justify-between">
@@ -829,13 +881,23 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
 
               <hr className="my-2" />
               <div className="flex items-center mt-2">
-                <IconMapPin size={20} className="text-gray-400 mr-2" />
-                <span>{selectedEvent.location || "TBA"}</span>
+                <IconMapPin
+                  size={20}
+                  className="text-gray-400 mr-2 flex-shrink-0 mt-0.5"
+                />
+                <span className="text-sm overflow-hidden text-ellipsis break-words">
+                  {selectedEvent.location || "TBA"}
+                </span>
               </div>
               {selectedEvent.description && (
-                <div className="flex items-center mt-2">
-                  <IconInfoCircle size={20} className="text-gray-400 mr-2" />
-                  <span>{selectedEvent.description}</span>
+                <div className="flex items-start mt-2">
+                  <IconInfoCircle
+                    size={20}
+                    className="text-gray-400 mr-2 flex-shrink-0 mt-0.5"
+                  />
+                  <div className="text-sm overflow-hidden max-h-40 overflow-y-auto pr-1">
+                    {selectedEvent.description}
+                  </div>
                 </div>
               )}
             </div>

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { EventType } from "@prisma/client";
-import { IconMapPin, IconCalendar } from "@tabler/icons-react";
+import { IconMapPin, IconCalendar, IconInfoCircle } from "@tabler/icons-react";
 
 type ScheduleEvent = {
   id: string;
@@ -101,7 +101,7 @@ const BeginnerWorkshops: React.FC<BeginnerWorkshopsProps> = ({ schedule }) => {
               }`}
               style={getGradientStyle(index, sortedEvents.length)}
             >
-              <div className="flex items-center text-sm text-gray-600 mb-2">
+              <div className="flex items-center text-sm text-gray-600">
                 <IconCalendar size={18} className="mr-1" />
                 {new Date(ev.startDate).toLocaleDateString(undefined, {
                   weekday: "long",
@@ -109,17 +109,25 @@ const BeginnerWorkshops: React.FC<BeginnerWorkshopsProps> = ({ schedule }) => {
                   day: "numeric",
                 })}
               </div>
-              <h3 className="text-md font-semibold">{ev.name}</h3>
-              <div className="text-sm text-gray-500">
-                {formatTimeRange(ev.startDate, ev.endDate)}
-              </div>
-              <div className="text-sm text-gray-500 flex items-center mt-1">
+              <span className="inline-flex flex-wrap md:flex-row flex-col items-center text-left">
+                <p className="text-sm font-bold whitespace-normal break-words mr-1">
+                  {ev.name},
+                </p>
+                <div className="text-xs whitespace-nowrap text-gray-500">
+                  {formatTimeRange(ev.startDate, ev.endDate)}
+                </div>
+              </span>
+              <div className="flex items-start text-sm text-gray-500">
                 <IconMapPin size={16} className="mr-1" />
                 <span>{ev.location || "TBA"}</span>
               </div>
-              {ev.description && (
-                <p className="text-sm mt-1">{ev.description}</p>
-              )}
+              <div className="flex items-start text-sm text-gray-500">
+                <IconInfoCircle
+                  size={16}
+                  className="mr-1 flex-shrink-0 mt-0.5"
+                />
+                <span>{ev.description || "TBA"}</span>
+              </div>
             </div>
           );
         })}
