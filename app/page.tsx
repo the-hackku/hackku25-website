@@ -306,6 +306,48 @@ export default function HomePage() {
       website: "https://www.redbull.com/us-en",
       tier: "Partner",
     },
+    {
+      name: "McClains",
+      logo: "/images/sponsors/mcclains.png",
+      website: "https://www.mclainskc.com/lawrence-iowast",
+      tier: "Partner",
+    },
+    {
+      name: "Globe Indian",
+      logo: "/images/sponsors/globeindian.png",
+      website: "https://www.globelawrence.com/",
+      tier: "Partner",
+    },
+    {
+      name: "Red Pepper",
+      logo: "/images/sponsors/redpepper.png",
+      website: "https://www.redpepperlawrenceks.com/",
+      tier: "Partner",
+    },
+    {
+      name: "La Estrella",
+      logo: "/images/sponsors/laestrella.png",
+      website: "https://laestrellamexicana.com/",
+      tier: "Partner",
+    },
+    {
+      name: "Eileens",
+      logo: "/images/sponsors/eileens.jpg",
+      website: "https://www.eileenscookies.com/store/lawrence/",
+      tier: "Partner",
+    },
+    {
+      name: "Wheatfields",
+      logo: "/images/sponsors/wheatfields.png",
+      website: "https://wheatfieldsbakery.com/",
+      tier: "Partner",
+    },
+    {
+      name: "Bubble Box",
+      logo: "/images/sponsors/bubblebox.png",
+      website: "https://www.instagram.com/bubbleboxlawrence/",
+      tier: "Partner",
+    },
   ];
 
   return (

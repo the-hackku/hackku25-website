@@ -57,14 +57,14 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
         </div>
 
         <p className="text-lg md:text-xl text-white">
-          Have more questions? Join our{" "}
+          Have more questions? View our{" "}
+          <Link href="/info" className="underline">
+            Info Page
+          </Link>{" "}
+          or join our{" "}
           <Link href={constants.discordInvite} className="underline">
             Discord
-          </Link>{" "}
-          or email us at{" "}
-          <a href={`mailto:${constants.supportEmail}`} className="underline">
-            {constants.supportEmail}
-          </a>
+          </Link>
           .
         </p>
       </motion.div>

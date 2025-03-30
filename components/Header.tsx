@@ -18,6 +18,8 @@ import {
   IconUserFilled,
   IconBolt,
   IconStar,
+  IconInfoCircle,
+  IconInfoCircleFilled,
 } from "@tabler/icons-react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -87,9 +89,10 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
       "/": "home",
       "/schedule": "schedule",
       "/faq": "faq",
-      // "/info": "info",
+      "/info": "info",
       "/profile": "profile",
       "/signin": "profile",
+      "/admin": "admin",
     }),
     []
   );
@@ -276,7 +279,7 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                 </TabsTrigger>
 
                 <TabsTrigger value="info" asChild>
-                  {/* <Link
+                  <Link
                     href="/info"
                     className="flex items-center text-lg font-medium"
                   >
@@ -285,8 +288,8 @@ const Header = ({ isAdmin }: { isAdmin: boolean }) => {
                     ) : (
                       <IconInfoCircle size={20} className="mr-2" />
                     )}
-                    HackerDoc
-                  </Link> */}
+                    Info
+                  </Link>
                 </TabsTrigger>
                 <TabsTrigger value="profile" asChild>
                   <Link href="/profile">

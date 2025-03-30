@@ -89,31 +89,40 @@ const BeginnerWorkshops: React.FC<BeginnerWorkshopsProps> = ({ schedule }) => {
         🎓 Pre-Hackathon Beginner Workshop Series:
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        {sortedEvents.map((ev, index) => (
-          <div
-            key={ev.id}
-            className="p-3 rounded-md shadow-sm hover:shadow-md hover:transform hover:scale-102"
-            style={getGradientStyle(index, sortedEvents.length)}
-          >
-            <div className="flex items-center text-sm text-gray-600 mb-2">
-              <IconCalendar size={18} className="mr-1" />
-              {new Date(ev.startDate).toLocaleDateString(undefined, {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
-              })}
+        {sortedEvents.map((ev, index) => {
+          const hasPassed = new Date(ev.endDate) < new Date();
+          return (
+            <div
+              key={ev.id}
+              className={`p-3 rounded-md   ${
+                hasPassed
+                  ? "opacity-50 grayscale hover:cursor-not-allowed"
+                  : "shadow-sm hover:shadow-md hover:transform hover:scale-102"
+              }`}
+              style={getGradientStyle(index, sortedEvents.length)}
+            >
+              <div className="flex items-center text-sm text-gray-600 mb-2">
+                <IconCalendar size={18} className="mr-1" />
+                {new Date(ev.startDate).toLocaleDateString(undefined, {
+                  weekday: "long",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </div>
+              <h3 className="text-md font-semibold">{ev.name}</h3>
+              <div className="text-sm text-gray-500">
+                {formatTimeRange(ev.startDate, ev.endDate)}
+              </div>
+              <div className="text-sm text-gray-500 flex items-center mt-1">
+                <IconMapPin size={16} className="mr-1" />
+                <span>{ev.location || "TBA"}</span>
+              </div>
+              {ev.description && (
+                <p className="text-sm mt-1">{ev.description}</p>
+              )}
             </div>
-            <h3 className="text-md font-semibold">{ev.name}</h3>
-            <div className="text-sm text-gray-500">
-              {formatTimeRange(ev.startDate, ev.endDate)}
-            </div>
-            <div className="text-sm text-gray-500 flex items-center mt-1">
-              <IconMapPin size={16} className="mr-1" />
-              <span>{ev.location || "TBA"}</span>
-            </div>
-            {ev.description && <p className="text-sm mt-1">{ev.description}</p>}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
