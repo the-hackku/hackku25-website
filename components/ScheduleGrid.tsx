@@ -735,7 +735,9 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                               {/* Event content */}
                               <span
                                 className={`inline-flex flex-wrap items-start text-left ${
-                                  overlapInfo && overlapInfo.groupSize > 1
+                                  (isMobile || selectedDay === "All") &&
+                                  overlapInfo &&
+                                  overlapInfo.groupSize > 1
                                     ? "flex-col"
                                     : "flex-row items-center"
                                 }`}
@@ -760,22 +762,24 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                   {event.location || "TBA"}
                                 </span>
                               </div>
-                              <div className="text-xs flex items-start">
-                                <IconInfoCircle
-                                  size={12}
-                                  className="mr-1 flex-shrink-0 mt-0.5"
-                                />
-                                <span
-                                  className="overflow-hidden text-ellipsis"
-                                  style={{
-                                    display: "-webkit-box",
-                                    WebkitLineClamp: descriptionLineClamp,
-                                    WebkitBoxOrient: "vertical",
-                                  }}
-                                >
-                                  {event.description || "TBA"}
-                                </span>
-                              </div>
+                              {duration > 30 && (
+                                <div className="text-xs flex items-start">
+                                  <IconInfoCircle
+                                    size={12}
+                                    className="mr-1 flex-shrink-0 mt-0.5"
+                                  />
+                                  <span
+                                    className="overflow-hidden text-ellipsis"
+                                    style={{
+                                      display: "-webkit-box",
+                                      WebkitLineClamp: descriptionLineClamp,
+                                      WebkitBoxOrient: "vertical",
+                                    }}
+                                  >
+                                    <em>{event.description || "TBA"}</em>
+                                  </span>
+                                </div>
+                              )}
                             </div>
                           );
                         })}
