@@ -2,44 +2,47 @@
 import { redirect } from "next/navigation";
 import LocalDateTime from "@/components/localDateTime";
 import QrCodeComponent from "@/components/UserQRCode";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import {
+  Tabs,
+  // TabsList,
+  // TabsTrigger,
+  TabsContent,
+} from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress"; // Make sure this is at the top
 import Link from "next/link";
 import {
   IconMail,
   IconUser,
   IconLogout,
-  IconBraces,
   IconUserFilled,
-  IconFileText,
-  IconHistory,
+  // IconHistory,
   IconCheck,
   IconLock,
-  IconExternalLink,
-  IconEdit,
+  // IconEdit,
 } from "@tabler/icons-react";
 
 import { prisma } from "@/lib/prisma";
 import {
   getUserWithReimbursement,
-  userHasReimbursement,
+  // userHasReimbursement,
 } from "../actions/reimbursement";
-import type { UserWithReimbursement } from "../actions/reimbursement";
+// import type { UserWithReimbursement } from "../actions/reimbursement";
 
 /**
  * Helper: can the user edit the existing reimbursement?
  */
-function canEditReimbursement(user: UserWithReimbursement): boolean {
-  // ✅ Solo reimbursement check
-  if (user.travelReimbursement && user.travelReimbursement.userId === user.id) {
-    return true;
-  }
-  // ✅ Group leader check (creator of reimbursement)
-  if (user.createdReimbursement) {
-    return true;
-  }
-  return false;
-}
+// function canEditReimbursement(user: UserWithReimbursement): boolean {
+//   // ✅ Solo reimbursement check
+//   if (user.travelReimbursement && user.travelReimbursement.userId === user.id) {
+//     return true;
+//   }
+//   // ✅ Group leader check (creator of reimbursement)
+//   if (user.createdReimbursement) {
+//     return true;
+//   }
+//   return false;
+// }
 
 /**
  * Profile Page
@@ -53,8 +56,8 @@ export default async function ProfilePage() {
   if (!userSession) redirect("/signin");
 
   // 2. Check if user has any reimbursement, and if they can edit
-  const hasReimb = await userHasReimbursement(userSession);
-  const canEdit = hasReimb && canEditReimbursement(userSession);
+  // const hasReimb = await userHasReimbursement(userSession);
+  // const canEdit = hasReimb && canEditReimbursement(userSession);
 
   // 3. Grab check-ins
   const checkIns = await prisma.checkin.findMany({
@@ -93,16 +96,16 @@ export default async function ProfilePage() {
 
   return (
     <div className="container mx-auto p-4 max-w-4xl space-y-6">
-      <Card className="shadow-sm">
-        <CardHeader className="p-6">
+      <Card className="shadow-none md:shadow-sm">
+        <CardHeader className="pt-6 pb-2">
           <CardTitle className="text-3xl font-bold text-center p-0">
             My Profile
           </CardTitle>
         </CardHeader>
 
-        <CardContent className="space-y-4">
+        <CardContent className="p-2 md:p-4 space-y-4">
           <Tabs defaultValue="profileInfo" className="w-full">
-            <div className="flex justify-center mb-6">
+            {/* <div className="flex justify-center mb-6">
               <TabsList aria-label="Profile sections">
                 <TabsTrigger value="profileInfo">
                   <IconUser size={16} className="mr-2" />
@@ -113,13 +116,43 @@ export default async function ProfilePage() {
                   Check-ins
                 </TabsTrigger>
               </TabsList>
-            </div>
+            </div> */}
 
             <TabsContent value="profileInfo">
+              {/* Check-in Level + Progress */}
+              <div className="w-full space-y-2  px-2 text-center gap-0">
+                <div>
+                  <span className="text-md font-semibold">
+                    Level {1 + Math.floor(checkIns.length / 5)} Hacker
+                  </span>
+                </div>
+                <Progress
+                  value={((checkIns.length % 5) / 5) * 100}
+                  className="h-2.5"
+                />
+                <div className="flex justify-between text-sm text-muted-foreground">
+                  <span>{checkIns.length} check-ins</span>
+
+                  <span>
+                    {Math.floor(checkIns.length / 5) < 10 ? (
+                      <>
+                        {`${Math.floor(checkIns.length / 5) + 1} more to `}
+                        <strong>{`Level ${
+                          Math.floor(checkIns.length / 5) + 2
+                        }`}</strong>
+                      </>
+                    ) : (
+                      "Max level"
+                    )}
+                  </span>
+                </div>
+              </div>
+              <hr className="my-4 border-gray-200" />
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* HackerPass Card */}
-                <Card className="shadow-sm">
-                  <CardHeader>
+
+                <Card className="shadow-none">
+                  <CardHeader className="pb-2">
                     <div className="flex justify-between items-center">
                       <CardTitle className="text-xl font-semibold flex items-center">
                         <IconUserFilled
@@ -139,7 +172,7 @@ export default async function ProfilePage() {
                     </p>
                   </CardHeader>
 
-                  <CardContent className="flex flex-col items-center space-y-4 p-6">
+                  <CardContent className="flex flex-col items-center space-y-2 p-3">
                     {!participant ? (
                       <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed rounded-lg bg-gray-50">
                         <IconLock size={40} className="text-gray-400 mb-4" />
@@ -154,7 +187,10 @@ export default async function ProfilePage() {
                       </div>
                     ) : (
                       <>
-                        <QrCodeComponent qrCodeData={String(qrCodeData)} />
+                        <QrCodeComponent
+                          qrCodeData={String(qrCodeData)}
+                          size={250}
+                        />
                         <p className="text-xs text-center text-muted-foreground">
                           Present this code at check-in stations
                         </p>
@@ -165,10 +201,13 @@ export default async function ProfilePage() {
 
                 {/* User Info Card */}
                 <Card className="shadow-sm">
-                  <CardHeader>
+                  <CardHeader className="pb-3">
                     <div className="flex justify-between items-center">
                       <CardTitle className="text-xl font-semibold flex items-center">
-                        <IconBraces size={20} className="text-primary mr-2" />
+                        <IconUserFilled
+                          size={20}
+                          className="text-primary mr-2"
+                        />
                         My Information
                       </CardTitle>
                     </div>
@@ -188,23 +227,10 @@ export default async function ProfilePage() {
                         <p>{userSession.email}</p>
                       </div>
 
-                      <div className="flex items-center gap-2 text-red-500">
-                        <IconLogout
-                          className="text-primary ml-[2px]"
-                          size={20}
-                        />
-                        <Link
-                          href="/signout"
-                          className="flex flex-row items-center gap-2 hover:underline"
-                        >
-                          Sign Out
-                        </Link>
-                      </div>
-
                       <hr className="my-4 border-gray-200" />
 
                       {/* If user has Reimbursement */}
-                      {participant && hasReimb ? (
+                      {/* {participant && hasReimb && (
                         <div className="flex flex-col space-y-2">
                           {canEdit && (
                             <div className="flex items-center gap-2">
@@ -216,27 +242,12 @@ export default async function ProfilePage() {
                                 href="/reimbursement/edit"
                                 className="flex flex-row items-center gap-2 hover:underline"
                               >
-                                View/Edit My Travel Reimbursement
+                                View/Edit Travel Reimbursement
                               </Link>
                             </div>
                           )}
                         </div>
-                      ) : (
-                        participant && (
-                          <div className="flex items-center space-x-2 hover:underline">
-                            <IconFileText className="text-primary" size={20} />
-                            <p>
-                              <Link
-                                href="/reimbursement"
-                                className="flex flex-row items-center gap-2"
-                              >
-                                Apply for Travel Reimbursement
-                                <IconExternalLink size={16} />
-                              </Link>
-                            </p>
-                          </div>
-                        )
-                      )}
+                      )} */}
                     </div>
 
                     {/* If the user is a group leader, show invite statuses */}
@@ -301,7 +312,7 @@ export default async function ProfilePage() {
                     {/* [NEW] Show reimbursement group if user accepted an invite */}
                     {userSession.travelReimbursement &&
                       !userSession.createdReimbursement && (
-                        <div className="p-4 mt-4 border-l-4 border-green-400 bg-green-50">
+                        <div className="p-4 mt-4 border-l-4 border-green-400 bg-green-50 space-x-2">
                           <h3 className="text-md font-semibold mb-2">
                             Reimbursement Group
                           </h3>
@@ -318,6 +329,20 @@ export default async function ProfilePage() {
                           </Link>
                         </div>
                       )}
+                    <div className="flex items-center space-x-2 space-y-4">
+                      <div className="flex items-center gap-2 pt-2">
+                        <IconLogout
+                          className="text-primary ml-[2px]"
+                          size={20}
+                        />
+                        <Link
+                          href="/signout"
+                          className="flex flex-row items-center gap-2 hover:underline"
+                        >
+                          Sign Out
+                        </Link>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
               </div>

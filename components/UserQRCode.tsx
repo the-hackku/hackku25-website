@@ -7,9 +7,10 @@ import { QRCodeSVG } from "qrcode.react";
 interface QrCodeComponentProps {
   qrCodeData: string | null;
   error?: string;
+  size?: number;
 }
 
-const QrCodeComponent = ({ qrCodeData, error }: QrCodeComponentProps) => {
+const QrCodeComponent = ({ qrCodeData, error, size }: QrCodeComponentProps) => {
   if (error) {
     return <div>Error: {error}</div>;
   }
@@ -17,7 +18,7 @@ const QrCodeComponent = ({ qrCodeData, error }: QrCodeComponentProps) => {
   return (
     <>
       {qrCodeData ? (
-        <QRCodeSVG value={qrCodeData} size={200} />
+        <QRCodeSVG value={qrCodeData} size={size || 200} />
       ) : (
         <p>Loading QR Code...</p>
       )}

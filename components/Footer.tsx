@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   IconBrandInstagram,
   IconBrandGithub,
@@ -10,6 +11,12 @@ import {
 import constants from "@/constants";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  // Don't render footer on /schedule
+  if (pathname === "/schedule") return null;
+  if (pathname === "/info") return null;
+
   return (
     <footer className="bg-gray-100 text-gray-600 py-6 w-full">
       <div className="container mx-auto px-4 flex justify-between items-center">

@@ -70,6 +70,14 @@ export default function ManualCheckin() {
       return;
     }
 
+    // Reset form state
+
+    setSelectedUserId("");
+    setSearchQuery("");
+    setSearchResults([]);
+    setIsSearching(false);
+    setSelectedEventId("");
+
     startTransition(async () => {
       try {
         // Optionally show a toast.promise for loading states:
@@ -93,6 +101,23 @@ export default function ManualCheckin() {
       <p className="text-sm mb-4">
         Use this form to manually check a user in if they don’t have a QR code.
       </p>
+
+      {/* Events Dropdown */}
+      <div className="mb-6">
+        <label className="block mb-1 font-semibold">Select an event:</label>
+        <select
+          value={selectedEventId}
+          onChange={(e) => setSelectedEventId(e.target.value)}
+          className="border p-2 rounded w-full"
+        >
+          <option value="">-- Select an event --</option>
+          {events.map((evt) => (
+            <option key={evt.id} value={evt.id}>
+              {evt.name}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {/* Search Input */}
       <div className="mb-6">
@@ -131,23 +156,6 @@ export default function ManualCheckin() {
             ))}
           </div>
         )}
-      </div>
-
-      {/* Events Dropdown */}
-      <div className="mb-6">
-        <label className="block mb-1 font-semibold">Select an event:</label>
-        <select
-          value={selectedEventId}
-          onChange={(e) => setSelectedEventId(e.target.value)}
-          className="border p-2 rounded w-full"
-        >
-          <option value="">-- Select an event --</option>
-          {events.map((evt) => (
-            <option key={evt.id} value={evt.id}>
-              {evt.name}
-            </option>
-          ))}
-        </select>
       </div>
 
       {/* Check-in button */}

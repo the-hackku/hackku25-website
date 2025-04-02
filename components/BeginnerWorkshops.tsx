@@ -1,7 +1,13 @@
 "use client";
 import React from "react";
 import { EventType } from "@prisma/client";
-import { IconMapPin, IconCalendar, IconInfoCircle } from "@tabler/icons-react";
+import {
+  IconMapPin,
+  IconCalendar,
+  IconInfoCircle,
+  IconClock,
+} from "@tabler/icons-react";
+import Link from "next/link";
 
 type ScheduleEvent = {
   id: string;
@@ -85,16 +91,21 @@ const BeginnerWorkshops: React.FC<BeginnerWorkshopsProps> = ({ schedule }) => {
 
   return (
     <div className="border rounded-md p-4 mt-8 bg-gradient-to-br from-blue-50 to-purple-50">
-      <h2 className="text-lg font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
-        🎓 Pre-Hackathon Beginner Workshop Series:
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="flex flex-row justify-between align-middle mb-4">
+        <h2 className="text-lg font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+          🎓 Pre-Hackathon Beginner Workshop Series:
+        </h2>
+        <span className="text-gray-700 hover:text-black">
+          <Link href="/info?section=resources">View Workshop Recordings</Link>
+        </span>
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
         {sortedEvents.map((ev, index) => {
           const hasPassed = new Date(ev.endDate) < new Date();
           return (
             <div
               key={ev.id}
-              className={`p-3 rounded-md   ${
+              className={`p-3 rounded-md ${
                 hasPassed
                   ? "opacity-50 grayscale hover:cursor-not-allowed"
                   : "shadow-sm hover:shadow-md hover:transform hover:scale-102"
@@ -111,14 +122,15 @@ const BeginnerWorkshops: React.FC<BeginnerWorkshopsProps> = ({ schedule }) => {
               </div>
               <span className="inline-flex flex-wrap md:flex-row flex-col items-center text-left">
                 <p className="text-sm font-bold whitespace-normal break-words mr-1">
-                  {ev.name},
+                  {ev.name}
                 </p>
-                <div className="text-xs whitespace-nowrap text-gray-500">
-                  {formatTimeRange(ev.startDate, ev.endDate)}
-                </div>
               </span>
-              <div className="flex items-start text-sm text-gray-500">
-                <IconMapPin size={16} className="mr-1" />
+              <div className="flex items-center text-sm text-gray-500">
+                <IconClock size={14} className="mr-1" />
+                <span> {formatTimeRange(ev.startDate, ev.endDate)}</span>
+              </div>
+              <div className="flex items-center text-sm text-gray-500">
+                <IconMapPin size={14} className="mr-1" />
                 <span>{ev.location || "TBA"}</span>
               </div>
               <div className="flex items-start text-sm text-gray-500">

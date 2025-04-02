@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 const tableOfContents = [
   { title: "Wi-Fi", id: "wifi" },
@@ -16,8 +16,8 @@ const tableOfContents = [
   { title: "Food", id: "food" },
   { title: "Venue", id: "venue" },
   { title: "Parking", id: "parking" },
-  { title: "Code of Conduct", id: "code-of-conduct" },
   { title: "Resources", id: "resources" },
+  { title: "Code of Conduct", id: "code-of-conduct" },
 ];
 
 interface SectionContainerProps {
@@ -29,7 +29,7 @@ interface SectionContainerProps {
 const SectionContainer = ({ id, title, children }: SectionContainerProps) => (
   <section
     id={id}
-    className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8 shadow-sm"
+    className="scroll-mt-20 bg-gray-50 border border-gray-200 rounded-lg p-6 mb-8 shadow-sm"
   >
     <h2 className="text-2xl font-semibold mb-4">{title}</h2>
     {children}
@@ -39,17 +39,14 @@ const SectionContainer = ({ id, title, children }: SectionContainerProps) => (
 export default function HackKUInfoPage() {
   const searchParams = useSearchParams();
   const [activeSection, setActiveSection] = useState<string>("");
-  const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
 
   // Combined manual scroll and URL update.
   const handleScrollToSection = useCallback((id: string) => {
     const element = document.getElementById(id);
     if (element) {
-      const yOffset = -80;
-      const y =
-        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
-      // Update URL query param when user clicks a TOC item.
+      element.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      // Update URL query param
       const currentUrl = window.location.pathname;
       window.history.replaceState(null, "", `${currentUrl}?section=${id}`);
     }
@@ -62,55 +59,59 @@ export default function HackKUInfoPage() {
       // Delay slightly to ensure elements are rendered.
       setTimeout(() => {
         handleScrollToSection(sectionQuery);
-      }, 100);
+      }, 50);
     }
   }, [searchParams, handleScrollToSection]);
 
+  const handleClick = useCallback(
+    (id: string) => {
+      let timeout: NodeJS.Timeout | null = null;
+      handleScrollToSection(id);
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => {}, 500); // Adjust to match scroll animation duration
+    },
+    [handleScrollToSection]
+  );
+
   useEffect(() => {
-    // Populate refs for each section.
-    tableOfContents.forEach(({ id }) => {
-      sectionRefs.current[id] = document.getElementById(id);
-    });
-
-    const observerCallback: IntersectionObserverCallback = (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          setActiveSection(entry.target.id);
-        }
+    const handleScroll = () => {
+      const offsets = tableOfContents.map(({ id }) => {
+        const el = document.getElementById(id);
+        if (!el) return { id, top: Infinity };
+        const rect = el.getBoundingClientRect();
+        return { id, top: Math.abs(rect.top - 100) };
       });
+
+      const closest = offsets.reduce((prev, curr) =>
+        curr.top < prev.top ? curr : prev
+      );
+
+      setActiveSection(closest.id);
     };
 
-    const observerOptions: IntersectionObserverInit = {
-      root: null,
-      rootMargin: "0px 0px -70% 0px",
-      threshold: 0,
-    };
-
-    const observer = new IntersectionObserver(
-      observerCallback,
-      observerOptions
-    );
-
-    Object.values(sectionRefs.current).forEach((section) => {
-      if (section) observer.observe(section);
-    });
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
-      observer.disconnect();
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
   return (
     <div className="px-4 md:px-36 py-8 flex flex-col md:flex-row gap-8">
       {/* Table of Contents Sidebar */}
-      <div className="w-full md:w-1/4 border border-gray-200 rounded-lg p-4 md:sticky top-4 self-start shadow-sm bg-white">
-        <h2 className="text-xl font-semibold mb-3">Table of Contents</h2>
-        <ul className="space-y-2 text-sm">
+      <div className="w-full md:w-1/4 border border-gray-200 rounded-lg p-4 md:sticky top-4 shadow-sm h-fit md:h-[calc(100vh-32px)] flex flex-col">
+        <h2
+          className="text-xl font-semibold mb-3 hover:cursor-pointer"
+          onClick={() => handleClick("top")}
+        >
+          Table of Contents
+        </h2>
+        <ul className="text-sm flex-1 flex flex-col justify-between">
           {tableOfContents.map((section) => (
             <li key={section.id}>
               <button
-                onClick={() => handleScrollToSection(section.id)}
-                className={`underline block py-1 px-2 rounded transition-colors duration-200 text-gray-600 ${
+                onClick={() => handleClick(section.id)}
+                className={`underline w-full text-left py-1 px-2 rounded transition-colors duration-200 text-gray-600 ${
                   activeSection === section.id
                     ? "bg-blue-100 font-bold"
                     : "hover:bg-gray-100"
@@ -125,9 +126,10 @@ export default function HackKUInfoPage() {
 
       {/* Main Content */}
       <main className="md:w-3/4 w-full">
-        <div className="w-full pt-16 sticky top-0 self-start bg-white"></div>
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-4">HackKU25 Information</h1>
+          <h1 className="text-3xl font-bold mb-4" id="top">
+            ℹ️ HackKU25 Information
+          </h1>
           <p className="text-gray-600">
             Welcome to HackKU25! Below you’ll find info on Wi-Fi, Discord,
             schedule, venue details, and more.
@@ -412,7 +414,7 @@ export default function HackKUInfoPage() {
                 target="_blank"
                 className="underline text-blue-600 hover:text-blue-800"
               >
-                Anker Power Bank
+                Anker PowerCore 10K
               </a>
             </li>
             <li>
@@ -422,7 +424,7 @@ export default function HackKUInfoPage() {
                 target="_blank"
                 className="underline text-blue-600 hover:text-blue-800"
               >
-                Air Fryer
+                3 Qt Air Fryer
               </a>
             </li>
             <li>
@@ -442,7 +444,7 @@ export default function HackKUInfoPage() {
                 target="_blank"
                 className="underline text-blue-600 hover:text-blue-800"
               >
-                Wacom Drawing Tablet
+                Wacom &quot;One&quot; Drawing Tablet
               </a>
             </li>
             <li>
@@ -460,8 +462,7 @@ export default function HackKUInfoPage() {
           <h3 className="text-xl font-semibold mt-6 mb-2">Sponsor Tracks</h3>
           <ul className="list-disc list-inside ml-6 space-y-2">
             <li>
-              <strong>Patient Safety Technology Challenge</strong> — announced
-              at opening ceremony
+              <strong>Patient Safety Technology Challenge</strong>
               <ul className="list-disc list-inside ml-6">
                 <li>
                   1st:{" "}
@@ -490,8 +491,29 @@ export default function HackKUInfoPage() {
               ceremony
             </li>
             <li>
-              <strong>Pella Sponsor Track:</strong> Prize announced at opening
-              ceremony
+              <strong>Pella Sponsor Track:</strong>
+              <ul className="list-disc list-inside ml-6">
+                <li>
+                  1st:{" "}
+                  <a
+                    href="https://www.keychron.com/products/keychron-k3-wireless-mechanical-keyboard?srsltid=AfmBOopXN4-mmoOPMKgmFZ_1VsbM_iQVboUNOMiccCloJvCjbTP_up-r"
+                    className="underline text-blue-600 hover:text-blue-800"
+                    target="_blank"
+                  >
+                    Keychron K3 Mechanical Keyboard
+                  </a>
+                </li>
+                <li>
+                  2nd:{" "}
+                  <a
+                    href="https://www.logitech.com/en-us/shop/p/z407-bluetooth-computer-speakers.980-001347?utm_source=google&utm_source=Google&utm_medium=Paid-Search&utm_campaign=DEPT_FY25_QX_USA_LO_Logi_DTX-Logitech-Shopping_Google_na&gad_source=1&gclid=CjwKCAjw-qi_BhBxEiwAkxvbkFBcPEuCXUKmI8wCZK56bhB3801aF4ISYB8yiBH3gck1PTRbe5z0XRoCEzMQAvD_BwE"
+                    className="underline text-blue-600 hover:text-blue-800"
+                    target="_blank"
+                  >
+                    Logitech Bluetooth Computer Speakers with Subwoofer
+                  </a>
+                </li>
+              </ul>
             </li>
             <li>
               <strong>Ripple Sponsor Track:</strong> Prize announced at opening
@@ -722,6 +744,34 @@ export default function HackKUInfoPage() {
           </ul>
         </SectionContainer>
 
+        <SectionContainer id="resources" title="📚 Resources">
+          <div>
+            <h2>Beginner Workshops:</h2>
+            <p className="mb-2">
+              📹{" "}
+              <a
+                href="https://drive.google.com/drive/folders/1XEw_IFyhPRxq8SnmnvyU6RsD3__itkr9"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                Intro to Git/GitHub/VCS
+              </a>
+            </p>
+            <p className="mb-2">
+              📹{" "}
+              <a
+                href="https://drive.google.com/file/d/1iJo7iFkrbryY8aTh-_Q1bzt__WXHjJ2V/view"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                Intro to Javascript
+              </a>
+            </p>
+          </div>
+          <p>More information coming soon!</p>
+        </SectionContainer>
         <SectionContainer id="code-of-conduct" title="📜 Code of Conduct">
           <p>
             Please review the HackKU Code of Conduct here:{" "}
@@ -735,21 +785,6 @@ export default function HackKUInfoPage() {
             </Link>
             .
           </p>
-        </SectionContainer>
-
-        <SectionContainer id="resources" title="📚 Resources">
-          <p className="mb-2">
-            📌{" "}
-            <a
-              href="https://drive.google.com/drive/folders/1XEw_IFyhPRxq8SnmnvyU6RsD3__itkr9"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline text-blue-600 hover:text-blue-800 transition-colors"
-            >
-              Intro to Git/GitHub/VCS
-            </a>
-          </p>
-          <p>More information coming soon!</p>
         </SectionContainer>
       </main>
     </div>

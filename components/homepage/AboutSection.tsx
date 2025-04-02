@@ -12,12 +12,13 @@ interface PreviousEvent {
 
 interface AboutSectionProps {
   previousEvents: PreviousEvent[];
+  id?: string;
 }
 
-const AboutSection: React.FC<AboutSectionProps> = ({ previousEvents }) => {
+const AboutSection: React.FC<AboutSectionProps> = ({ previousEvents, id }) => {
   return (
     <section
-      id="about"
+      id={id}
       className="w-full py-32 md:py-44 flex items-center justify-center bg-[#F0E9DF]"
     >
       <motion.div
@@ -41,7 +42,11 @@ const AboutSection: React.FC<AboutSectionProps> = ({ previousEvents }) => {
           event where students come together to build innovative projects and
           compete for exciting prizes. Hackers can attend workshops, network
           with sponsors, and explore new technologies, all while meeting new
-          people and having fun!
+          people and having fun! Learn more about what to expect{" "}
+          <Link href="/info" className="underline">
+            here
+          </Link>
+          .
         </p>
 
         <h2 className="text-lg md:text-xl mt-12 mb-8 text-center text-gray-800">

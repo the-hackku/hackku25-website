@@ -21,11 +21,13 @@ export async function createReservationRequest(input: {
     }
 
     // 2) Create the reservation request record
+
+    const aggEmails = `${session.user.email}, ${input.memberEmails}`;
     const reservation = await prisma.reservationRequest.create({
       data: {
         userId: session.user.id,
         teamName: input.teamName,
-        memberEmails: input.memberEmails,
+        memberEmails: aggEmails,
         outOfState: input.outOfState,
         // If your schema has a "teamMembers" column, store it as well:
         // teamMembers: input.teamMembers,

@@ -17,13 +17,14 @@ interface FAQ {
 
 interface FAQSectionProps {
   faqs: FAQ[];
+  id?: string;
 }
 
-const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
+const FAQSection: React.FC<FAQSectionProps> = ({ faqs, id }) => {
   return (
     <section
-      id="faq"
-      className="w-full py-32 md:py-44 flex items-center justify-center  bg-[#019757] text-white"
+      id={id}
+      className="w-full min-h-screen py-32 md:py-44 flex flex-col items-center justify-start bg-[#019757] text-white"
     >
       <motion.div
         initial={{ opacity: 0, y: 50 }}
@@ -37,7 +38,7 @@ const FAQSection: React.FC<FAQSectionProps> = ({ faqs }) => {
           Frequently asked questions about HackKU.
         </p>
 
-        <div className="mx-auto w-full max-w-2xl p-4 md:p-8">
+        <div className="mx-auto w-full max-w-2xl p-4 md:p-8 ">
           <Accordion type="single" collapsible>
             {faqs.map((faq, index) => (
               <AccordionItem

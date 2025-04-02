@@ -57,9 +57,7 @@ export default async function SchedulePage() {
     <div className="container mx-auto py-4">
       {/* Pass only the main schedule events to the big schedule */}
       <BeginnerWorkshops schedule={beginnerWorkshops} />
-      <h2 className="text-2xl font-bold mt-8 flex justify-center">
-        Weekend Schedule:
-      </h2>
+      <hr className="my-8" />
 
       <ScheduleGrid schedule={mainScheduleEvents} />
       {/* Pass only the "beginner" events to the simpler layout */}

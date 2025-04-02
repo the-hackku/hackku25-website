@@ -52,16 +52,22 @@ const eventTypeDarkerColors: Record<EventType, string> = {
 };
 
 // Helper function to map slot index to a readable time format (e.g., "7:00 AM", "7:30 AM", etc.)
-const formatTime = (index: number, baseHour: number) => {
+const formatTime = (
+  index: number,
+  baseHour: number,
+  timezone: "local" | "central"
+) => {
   const hour = Math.floor(index / 2) + baseHour;
-  const minutes = index % 2 === 0 ? "00" : "30";
+  const minutes = index % 2 === 0 ? 0 : 30;
   const date = new Date();
-  date.setHours(hour, parseInt(minutes), 0, 0);
+  date.setHours(hour, minutes, 0, 0);
+
   return date
     .toLocaleTimeString(undefined, {
       hour: "numeric",
       minute: "2-digit",
       hour12: true,
+      timeZone: timezone === "central" ? "America/Chicago" : undefined,
     })
     .toLowerCase();
 };
@@ -77,28 +83,30 @@ const getRowIndex = (dateString: string, baseHour: number) => {
   return (hours - baseHour) * 2 + (minutes >= 30 ? 1 : 0);
 };
 
-const formatTimeForSlot = (startString: string, endString: string) => {
+const formatTimeForSlot = (
+  startString: string,
+  endString: string,
+  timezone: "local" | "central"
+) => {
   const start = new Date(startString);
   const end = new Date(endString);
 
-  const startTime = start
-    .toLocaleTimeString(undefined, {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    })
-    .toLowerCase()
-    .replace(/\s/g, ""); // Remove any spaces
-  const endTime = end
-    .toLocaleTimeString(undefined, {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    })
-    .toLowerCase()
-    .replace(/\s/g, ""); // Remove any spaces
+  const options: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: timezone === "central" ? "America/Chicago" : undefined,
+  };
 
-  // Remove the first "am" or "pm" if both times are the same period
+  const startTime = start
+    .toLocaleTimeString(undefined, options)
+    .toLowerCase()
+    .replace(/\s/g, "");
+  const endTime = end
+    .toLocaleTimeString(undefined, options)
+    .toLowerCase()
+    .replace(/\s/g, "");
+
   const isSamePeriod = startTime.slice(-2) === endTime.slice(-2);
   const formattedStartTime = isSamePeriod ? startTime.slice(0, -2) : startTime;
 
@@ -196,33 +204,38 @@ const getRowSpan = (
 };
 
 // Format event time range as "Day, StartTime - EndTime"
-const formatEventTimeRange = (startString: string, endString: string) => {
+const formatEventTimeRange = (
+  startString: string,
+  endString: string,
+  timezone: "local" | "central"
+) => {
   const start = new Date(startString);
   const end = new Date(endString);
 
-  const day = start.toLocaleDateString(undefined, {
+  const dateOptions: Intl.DateTimeFormatOptions = {
     weekday: "long",
     month: "short",
     day: "numeric",
-  });
-  const startTime = start
-    .toLocaleTimeString(undefined, {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    })
-    .toLowerCase()
-    .replace(/\s/g, ""); // Remove any spaces
-  const endTime = end
-    .toLocaleTimeString(undefined, {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    })
-    .toLowerCase()
-    .replace(/\s/g, ""); // Remove any spaces
+    timeZone: timezone === "central" ? "America/Chicago" : undefined,
+  };
 
-  // Remove the first "am" or "pm" if both times are the same period
+  const timeOptions: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+    timeZone: timezone === "central" ? "America/Chicago" : undefined,
+  };
+
+  const day = start.toLocaleDateString(undefined, dateOptions);
+  const startTime = start
+    .toLocaleTimeString(undefined, timeOptions)
+    .toLowerCase()
+    .replace(/\s/g, "");
+  const endTime = end
+    .toLocaleTimeString(undefined, timeOptions)
+    .toLowerCase()
+    .replace(/\s/g, "");
+
   const isSamePeriod = startTime.slice(-2) === endTime.slice(-2);
   const formattedStartTime = isSamePeriod ? startTime.slice(0, -2) : startTime;
 
@@ -232,9 +245,11 @@ const formatEventTimeRange = (startString: string, endString: string) => {
 const MobileEventDrawer = ({
   event,
   onClose,
+  timezoneMode,
 }: {
   event: ScheduleEvent | null;
   onClose: () => void;
+  timezoneMode: "local" | "central";
 }) => {
   if (!event) return null;
 
@@ -245,9 +260,21 @@ const MobileEventDrawer = ({
         animate={{ y: 0 }}
         exit={{ y: "100%" }}
         transition={{ duration: 0.2 }}
-        className="fixed inset-x-0 bottom-0 z-50 h-[50vh] overflow-hidden shadow-2xl p-5 bg-gray-200"
+        className="fixed inset-x-0 bottom-0 z-50 h-[40vh] overflow-hidden shadow-2xl p-5 bg-gray-200"
+        style={{
+          boxShadow: `inset 0 0 0 2px ${
+            eventTypeDarkerColors[event.eventType]
+          }`,
+        }}
       >
-        <div className="fixed inset-x-0 bottom-0 z-50 h-[50vh] overflow-hidden shadow-2xl p-5 bg-gray-200">
+        <div
+          className="fixed inset-x-0 bottom-0 z-50 h-[40vh] overflow-hidden shadow-2xl p-5 bg-gray-200"
+          style={{
+            boxShadow: `inset 0 0 0 2px ${
+              eventTypeDarkerColors[event.eventType]
+            }`,
+          }}
+        >
           <div className="flex justify-between items-center mb-2">
             <h2 className="text-lg font-bold">{event.name}</h2>
             <button onClick={onClose}>
@@ -256,7 +283,7 @@ const MobileEventDrawer = ({
           </div>
 
           <p className="text-sm text-gray-500 mb-2">
-            {formatEventTimeRange(event.startDate, event.endDate)}
+            {formatEventTimeRange(event.startDate, event.endDate, timezoneMode)}
           </p>
 
           {event.eventType && (
@@ -303,6 +330,9 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   ]);
   const [collapsed, setCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [timezoneMode, setTimezoneMode] = useState<"local" | "central">(
+    "central"
+  );
 
   const scheduleGridRef = useRef<HTMLDivElement | null>(null);
 
@@ -460,32 +490,15 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row sm:gap-1 md:gap-3 p-4 h-screen md:max-h-[calc(100vh-4rem)]">
-      {/* LEFT SECTION: Schedule Grid */}
-      <motion.div
+    <div className="flex flex-col md:flex-row sm:gap-1 md:gap-3 p-2 h-[calc(100vh-6rem)]">
+      <div
         ref={scheduleGridRef}
-        // Animate width on desktop, height on mobile
-        animate={
-          selectedEvent
-            ? isMobile
-              ? { height: "66%" }
-              : {}
-            : isMobile
-            ? { height: "100%" }
-            : {}
-        }
-        transition={{ duration: 0.2 }}
-        className="overflow-y-scroll relative"
-        style={
-          !isMobile
-            ? {
-                flex: collapsed ? "1 1 100%" : "0 0 75%", // Full width when collapsed
-              }
-            : {}
-        }
+        className="flex-1 flex-col gap-2 md:mb-0 h-[calc(100vh-10rem)] md:h-full md:overflow-y-hidden"
+        style={{
+          flex: collapsed ? "1 1 100%" : "0 0 75%",
+        }}
       >
-        {/* Container for Tabs and Filter */}
-        <div className="flex justify-between items-center space-x-4 py-4 bg-white sticky top-0 z-40 pb-2">
+        <div className="flex justify-between items-center space-x-4 pb-2 bg-white sticky top-0 z-40">
           <div className="flex justify-start w-full gap-2">
             <Tabs value={selectedDay} onValueChange={handleDayChange}>
               <TabsList>
@@ -501,6 +514,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                 ))}
               </TabsList>
             </Tabs>
+
             {!isMobile && (
               <div className="relative flex items-center">
                 <Input
@@ -600,6 +614,20 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                 </div>
               </PopoverContent>
             </Popover>
+            {!isMobile && (
+              <div
+                className="flex items-center gap-2 text-xs border px-2 py-1 rounded-md hover:cursor-pointer"
+                onClick={() =>
+                  setTimezoneMode(
+                    timezoneMode === "local" ? "central" : "local"
+                  )
+                }
+              >
+                <span className="font-medium w-[60px] text-center">
+                  🕒 {timezoneMode === "local" ? "Local" : "Central"}
+                </span>
+              </div>
+            )}
           </div>
 
           {!isMobile && (
@@ -615,99 +643,126 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
             </span>
           )}
         </div>
+        {/* LEFT SECTION: Schedule Grid */}
+        <motion.div
+          ref={scheduleGridRef}
+          // Animate width on desktop, height on mobile
+          animate={
+            selectedEvent
+              ? isMobile
+                ? { height: "66%" }
+                : {}
+              : isMobile
+              ? { height: "100%" }
+              : {}
+          }
+          transition={{ duration: 0.2 }}
+          className="overflow-y-scroll relative h-full"
+          style={
+            !isMobile
+              ? {
+                  flex: collapsed ? "1 1 100%" : "0 0 75%", // Full width when collapsed
+                }
+              : {}
+          }
+        >
+          {/* Container for Tabs and Filter */}
 
-        {/* Schedule Grid Table */}
+          {/* Schedule Grid Table */}
 
-        <table className="table-fixed w-full border-collapse">
-          <thead className="sticky top-0 bg-gray-100 z-10">
-            <tr>
-              <th className="w-16"></th>
-              {selectedDay === "All" ? (
-                days.map((date) => (
-                  <th key={date} className="p-2 text-center">
-                    {new Date(date).toLocaleDateString(undefined, {
+          <table className="table-fixed w-full border-collapse h-full">
+            <thead className="sticky top-0 bg-gray-100 z-50 border-b">
+              <tr>
+                <th className="w-16"></th>
+                {selectedDay === "All" ? (
+                  days.map((date) => (
+                    <th key={date} className="p-2 text-center">
+                      {new Date(date).toLocaleDateString(undefined, {
+                        weekday: "long",
+                        month: "long",
+                        day: "numeric",
+                      })}
+                    </th>
+                  ))
+                ) : (
+                  <th className="p-2 text-center">
+                    {new Date(selectedDay).toLocaleDateString(undefined, {
                       weekday: "long",
                       month: "long",
                       day: "numeric",
                     })}
                   </th>
-                ))
-              ) : (
-                <th className="p-2 text-center">
-                  {new Date(selectedDay).toLocaleDateString(undefined, {
-                    weekday: "long",
-                    month: "long",
-                    day: "numeric",
-                  })}
-                </th>
-              )}
-            </tr>
-          </thead>
+                )}
+              </tr>
+            </thead>
 
-          <tbody onClick={() => setSelectedEvent(null)}>
-            {slots.map((slotIndex) => (
-              <tr key={slotIndex} className="h-12">
-                <td
-                  className={`relative border-r border-gray-300 overflow-visible text-xs ${
-                    slotIndex % 2 === 0 ? "" : "border-b border-solid"
-                  }`}
-                >
-                  {slotIndex % 2 === 0 ? formatTime(slotIndex, baseHour) : ""}
-                </td>
-                {(selectedDay === "All" ? days : [selectedDay]).map((day) => {
-                  const dayOverlapMap = overlapMaps[day]; // get the overlap map for this day
+            <tbody onClick={() => setSelectedEvent(null)}>
+              {slots.map((slotIndex) => (
+                <tr key={slotIndex} className="h-12">
+                  <td
+                    className={`relative border-r border-gray-300 overflow-visible text-xs ${
+                      slotIndex % 2 === 0 ? "" : "border-b border-solid"
+                    }`}
+                  >
+                    {slotIndex % 2 === 0
+                      ? formatTime(slotIndex, baseHour, timezoneMode)
+                      : ""}
+                  </td>
+                  {(selectedDay === "All" ? days : [selectedDay]).map((day) => {
+                    const dayOverlapMap = overlapMaps[day]; // get the overlap map for this day
 
-                  return (
-                    <td
-                      key={day}
-                      className={`relative border-r border-gray-300 overflow-visible ${
-                        slotIndex % 2 === 0 ? "" : "border-b border-solid"
-                      }`}
-                      style={{
-                        borderRightStyle: "dashed",
-                      }}
-                    >
-                      {filteredGroupedEvents[day]
-                        ?.filter(
-                          (event) =>
-                            getRowIndex(event.startDate, baseHour) === slotIndex
-                        )
-                        .map((event) => {
-                          const { span: rowSpan, duration } = getRowSpan(
-                            event.startDate,
-                            event.endDate
-                          );
-                          const descriptionLineClamp = Math.floor(
-                            duration / 30
-                          ); // 1 line per 10 minutes
-
-                          const isSelected = selectedEvent?.id === event.id;
-                          const colorClass = event.eventType
-                            ? eventTypeColors[event.eventType]
-                            : "bg-gray-400";
-
-                          // Look up this event's overlap info
-                          const overlapInfo = dayOverlapMap?.get(event.id);
-                          let overlapStyle: React.CSSProperties = {};
-
-                          if (overlapInfo) {
-                            overlapStyle = getOverlapStyle(
-                              overlapInfo.eventIndex,
-                              overlapInfo.groupSize
+                    return (
+                      <td
+                        key={day}
+                        className={`relative border-r border-gray-300 overflow-visible ${
+                          slotIndex % 2 === 0 ? "" : "border-b border-solid"
+                        }`}
+                        style={{
+                          borderRightStyle: "dashed",
+                        }}
+                      >
+                        {filteredGroupedEvents[day]
+                          ?.filter(
+                            (event) =>
+                              getRowIndex(event.startDate, baseHour) ===
+                              slotIndex
+                          )
+                          .map((event) => {
+                            const { span: rowSpan, duration } = getRowSpan(
+                              event.startDate,
+                              event.endDate
                             );
-                          } else {
-                            // Default if not found in map
-                            overlapStyle = { left: "0%", width: "100%" };
-                          }
+                            const descriptionLineClamp = Math.floor(
+                              duration / 30
+                            ); // 1 line per 10 minutes
 
-                          return (
-                            <div
-                              key={event.id}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setSelectedEvent(isSelected ? null : event);
-                              }}
-                              className={`absolute inset-0 z-10 rounded-md p-1 overflow-hidden cursor-pointer text-white
+                            const isSelected = selectedEvent?.id === event.id;
+                            const colorClass = event.eventType
+                              ? eventTypeColors[event.eventType]
+                              : "bg-gray-400";
+
+                            // Look up this event's overlap info
+                            const overlapInfo = dayOverlapMap?.get(event.id);
+                            let overlapStyle: React.CSSProperties = {};
+
+                            if (overlapInfo) {
+                              overlapStyle = getOverlapStyle(
+                                overlapInfo.eventIndex,
+                                overlapInfo.groupSize
+                              );
+                            } else {
+                              // Default if not found in map
+                              overlapStyle = { left: "0%", width: "100%" };
+                            }
+
+                            return (
+                              <div
+                                key={event.id}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedEvent(isSelected ? null : event);
+                                }}
+                                className={`absolute inset-0 z-10 rounded-md p-1 overflow-hidden cursor-pointer text-white
                                 ${colorClass}
                                 ${
                                   isSelected
@@ -716,81 +771,85 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                 }
                                 
                               `}
-                              style={{
-                                gridRow: `span ${rowSpan}`,
-                                height: `${rowSpan * 3}rem`, // for h-12
-                                position: "absolute",
-                                ...overlapStyle,
-                                boxShadow: isSelected
-                                  ? `inset 0 0 0 2px ${
-                                      eventTypeDarkerColors[event.eventType] ||
-                                      "black"
-                                    }`
-                                  : `inset 0 0 0 0.5px ${
-                                      eventTypeDarkerColors[event.eventType] ||
-                                      "black"
-                                    }`,
-                              }}
-                            >
-                              {/* Event content */}
-                              <span
-                                className={`inline-flex flex-wrap items-start text-left ${
-                                  (isMobile || selectedDay === "All") &&
-                                  overlapInfo &&
-                                  overlapInfo.groupSize > 1
-                                    ? "flex-col"
-                                    : "flex-row items-center"
-                                }`}
+                                style={{
+                                  gridRow: `span ${rowSpan}`,
+                                  height: `${rowSpan * 3}rem`, // for h-12
+                                  position: "absolute",
+                                  ...overlapStyle,
+                                  boxShadow: isSelected
+                                    ? `inset 0 0 0 2px ${
+                                        eventTypeDarkerColors[
+                                          event.eventType
+                                        ] || "black"
+                                      }`
+                                    : `inset 0 0 0 0.5px ${
+                                        eventTypeDarkerColors[
+                                          event.eventType
+                                        ] || "black"
+                                      }`,
+                                }}
                               >
-                                <p className="text-sm font-bold whitespace-normal break-words mr-1">
-                                  {event.name}
-                                </p>
-                                <div className="text-xs text-white/90 whitespace-nowrap">
-                                  {formatTimeForSlot(
-                                    event.startDate,
-                                    event.endDate
-                                  )}
-                                </div>
-                              </span>
-
-                              <div className="text-xs flex items-start">
-                                <IconMapPin
-                                  size={12}
-                                  className="mr-1 flex-shrink-0 mt-0.5"
-                                />
-                                <span className="truncate">
-                                  {event.location || "TBA"}
+                                {/* Event content */}
+                                <span
+                                  className={`inline-flex flex-wrap items-start text-left ${
+                                    (isMobile || selectedDay === "All") &&
+                                    overlapInfo &&
+                                    overlapInfo.groupSize > 1
+                                      ? "flex-col"
+                                      : "flex-row items-center"
+                                  }`}
+                                >
+                                  <p className="text-sm font-bold whitespace-normal break-words mr-1">
+                                    {event.name}
+                                  </p>
+                                  <div className="text-xs text-white/90 whitespace-nowrap">
+                                    {formatTimeForSlot(
+                                      event.startDate,
+                                      event.endDate,
+                                      timezoneMode
+                                    )}
+                                  </div>
                                 </span>
-                              </div>
-                              {duration > 30 && (
+
                                 <div className="text-xs flex items-start">
-                                  <IconInfoCircle
+                                  <IconMapPin
                                     size={12}
                                     className="mr-1 flex-shrink-0 mt-0.5"
                                   />
-                                  <span
-                                    className="overflow-hidden text-ellipsis"
-                                    style={{
-                                      display: "-webkit-box",
-                                      WebkitLineClamp: descriptionLineClamp,
-                                      WebkitBoxOrient: "vertical",
-                                    }}
-                                  >
-                                    <em>{event.description || "TBA"}</em>
+                                  <span className="truncate">
+                                    {event.location || "TBA"}
                                   </span>
                                 </div>
-                              )}
-                            </div>
-                          );
-                        })}
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </motion.div>
+                                {duration > 30 && (
+                                  <div className="text-xs flex items-start">
+                                    <IconInfoCircle
+                                      size={12}
+                                      className="mr-1 flex-shrink-0 mt-0.5"
+                                    />
+                                    <span
+                                      className="overflow-hidden text-ellipsis"
+                                      style={{
+                                        display: "-webkit-box",
+                                        WebkitLineClamp: descriptionLineClamp,
+                                        WebkitBoxOrient: "vertical",
+                                      }}
+                                    >
+                                      <em>{event.description}</em>
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </motion.div>
+      </div>
       {/* Draggable Divider */}
       {!isMobile && !collapsed && (
         <div
@@ -838,6 +897,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
         <MobileEventDrawer
           event={selectedEvent}
           onClose={() => setSelectedEvent(null)}
+          timezoneMode={timezoneMode}
         />
       ) : (
         <motion.div
@@ -885,7 +945,8 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                 <p className="text-sm text-gray-500">
                   {formatEventTimeRange(
                     selectedEvent.startDate,
-                    selectedEvent.endDate
+                    selectedEvent.endDate,
+                    timezoneMode
                   )}
                 </p>
 

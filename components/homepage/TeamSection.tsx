@@ -20,9 +20,10 @@ interface TeamMember {
 
 interface TeamSectionProps {
   teamMembers: TeamMember[];
+  id?: string;
 }
 
-const TeamSection: React.FC<TeamSectionProps> = ({ teamMembers }) => {
+const TeamSection: React.FC<TeamSectionProps> = ({ teamMembers, id }) => {
   const [hoveredImage, setHoveredImage] = useState<string | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [scrollLeft, setScrollLeft] = useState(0);
@@ -58,7 +59,7 @@ const TeamSection: React.FC<TeamSectionProps> = ({ teamMembers }) => {
 
   return (
     <section
-      id="team"
+      id={id}
       className="w-full py-32 md:py-44 flex flex-col items-center justify-center bg-[#037EC1]"
     >
       <motion.div

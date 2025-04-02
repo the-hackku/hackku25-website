@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import SponsorsSection from "@/components/homepage/SponsorsSection";
 import AboutSection from "@/components/homepage/AboutSection";
 import AllSvg from "@/components/homepage/svg/AllSvg";
@@ -20,6 +20,49 @@ export default function HomePage() {
   // };
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isMouseOver, setIsMouseOver] = useState(false);
+  const [activeSection, setActiveSection] = useState<string>("header");
+  const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsSidebarVisible(true);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+      scrollTimeoutRef.current = setTimeout(() => {
+        setIsSidebarVisible(false);
+      }, 3000);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (scrollTimeoutRef.current) {
+        clearTimeout(scrollTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const sections = document.querySelectorAll("[id]");
+    const validSectionIds = ["header", "about", "faq", "sponsors", "team"];
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const id = entry.target.id;
+        if (entry.isIntersecting && validSectionIds.includes(id)) {
+          setActiveSection(id);
+        }
+      });
+      entries.forEach((entry) => {
+        console.log("Intersecting:", entry.target.id, entry.isIntersecting);
+      });
+    });
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     const { clientX, clientY, currentTarget } = e;
@@ -356,7 +399,57 @@ export default function HomePage() {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8, ease: "easeInOut" }}
     >
-      <div className="w-full min-h-screen overflow-x-hidden overflow-y-auto text-white font-agency">
+      <div
+        onMouseEnter={() => {
+          setIsSidebarVisible(true);
+          if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+        }}
+        onMouseLeave={() => {
+          if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+          scrollTimeoutRef.current = setTimeout(() => {
+            setIsSidebarVisible(false);
+          }, 3000);
+        }}
+        className={`fixed top-1/2 left-4 -translate-y-1/2 z-50 hidden md:flex flex-col space-y-4 transition-opacity duration-500 ${
+          isSidebarVisible ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        {[
+          { id: "header", label: "Home" },
+          { id: "about", label: "About" },
+          { id: "faq", label: "FAQ" },
+          { id: "sponsors", label: "Sponsors" },
+          { id: "team", label: "Team" },
+        ].map(({ id, label }) => (
+          <Link
+            key={id}
+            href={`#${id}`}
+            className="flex items-center space-x-2 group"
+          >
+            <div
+              className={`transition-all duration-500 ease-in-out rounded-full
+        ${
+          activeSection === id
+            ? "bg-yellow-400 w-3 h-14"
+            : "bg-gray-400 w-1 h-10"
+        }
+        group-hover:w-2 group-hover:bg-yellow-300`}
+            />
+            <span
+              className={`text-sm px-2 py-1 rounded-md  text-black transition-all duration-300
+    ${
+      activeSection === id
+        ? "opacity-100 bg-yellow-400"
+        : "opacity-0 group-hover:opacity-100"
+    }`}
+            >
+              {label}
+            </span>
+          </Link>
+        ))}
+      </div>
+
+      <div className="w-full min-h-screen overflow-x-hidden text-white font-agency">
         {/* Header Section */}
         <section
           id="header"
@@ -449,10 +542,14 @@ export default function HomePage() {
             <AllSvg className="w-full h-full object-cover" />
           </div>
         </section>
-        <AboutSection previousEvents={previousEvents} />
-        <FAQSection faqs={faqs} />;
-        <SponsorsSection sponsorTiers={sponsorTiers} sponsors={sponsors} />
-        <TeamSection teamMembers={teamMembers} />
+        <AboutSection previousEvents={previousEvents} id="about" />
+        <FAQSection faqs={faqs} id="faq" />
+        <SponsorsSection
+          sponsorTiers={sponsorTiers}
+          sponsors={sponsors}
+          id="sponsors"
+        />
+        <TeamSection teamMembers={teamMembers} id="team" />
       </div>
     </motion.div>
   );

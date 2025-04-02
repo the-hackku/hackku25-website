@@ -13,11 +13,13 @@ interface Sponsor {
 interface SponsorsSectionProps {
   sponsorTiers: string[];
   sponsors: Sponsor[];
+  id?: string;
 }
 
 const SponsorsSection: React.FC<SponsorsSectionProps> = ({
   sponsorTiers,
   sponsors,
+  id,
 }) => {
   // Function to determine logo size based on tier rank
   const getLogoSize = (tier: string) => {
@@ -37,7 +39,7 @@ const SponsorsSection: React.FC<SponsorsSectionProps> = ({
 
   return (
     <section
-      id="sponsors"
+      id={id}
       className="w-full py-32 md:py-44 flex flex-col items-center justify-center bg-gray-50 text-black"
     >
       <motion.div

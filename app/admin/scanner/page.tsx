@@ -20,6 +20,9 @@ export default function ScannerPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [, startTransition] = useTransition();
   const [events, setEvents] = useState<{ id: string; name: string }[]>([]);
+  const [scannerKey, setScannerKey] = useState(0); // <-- Add this
+  const [scannerStartTime, setScannerStartTime] = useState<number>(Date.now());
+  const [scannerExpired, setScannerExpired] = useState(false);
   const [scanHistory, setScanHistory] = useState<
     {
       id: string;
@@ -32,9 +35,13 @@ export default function ScannerPage() {
 
   const selectedEventRef = useRef<string | null>(null);
 
-  // Sound effects
-  const errorSound = useRef(new Audio("/sounds/error.mp3"));
-  const successSound = useRef(new Audio("/sounds/success.mp3"));
+  const errorSound = useRef<HTMLAudioElement | null>(null);
+  const successSound = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    errorSound.current = new Audio("/sounds/error.mp3");
+    successSound.current = new Audio("/sounds/success.mp3");
+  }, []);
 
   // Fetch events and scan history on component mount
   useEffect(() => {
@@ -61,7 +68,7 @@ export default function ScannerPage() {
     const selectedEvent = selectedEventRef.current;
 
     if (!selectedEvent) {
-      errorSound.current.play(); // Play error sound for missing event
+      errorSound.current?.play();
       setIsProcessing(false);
       setLoading(false);
       setValidationResult("Please select an event.");
@@ -79,14 +86,14 @@ export default function ScannerPage() {
         if (result.success) {
           if (result.isHighSchoolStudent) {
             setBackgroundColor("yellow");
-            errorSound.current.play(); // Play error sound for high school student
+            errorSound.current?.play();
             setValidationResult(
               `HS Student: ${result.name} -
               Chaperone: ${result.chaperoneInfo?.chaperoneName}`
             );
           } else {
             setBackgroundColor("green");
-            successSound.current.play(); // Play success sound
+            successSound.current?.play();
             setValidationResult(`Welcome ${result.name}!`);
 
             setScanHistory((prevHistory) => [
@@ -102,7 +109,7 @@ export default function ScannerPage() {
           }
         } else {
           setBackgroundColor("red");
-          errorSound.current.play(); // Play error sound for invalid scan
+          errorSound.current?.play();
           setValidationResult(result.message || "Invalid QR code.");
         }
 
@@ -110,6 +117,22 @@ export default function ScannerPage() {
       });
     }
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = Date.now();
+      const elapsed = now - scannerStartTime;
+
+      if (elapsed > 30_000) {
+        setScannerExpired(true);
+        setScannerKey((prev) => prev + 1); // Forces remount
+        setScannerStartTime(Date.now());
+        setScannerExpired(false);
+      }
+    }, 5_000); // Check every 5s
+
+    return () => clearInterval(interval);
+  }, [scannerStartTime]);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -120,7 +143,9 @@ export default function ScannerPage() {
             selectedEventRef.current = value;
           }}
         >
-          <SelectTrigger>
+          <SelectTrigger
+            className={selectedEventRef.current === null ? "bg-yellow-200" : ""}
+          >
             <SelectValue placeholder="Select an event" />
           </SelectTrigger>
           <SelectContent>
@@ -131,6 +156,7 @@ export default function ScannerPage() {
             ))}
           </SelectContent>
         </Select>
+
         <div
           className="container mx-auto py-8"
           style={{
@@ -142,12 +168,17 @@ export default function ScannerPage() {
           }}
         >
           <div className="space-y-4">
-            <div style={{ opacity: isProcessing ? 0 : 1 }}>
-              <ScannerComponent
-                onScanResult={handleScanResult}
-                isProcessing={isProcessing}
-              />
-            </div>
+            {!scannerExpired ? (
+              <div style={{ opacity: isProcessing ? 0 : 1 }}>
+                <ScannerComponent
+                  key={scannerKey}
+                  onScanResult={handleScanResult}
+                  isProcessing={isProcessing}
+                />
+              </div>
+            ) : (
+              <div className="text-center"></div>
+            )}
 
             {(validationResult || loading) && (
               <div
@@ -156,7 +187,6 @@ export default function ScannerPage() {
                   top: "50%",
                   left: "50%",
                   transform: "translate(-50%, -50%)",
-
                   textAlign: "center",
                   zIndex: 10,
                 }}
@@ -165,14 +195,8 @@ export default function ScannerPage() {
                   "Validating..."
                 ) : (
                   <>
-                    <p
-                      className="
-                      text-2xl
-                      font-bold
-                      mb-4
-                    "
-                    >
-                      {validationResult}{" "}
+                    <p className="text-2xl font-bold mb-4">
+                      {validationResult}
                     </p>
                     <p>Click anywhere to scan again.</p>
                   </>

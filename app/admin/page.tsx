@@ -257,8 +257,6 @@ export default function AdminTabsPage() {
 
   return (
     <div className="container mx-auto max-w-5xl py-8">
-      <h1 className="text-2xl font-semibold mb-4">Admin Dashboard</h1>
-
       {/* Add total registrations display */}
       <div className="mb-4 p-4 border rounded-lg flex flex-row">
         <h2 className="text-xl font-semibold">
@@ -266,12 +264,6 @@ export default function AdminTabsPage() {
           {totalRegistrations !== null ? totalRegistrations : "Loading..."}
         </h2>
       </div>
-      <Link
-        href="https://docs.google.com/spreadsheets/d/1Xwv7RBzU2VFX_xXCNxEpOi-StvNJV5DsiqkIYEQWQD4/edit?gid=0#gid=0"
-        target="_blank"
-      >
-        <Button className="bg-green-600 mb-4">Go to Google Sheet</Button>
-      </Link>
 
       {/* User Details Dialog */}
       <UserDetailsDialog
@@ -285,17 +277,31 @@ export default function AdminTabsPage() {
         onOpenChange={(open) => !open && setSelectedEventId(null)} // Reset event ID when closed
       />
 
-      <Tabs defaultValue="analytics">
-        <TabsList className="mb-4">
-          <TabsTrigger value="analytics">Analytics</TabsTrigger>
-          <TabsTrigger value="users">Users</TabsTrigger>
-          <TabsTrigger value="checkins">Check-ins</TabsTrigger>
-        </TabsList>
-        <TabsList className="mb-4">
-          <TabsTrigger value="reimbursements">Reimbursements</TabsTrigger>
-          <TabsTrigger value="events">Events</TabsTrigger>
-          <TabsTrigger value="actions">Admin Actions</TabsTrigger>
-        </TabsList>
+      <Tabs defaultValue="users">
+        <div className="flex flex-col md:flex-row items-start gap-2">
+          <TabsList className="mb-4">
+            <TabsTrigger value="users">Users</TabsTrigger>
+            <TabsTrigger value="analytics">Analytics</TabsTrigger>
+
+            <TabsTrigger value="checkins">Check-ins</TabsTrigger>
+          </TabsList>
+          <TabsList className="mb-4">
+            <TabsTrigger value="reimbursements">Reimbursements</TabsTrigger>
+            <TabsTrigger value="events">Events</TabsTrigger>
+            <TabsTrigger value="actions">Admin Actions</TabsTrigger>
+          </TabsList>
+          <div className="flex flex-row gap-2">
+            <Link
+              href="https://docs.google.com/spreadsheets/d/1Xwv7RBzU2VFX_xXCNxEpOi-StvNJV5DsiqkIYEQWQD4/edit?gid=0#gid=0"
+              target="_blank"
+            >
+              <Button className="bg-green-600 mb-4">Go to Google Sheet</Button>
+            </Link>
+            <Link href="/admin/scanner">
+              <Button className="bg-blue-400 mb-4">Scan In Hackers</Button>
+            </Link>
+          </div>
+        </div>
 
         <TabsContent value="users">
           <GenericDataContainer<User>
