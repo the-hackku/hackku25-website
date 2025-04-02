@@ -96,8 +96,8 @@ export function EventForm() {
 
   return (
     <div className="flex justify-center">
-      <div className="w-full max-w-xl p-6 bg-white rounded-lg shadow-sm border m-8">
-        <h2 className="text-lg font-semibold mb-4 text-center">
+      <div className=" p-4 flex-1 bg-white rounded-lg shadow-sm border ">
+        <h2 className="text-lg font-semibold mb-4 text-center bg-green-400">
           Create New Event
         </h2>
         <Form {...form}>
@@ -260,9 +260,13 @@ export function EventForm() {
             </div>
 
             {/* Submit Button */}
-            <div className="flex justify-end pt-4">
-              <Button type="submit" disabled={form.formState.isSubmitting}>
-                Add Event
+            <div className="w-full">
+              <Button
+                className="bg-blue-600 text-white w-full rounded hover:bg-blue-700"
+                type="submit"
+                disabled={form.formState.isSubmitting}
+              >
+                Create Event
               </Button>
             </div>
           </form>

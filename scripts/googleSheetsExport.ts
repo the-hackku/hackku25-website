@@ -8,6 +8,7 @@ import type {
   User as PrismaUser,
   ParticipantInfo as PrismaParticipantInfo,
   ReservationRequest,
+  ThemedRoomReservation,
 } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
@@ -260,5 +261,45 @@ export async function exportReservationRequestToGoogleSheet(
     console.log("✅ Reservation request successfully added to Google Sheet!");
   } catch (error) {
     console.error("❌ Error exporting reservation request data:", error);
+  }
+}
+
+export async function exportThemedRoomReservationToGoogleSheet(
+  reservation: ThemedRoomReservation
+) {
+  const sheetsApi = google.sheets({ version: "v4", auth });
+
+  try {
+    // 1) Fetch the user’s email
+    const user = await prisma.user.findUnique({
+      where: { id: reservation.userId },
+      select: { email: true },
+    });
+    const email = user?.email ?? "N/A";
+
+    // 2) Format reservation data for the sheet
+    const row = [
+      email,
+      reservation.teamName,
+      reservation.memberEmails,
+      reservation.theme,
+      reservation.timeSlot,
+      reservation.createdAt?.toISOString() ?? "N/A",
+    ];
+
+    // 3) Append to Google Sheet tab: "ThemedRoomReservations"
+    await sheetsApi.spreadsheets.values.append({
+      spreadsheetId: SHEET_ID,
+      range: "ThemedRoomReservations!A1",
+      valueInputOption: "RAW",
+      insertDataOption: "INSERT_ROWS",
+      requestBody: {
+        values: [row],
+      },
+    });
+
+    console.log("✅ Themed Room Reservation exported to Google Sheets.");
+  } catch (error) {
+    console.error("❌ Failed to export themed room reservation:", error);
   }
 }

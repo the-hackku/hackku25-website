@@ -287,7 +287,9 @@ export default function AdminTabsPage() {
           </TabsList>
           <TabsList className="mb-4">
             <TabsTrigger value="reimbursements">Reimbursements</TabsTrigger>
-            <TabsTrigger value="events">Events</TabsTrigger>
+            <Link href="/admin/events">
+              <TabsTrigger value="events">Manage Events</TabsTrigger>
+            </Link>
             <TabsTrigger value="actions">Admin Actions</TabsTrigger>
           </TabsList>
           <div className="flex flex-row gap-2">
@@ -382,16 +384,7 @@ export default function AdminTabsPage() {
             debounceTime={250}
           />
         </TabsContent>
-        <TabsContent value="events">
-          <div className="flex flex-col items-start space-y-2">
-            <p className="text-sm text-muted-foreground">
-              Manage your events in a separate page:
-            </p>
-            <Link href="/admin/events" className="underline text-blue-600">
-              Go to Manage Events
-            </Link>
-          </div>
-        </TabsContent>
+
         <TabsContent value="scanner">
           <div className="flex flex-col items-start space-y-2">
             <p className="text-sm text-muted-foreground">

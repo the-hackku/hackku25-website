@@ -314,6 +314,12 @@ export default function HomePage() {
       tier: "Mega",
     },
     {
+      name: "KU School of business",
+      logo: "/images/sponsors/bschool.png",
+      website: "https://business.ku.edu/",
+      tier: "Kila",
+    },
+    {
       name: "Niantic 8th Wall",
       logo: "/images/sponsors/niantic.svg",
       website: "https://www.8thwall.com/niantic",
@@ -436,11 +442,11 @@ export default function HomePage() {
         group-hover:w-2 group-hover:bg-yellow-300`}
             />
             <span
-              className={`text-sm px-2 py-1 rounded-md  text-black transition-all duration-300
+              className={`text-sm px-2 py-1 rounded-md text-black transition-all duration-300
     ${
       activeSection === id
         ? "opacity-100 bg-yellow-400"
-        : "opacity-0 group-hover:opacity-100"
+        : "opacity-0 group-hover:opacity-100 bg-gray-300"
     }`}
             >
               {label}

@@ -1,5 +1,6 @@
 // app/schedule/page.tsx
 
+import AdminEventEditor from "@/components/admin/EventEditor";
 import { EventForm } from "@/components/forms/eventForm";
 import ScheduleGrid from "@/components/ScheduleGrid";
 import { prisma } from "@/lib/prisma";
@@ -53,7 +54,10 @@ export default async function SchedulePage() {
         <Link href="/admin">← Back to Admin Panel</Link>
       </div>
       <h1 className="text-2xl font-bold mb-4">Events</h1>
-      <EventForm />
+      <div className="flex flex-col md:flex-row gap-2">
+        <EventForm />
+        <AdminEventEditor events={events} />
+      </div>
       {/* Render the Schedule Grid */}
       <ScheduleGrid schedule={mainScheduleEvents} />
     </>

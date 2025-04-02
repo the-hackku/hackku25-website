@@ -3,9 +3,13 @@
 import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/authoptions";
+import { TimeSlot, RoomTheme } from "@prisma/client";
 
 // 1) Import your Google Sheets export function
-import { exportReservationRequestToGoogleSheet } from "@/scripts/googleSheetsExport";
+import {
+  exportReservationRequestToGoogleSheet,
+  exportThemedRoomReservationToGoogleSheet,
+} from "@/scripts/googleSheetsExport";
 
 export async function createReservationRequest(input: {
   teamName: string;
@@ -29,12 +33,9 @@ export async function createReservationRequest(input: {
         teamName: input.teamName,
         memberEmails: aggEmails,
         outOfState: input.outOfState,
-        // If your schema has a "teamMembers" column, store it as well:
-        // teamMembers: input.teamMembers,
       },
     });
 
-    // 3) Immediately export to Google Sheets
     await exportReservationRequestToGoogleSheet(reservation);
 
     // 4) Return the reservation record
@@ -46,4 +47,51 @@ export async function createReservationRequest(input: {
     }
     throw new Error("Failed to create reservation request.");
   }
+}
+
+export async function createThemedRoomReservation(data: {
+  teamName: string;
+  memberEmails: string[];
+  timeSlot: TimeSlot;
+  theme: RoomTheme;
+}) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
+    throw new Error("Not authenticated. Please sign in.");
+  }
+
+  const existing = await prisma.themedRoomReservation.findUnique({
+    where: {
+      theme_timeSlot: {
+        theme: data.theme,
+        timeSlot: data.timeSlot,
+      },
+    },
+  });
+
+  if (existing) {
+    throw new Error("That theme and time slot is already taken.");
+  }
+  const aggEmails = `${session.user.email}, ${data.memberEmails}`;
+  const reservation = await prisma.themedRoomReservation.create({
+    data: {
+      teamName: data.teamName,
+      memberEmails: aggEmails,
+      timeSlot: data.timeSlot,
+      theme: data.theme,
+      userId: session.user.id,
+    },
+  });
+  await exportThemedRoomReservationToGoogleSheet(reservation);
+}
+
+export async function getTakenThemeTimeCombos() {
+  const reservations = await prisma.themedRoomReservation.findMany({
+    select: {
+      theme: true,
+      timeSlot: true,
+    },
+  });
+
+  return reservations;
 }

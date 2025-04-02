@@ -22,7 +22,7 @@ export default async function ReservationLayout({
   }
 
   // 2) Check if a reservation already exists for this user
-  const existingReservation = await prisma.reservationRequest.findUnique({
+  const existingReservation = await prisma.themedRoomReservation.findFirst({
     where: { userId: session.user.id },
   });
 

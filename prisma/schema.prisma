@@ -187,6 +187,43 @@ model ReservationRequest {
   updatedAt            DateTime @default(now())
 }
 
+model ThemedRoomReservation {
+  id           String     @id @default(cuid())
+  userId       String   @unique
+  teamName     String
+  memberEmails String
+  timeSlot     TimeSlot
+  theme        RoomTheme
+  createdAt    DateTime   @default(now())
+
+@@unique([theme, timeSlot], name: "theme_timeSlot")
+
+}
+
+
+enum TimeSlot {
+  FRI_8_11PM
+  FRI_11PM_2AM
+  SAT_2_5AM
+  SAT_5_8AM
+  SAT_8_11AM
+  SAT_11AM_2PM
+  SAT_2_5PM
+  SAT_5_8PM
+  SAT_8_11PM
+  SAT_11PM_2AM
+  SUN_2_5AM
+  SUN_5_8AM
+}
+
+enum RoomTheme {
+  DUNGEONS_AND_DRAGONS
+  HOW_TO_TRAIN_YOUR_DRAGON
+  DARK_FAIRY
+}
+
+
+
 model ReimbursementInvite {
   id                 String   @id @default(cuid())
   reimbursementId    String

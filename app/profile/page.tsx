@@ -136,7 +136,7 @@ export default async function ProfilePage() {
                   <span>
                     {Math.floor(checkIns.length / 5) < 10 ? (
                       <>
-                        {`${Math.floor(checkIns.length / 5) + 1} more to `}
+                        {`${5 - (checkIns.length % 5)} more to `}
                         <strong>{`Level ${
                           Math.floor(checkIns.length / 5) + 2
                         }`}</strong>
