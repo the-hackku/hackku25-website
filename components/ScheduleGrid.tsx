@@ -126,29 +126,48 @@ const doEventsOverlap = (a: ScheduleEvent, b: ScheduleEvent) => {
 
 // Function to group overlapping events
 const groupOverlappingEvents = (events: ScheduleEvent[]): ScheduleEvent[][] => {
-  const sortedEvents = events.sort(
-    (a, b) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-  );
-  const groups: ScheduleEvent[][] = [];
+  const parent: Record<string, string> = {};
 
-  for (const event of sortedEvents) {
-    let placed = false;
-
-    for (const group of groups) {
-      // Check if the event overlaps with any event in the group
-      if (group.some((e) => doEventsOverlap(e, event))) {
-        group.push(event);
-        placed = true;
-        break;
-      }
+  const find = (x: string): string => {
+    if (parent[x] !== x) {
+      parent[x] = find(parent[x]);
     }
+    return parent[x];
+  };
 
-    if (!placed) {
-      groups.push([event]); // Create a new group
+  const union = (a: string, b: string) => {
+    const rootA = find(a);
+    const rootB = find(b);
+    if (rootA !== rootB) {
+      parent[rootB] = rootA;
+    }
+  };
+
+  // Initialize disjoint sets
+  for (const event of events) {
+    parent[event.id] = event.id;
+  }
+
+  // Merge overlapping sets
+  for (let i = 0; i < events.length; i++) {
+    for (let j = i + 1; j < events.length; j++) {
+      if (doEventsOverlap(events[i], events[j])) {
+        union(events[i].id, events[j].id);
+      }
     }
   }
 
-  return groups;
+  // Group by root parent
+  const groups: Record<string, ScheduleEvent[]> = {};
+  for (const event of events) {
+    const root = find(event.id);
+    if (!groups[root]) {
+      groups[root] = [];
+    }
+    groups[root].push(event);
+  }
+
+  return Object.values(groups);
 };
 
 type OverlapInfo = {
@@ -162,13 +181,55 @@ function buildOverlapMap(events: ScheduleEvent[]): Map<string, OverlapInfo> {
   const groups = groupOverlappingEvents(events);
 
   groups.forEach((group, groupIndex) => {
-    group.forEach((ev, eventIndex) => {
-      overlapMap.set(ev.id, {
-        groupIndex,
-        eventIndex,
-        groupSize: group.length,
-      });
-    });
+    const sortedGroup = group.sort(
+      (a, b) =>
+        new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+    );
+
+    const columns: ScheduleEvent[][] = [];
+
+    for (const event of sortedGroup) {
+      let placed = false;
+
+      for (let colIndex = 0; colIndex < columns.length; colIndex++) {
+        const col = columns[colIndex];
+        const lastInCol = col[col.length - 1];
+
+        if (
+          new Date(event.startDate).getTime() >=
+          new Date(lastInCol.endDate).getTime()
+        ) {
+          col.push(event);
+          overlapMap.set(event.id, {
+            groupIndex,
+            eventIndex: colIndex,
+            groupSize: 0, // we'll fix this later
+          });
+          placed = true;
+          break;
+        }
+      }
+
+      if (!placed) {
+        columns.push([event]);
+        overlapMap.set(event.id, {
+          groupIndex,
+          eventIndex: columns.length - 1,
+          groupSize: 0, // will fix later
+        });
+      }
+    }
+
+    // Fix groupSize now that we know total columns
+    const totalColumns = columns.length;
+    for (const col of columns) {
+      for (const ev of col) {
+        const info = overlapMap.get(ev.id);
+        if (info) {
+          info.groupSize = totalColumns;
+        }
+      }
+    }
   });
 
   return overlapMap;
@@ -450,32 +511,28 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
       ? filteredEvents
       : filteredGroupedEvents[selectedDay] || [];
 
-  // Use dayEvents (which is filteredEvents in "All" view or events for a specific day)
-  // to determine the base hour (earliest start hour).
+  // Determine base hour (earliest event start hour)
   const baseHour = dayEvents.length
     ? Math.min(
         ...dayEvents.map((event) => new Date(event.startDate).getHours())
       )
-    : 6; // fallback if no events
+    : 6;
 
-  // Determine the first and last row indexes based on event start/end times.
-  const firstEventSlotIndex = dayEvents.length
-    ? Math.min(
-        ...dayEvents.map((event) => getRowIndex(event.startDate, baseHour))
-      )
-    : 0;
-  const lastEventSlotIndex = dayEvents.length
-    ? Math.max(
-        ...dayEvents.map((event) => getRowIndex(event.endDate, baseHour))
-      )
-    : firstEventSlotIndex;
+  // Define timezone-aware end-of-day
+  const getEndOfDaySlot = (events: ScheduleEvent[]) => {
+    const date = new Date(events[0]?.startDate || Date.now());
+    const end = new Date(date);
+    end.setHours(23, 59, 59, 999); // 11:59 PM
 
-  // Generate slots only for the range where events occur.
-  const slots = Array.from(
-    { length: lastEventSlotIndex - firstEventSlotIndex + 1 },
-    (_, i) => i + firstEventSlotIndex
-  );
+    const base = new Date(date);
+    base.setHours(baseHour, 0, 0, 0);
 
+    const diffMinutes = (end.getTime() - base.getTime()) / (1000 * 60);
+    return Math.ceil(diffMinutes / 30) + 1; // Add one more slot to include final half-hour
+  };
+
+  const numberOfSlots = getEndOfDaySlot(dayEvents);
+  const slots = Array.from({ length: numberOfSlots }, (_, i) => i);
   // Handle multi-select of event types
   const handleEventTypeChange = (type: EventType, checked: boolean) => {
     setSelectedEventTypes((prev) => {
@@ -820,7 +877,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
                                     {event.location || "TBA"}
                                   </span>
                                 </div>
-                                {duration > 30 && (
+                                {duration > 30 && event.description && (
                                   <div className="text-xs flex items-start">
                                     <IconInfoCircle
                                       size={12}

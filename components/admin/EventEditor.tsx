@@ -75,7 +75,7 @@ export default function AdminEventEditor({ events }: Props) {
   }
 
   return (
-    <div className="border p-4 rounded-xl w-full max-w-2xl mx-auto">
+    <div className="border p-4 rounded-xl w-full max-w-2xl mx-auto text-sm">
       <h2 className="text-lg font-semibold mb-4 text-center bg-yellow-200">
         Edit Existing Event
       </h2>
@@ -87,24 +87,29 @@ export default function AdminEventEditor({ events }: Props) {
         <option value="" disabled>
           Select an event
         </option>
-        {events.map((ev) => {
-          const date = new Date(ev.startDate);
-          const weekday = date.toLocaleDateString(undefined, {
-            weekday: "short",
-            month: "short",
-            day: "numeric",
-          });
-          const time = date.toLocaleTimeString(undefined, {
-            hour: "numeric",
-            minute: "2-digit",
-          });
+        {[...events]
+          .sort(
+            (a, b) =>
+              new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
+          )
+          .map((ev) => {
+            const date = new Date(ev.startDate);
+            const weekday = date.toLocaleDateString(undefined, {
+              weekday: "short",
+              month: "short",
+              day: "numeric",
+            });
+            const time = date.toLocaleTimeString(undefined, {
+              hour: "numeric",
+              minute: "2-digit",
+            });
 
-          return (
-            <option key={ev.id} value={ev.id}>
-              {ev.name} – {weekday} @ {time}
-            </option>
-          );
-        })}
+            return (
+              <option key={ev.id} value={ev.id}>
+                {ev.name} – {weekday} @ {time}
+              </option>
+            );
+          })}
       </select>
 
       {selectedEvent && (

@@ -10,6 +10,7 @@ import FAQSection from "@/components/homepage/FAQSection";
 import { IconBrandDiscord } from "@tabler/icons-react";
 import constants from "@/constants";
 import TeamSection from "@/components/homepage/TeamSection";
+import { useSession } from "next-auth/react";
 
 // import TeamSection from "@/components/homepage/TeamSection";
 
@@ -23,6 +24,8 @@ export default function HomePage() {
   const [activeSection, setActiveSection] = useState<string>("header");
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const { data: session } = useSession();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -517,15 +520,28 @@ export default function HomePage() {
               transition={{ duration: 0.7, delay: 0.3 }}
               className="mt-6 flex flex-row justify-center md:justify-start gap-2"
             >
-              <Link href="/register">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="px-4 py-3 bg-yellow-500 rounded-full text-2xl text-black font-agency"
-                >
-                  Register Now
-                </motion.button>
-              </Link>
+              {session ? (
+                <Link href="/schedule">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-4 py-3 bg-green-600 rounded-full text-2xl text-white font-agency"
+                  >
+                    View Schedule
+                  </motion.button>
+                </Link>
+              ) : (
+                <Link href="/register">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-4 py-3 bg-yellow-500 rounded-full text-2xl text-black font-agency"
+                  >
+                    Register Now
+                  </motion.button>
+                </Link>
+              )}
+
               <Link
                 href={constants.discordInvite}
                 target="_blank"

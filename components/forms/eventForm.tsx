@@ -96,13 +96,13 @@ export function EventForm() {
 
   return (
     <div className="flex justify-center">
-      <div className=" p-4 flex-1 bg-white rounded-lg shadow-sm border ">
+      <div className=" p-4 bg-white rounded-lg shadow-sm border ">
         <h2 className="text-lg font-semibold mb-4 text-center bg-green-400">
           Create New Event
         </h2>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid gap-4">
+            <div className="grid gap-1">
               {/* Event Name */}
               <FormField
                 control={form.control}
@@ -220,7 +220,7 @@ export function EventForm() {
               />
 
               {/* Event Start Time and Duration */}
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-1">
                 <FormField
                   control={form.control}
                   name="startTime"

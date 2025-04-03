@@ -99,14 +99,14 @@ export default function HackKUInfoPage() {
   return (
     <div className="px-4 md:px-36 py-8 flex flex-col md:flex-row gap-8">
       {/* Table of Contents Sidebar */}
-      <div className="w-full md:w-1/4 border border-gray-200 rounded-lg p-4 md:sticky top-4 shadow-sm h-fit md:h-[calc(100vh-32px)] flex flex-col">
+      <div className="w-full md:w-1/4 border border-gray-200 rounded-lg p-4 md:sticky top-4 shadow-sm h-fit flex flex-col">
         <h2
           className="text-xl font-semibold mb-3 hover:cursor-pointer"
           onClick={() => handleClick("top")}
         >
           Table of Contents
         </h2>
-        <ul className="text-sm flex-1 flex flex-col justify-between">
+        <ul className="text-sm flex-1 flex flex-col justify-between gap-1">
           {tableOfContents.map((section) => (
             <li key={section.id}>
               <button
@@ -234,9 +234,7 @@ export default function HackKUInfoPage() {
           <h3 className="text-xl font-medium mt-6 mb-2">
             🗺️ Venue Information
           </h3>
-          <p className="mb-2">
-            🚨 <strong>Need to add map</strong>
-          </p>
+
           <p className="mb-2">
             HackKU25 will take place throughout the University of Kansas School
             of Engineering, which includes LEEP2, Eaton, and Learned Halls. The
@@ -245,7 +243,6 @@ export default function HackKUInfoPage() {
           </p>
           <h4 className="text-lg font-medium mt-4 mb-2">Accommodations</h4>
           <p className="mb-4">
-            🚨 <strong>Need to be edited</strong>
             <br />
             HackKU will NOT be providing specific sleeping accommodations,
             however, all participants are welcome to sleep in the venue if they
@@ -346,32 +343,19 @@ export default function HackKUInfoPage() {
           id="tracks-challenges-prizes"
           title="🏆 Tracks, Challenges & Prizes"
         >
-          <h3 className="text-xl font-semibold mt-4 mb-2">Theme Track</h3>
           <p>
-            The theme will be announced during <strong>OPENING CEREMONY</strong>
-            !
+            The official HackKU theme and track details will be announced during
+            the <strong>Opening Ceremony</strong>. Track rules, guidelines, and
+            judging criteria will be revealed afterwards.
           </p>
+          <h3 className="text-xl font-semibold mt-4 mb-2">Theme Track</h3>
 
-          <ul className="list-disc list-inside ml-6 mt-2 space-y-4">
+          <ul className="list-disc list-inside ml-6 mt-2 space-y-2">
             <li>
-              <strong>1st Place:</strong>{" "}
-              <a
-                href="https://www.amazon.com/Nintendo-Switch-Lite-Turquoise/dp/B07V4GCFP9"
-                target="_blank"
-                className="underline text-blue-600 hover:text-blue-800"
-              >
-                Nintendo Switch Lite (Turquoise)
-              </a>
+              <strong>1st Place:</strong> Nintendo Switch Lite (Turquoise)
             </li>
             <li>
-              <strong>2nd Place:</strong>{" "}
-              <a
-                href="https://www.amazon.com/Fujifilm-Instax-Mini-Instant-Camera/dp/B0852844YB"
-                target="_blank"
-                className="underline text-blue-600 hover:text-blue-800"
-              >
-                Fujifilm Instax Mini 11
-              </a>
+              <strong>2nd Place:</strong> Fujifilm Instax Mini 11
             </li>
             <li>
               <strong>3rd Place:</strong> $50 Gift Cards
@@ -379,26 +363,13 @@ export default function HackKUInfoPage() {
           </ul>
 
           <h3 className="text-xl font-semibold mt-6 mb-2">General Track</h3>
-          <ul className="list-disc list-inside ml-6 space-y-4">
+          <ul className="list-disc list-inside ml-6 space-y-2">
             <li>
-              <strong>1st Place:</strong>{" "}
-              <a
-                href="https://www.amazon.com/SAMSUNG-Android-Speakers-Upgraded-Graphite/dp/B0CLF3VPMV"
-                target="_blank"
-                className="underline text-blue-600 hover:text-blue-800"
-              >
-                Samsung Galaxy Tab A9+ (2024)
-              </a>
+              <strong>1st Place:</strong> Samsung Galaxy Tab A9+ (2024)
             </li>
             <li>
-              <strong>2nd Place:</strong>{" "}
-              <a
-                href="https://www.amazon.com/Keychron-Wireless-Bluetooth-Mechanical-Keyboard/dp/B07YB32H52"
-                target="_blank"
-                className="underline text-blue-600 hover:text-blue-800"
-              >
-                Keychron K2 Wireless Mechanical Keyboard
-              </a>
+              <strong>2nd Place:</strong> Keychron K2 Wireless Mechanical
+              Keyboard
             </li>
             <li>
               <strong>3rd Place:</strong> $50 Gift Cards
@@ -406,122 +377,62 @@ export default function HackKUInfoPage() {
           </ul>
 
           <h3 className="text-xl font-semibold mt-6 mb-2">Challenge Prizes</h3>
-          <ul className="list-disc list-inside ml-6 space-y-4">
+          <ul className="list-disc list-inside ml-6 space-y-2">
             <li>
-              <strong>Best High School Project:</strong>{" "}
-              <a
-                href="https://www.amazon.com/dp/B0D5CLSMFB"
-                target="_blank"
-                className="underline text-blue-600 hover:text-blue-800"
-              >
-                Anker PowerCore 10K
-              </a>
+              <strong>Best High School Project:</strong> Anker PowerCore 10K
             </li>
             <li>
-              <strong>Best Beginner Project (College/University):</strong>{" "}
-              <a
-                href="https://www.amazon.com/dp/B0DD12R7MY"
-                target="_blank"
-                className="underline text-blue-600 hover:text-blue-800"
-              >
-                3 Qt Air Fryer
-              </a>
+              <strong>Best Beginner Project (College/University):</strong> 3 Qt
+              Air Fryer
             </li>
             <li>
-              <strong>Best Hardware Project:</strong>{" "}
-              <a
-                href="https://www.amazon.com/dp/B07TD42S27"
-                target="_blank"
-                className="underline text-blue-600 hover:text-blue-800"
-              >
-                Raspberry Pi 4 Model B (2GB)
-              </a>
+              <strong>Best Hardware Project:</strong> Raspberry Pi 4 Model B
+              (2GB)
             </li>
             <li>
-              <strong>Most Creative UI/UX:</strong>{" "}
-              <a
-                href="https://www.amazon.com/dp/B07S1RR3FR"
-                target="_blank"
-                className="underline text-blue-600 hover:text-blue-800"
-              >
-                Wacom &quot;One&quot; Drawing Tablet
-              </a>
+              <strong>Most Creative UI/UX:</strong> Wacom “One” Drawing Tablet
             </li>
             <li>
-              <strong>Hacker’s Choice Award:</strong>{" "}
-              <a
-                href="https://www.amazon.com/dp/B08KW1KR5H"
-                target="_blank"
-                className="underline text-blue-600 hover:text-blue-800"
-              >
-                JBL Go 3 Bluetooth Speaker
-              </a>
+              <strong>Hacker’s Choice Award:</strong> JBL Go 3 Bluetooth Speaker
             </li>
           </ul>
 
+          <hr className="my-6 border-gray-300" />
+
           <h3 className="text-xl font-semibold mt-6 mb-2">Sponsor Tracks</h3>
-          <ul className="list-disc list-inside ml-6 space-y-2">
+          <ul className="list-disc list-inside ml-6 space-y-4">
             <li>
               <strong>Patient Safety Technology Challenge</strong>
-              <ul className="list-disc list-inside ml-6">
+              <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
+                <li>1st: Beats Solo 4</li>
+                <li>2nd: Logitech G305 Wireless Mouse</li>
+              </ul>
+            </li>
+
+            <li>
+              <strong>Pella Sponsor Track</strong>
+              <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
+                <li>1st: Keychron K3 Mechanical Keyboard</li>
                 <li>
-                  1st:{" "}
-                  <a
-                    href="https://www.beatsbydre.com/headphones/solo4-wireless"
-                    className="underline text-blue-600 hover:text-blue-800"
-                    target="_blank"
-                  >
-                    Beats Solo 4
-                  </a>
-                </li>
-                <li>
-                  2nd:{" "}
-                  <a
-                    href="https://www.logitechg.com/en-us/products/gaming-mice/g305-lightspeed-wireless-gaming-mouse.910-005280.html"
-                    className="underline text-blue-600 hover:text-blue-800"
-                    target="_blank"
-                  >
-                    Logitech G305 Wireless Mouse
-                  </a>
+                  2nd: Logitech Bluetooth Computer Speakers with Subwoofer
                 </li>
               </ul>
             </li>
+
             <li>
-              <strong>Niantic Sponsor Track:</strong> Prize announced at opening
-              ceremony
-            </li>
-            <li>
-              <strong>Pella Sponsor Track:</strong>
-              <ul className="list-disc list-inside ml-6">
-                <li>
-                  1st:{" "}
-                  <a
-                    href="https://www.keychron.com/products/keychron-k3-wireless-mechanical-keyboard?srsltid=AfmBOopXN4-mmoOPMKgmFZ_1VsbM_iQVboUNOMiccCloJvCjbTP_up-r"
-                    className="underline text-blue-600 hover:text-blue-800"
-                    target="_blank"
-                  >
-                    Keychron K3 Mechanical Keyboard
-                  </a>
-                </li>
-                <li>
-                  2nd:{" "}
-                  <a
-                    href="https://www.logitech.com/en-us/shop/p/z407-bluetooth-computer-speakers.980-001347?utm_source=google&utm_source=Google&utm_medium=Paid-Search&utm_campaign=DEPT_FY25_QX_USA_LO_Logi_DTX-Logitech-Shopping_Google_na&gad_source=1&gclid=CjwKCAjw-qi_BhBxEiwAkxvbkFBcPEuCXUKmI8wCZK56bhB3801aF4ISYB8yiBH3gck1PTRbe5z0XRoCEzMQAvD_BwE"
-                    className="underline text-blue-600 hover:text-blue-800"
-                    target="_blank"
-                  >
-                    Logitech Bluetooth Computer Speakers with Subwoofer
-                  </a>
-                </li>
+              <strong>Ripple Sponsor Track</strong>
+              <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
+                <li>1st: $1,000</li>
+                <li>2nd: $500</li>
               </ul>
             </li>
             <li>
-              <strong>Ripple Sponsor Track:</strong> Prize announced at opening
-              ceremony
+              <strong>Niantic Sponsor Track:</strong> Details revealed after
+              Opening Ceremony
             </li>
             <li>
-              <strong>Major League Hacking Prizes:</strong> Visit MLH table or
-              check Discord for details
+              <strong>Major League Hacking Prizes:</strong> Visit the MLH table
+              or check Discord
             </li>
           </ul>
         </SectionContainer>
@@ -747,28 +658,31 @@ export default function HackKUInfoPage() {
         <SectionContainer id="resources" title="📚 Resources">
           <div>
             <h2>Beginner Workshops:</h2>
-            <p className="mb-2">
-              📹{" "}
-              <a
-                href="https://drive.google.com/drive/folders/1XEw_IFyhPRxq8SnmnvyU6RsD3__itkr9"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline text-blue-600 hover:text-blue-800 transition-colors"
-              >
-                Intro to Git/GitHub/VCS
-              </a>
-            </p>
-            <p className="mb-2">
-              📹{" "}
-              <a
-                href="https://drive.google.com/file/d/1iJo7iFkrbryY8aTh-_Q1bzt__WXHjJ2V/view"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline text-blue-600 hover:text-blue-800 transition-colors"
-              >
-                Intro to Javascript
-              </a>
-            </p>
+            <ul>
+              {" "}
+              <li className="mb-2">
+                📹{" "}
+                <a
+                  href="https://drive.google.com/drive/folders/1XEw_IFyhPRxq8SnmnvyU6RsD3__itkr9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline text-blue-600 hover:text-blue-800 transition-colors"
+                >
+                  Intro to Git/GitHub/VCS
+                </a>
+              </li>
+              <li className="mb-2">
+                📹{" "}
+                <a
+                  href="https://drive.google.com/file/d/1iJo7iFkrbryY8aTh-_Q1bzt__WXHjJ2V/view"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline text-blue-600 hover:text-blue-800 transition-colors"
+                >
+                  Intro to Javascript
+                </a>
+              </li>
+            </ul>
           </div>
           <p>More information coming soon!</p>
         </SectionContainer>
