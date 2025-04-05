@@ -15,7 +15,9 @@ export default function ManualCheckin() {
   >([]);
   const [selectedUserId, setSelectedUserId] = useState<string>("");
   const [selectedEventId, setSelectedEventId] = useState<string>("");
-  const [events, setEvents] = useState<{ id: string; name: string }[]>([]);
+  const [events, setEvents] = useState<
+    { id: string; name: string; startDate: string }[]
+  >([]);
   const [message, setMessage] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -25,13 +27,25 @@ export default function ManualCheckin() {
     startTransition(async () => {
       try {
         const eventsList = await fetchEvents();
-        setEvents(eventsList);
+        setEvents(
+          eventsList.map((event) => ({
+            ...event,
+            startDate: event.startDate.toISOString(),
+          }))
+        );
       } catch (error) {
         console.error("Failed to fetch events:", error);
         toast.error("Failed to load events.");
       }
     });
   }, []);
+
+  const resetUserSelection = () => {
+    setSelectedUserId("");
+    setSearchQuery("");
+    setSearchResults([]);
+    setIsSearching(false);
+  };
 
   // ---- 2. Debounce the user search to reduce server calls ----
   const debouncedSearch = useMemo(
@@ -70,22 +84,14 @@ export default function ManualCheckin() {
       return;
     }
 
-    // Reset form state
-
-    setSelectedUserId("");
-    setSearchQuery("");
-    setSearchResults([]);
-    setIsSearching(false);
-    setSelectedEventId("");
-
     startTransition(async () => {
       try {
-        // Optionally show a toast.promise for loading states:
-        toast.promise(manualCheckIn(selectedUserId, selectedEventId), {
+        await toast.promise(manualCheckIn(selectedUserId, selectedEventId), {
           loading: "Checking user in...",
           success: "Check-in successful!",
           error: "Manual check-in failed.",
         });
+        resetUserSelection(); // ✅ Only reset the user field here
       } catch (error) {
         console.error("Manual check-in error:", error);
         setMessage("Something went wrong with manual check-in.");
@@ -113,7 +119,7 @@ export default function ManualCheckin() {
           <option value="">-- Select an event --</option>
           {events.map((evt) => (
             <option key={evt.id} value={evt.id}>
-              {evt.name}
+              {evt.name} ({new Date(evt.startDate).toLocaleString()})
             </option>
           ))}
         </select>

@@ -1,7 +1,7 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import React, { useState, useEffect, useCallback } from "react";
 
 const tableOfContents = [
@@ -14,7 +14,15 @@ const tableOfContents = [
   { title: "Tracks, Challenges & Prizes", id: "tracks-challenges-prizes" },
   { title: "Workshops & Events", id: "workshops-events" },
   { title: "Food", id: "food" },
-  { title: "Venue", id: "venue" },
+  {
+    title: "Venue / Maps",
+    id: "venue",
+    children: [
+      { title: "LEEP2", id: "venue-leep2" },
+      { title: "Learned", id: "venue-learned" },
+      { title: "Opening Ceremony Map", id: "venue-opening" },
+    ],
+  },
   { title: "Parking", id: "parking" },
   { title: "Resources", id: "resources" },
   { title: "Code of Conduct", id: "code-of-conduct" },
@@ -37,45 +45,45 @@ const SectionContainer = ({ id, title, children }: SectionContainerProps) => (
 );
 
 export default function HackKUInfoPage() {
-  const searchParams = useSearchParams();
-  const [activeSection, setActiveSection] = useState<string>("");
+  const [currentHash, setCurrentHash] = useState<string>("");
 
-  // Combined manual scroll and URL update.
   const handleScrollToSection = useCallback((id: string) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth", block: "start" });
-
-      // Update URL query param
-      const currentUrl = window.location.pathname;
-      window.history.replaceState(null, "", `${currentUrl}?section=${id}`);
     }
   }, []);
 
-  // On initial mount: if a section query param exists, scroll to that section.
-  useEffect(() => {
-    const sectionQuery = searchParams.get("section");
-    if (sectionQuery) {
-      // Delay slightly to ensure elements are rendered.
-      setTimeout(() => {
-        handleScrollToSection(sectionQuery);
-      }, 50);
-    }
-  }, [searchParams, handleScrollToSection]);
-
   const handleClick = useCallback(
     (id: string) => {
-      let timeout: NodeJS.Timeout | null = null;
       handleScrollToSection(id);
-      if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(() => {}, 500); // Adjust to match scroll animation duration
+
+      // Wait for scroll animation before updating hash and currentHash
+      setTimeout(() => {
+        window.history.replaceState(null, "", `#${id}`);
+        setCurrentHash(`#${id}`);
+      }, 1000); // adjust this duration to match scroll speed
     },
     [handleScrollToSection]
   );
 
   useEffect(() => {
-    const handleScroll = () => {
-      const offsets = tableOfContents.map(({ id }) => {
+    const hash = window.location.hash.slice(1); // remove #
+    if (hash) {
+      setTimeout(() => {
+        handleScrollToSection(hash);
+        setCurrentHash(`#${hash}`);
+      }, 50);
+    }
+  }, [handleScrollToSection]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const flatTOC = tableOfContents.flatMap((item) =>
+        item.children ? [item, ...item.children] : [item]
+      );
+
+      const offsets = flatTOC.map(({ id }) => {
         const el = document.getElementById(id);
         if (!el) return { id, top: Infinity };
         const rect = el.getBoundingClientRect();
@@ -86,14 +94,22 @@ export default function HackKUInfoPage() {
         curr.top < prev.top ? curr : prev
       );
 
-      setActiveSection(closest.id);
+      if (`#${closest.id}` !== currentHash) {
+        window.history.replaceState(null, "", `#${closest.id}`);
+        setCurrentHash(`#${closest.id}`);
+      }
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [currentHash]);
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+  useEffect(() => {
+    const updateHash = () => setCurrentHash(window.location.hash);
+    window.addEventListener("hashchange", updateHash);
+    updateHash(); // set initial
+
+    return () => window.removeEventListener("hashchange", updateHash);
   }, []);
 
   return (
@@ -112,13 +128,31 @@ export default function HackKUInfoPage() {
               <button
                 onClick={() => handleClick(section.id)}
                 className={`underline w-full text-left py-1 px-2 rounded transition-colors duration-200 text-gray-600 ${
-                  activeSection === section.id
+                  currentHash === `#${section.id}`
                     ? "bg-blue-100 font-bold"
                     : "hover:bg-gray-100"
                 }`}
               >
                 {section.title}
               </button>
+              {section.children && (
+                <ul className="ml-4 mt-1 space-y-1">
+                  {section.children.map((sub) => (
+                    <li key={sub.id}>
+                      <button
+                        onClick={() => handleClick(sub.id)}
+                        className={`text-left w-full text-gray-600 px-2 py-1 text-sm rounded-md underline ${
+                          currentHash === `#${sub.id}`
+                            ? "bg-blue-100 font-semibold"
+                            : "hover:bg-gray-100"
+                        }`}
+                      >
+                        {sub.title}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </li>
           ))}
         </ul>
@@ -304,6 +338,15 @@ export default function HackKUInfoPage() {
             you are unable to check-in during this time, stop by the Organizer’s
             HQ when you do arrive.
           </p>
+          <h3 className="text-xl font-medium mt-4 mb-2">Schedule</h3>
+          <p>
+            The full schedule can be found in the{" "}
+            <Link href="/schedule" className="underline">
+              Schedule
+            </Link>{" "}
+            tab. The schedule may be updated throughout the Hackathon, so be
+            sure to check the Discord for any updates.
+          </p>
         </SectionContainer>
 
         <SectionContainer
@@ -349,7 +392,10 @@ export default function HackKUInfoPage() {
             judging criteria will be revealed afterwards.
           </p>
           <h3 className="text-xl font-semibold mt-4 mb-2">Theme Track</h3>
-
+          <p>Challenge Details: Health and Well-Being</p>
+          <Link href="" className="underline" target="_blank">
+            <p>View Slides from Presentation</p>
+          </Link>
           <ul className="list-disc list-inside ml-6 mt-2 space-y-2">
             <li>
               <strong>1st Place:</strong> Nintendo Switch Lite (Turquoise)
@@ -361,7 +407,6 @@ export default function HackKUInfoPage() {
               <strong>3rd Place:</strong> $50 Gift Cards
             </li>
           </ul>
-
           <h3 className="text-xl font-semibold mt-6 mb-2">General Track</h3>
           <ul className="list-disc list-inside ml-6 space-y-2">
             <li>
@@ -375,7 +420,6 @@ export default function HackKUInfoPage() {
               <strong>3rd Place:</strong> $50 Gift Cards
             </li>
           </ul>
-
           <h3 className="text-xl font-semibold mt-6 mb-2">Challenge Prizes</h3>
           <ul className="list-disc list-inside ml-6 space-y-2">
             <li>
@@ -396,43 +440,136 @@ export default function HackKUInfoPage() {
               <strong>Hacker’s Choice Award:</strong> JBL Go 3 Bluetooth Speaker
             </li>
           </ul>
-
           <hr className="my-6 border-gray-300" />
+          <h2 className="text-2xl font-semibold mb-4">🎯 Sponsor Tracks</h2>
+          {/* PSTC */}
+          <h3 className="text-lg font-semibold mt-4 mb-1">
+            Patient Safety Technology Challenge
+          </h3>
+          <p className="text-gray-700 mb-2">
+            Have you or someone you know experienced receiving incorrect
+            medication, developed an infection within a healthcare facility, or
+            faced a delay in treatment due to a new diagnosis not being
+            communicated timely? These are exactly the types of patient safety
+            issues we are challenging you to tackle this weekend. Your
+            innovative hack could not only become a viable business but also
+            significantly benefit humanity and save lives!
+            <br />
+            Go to{" "}
+            <Link
+              href="https://www.patientsafetytech.com/"
+              target="_blank"
+              className="underline"
+            >
+              Patient Safety Tech
+            </Link>{" "}
+            to learn more about this track!
+            <Link
+              href="https://docs.google.com/presentation/d/1_IId9C6fipiO480l2SqmUyYe7qcUn4pU/edit#slide=id.p2"
+              className="underline"
+              target="_blank"
+            >
+              <p>View Slides from Presentation</p>
+            </Link>
+          </p>
+          <p className="font-medium">Prizes:</p>
+          <ul className="list-disc list-inside ml-6 mb-6">
+            <li>
+              <b>First Place</b>: Beats Solo 4
+            </li>
+            <li>
+              <b>Second Place</b>: Logitech G305 Wireless Mouse
+            </li>
+          </ul>
+          {/* Pella */}
+          <h3 className="text-lg font-semibold mt-4 mb-1">
+            Pella Sponsor Track
+          </h3>
+          <p className="text-gray-700 mb-2">
+            This award recognizes the team that develops the most groundbreaking
+            solution in the realm of home innovation. The winning hack will
+            showcase originality, creativity, and a forward-thinking approach.
+            <br />
+            Example ideas: Home automation, Recipe Finder and Meal Planner, Home
+            Energy Efficiency Calculator, Apartment Finder.
+          </p>
+          <p className="font-medium">Prizes:</p>
+          <ul className="list-disc list-inside ml-6 mb-6">
+            <li>Keychron K3 Mechanical Keyboard</li>
+            <li>Logitech Bluetooth Computer Speakers with Subwoofer</li>
+          </ul>
+          {/* Ripple */}
+          <h3 className="text-lg font-semibold mt-4 mb-1">
+            Ripple Sponsor Track
+          </h3>
+          <p className="text-gray-700 mb-2">
+            Use RLUSD on the XRP Ledger to build an innovative finance app.
+            Explore applications such as DeFi, cross-border payments,
+            micropayments, digital wallets, RWA Tokenization, InsurTech,
+            RegTech, financial inclusion, crowdfunding, and more.
+          </p>
+          <p className="font-medium">Requirements:</p>
+          <ul className="list-disc ml-6 mb-2 text-sm">
+            <li>Operations must run on XRPL testnet</li>
+            <li>Transactions verifiable via explorer</li>
+            <li>Public GitHub repo with MIT License</li>
+            <li>2-minute demo video</li>
+            <li>Majority of project must be built during HackKU</li>
+          </ul>
+          <p className="font-medium">Prizes:</p>
+          <ul className="list-disc list-inside ml-6 mb-6">
+            <li>
+              <b>Winning Team:</b> $1,000
+            </li>
+            <li>
+              <b>Runner-up</b>: $500
+            </li>
+          </ul>
 
-          <h3 className="text-xl font-semibold mt-6 mb-2">Sponsor Tracks</h3>
-          <ul className="list-disc list-inside ml-6 space-y-4">
+          <h3 className="text-lg font-semibold mt-4 mb-1">
+            Niantic Sponsor Track
+          </h3>
+          <p className="text-gray-700 mb-2">
+            Create a WebXR experience utilizing Niantic Studio’s beta visual
+            editor to create an immersive experience that transforms the world
+            around you.
+            <br />
+            Go to the <em>Niantic workshop</em> to learn more about this track!
+            <p>
+              <Link
+                href="https://docs.google.com/presentation/d/1yiq1Gij8f2XZuNgzdn-0e_cPj141bdEHyPtQvuyNvTI/edit#slide=id.g1ddd9163b76_0_173"
+                target="_blank"
+                className="underline"
+              >
+                View Slides from Presentation
+              </Link>
+            </p>
+          </p>
+          <p className="font-medium">Prize:</p>
+          <ul className="list-disc list-inside ml-6 mb-6">
             <li>
-              <strong>Patient Safety Technology Challenge</strong>
-              <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
-                <li>1st: Beats Solo 4</li>
-                <li>2nd: Logitech G305 Wireless Mouse</li>
-              </ul>
+              <b>Prize:</b> $100 Amazon Gift Card per team member
             </li>
-
+          </ul>
+          {/* MLH */}
+          <h3 className="text-lg font-semibold mt-4 mb-1">
+            Major League Hacking (MLH) Prizes
+          </h3>
+          <ul className="list-disc list-inside ml-6 mb-2">
             <li>
-              <strong>Pella Sponsor Track</strong>
-              <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
-                <li>1st: Keychron K3 Mechanical Keyboard</li>
-                <li>
-                  2nd: Logitech Bluetooth Computer Speakers with Subwoofer
-                </li>
-              </ul>
-            </li>
-
-            <li>
-              <strong>Ripple Sponsor Track</strong>
-              <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
-                <li>1st: $1,000</li>
-                <li>2nd: $500</li>
-              </ul>
+              <strong>Best Use of Gemini API:</strong> Assorted Prizes (Visit
+              MLH Booth)
             </li>
             <li>
-              <strong>Niantic Sponsor Track:</strong> Details revealed after
-              Opening Ceremony
+              <strong>Best Use of Midnight:</strong> JBL Tune 510BT Wireless
+              Headphones
             </li>
             <li>
-              <strong>Major League Hacking Prizes:</strong> Visit the MLH table
-              or check Discord
+              <strong>Best Use of MongoDB Atlas:</strong> M5GO IoT Starter Kit
+            </li>
+            <li>
+              <strong>Best Domain Name from GoDaddy Registry:</strong> Digital
+              Gift Card
             </li>
           </ul>
         </SectionContainer>
@@ -443,22 +580,24 @@ export default function HackKUInfoPage() {
             events! Learn new skills at workshops, and take a break from coding
             to meet other hackers at social events.
           </p>
-          <p className="mb-2">
-            More info:{" "}
-            <Link
-              href="/schedule"
-              rel="noopener noreferrer"
-              className="underline text-blue-600 hover:text-blue-800 transition-colors"
-            >
-              Schedule
-            </Link>
-          </p>
+
           <h3 className="text-xl font-medium mt-4 mb-2">Bingo Card</h3>
           <p>
             Participate and complete the challenges on your{" "}
             <strong>HackKU25 Bingo Card</strong> to win awesome prizes! Each
             completed square brings you closer to victory.{" "}
             <em>Prizes coming soon!</em>
+          </p>
+          <h3 className="text-xl font-medium mt-4 mb-2">
+            Event / Workshop Schedule
+          </h3>
+          <p>
+            The full schedule of workshops and events will be available on the{" "}
+            <Link href="/schedule" className="underline">
+              Schedule
+            </Link>{" "}
+            page. Be sure to check it out! All Workshops and Events will be
+            posted here.
           </p>
         </SectionContainer>
 
@@ -468,114 +607,132 @@ export default function HackKUInfoPage() {
             drinks will be available throughout the weekend!
           </p>
 
-          <h3 className="text-xl font-medium mt-4 mb-2">Friday</h3>
-          <p>
-            <strong>Dinner:</strong> <em>Red Pepper</em>
-          </p>
-          <ul className="list-disc list-inside ml-6 mb-2">
-            <li>Egg Rolls</li>
-            <li>Crab Rangoons</li>
-            <li>Vegetable Lo Mein</li>
-            <li>Vegetable Fried Rice</li>
-            <li>Sesame Chicken</li>
-            <li>Beef Broccoli</li>
-            <li>Cold Noodles</li>
-            <li>Vegetable</li>
-          </ul>
+          {[
+            {
+              day: "Friday",
+              meals: [
+                {
+                  label: "Dinner",
+                  vendor: "Globe Indian",
+                  items: [
+                    "Veggie Pakora",
+                    "Channa Masala",
+                    "Chicken 65",
+                    "Naan pieces",
+                    "Tikka Masala",
+                    "Rice",
+                  ],
+                },
+                {
+                  label: "Late Night Snack",
+                  vendor: "Eileens Colossal Cookies",
+                  items: [
+                    "Cookies",
+                    "“Gluten free” cookie cake",
+                    "Thai milk with crystal bubbles",
+                  ],
+                },
+              ],
+            },
+            {
+              day: "Saturday",
+              meals: [
+                {
+                  label: "Breakfast",
+                  vendor: "Wheatfields Bakery",
+                  items: [
+                    "Empanada trays (burgundy mushroom/swiss and chicken fajita)",
+                    "Quiche trays (ham/onion/gouda and tomato/basil/mozzarella)",
+                    "Breads and spreads:",
+                    [
+                      "Hummus (vegan)",
+                      "Roasted red pepper",
+                      "Whipped chev and blueberry compote",
+                      "Dill and chive compound butter",
+                    ],
+                    "Croissants (plain / chocolate)",
+                    "Danish trays (cherry almond)",
+                    "Scone trays (apple cinnamon / cherry chocolate)",
+                  ],
+                },
+                {
+                  label: "Lunch",
+                  vendor: "Red Pepper",
+                  items: [
+                    "Egg Rolls",
+                    "Crab Rangoons",
+                    "Vegetable Lo Mein",
+                    "Vegetable Fried Rice",
+                    "Sesame Chicken",
+                    "Beef Broccoli",
+                    "Cold Noodles",
+                    "Vegetable",
+                  ],
+                },
+                {
+                  label: "Dinner",
+                  vendor: "La Estrella",
+                  items: [
+                    "Tacos: steak, carnitas, pollo, birria",
+                    "Rice",
+                    "Beans",
+                  ],
+                },
 
-          <p>
-            <strong>Late Night Snack:</strong>{" "}
-            <em>Bubble Box / Eileens Colossal Cookies</em>
-          </p>
-          <ul className="list-disc list-inside ml-6 mb-2">
-            <li>Mango with crystal bubbles (vegan)</li>
-            <li>Thai milk with oatmilk (no bubbles) (vegan / DF)</li>
-            <li>Thai milk with crystal bubbles</li>
-            <li>Cookies</li>
-            <li>“Gluten free” cookie cake</li>
-          </ul>
+                {
+                  label: "Late Night Snack",
+                  vendor: "Bubble Box",
+                  items: [
+                    "Mango with crystal bubbles (vegan)",
+                    "Thai milk with oatmilk (no bubbles) (vegan / DF)",
+                    "Thai milk with crystal bubbles",
+                  ],
+                },
+              ],
+            },
+            {
+              day: "Sunday",
+              meals: [
+                {
+                  label: "Breakfast",
+                  vendor: "McClains",
+                  items: [
+                    "Pastry Box",
+                    "Very Berry Sunflower Toast",
+                    "Market Bowl (halal chicken, sausage, other options)",
+                    "Coffee Carafe",
+                  ],
+                },
+              ],
+            },
+          ].map((day) => (
+            <div key={day.day} className="mb-8">
+              <h3 className="text-xl font-medium mb-4">{day.day}</h3>
+              {day.meals.map((meal, i) => (
+                <div key={i} className="mb-4">
+                  <p className="font-semibold">
+                    {meal.label}: <em>{meal.vendor}</em>
+                  </p>
+                  <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
+                    {meal.items.map((item, j) =>
+                      Array.isArray(item) ? (
+                        <ul key={j} className="list-disc ml-6 space-y-1">
+                          {item.map((subItem, k) => (
+                            <li key={k}>{subItem}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <li key={j}>{item}</li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              ))}
+              <hr />
+            </div>
+          ))}
 
-          <h3 className="text-xl font-medium mt-4 mb-2">Saturday</h3>
-          <p>
-            <strong>Breakfast:</strong> <em>Wheatfields Bakery</em>
-          </p>
-          <ul className="list-disc list-inside ml-6">
-            <li>Empanada trays (burgundy mushroom/swiss and chicken fajita)</li>
-            <li>Quiche trays (ham/onion/gouda and tomato/basil/mozzarella)</li>
-            <li>
-              Breads and spreads:
-              <ul className="list-disc list-inside ml-6">
-                <li>Hummus (vegan)</li>
-                <li>Roasted red pepper</li>
-                <li>Whipped chev and blueberry compote</li>
-                <li>Dill and chive compound butter</li>
-              </ul>
-            </li>
-            <li>Croissants (plain / chocolate)</li>
-            <li>Danish trays (cherry almond)</li>
-            <li>Scone trays (apple cinnamon / cherry chocolate)</li>
-          </ul>
-
-          <p className="mt-2">
-            <em>McClains</em>
-          </p>
-          <ul className="list-disc list-inside ml-6 mb-6">
-            <li>Pastry Box</li>
-            <li>Very Berry Sunflower Toast</li>
-            <li>Market Bowl (halal chicken, sausage, other options)</li>
-            <li>Coffee Carafe</li>
-          </ul>
-
-          <p>
-            <strong>Lunch:</strong> <em>La Estrella</em>
-          </p>
-          <ul className="list-disc list-inside ml-6 mb-6">
-            <li>Tacos: steak, carnitas, pollo, birria</li>
-            <li>Rice</li>
-            <li>Beans</li>
-          </ul>
-
-          <p>
-            <strong>Dinner:</strong> <em>Globe Indian</em>
-          </p>
-          <ul className="list-disc list-inside ml-6 mb-6">
-            <li>Veggie Pakora</li>
-            <li>Channa Masala</li>
-            <li>Chicken 65</li>
-            <li>Naan pieces</li>
-            <li>Tikka Masala</li>
-            <li>Rice</li>
-          </ul>
-
-          <p>
-            <strong>Late Night Snack:</strong> <em>Bubble Box</em>
-          </p>
-          <ul className="list-disc list-inside ml-6 mb-2">
-            <li>Mango with crystal bubbles (vegan)</li>
-            <li>Thai milk with oatmilk (no bubbles) (vegan / DF)</li>
-            <li>Thai milk with crystal bubbles</li>
-          </ul>
-
-          <p>
-            <em>Eileens Colossal Cookies</em>
-          </p>
-          <ul className="list-disc list-inside ml-6 mb-6">
-            <li>Cookies</li>
-            <li>“Gluten free” cookie cake</li>
-          </ul>
-
-          <h3 className="text-xl font-medium mt-4 mb-2">Sunday</h3>
-          <p>
-            <strong>Breakfast:</strong> <em>McClains</em>
-          </p>
-          <ul className="list-disc list-inside ml-6 mb-6">
-            <li>Pastry Box</li>
-            <li>Very Berry Sunflower Toast</li>
-            <li>Market Bowl (halal chicken, sausage, other options)</li>
-            <li>Coffee Carafe</li>
-          </ul>
-
-          <aside className="bg-yellow-100 border-l-4 border-yellow-400 p-4 rounded-lg text-sm">
+          <aside className="bg-yellow-100 border-l-4 border-yellow-400 p-4 rounded-lg text-sm mt-6">
             ⚠️{" "}
             <strong>
               Please bring your own reusable water bottle to reduce waste!
@@ -583,8 +740,8 @@ export default function HackKUInfoPage() {
           </aside>
         </SectionContainer>
 
-        <SectionContainer id="venue" title="🗺️ Venue">
-          <p className="mb-2">
+        <SectionContainer id="venue" title="🗺️ Venue / Maps">
+          <p className="mb-4">
             HackKU will be hosted at the University of Kansas School of
             Engineering. The main building (Learned Engineering Expansion 2,
             LEEP2) is located at{" "}
@@ -596,31 +753,134 @@ export default function HackKUInfoPage() {
             >
               1536 W 15th St, Lawrence, KS 66045
             </a>
-            . Rooms for hacking, workshops, and other events are listed below. A
-            map of LEEP2 can be found{" "}
-            <a
-              href="https://engr.ku.edu/m2sec-maps"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="underline text-blue-600 hover:text-blue-800 transition-colors"
-            >
-              here
-            </a>
-            .
+            . Rooms for hacking, workshops, and other events are listed below.
           </p>
-          <h3 className="text-xl font-medium mt-4 mb-2">Hacking Rooms</h3>
+
+          <div className="space-y-6">
+            <h2 id="venue-leep2" className="text-lg font-semibold mb-2">
+              LEEP2 Maps
+            </h2>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">
+                LEEP2 Ground Floor (LEEP2 G...)
+              </h3>
+              <div className="relative w-full h-auto aspect-[500/300]">
+                {" "}
+                {/* maintains aspect ratio */}
+                <Image
+                  src="/images/maps/leep2_ground.svg"
+                  alt="LEEP2 Ground Floor Map"
+                  fill
+                  className="object-contain rounded border border-gray-300"
+                />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">
+                LEEP2 First Floor (LEEP2 1...)
+              </h3>
+              <div className="relative w-full h-auto aspect-[500/300]">
+                <Image
+                  src="/images/maps/leep2_first.svg"
+                  alt="LEEP2 Second Floor Map"
+                  fill
+                  className="object-contain rounded border border-gray-300"
+                />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">
+                LEEP2 Second Floor (LEEP2 2...)
+              </h3>
+              <div className="relative w-full h-auto aspect-[500/300]">
+                <Image
+                  src="/images/maps/leep2_second.svg"
+                  alt="LEEP2 Second Floor Map"
+                  fill
+                  className="object-contain rounded border border-gray-300"
+                />
+              </div>
+            </div>
+            <hr />
+            <h2 id="venue-learned" className="text-lg font-semibold mb-2">
+              Learned Hall Maps
+            </h2>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">
+                Learned First Floor
+              </h3>
+              <div className="relative w-full h-auto aspect-[500/300]">
+                {" "}
+                {/* maintains aspect ratio */}
+                <Image
+                  src="/images/maps/learned_first.svg"
+                  alt="Learned First Floor"
+                  fill
+                  className="object-contain rounded border border-gray-300"
+                />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">
+                Learned Second Floor
+              </h3>
+              <div className="relative w-full h-auto aspect-[500/300]">
+                {" "}
+                {/* maintains aspect ratio */}
+                <Image
+                  src="/images/maps/learned_second.svg"
+                  alt="Learned Second Floor"
+                  fill
+                  className="object-contain rounded border border-gray-300"
+                />
+              </div>
+            </div>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">
+                Learned Third Floor
+              </h3>
+              <div className="relative w-full h-auto aspect-[500/300]">
+                {" "}
+                {/* maintains aspect ratio */}
+                <Image
+                  src="/images/maps/learned_third.svg"
+                  alt="Learned First Floor"
+                  fill
+                  className="object-contain rounded border border-gray-300"
+                />
+              </div>
+            </div>
+            <hr />
+            <h2 id="venue-opening" className="text-lg font-semibold mb-2">
+              Map to Opening Ceremony (Budig Hall)
+            </h2>
+            <div>
+              <h3 className="text-lg font-semibold mb-2">
+                Map to Opening Ceremony (Budig Hall) from Engineering
+              </h3>
+              <div className="relative w-full h-auto aspect-[500/300]">
+                <Image
+                  src="/images/maps/maptobudig.png"
+                  alt="Map to budig"
+                  fill
+                  className="object-contain rounded border border-gray-300"
+                />
+              </div>
+            </div>
+          </div>
+
+          <h3 className="text-xl font-medium mt-8 mb-2">Hacking Rooms</h3>
           <ul className="list-disc list-inside ml-6 mb-2">
             <li>
               <strong>Available for everyone:</strong> LEEP2: 2415, 2425;
-              Learned: 1131, 1136, 2111, 2112, 2115, 2133, 3150, 3151, 3152,
-              3153, 3154
+              Learned: 1136, 2111, 2115, 2133, 3150, 3151, 3152, 3153, 3154
             </li>
             <li>
               <strong>Themed rooms (for registered):</strong> LEEP2: 2324, 2326,
               2328
             </li>
             <li>
-              <strong>Give away rooms:</strong> LEEP2: 2322 & 2320
+              <strong>Giveaway rooms:</strong> LEEP2: 2322 & 2320
             </li>
             <li>
               <strong>Rooms for high-schoolers & out-of-state:</strong> LEEP2:
@@ -636,12 +896,13 @@ export default function HackKUInfoPage() {
           </p>
           <ul className="list-disc list-inside ml-6">
             <li>
-              If you arrive before 5PM on Friday, park in the Allen Fieldhouse
-              garage (first hour fee $1.75 + $1.50/hr until 5PM).
+              If you arrive before 5:00 PM on Friday, park in the Allen
+              Fieldhouse garage (first hour fee $1.75 + $1.50/hr until 5PM).
             </li>
             <li>
-              If you arrive after 5PM, we recommend parking in Lots 41, 54, 72,
-              or 90 for free, shown on KU’s{" "}
+              If you arrive after 5:00 PM, we recommend parking in Lots 41, 54,
+              72, or 90. All lots are free to park in <b>after 5:00</b> on
+              Friday, shown below or on KU’s full{" "}
               <a
                 href="https://parking.ku.edu/sites/parking/files/documents/parkingmap.pdf"
                 target="_blank"
@@ -650,41 +911,91 @@ export default function HackKUInfoPage() {
               >
                 parking map
               </a>
-              .
+              . Don&apos;t hesitate to reach out to an organizer if you have any
+              questions about parking.
             </li>
+            <div className="relative w-full h-auto aspect-[500/300]">
+              {" "}
+              {/* maintains aspect ratio */}
+              <Image
+                src="/images/maps/parking.png"
+                alt="LEEP2 Ground Floor Map"
+                fill
+                className="object-contain rounded border border-gray-300"
+              />
+            </div>
           </ul>
         </SectionContainer>
 
         <SectionContainer id="resources" title="📚 Resources">
           <div>
-            <h2>Beginner Workshops:</h2>
-            <ul>
-              {" "}
-              <li className="mb-2">
-                📹{" "}
-                <a
-                  href="https://drive.google.com/drive/folders/1XEw_IFyhPRxq8SnmnvyU6RsD3__itkr9"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline text-blue-600 hover:text-blue-800 transition-colors"
-                >
-                  Intro to Git/GitHub/VCS
-                </a>
-              </li>
-              <li className="mb-2">
-                📹{" "}
-                <a
-                  href="https://drive.google.com/file/d/1iJo7iFkrbryY8aTh-_Q1bzt__WXHjJ2V/view"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="underline text-blue-600 hover:text-blue-800 transition-colors"
-                >
-                  Intro to Javascript
-                </a>
-              </li>
-            </ul>
+            <h1 className="text-lg">Beginner Workshops:</h1>
+            <Link
+              href="https://drive.google.com/drive/folders/1XEw_IFyhPRxq8SnmnvyU6RsD3__itkr9"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-blue-600 hover:text-blue-800 transition-colors"
+            >
+              Intro to Git/GitHub/VCS
+            </Link>
+
+            <p>
+              <Link
+                href="https://drive.google.com/file/d/1iJo7iFkrbryY8aTh-_Q1bzt__WXHjJ2V/view"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                Intro to Javascript
+              </Link>
+            </p>
           </div>
-          <p>More information coming soon!</p>
+          <div>
+            <h1 className="text-lg">Day-Of Slides:</h1>
+            <p>
+              <Link
+                href=" https://kansas-my.sharepoint.com/:p:/g/personal/w412w955_home_ku_edu/EZD1-3KaJG5Go1uvjjsLDH0BtDT-vVXdQ4SyFRJaaRsIXw?e=wTJJAe"
+                className="underline text-blue-600 hover:text-blue-800 transition-colors"
+                target="_blank"
+              >
+                Opening Ceremony Slides!
+              </Link>
+            </p>
+            <Link
+              href="https://docs.google.com/presentation/d/1yiq1Gij8f2XZuNgzdn-0e_cPj141bdEHyPtQvuyNvTI/edit#slide=id.g1ddd9163b76_0_173"
+              target="_blank"
+              className="underline text-blue-600 hover:text-blue-800 transition-colors"
+            >
+              Niantic Workshop Slides
+            </Link>
+            <p>
+              <Link
+                href="https://docs.google.com/presentation/d/1_IId9C6fipiO480l2SqmUyYe7qcUn4pU/edit#slide=id.p2"
+                className="underline text-blue-600 hover:text-blue-800 transition-colors"
+                target="_blank"
+              >
+                PSTC Workshop Slides
+              </Link>
+            </p>
+            <p>
+              <Link
+                href="https://events.mlh.io/events/12507"
+                className="underline text-blue-600 hover:text-blue-800 transition-colors"
+                target="_blank"
+              >
+                Github Copilot Slides
+              </Link>
+            </p>
+            <p>
+              <Link
+                href="https://docs.google.com/presentation/d/1lgPUK2apuhM18cgXXciGh1j6Omuc1ztAvlo_aDn9fvg/edit#slide=id.p"
+                className="underline text-blue-600 hover:text-blue-800 transition-colors"
+                target="_blank"
+              >
+                Deep Learning Slides
+              </Link>
+            </p>
+          </div>
         </SectionContainer>
         <SectionContainer id="code-of-conduct" title="📜 Code of Conduct">
           <p>

@@ -280,16 +280,12 @@ export async function validateQrCode(
     },
   });
 
-  // If the user doesn't exist, create a failed scan and return an error
+  /*************************************************************
+   *   IF NO USER, JUST RETURN A FAILURE (NO 'Scan' INSERT).   *
+   *************************************************************/
   if (!user) {
-    await prisma.scan.create({
-      data: {
-        userId: scannedCode, // May fail if user doesn't exist, adjust schema if necessary
-        adminId: admin.id,
-        eventId: eventId,
-        successful: false,
-      },
-    });
+    // We skip prisma.scan.create({ userId: scannedCode, ... })
+    // because that would reference a non-existent user and violate FK constraints.
     return {
       success: false,
       message: "Invalid QR code. No matching user found.",
@@ -298,11 +294,11 @@ export async function validateQrCode(
 
   // Check if the user has already checked in for this event
   const existingCheckin = await prisma.checkin.findFirst({
-    where: { userId: scannedCode, eventId },
+    where: { userId: user.id, eventId },
   });
 
-  // If the user has already checked in, create a failed scan and return an error
   if (existingCheckin) {
+    // Create a 'failed' Scan record if you still want to log the attempt with the real user.id
     await prisma.scan.create({
       data: {
         userId: user.id,
@@ -317,7 +313,7 @@ export async function validateQrCode(
     };
   }
 
-  // If the user exists and hasn't checked in, proceed to create a check-in and a successful scan
+  // If user exists and hasn't checked in, create a check-in + successful scan
   await prisma.$transaction([
     prisma.checkin.create({
       data: {
@@ -336,13 +332,11 @@ export async function validateQrCode(
     }),
   ]);
 
-  // Build the response with user details
   const fullName = user.ParticipantInfo
     ? `${user.ParticipantInfo.firstName} ${user.ParticipantInfo.lastName}`
     : "Participant";
 
-  const isHighSchoolStudent =
-    user.ParticipantInfo?.isHighSchoolStudent || false;
+  const isHighSchoolStudent = !!user.ParticipantInfo?.isHighSchoolStudent;
   const chaperoneInfo = isHighSchoolStudent
     ? {
         chaperoneName: `${user.ParticipantInfo?.chaperoneFirstName || ""} ${
@@ -727,6 +721,16 @@ export async function getTotalRegistrationNumber() {
   const totalRegistrations = await prisma.participantInfo.count();
   return totalRegistrations;
 }
+export async function getHackathonCheckinCount(eventId: string) {
+  await isAdmin();
+
+  const count = await prisma.checkin.count({
+    where: { eventId },
+  });
+
+  return count;
+}
+
 export async function searchUsers(searchQuery: string) {
   await isAdminOrVolunteer();
   const trimmed = searchQuery.trim();

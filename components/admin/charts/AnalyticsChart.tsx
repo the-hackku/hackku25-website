@@ -1,107 +1,77 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { getAnalyticsData } from "@/app/actions/admin/getAnalyticsData";
-import { Line, Bar } from "react-chartjs-2";
-import "react-datepicker/dist/react-datepicker.css";
+import { getEventCheckinCounts } from "@/app/actions/admin/getAnalyticsData";
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  PointElement,
   BarElement,
-  LineElement,
   Title,
   Tooltip,
   Legend,
-  Filler,
 } from "chart.js";
-import { format, parseISO, subDays } from "date-fns";
+import { format } from "date-fns";
 
-// Register Chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,
-  PointElement,
   BarElement,
-  LineElement,
   Title,
   Tooltip,
-  Legend,
-  Filler
+  Legend
 );
 
-interface DataPoint {
-  date: string;
-  registrations: number;
+interface EventCheckinData {
+  name: string;
+  startTime: string;
   checkins: number;
 }
 
-export default function AnalyticsChart() {
-  const [rawData, setRawData] = useState<DataPoint[]>([]);
-  const [aggregation, setAggregation] = useState<"hourly" | "daily">("daily"); // ✅ Separate hourly/daily
-  const [chartType, setChartType] = useState<"area" | "bar">("bar"); // ✅ Area for cumulative, Bar for raw
-  const [daysBack, setDaysBack] = useState(14); // Default: Last 7 days
-
-  const endDate = new Date(); // Always today
-  const startDate = subDays(endDate, daysBack); // Calculate based on selection
+export default function EventCheckinChart() {
+  const [data, setData] = useState<EventCheckinData[]>([]);
+  const [countdown, setCountdown] = useState(30);
 
   useEffect(() => {
     async function fetchData() {
-      try {
-        const results = await getAnalyticsData(startDate, endDate, aggregation);
-        setRawData(results);
-      } catch (error) {
-        console.error("Error fetching analytics data:", error);
-      }
+      const result = await getEventCheckinCounts();
+      const filtered = result
+        .filter((event) => event.checkins > 0)
+        .map((event) => ({
+          ...event,
+          startTime: event.startTime.toISOString(),
+        }));
+      setData(filtered);
+      setCountdown(30); // reset countdown after data fetch
     }
+
     fetchData();
-  }, [daysBack, aggregation]); // Refetch when changes
 
-  function transformData(data: DataPoint[]) {
-    if (chartType === "area") {
-      let runningRegistrations = 0;
-      let runningCheckins = 0;
-      return data.map((item) => {
-        runningRegistrations += item.registrations;
-        runningCheckins += item.checkins;
-        return {
-          date: item.date,
-          registrations: runningRegistrations,
-          checkins: runningCheckins,
-        };
-      });
-    }
-    return data; // Bar chart uses raw data (non-cumulative)
-  }
+    const pollInterval = setInterval(fetchData, 30000);
+    const countdownInterval = setInterval(() => {
+      setCountdown((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
 
-  const displayData = transformData(rawData);
+    return () => {
+      clearInterval(pollInterval);
+      clearInterval(countdownInterval);
+    };
+  }, []);
 
-  const labels = displayData.map((item) =>
-    format(
-      parseISO(item.date),
-      aggregation === "hourly" ? "MMM d, h a" : "MMM d"
-    )
+  const labels = data.map(
+    (event) =>
+      `${event.name} (${format(new Date(event.startTime), "MMM d h:mm a")})`
   );
-  const registrationData = displayData.map((item) => item.registrations);
-  const checkinData = displayData.map((item) => item.checkins);
+  const checkinCounts = data.map((event) => event.checkins);
 
   const chartData = {
     labels,
     datasets: [
       {
-        label: "Registrations",
-        data: registrationData,
-        borderColor: "rgb(54, 162, 235)",
-        backgroundColor: "rgba(54, 162, 235, 0.3)",
-        fill: chartType === "area",
-      },
-      {
         label: "Check-ins",
-        data: checkinData,
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.3)",
-        fill: chartType === "area",
+        data: checkinCounts,
+        backgroundColor: "rgba(75, 192, 192, 0.6)",
       },
     ],
   };
@@ -109,57 +79,28 @@ export default function AnalyticsChart() {
   const options = {
     responsive: true,
     scales: {
-      x: { title: { display: true, text: "Date/Hour" } },
-      y: { title: { display: true, text: "Count" }, beginAtZero: true },
+      x: {
+        title: { display: true, text: "Event (Start Time)" },
+        ticks: {
+          autoSkip: false,
+          maxRotation: 45,
+          minRotation: 45,
+        },
+      },
+      y: {
+        beginAtZero: true,
+        title: { display: true, text: "Check-ins" },
+      },
     },
   };
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-semibold mb-2">Analytics</h2>
-
-      {/* Controls */}
-      <div className="mb-4 flex flex-wrap gap-4 items-center">
-        <label className="font-medium">Show Data For:</label>
-        <select
-          value={daysBack}
-          onChange={(e) => setDaysBack(Number(e.target.value))}
-          className="border rounded p-1"
-        >
-          <option value={1}>Last 1 Day</option>
-          <option value={7}>Last 7 Days</option>
-          <option value={14}>Last 14 Days</option>
-          <option value={30}>Last 30 Days</option>
-        </select>
-
-        <label className="font-medium">Aggregation:</label>
-        <select
-          value={aggregation}
-          onChange={(e) => setAggregation(e.target.value as "hourly" | "daily")}
-          className="border rounded p-1"
-        >
-          <option value="daily">Daily</option>
-          <option value="hourly">Hourly</option>
-        </select>
-
-        <label className="font-medium">Chart Type:</label>
-        <select
-          value={chartType}
-          onChange={(e) => setChartType(e.target.value as "area" | "bar")}
-          className="border rounded p-1"
-        >
-          <option value="area">Cumulative (Area)</option>
-          <option value="bar">Raw (Bar)</option>
-        </select>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-xl font-semibold">Event Check-ins</h2>
+        <span className="text-sm text-gray-500">Refresh in {countdown}s</span>
       </div>
-
-      <div className="w-full">
-        {chartType === "area" ? (
-          <Line data={chartData} options={options} />
-        ) : (
-          <Bar data={chartData} options={options} />
-        )}
-      </div>
+      <Bar data={chartData} options={options} />
     </div>
   );
 }

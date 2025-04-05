@@ -97,3 +97,23 @@ export async function getAnalyticsData(
     ...counts,
   }));
 }
+
+export async function getEventCheckinCounts() {
+  const eventsWithCheckins = await prisma.event.findMany({
+    orderBy: { startDate: "asc" }, // ✅ Correct field name
+    select: {
+      id: true,
+      name: true,
+      startDate: true, // ✅ Correct field name
+      checkins: {
+        select: { id: true },
+      },
+    },
+  });
+
+  return eventsWithCheckins.map((event) => ({
+    name: event.name,
+    startTime: event.startDate, // You can keep using `startTime` as the output key
+    checkins: event.checkins.length,
+  }));
+}

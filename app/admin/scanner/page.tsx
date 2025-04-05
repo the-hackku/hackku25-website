@@ -1,9 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition, useMemo } from "react";
+import { debounce } from "lodash";
 import ScannerComponent from "@/components/ScannerComponent";
-import { validateQrCode, fetchScanHistory } from "@/app/actions/admin"; // Update to use the new action for validating QR codes
+
+// Combined imports for scanning + manual checkin logic
+import {
+  validateQrCode,
+  fetchScanHistory,
+  searchUsers,
+  manualCheckIn,
+} from "@/app/actions/admin";
 import { fetchEvents } from "@/app/actions/events";
+
 import {
   Select,
   SelectTrigger,
@@ -11,18 +20,22 @@ import {
   SelectItem,
   SelectValue,
 } from "@/components/ui/select";
-import ManualCheckin from "@/components/admin/ManualCheckin";
+
+import { toast } from "sonner";
+import { IconLoader } from "@tabler/icons-react";
 
 export default function ScannerPage() {
+  /*******************************/
+  /***  STATE & REF VARIABLES  ***/
+  /*******************************/
   const [backgroundColor, setBackgroundColor] = useState("inherit");
   const [validationResult, setValidationResult] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [, startTransition] = useTransition();
-  const [events, setEvents] = useState<{ id: string; name: string }[]>([]);
-  const [scannerKey, setScannerKey] = useState(0); // <-- Add this
-  const [scannerStartTime, setScannerStartTime] = useState<number>(Date.now());
-  const [scannerExpired, setScannerExpired] = useState(false);
+  const [events, setEvents] = useState<
+    { id: string; name: string; startDate: Date }[]
+  >([]);
   const [scanHistory, setScanHistory] = useState<
     {
       id: string;
@@ -33,15 +46,28 @@ export default function ScannerPage() {
     }[]
   >([]);
 
+  // We keep this ref around for the backend logic
   const selectedEventRef = useRef<string | null>(null);
 
+  // Audio references
   const errorSound = useRef<HTMLAudioElement | null>(null);
   const successSound = useRef<HTMLAudioElement | null>(null);
 
-  useEffect(() => {
-    errorSound.current = new Audio("/sounds/error.mp3");
-    successSound.current = new Audio("/sounds/success.mp3");
-  }, []);
+  /***************************************************/
+  /***  MANUAL CHECK-IN STATES (MOVED IN-LINE)    ****/
+  /***************************************************/
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState<
+    { id: string; firstName: string; lastName: string; email: string }[]
+  >([]);
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
+  const [message, setMessage] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [isPending, startManualCheckInTransition] = useTransition();
+
+  /***************************************************/
+  /***  USEEFFECTS FOR INITIAL DATA & SCANNER RESET ***/
+  /***************************************************/
 
   // Fetch events and scan history on component mount
   useEffect(() => {
@@ -50,11 +76,28 @@ export default function ScannerPage() {
         fetchEvents(),
         fetchScanHistory(),
       ]);
-      setEvents(eventsList);
+
+      // Make sure to convert date strings to actual Date objects if needed
+      // (depends on how your fetchEvents() returns the data)
+      const typedEvents = eventsList.map((evt) => ({
+        ...evt,
+        startDate: new Date(evt.startDate),
+      }));
+      setEvents(typedEvents);
       setScanHistory(history);
     }
     initializeData();
   }, []);
+
+  // Load audio on mount
+  useEffect(() => {
+    errorSound.current = new Audio("/sounds/error.mp3");
+    successSound.current = new Audio("/sounds/success.mp3");
+  }, []);
+
+  /*********************************************/
+  /***  SCANNER-RELATED FUNCTIONS & HANDLERS  ***/
+  /*********************************************/
 
   // Function to reset the background and validation result
   const resetScreen = () => {
@@ -63,8 +106,8 @@ export default function ScannerPage() {
     setIsProcessing(false);
   };
 
-  // Function to handle scan result and validate the QR code
-  const handleScanResult = (scannedCode: string) => {
+  // Handle scan result
+  const handleScanResult = async (scannedCode: string) => {
     const selectedEvent = selectedEventRef.current;
 
     if (!selectedEvent) {
@@ -88,22 +131,22 @@ export default function ScannerPage() {
             setBackgroundColor("yellow");
             errorSound.current?.play();
             setValidationResult(
-              `HS Student: ${result.name} -
-              Chaperone: ${result.chaperoneInfo?.chaperoneName}`
+              `HS Student: ${result.name} - Chaperone: ${result.chaperoneInfo?.chaperoneName}`
             );
           } else {
             setBackgroundColor("green");
             successSound.current?.play();
             setValidationResult(`Welcome ${result.name}!`);
 
+            // Update local scan history
             setScanHistory((prevHistory) => [
               ...prevHistory,
               {
-                id: result.id, // Assume `result.id` is included in the API response
-                name: result.name || "Unknown User", // Ensure `name` is always a string
+                id: result.id,
+                name: result.name || "Unknown User",
                 eventName: selectedEventRef.current || "Unknown Event",
-                successful: true, // Mark as successful scan
-                timestamp: new Date().toISOString(), // Use ISO string format for consistency
+                successful: true,
+                timestamp: new Date().toISOString(),
               },
             ]);
           }
@@ -118,22 +161,68 @@ export default function ScannerPage() {
     }
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = Date.now();
-      const elapsed = now - scannerStartTime;
+  /***************************************************/
+  /***  MANUAL CHECK-IN LOGIC (SHARING EVENT REF)  ***/
+  /***************************************************/
+  // Debounced user search
+  const debouncedSearch = useMemo(
+    () =>
+      debounce(async (query: string) => {
+        if (query.length < 2) {
+          setSearchResults([]);
+          return;
+        }
 
-      if (elapsed > 30_000) {
-        setScannerExpired(true);
-        setScannerKey((prev) => prev + 1); // Forces remount
-        setScannerStartTime(Date.now());
-        setScannerExpired(false);
+        try {
+          setIsSearching(true);
+          const results = await searchUsers(query);
+          setSearchResults(results);
+        } catch (error) {
+          console.error("Search failed:", error);
+          toast.error("User search failed.");
+        } finally {
+          setIsSearching(false);
+        }
+      }, 300),
+    []
+  );
+
+  // Handle changes in the search box
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setSearchQuery(value);
+    debouncedSearch(value);
+  };
+
+  // Manual check-in
+  const handleCheckIn = async () => {
+    const eventId = selectedEventRef.current;
+    if (!selectedUserId || !eventId) {
+      toast.error("Please select a user and event first.");
+      return;
+    }
+
+    startManualCheckInTransition(async () => {
+      try {
+        await toast.promise(manualCheckIn(selectedUserId, eventId), {
+          loading: "Checking user in...",
+          success: "Check-in successful!",
+          error: "Manual check-in failed.",
+        });
+        // Reset relevant states
+        setSelectedUserId("");
+        setSearchQuery("");
+        setSearchResults([]);
+      } catch (error) {
+        console.error("Manual check-in error:", error);
+        setMessage("Something went wrong with manual check-in.");
       }
-    }, 5_000); // Check every 5s
+    });
+  };
 
-    return () => clearInterval(interval);
-  }, [scannerStartTime]);
-
+  /*********************/
+  /***  RENDER JSX   ***/
+  /*********************/
   return (
     <div className="flex flex-col min-h-screen">
       {/* Scanner Section with dynamic background */}
@@ -149,11 +238,18 @@ export default function ScannerPage() {
             <SelectValue placeholder="Select an event" />
           </SelectTrigger>
           <SelectContent>
-            {events.map((event) => (
-              <SelectItem key={event.id} value={event.id}>
-                {event.name}
-              </SelectItem>
-            ))}
+            {events.map((event) => {
+              // get e.g. "Sat"
+              const dayName = new Date(event.startDate).toLocaleDateString(
+                "en-US",
+                { weekday: "short" }
+              );
+              return (
+                <SelectItem key={event.id} value={event.id}>
+                  {dayName}: {event.name}
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
 
@@ -168,17 +264,12 @@ export default function ScannerPage() {
           }}
         >
           <div className="space-y-4">
-            {!scannerExpired ? (
-              <div style={{ opacity: isProcessing ? 0 : 1 }}>
-                <ScannerComponent
-                  key={scannerKey}
-                  onScanResult={handleScanResult}
-                  isProcessing={isProcessing}
-                />
-              </div>
-            ) : (
-              <div className="text-center"></div>
-            )}
+            <div style={{ opacity: isProcessing ? 0 : 1 }}>
+              <ScannerComponent
+                onScanResult={handleScanResult}
+                isProcessing={isProcessing}
+              />
+            </div>
 
             {(validationResult || loading) && (
               <div
@@ -207,9 +298,73 @@ export default function ScannerPage() {
         </div>
       </div>
 
-      <ManualCheckin />
+      {/* MANUAL CHECK-IN SECTION (same event selection) */}
+      <div className="max-w-3xl mx-auto p-6 bg-white my-6 rounded-lg md:shadow-sm md:border">
+        <h2 className="text-xl font-semibold text-center mb-4">
+          Manual Check-In
+        </h2>
+        <p className="text-sm mb-4">
+          Use this form to manually check a user in if they don’t have a QR
+          code.
+        </p>
 
-      {/* Scan History Section with static background */}
+        {/* We no longer have a separate event dropdown here; 
+            we’re using selectedEventRef from above. */}
+
+        {/* Search Input */}
+        <div className="mb-6">
+          <label className="block mb-1 font-semibold">Search for a user:</label>
+          <div className="flex items-center gap-2">
+            <input
+              type="text"
+              placeholder="Search by name or email..."
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="border p-2 rounded w-full"
+            />
+            {isSearching && <IconLoader className="animate-spin" size={20} />}
+          </div>
+          <p className="text-xs text-gray-500 mt-1">
+            Type at least 2 characters to start searching.
+          </p>
+
+          {/* Search Results */}
+          {searchResults.length > 0 && (
+            <div className="mt-2 border rounded p-2 bg-gray-50">
+              {searchResults.map((user) => (
+                <label
+                  key={user.id}
+                  className="block py-1 cursor-pointer hover:bg-gray-100 rounded"
+                >
+                  <input
+                    type="radio"
+                    name="selectedUser"
+                    className="mr-2"
+                    value={user.id}
+                    onChange={() => setSelectedUserId(user.id)}
+                    checked={selectedUserId === user.id}
+                  />
+                  {user.firstName} {user.lastName} ({user.email})
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Check-in button */}
+        <button
+          onClick={handleCheckIn}
+          disabled={isPending}
+          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:bg-gray-400"
+        >
+          {isPending ? "Checking in..." : "Check In Manually"}
+        </button>
+
+        {/* Message display (success or error) */}
+        {message && <p className="mt-4 text-center font-medium">{message}</p>}
+      </div>
+
+      {/* Scan History Section */}
       <div className="bg-white border-t">
         <div className="container mx-auto py-8">
           <h2 className="text-lg font-bold mb-4">Scan History</h2>

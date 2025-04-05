@@ -321,7 +321,7 @@ const MobileEventDrawer = ({
         animate={{ y: 0 }}
         exit={{ y: "100%" }}
         transition={{ duration: 0.2 }}
-        className="fixed inset-x-0 bottom-0 z-50 h-[40vh] overflow-hidden shadow-2xl p-5 bg-gray-200"
+        className="fixed rounded-md inset-x-0 bottom-0 z-50 h-[40vh] overflow-hidden shadow-2xl p-5 bg-gray-200"
         style={{
           boxShadow: `inset 0 0 0 2px ${
             eventTypeDarkerColors[event.eventType]
@@ -329,7 +329,7 @@ const MobileEventDrawer = ({
         }}
       >
         <div
-          className="fixed inset-x-0 bottom-0 z-50 h-[40vh] overflow-hidden shadow-2xl p-5 bg-gray-200"
+          className="fixed rounded-md inset-x-0 bottom-0 z-50 h-[40vh] overflow-hidden shadow-2xl p-5 bg-gray-200"
           style={{
             boxShadow: `inset 0 0 0 2px ${
               eventTypeDarkerColors[event.eventType]
@@ -366,7 +366,9 @@ const MobileEventDrawer = ({
           {event.description && (
             <div className="flex items-start">
               <IconInfoCircle size={14} className="text-gray-400 mr-2 mt-0.5" />
-              <p className="text-sm whitespace-pre-wrap">{event.description}</p>
+              <p className="text-sm whitespace-pre-wrap overflow-y-scroll">
+                {event.description}
+              </p>
             </div>
           )}
         </div>
@@ -409,7 +411,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const days = Object.keys(groupedEvents).sort();
 
   const [selectedDay, setSelectedDay] = useState<string>(
-    days.length > 0 ? days[0] : "" // Use the first day if available
+    days.length > 0 ? days[1] : "" // Use the first day if available
   );
 
   useEffect(() => {

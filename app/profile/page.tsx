@@ -66,6 +66,41 @@ export default async function ProfilePage() {
     orderBy: { createdAt: "desc" },
   });
 
+  // Get all users' check-in counts
+  const allUserCheckins = await prisma.user.findMany({
+    select: {
+      id: true,
+      checkinsAsUser: { select: { id: true } },
+    },
+  });
+
+  const userCheckinCount = checkIns.length;
+  const checkinCounts = allUserCheckins.map((u) => u.checkinsAsUser.length);
+
+  const usersWithFewerCheckins = checkinCounts.filter(
+    (count) => count < userCheckinCount
+  ).length;
+
+  const totalUsers = checkinCounts.length;
+  const checkinPercentile =
+    totalUsers > 0
+      ? Math.round((usersWithFewerCheckins / totalUsers) * 100)
+      : 0;
+
+  const reservationRequest = await prisma.reservationRequest.findUnique({
+    where: { userId: userSession.id },
+  });
+
+  const themedRoomReservation = await prisma.themedRoomReservation.findUnique({
+    where: { userId: userSession.id },
+  });
+
+  const themeRoomMap: Record<string, string> = {
+    DUNGEONS_AND_DRAGONS: "LEEP2 Room 2324 🐉",
+    HOW_TO_TRAIN_YOUR_DRAGON: "LEEP2 Room 2326 🐲",
+    DARK_FAIRY: "LEEP2 Room 2328 🧚",
+  };
+
   // Participant info
   const participant = userSession.ParticipantInfo;
   const fullName = participant
@@ -123,7 +158,16 @@ export default async function ProfilePage() {
               <div className="w-full space-y-2  px-2 text-center gap-0">
                 <div>
                   <span className="text-md font-semibold">
-                    Level {1 + Math.floor(checkIns.length / 5)} Hacker
+                    Level {1 + Math.floor(checkIns.length / 5)} Hacker (
+                    {checkinPercentile}
+                    {checkinPercentile % 10 === 1 && checkinPercentile !== 11
+                      ? "st"
+                      : checkinPercentile % 10 === 2 && checkinPercentile !== 12
+                      ? "nd"
+                      : checkinPercentile % 10 === 3 && checkinPercentile !== 13
+                      ? "rd"
+                      : "th"}{" "}
+                    percentile)
                   </span>
                 </div>
                 <Progress
@@ -329,6 +373,53 @@ export default async function ProfilePage() {
                           </Link>
                         </div>
                       )}
+                    {reservationRequest?.roomAssignment && (
+                      <div className="p-4 mt-4 border-l-4 border-indigo-400 bg-indigo-50">
+                        <h3 className="text-md font-semibold">
+                          Weekend Room Reservation
+                        </h3>
+                        <p>
+                          <span className="font-medium">Room:</span>{" "}
+                          {reservationRequest.roomAssignment}
+                        </p>
+
+                        <p>
+                          <span className="font-medium">Team Name:</span>{" "}
+                          {reservationRequest.teamName}
+                        </p>
+                      </div>
+                    )}
+                    {themedRoomReservation && (
+                      <div className="p-4 mt-4 border-l-4 border-pink-400 bg-pink-50">
+                        <h3 className="text-md font-semibold mb-2">
+                          Themed Room Reservation
+                        </h3>
+                        <p>
+                          <span className="font-medium">Room:</span>{" "}
+                          <span>
+                            {themeRoomMap[themedRoomReservation.theme]}
+                          </span>
+                        </p>
+
+                        <p>
+                          <span className="font-medium">Time Slot:</span>{" "}
+                          {themedRoomReservation.timeSlot
+                            .replace(/_/g, " ")
+                            .replace(
+                              /(\w+)\s(\d+)\s(\d+)(AM|PM)/,
+                              (_, day, start, end, period) =>
+                                `${day.charAt(0)}${day
+                                  .slice(1)
+                                  .toLowerCase()} ${start} - ${end}${period}`
+                            )}
+                        </p>
+                        <p>
+                          <span className="font-medium">Team Name:</span>{" "}
+                          {themedRoomReservation.teamName}
+                        </p>
+                      </div>
+                    )}
+
                     <div className="flex items-center space-x-2 space-y-4">
                       <div className="flex items-center gap-2 pt-2">
                         <IconLogout

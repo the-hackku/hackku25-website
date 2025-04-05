@@ -12,6 +12,7 @@ import {
   batchUpdateReimbursements,
   backupRegistrationScript,
   getTotalRegistrationNumber,
+  getHackathonCheckinCount,
 } from "@/app/actions/admin";
 import { ColumnDef } from "@tanstack/react-table";
 import { ROLE, TravelReimbursement } from "@prisma/client";
@@ -104,6 +105,24 @@ export default function AdminTabsPage() {
   const [totalRegistrations, setTotalRegistrations] = useState<number | null>(
     null
   );
+  const [hackathonCheckinCount, setHackathonCheckinCount] = useState<
+    number | null
+  >(null);
+
+  useEffect(() => {
+    const fetchCheckinCount = async () => {
+      try {
+        const count = await getHackathonCheckinCount(
+          "cm6vgqdwr0000l703iuxogwcy"
+        );
+        setHackathonCheckinCount(count);
+      } catch (error) {
+        console.error("Failed to fetch check-in count:", error);
+      }
+    };
+
+    fetchCheckinCount();
+  }, []);
 
   useEffect(() => {
     const fetchTotalRegistrations = async () => {
@@ -259,9 +278,16 @@ export default function AdminTabsPage() {
     <div className="container mx-auto max-w-5xl py-8">
       {/* Add total registrations display */}
       <div className="mb-4 p-4 border rounded-lg flex flex-row">
-        <h2 className="text-xl font-semibold">
-          Total Registrations:{" "}
-          {totalRegistrations !== null ? totalRegistrations : "Loading..."}
+        <h2 className="text-xl font-semibold flex flex-row gap-2">
+          <span>
+            {" "}
+            Total Registrations:{" "}
+            {totalRegistrations !== null ? totalRegistrations : "Loading..."}
+          </span>
+          -
+          <span>
+            People Checked in: {hackathonCheckinCount ?? "Loading..."}
+          </span>
         </h2>
       </div>
 
@@ -277,7 +303,7 @@ export default function AdminTabsPage() {
         onOpenChange={(open) => !open && setSelectedEventId(null)} // Reset event ID when closed
       />
 
-      <Tabs defaultValue="users">
+      <Tabs defaultValue="analytics">
         <div className="flex flex-col md:flex-row items-start gap-2">
           <TabsList className="mb-4">
             <TabsTrigger value="users">Users</TabsTrigger>

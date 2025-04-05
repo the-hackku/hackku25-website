@@ -41,8 +41,14 @@ const ScannerComponent: React.FC<ScannerComponentProps> = ({
 
   const handleScan = (result: QrScanner.ScanResult) => {
     if (result && !isProcessing && !scanLock.current) {
-      scanLock.current = true; // Lock the scanner to prevent further scans
-      onScanResult(result.data); // Send scan result to parent
+      scanLock.current = true; // Lock the scanner
+
+      onScanResult(result.data);
+
+      // Auto-unlock after delay in case validation fails silently
+      setTimeout(() => {
+        scanLock.current = false;
+      }, 3000); // Adjust to your validation time
     }
   };
 

@@ -99,7 +99,7 @@ const BeginnerWorkshops: React.FC<BeginnerWorkshopsProps> = ({ schedule }) => {
           <Link href="/info?section=resources">View Workshop Recordings</Link>
         </span>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-4">
         {sortedEvents.map((ev, index) => {
           const hasPassed = new Date(ev.endDate) < new Date();
           return (
@@ -138,7 +138,9 @@ const BeginnerWorkshops: React.FC<BeginnerWorkshopsProps> = ({ schedule }) => {
                   size={16}
                   className="mr-1 flex-shrink-0 mt-0.5"
                 />
-                <span>{ev.description || "TBA"}</span>
+                <span className="overflow-y-scroll max-h-32">
+                  {ev.description || "TBA"}
+                </span>
               </div>
             </div>
           );

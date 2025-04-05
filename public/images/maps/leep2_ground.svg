@@ -1,0 +1,307 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 739" width="1500" height="739">
+	<title>New Project</title>
+	<style>
+		tspan { white-space:pre } 
+		.s0 { fill: #e1e1e1;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 4.8 } 
+		.s1 { fill: #c5c7fc;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 4.8 } 
+		.s2 { fill: #fcd4f0;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 4.8 } 
+		.s3 { fill: #ffffbe;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 4.8 } 
+		.s4 { fill: #ffaa00;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 4.8 } 
+		.s5 { fill: #fcccb3;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 4.8 } 
+		.s6 { fill: #e64c00;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 4.8 } 
+		.s7 { fill: #b6fcba;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 4.8 } 
+		.s8 { fill: #ffffff;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 4.8 } 
+		.t9 { font-size: 12px;fill: #000000;font-family: "Arial" } 
+		.t10 { font-size: 12px;line-height: 6px;fill: #000000;font-family: "Arial" } 
+		.t11 { font-size: 12px;line-height: 8px;fill: #000000;font-family: "Arial" } 
+		.t12 { font-size: 12px;line-height: 0px;fill: #000000;font-family: "Arial" } 
+		.t13 { font-size: 12px;line-height: 15px;fill: #000000;font-family: "Arial" } 
+	</style>
+	<path id="Path 2 copy" fill-rule="evenodd" class="s0" d="m989.3 488.4v-69h126.4v30.8h31.3v-20.3h1.7v22h-33-42.3v36.5z"/>
+	<path id="Path 3 copy" fill-rule="evenodd" class="s0" d="m1115.7 407.9v11.5h-126.4v-11.5z"/>
+	<path id="Path 4 copy" fill-rule="evenodd" class="s0" d="m1148.1 406.7h-1.7v-13.3h-30.7v14.5h-126.4v-52.8h146.1v35.9h12.7z"/>
+	<path id="Path 5 copy" fill-rule="evenodd" class="s1" d="m1135.4 355.1h-146.1v-86.3l99.1 0.5v8.7h8.7l7 7 4.6 4.6 5.2 5.8 4.7 6.4 4 6.4 2.9 4.6 3.5 7 3.5 8.6 2.9 9.3z"/>
+	<path id="Path 6 copy" fill-rule="evenodd" class="s2" d="m989.3 268.8v112.4l-89.8-0.6v-111.8z"/>
+	<path id="Path 7 copy" fill-rule="evenodd" class="s3" d="m899.5 268.8v112.4l-136.8-0.6v-111.8z"/>
+	<path id="Path 8 copy" fill-rule="evenodd" class="s4" d="m762.7 268.8v51.5h-50.5v-51.5z"/>
+	<path id="Path 9 copy" fill-rule="evenodd" class="s4" d="m762.7 320.3v60.3h-42.9v-60.3z"/>
+	<path id="Path 10 copy" fill-rule="evenodd" class="s1" d="m712.2 380.6h-142v-161.1h51v12.2h91z"/>
+	<path id="Path 11 copy" fill-rule="evenodd" class="s2" d="m570.2 380.6h-62v-16.8h-118.3v-49.8l-15 0.5 0.5-95.6h112.5v12.2h82.3z"/>
+	<path id="Path 12 copy" fill-rule="evenodd" class="s5" d="m374.9 478v-58.6h42.9v-55.6h52.1v56.2h38.3v113h-45.8v12.8l-52.8-0.6v-33.6h-19.7l0.6-33.6z"/>
+	<path id="Path 13 copy" fill-rule="evenodd" class="s5" d="m508.2 363.8v56.2h-38.3v-56.2z"/>
+	<path id="Path 14 copy" fill-rule="evenodd" class="s5" d="m417.8 363.8v55.6h-42.9v-55.6z"/>
+	<path id="Path 15 copy" fill-rule="evenodd" class="s4" d="m409.6 545.2h-34.7l0.5-33.6h34.2z"/>
+	<path id="Path 16 copy" fill-rule="evenodd" class="s5" d="m508.2 596.2v101.4h-128.1v-8.1h-6.4v-44.6h13.9v-48.7z"/>
+	<path id="Path 17 copy" fill-rule="evenodd" class="s3" d="m508.2 580.6v15.6h-37.1v-15.6z"/>
+	<path id="Path 18 copy" fill-rule="evenodd" class="s3" d="m427.6 580.6v15.6h-40v-15.6z"/>
+	<path id="Path 19 copy" fill-rule="evenodd" class="s6" d="m332.5 649v44.6h-67.8v-44.6z"/>
+	<path id="Path 20 copy" fill-rule="evenodd" class="s6" d="m264.7 649v44.6h-81.1v-44.6z"/>
+	<path id="Path 21 copy" fill-rule="evenodd" class="s3" d="m318.6 649h-96.2v-194.8h110.1l0.6 146.1-13.9-0.6z"/>
+	<path id="Path 22 copy" fill-rule="evenodd" class="s3" d="m222.4 454.2v194.8h-38.2v-194.8z"/>
+	<path id="Path 23 copy" fill-rule="evenodd" class="s6" d="m321 405.5v48.7h-85.3v-48.7z"/>
+	<path id="Path 24 copy" fill-rule="evenodd" class="s6" d="m235.7 358.6v95.6h-51.5v-95.6z"/>
+	<path id="Path 25 copy" fill-rule="evenodd" class="s6" d="m283.3 358.6v46.9h-47.6v-46.9z"/>
+	<path id="Path 26 copy" fill-rule="evenodd" class="s6" d="m334.3 335.4v70.1h-51v-70.1z"/>
+	<path id="Path 27 copy" fill-rule="evenodd" class="s3" d="m334.3 263v72.4h-51v-72.4z"/>
+	<path id="Path 28 copy" fill-rule="evenodd" class="s3" d="m334.3 217.2v45.8h-51v-45.8z"/>
+	<path id="Path 29 copy" fill-rule="evenodd" class="s5" d="m236.9 216v47h-94.5v-47z"/>
+	<path id="Path 30 copy" fill-rule="evenodd" class="s5" d="m283.3 229.3v129.3h-99.1v7.5h-94.5v-49.8-87.5h52.1l0.6 34.2h94.5v-33.7z"/>
+	<path id="Path 31 copy" fill-rule="evenodd" class="s3" d="m43.9 216h-43.5v-43.5h44.1z"/>
+	<path id="Path 32 copy" fill-rule="evenodd" class="s7" d="m0.4 172.5v-147.2h93.9v135.7h-46.9v11.5z"/>
+	<path id="Path 33 copy" fill-rule="evenodd" class="s4" d="m146.5 25.3v35.4h-52.2v-35.4z"/>
+	<path id="Path 34 copy" fill-rule="evenodd" class="s0" d="m146.5 60.7v53.3h-52.2v-53.3z"/>
+	<path id="Path 35 copy" fill-rule="evenodd" class="s0" d="m146.5 114v54.5h-52.2v-54.5z"/>
+	<path id="Path 36 copy" fill-rule="evenodd" class="s0" d="m191.1 25.3v147.2h-44.6v-147.2z"/>
+	<path id="Path 37 copy" fill-rule="evenodd" class="s2" d="m237.5 25.3v147.2h-46.4v-147.2z"/>
+	<path id="Path 38 copy" fill-rule="evenodd" class="s2" d="m285.6 64.2v70.7h-48.1v-70.7z"/>
+	<path id="Path 39 copy" fill-rule="evenodd" class="s2" d="m237.5 25.3h238.8v104.9h-95.6v45.8h-51.1v-13.3h-41.7l0.6 9.8h-51v-37.6h48.1v-70.7h-48.1z"/>
+	<path id="Path 40 copy" fill-rule="evenodd" class="s2" d="m416 130.2v45.8h-35.3v-45.8z"/>
+	<path id="Path 41 copy" fill-rule="evenodd" class="s2" d="m476.3 130.2v45.8h-60.3v-45.8z"/>
+	<path id="Path 42 copy" fill-rule="evenodd" class="s7" d="m523.3 25.3v48.1h-47v-48.1z"/>
+	<path id="Path 43 copy" fill-rule="evenodd" class="s7" d="m523.3 73.4v102.6h-47v-102.6z"/>
+	<path id="Path 44 copy" fill-rule="evenodd" class="s7" d="m523.3 25.3l186.6-0.5v139.1h-44.6v13.9h-93.9v-13.9h-48.1z"/>
+	<path id="Path 45 copy" fill-rule="evenodd" class="s3" d="m709.9 87.9l9.3-79.4 91-8.1 89.8 9.9 4.7 77.6-6.4 83.5v11h12.2v35.4l-109.6 8.1h-42.9l-22-22.6 8.7-9.3-27.3-27.8z"/>
+	<path id="Path 46 copy" fill-rule="evenodd" class="s3" d="m904.7 87.9l5.8-77.6 89.2-8.7h96.3l89.8 11.6 7 74.7-12.2 132.7-96.2 7-12.8-13.3-49.2-0.6-14.5 13.3-95.7-8.7z"/>
+	<path id="Path 47 copy" fill-rule="evenodd" class="s0" d="m1192.8 87.9l0.6-41.1h44.6v41.1z"/>
+	<path id="Path 48 copy" fill-rule="evenodd" class="s4" d="m1284.4 87.9v32.5h-53.4v-32.5z"/>
+	<path id="Path 49 copy" fill-rule="evenodd" class="s3" d="m1231 120.4h53.4v24.3l-53.4 0.6z"/>
+	<path id="Path 50 copy" fill-rule="evenodd" class="s0" d="m1231 145.3l53.4-0.6 0.5 34.8h-53.9z"/>
+	<path id="Path 51 copy" fill-rule="evenodd" class="s1" d="m1284.9 179.5h215.1v21.4l-0.6 14-1.7 10.4-1.8 8.7-1.1 8.7-2.3 9.2-2.4 9.3-2.9 10.5-2.9 10.4-4.6 12.2-4 9.2-5.8 10.5-7 12.1-8.1 13.9-8.1 12.2-8.1 11-7.6 8.7-8.1 8.7-9.3 9.3-11 8.7-10.4 8.1-9.9 4.6-73.6-90.4-6.9-9.8-5.3-9.3-5.2-9.9-5.8-11.6-5.8-15-4.6-13.9-4.6-15.1-2.4-11-2.9-19.7-1.1-26.1z"/>
+	<path id="Path 52 copy" fill-rule="evenodd" class="s0" d="m1191 488.4v-124.6h-2.9v-19.1l45.8 0.6 12.2 44.6-3.5 1.1 17.4 63.2-15.6 4.1v30.1z"/>
+	<path id="Path 53 copy" fill-rule="evenodd" class="s0" d="m1242.6 391l3.5-1.1 4.6-0.6 5.8-1.2 4.7-1.1 4.6-1.2 4.7-1.1 4.6-1.2 4-1.7 22.7-11.6 4.6-2.3 4-2.9 4.7-2.9 4-2.9 3.5-2.4 3.5-2.8 3.5-2.9 1.7-2.4 20.3 25.5-2.9 2.4-3.5 2.3-2.9 1.7-3.4 2.9-4.7 2.3-3.5 2.9-3.4 2.3-3.5 2.4-4.7 2.3-2.9 2.3-23.1 12.2-5.3 1.7-4 1.7-4.7 1.8-3.4 1.7-3.5 1.2-4.6 1.1-4.7 1.8-3.5 1.1-3.4 0.6-4.1 1.8z"/>
+	<path id="Path 54 copy" fill-rule="evenodd" class="s4" d="m44.5 316.3l-0.6-100.3h45.8v100.3z"/>
+	<path id="Path 55 copy" fill-rule="evenodd" class="s0" d="m380.7 693.6v46.3h-149v-46.3z"/>
+	<path id="Path 56 copy" fill-rule="evenodd" class="s0" d="m387.6 580.6v-35.4l74.8 0.6v-12.8h45.8v47.6h-37.1v15.6h-43.5v-15.6z"/>
+	<path id="Path 57 copy" fill-rule="evenodd" class="s0" d="m375.4 511.6l-0.5 33.6h12.7v99.7h-13.9v44.6h6.4l0.6 4.1h-48.2v-44.6h-13.9l0.6-49.3 13.9 0.6-0.6-146.1h-11.5v-48.7h13.3v-186.6h41.1l-0.5 95.6 15-0.5v49.8h-15v114.2h15.6l-0.6 33.6z"/>
+	<path id="Path 58 copy" fill-rule="evenodd" class="s0" d="m334.3 218.9v-1.7h-51v12.1h-46.4v-13.3h-94.5l-0.6 12.8h-52.1v-12.8h-45.8l0.6-43.5h2.9v-11.5h46.9v7.5h52.2v4h142l-0.6-9.8h41.7v13.3h193.7v-12.1h48.1v13.9h93.9v-13.9h44.6l2.3 0.5v67.3h-46.9v-12.2h-95.1v11.6h-43.5v-12.2h-92.7z"/>
+	<path id="Path 59 copy" fill-rule="evenodd" class="s0" d="m712.2 164.4l5.2 1.8 27.3 27.8-8.7 9.3 22 22.6h42.9l109.6-8.1 1.7 0.5 95.7 8.7 14.5-13.3 49.2 0.6 12.8 13.3 96.2-7 7-73.6 0.5 197.7v10.4h-52.7v-17.4l-2.9-9.3-3.5-8.6-3.5-7-2.9-4.6-4-6.4-4.7-6.4-5.2-5.8-4.6-4.6-7-7h-8.7v-8.7l-376.2-0.5z"/>
+	<path id="Path 60 copy" fill-rule="evenodd" class="s0" d="m1148.7 451.9v-22h-1.7v20.3h-31.3v-56.8h30.7v13.3h1.7v-14.5h-12.7v-37.1h52.7v8.7h2.9v124.6h-56.8-4.6-5.2v-9.3h-1.8v9.3h-22-6.9v-36.5z"/>
+	<path id="Path 61 copy" fill-rule="evenodd" class="s0" d="m1231 87.9v91.6h33.1l1.1 26.1 2.9 19.7 2.4 11 4.6 15.1 4.6 13.9 5.8 15 5.8 11.6 5.2 9.9 5.3 9.3 6.9 9.8 22.6 27.8-1.7 2.4-3.5 2.9-3.5 2.8-3.5 2.4-2.3 1.7-6.4 4.1-4 2.9-25.5 13.3-5.8 2.3-4.6 1.2-4.7 1.1-4.6 1.2-4.7 1.1-5.8 1.2-4.6 0.6-12.2-44.6-45.8-0.6-0.5-197.7 5.2-59.1z"/>
+	<path id="Path 62 copy" fill-rule="evenodd" class="s3" d="m665.3 219.5v12.2h-44.1v-12.2z"/>
+	<path id="Path 63 copy" fill-rule="evenodd" class="s3" d="m526.7 218.9v12.2h-38.8v-12.2z"/>
+	<path id="Path 64 copy" fill-rule="evenodd" class="s8" d="m1093.7 451.9v36.5h-20.3v-36.5z"/>
+	<text id="G411 copy" style="transform: matrix(1.208,0,0,1.207,1030.758,117.892)" >
+		<tspan x="0" y="0" class="t9">G411
+</tspan>
+	</text>
+	<text id="G415 copy" style="transform: matrix(1.208,0,0,1.207,789.037,117.312)" >
+		<tspan x="0" y="0" class="t9">G415
+</tspan>
+	</text>
+	<text id="G400 copy" style="transform: matrix(1.208,0,0,1.207,1366.387,273.218)" >
+		<tspan x="0" y="0" class="t9">G400
+</tspan>
+	</text>
+	<text id="GC30 copy" style="transform: matrix(1.208,0,0,1.207,358.923,201.93)" >
+		<tspan x="0" y="0" class="t9">GC30
+</tspan>
+	</text>
+	<text id="GC20 copy" style="transform: matrix(1.208,0,0,1.207,930.476,252.353)" >
+		<tspan x="0" y="0" class="t9">GC20
+</tspan>
+	</text>
+	<text id="G424 copy" style="transform: matrix(1.208,0,0,1.207,454.568,296.98)" >
+		<tspan x="0" y="0" class="t9">G424
+</tspan>
+	</text>
+	<text id="G429 G421 copy" style="transform: matrix(1.208,0,0,1.207,362.969,85.725)" >
+		<tspan x="0" y="8.7" class="t9">G429</tspan><tspan  y="8.7" class="t10">
+</tspan>
+		<tspan x="195.6" y="14.9" class="t10">G421
+</tspan>
+	</text>
+	<text id="G432 copy" style="transform: matrix(1.208,0,0,1.207,168.212,316.106)" >
+		<tspan x="0" y="0" class="t10">G432
+</tspan>
+	</text>
+	<text id="GC40 copy" style="transform: matrix(1.208,0,0,1.207,334.577,471.432)" >
+		<tspan x="0" y="0" class="t10">GC40
+</tspan>
+	</text>
+	<text id="G420 copy" style="transform: matrix(1.208,0,0,1.207,622.672,309.151)" >
+		<tspan x="0" y="0" class="t10">G420
+</tspan>
+	</text>
+	<text id="GC10 copy" style="transform: matrix(1.208,0,0,1.207,1211.615,264.524)" >
+		<tspan x="0" y="0" class="t10">GC10
+</tspan>
+	</text>
+	<text id="G446 copy" style="transform: matrix(1.208,0,0,1.207,259.22,554.891)" >
+		<tspan x="0" y="0" class="t10">G446
+</tspan>
+	</text>
+	<text id="G445 copy" style="transform: matrix(1.208,0,0,1.207,423.266,459.84)" >
+		<tspan x="0" y="0" class="t10">G445
+</tspan>
+	</text>
+	<text id="G416 copy" style="transform: matrix(1.208,0,0,1.207,812.803,330.016)" >
+		<tspan x="0" y="0" class="t10">G416
+</tspan>
+	</text>
+	<text id="G435 copy" style="transform: matrix(1.208,0,0,1.207,29.092,101.664)" >
+		<tspan x="0" y="0" class="t10">G435
+</tspan>
+	</text>
+	<text id="G455 copy" style="transform: matrix(1.208,0,0,1.207,429.642,652.259)" >
+		<tspan x="0" y="0" class="t10">G455
+</tspan>
+	</text>
+	<text id="G410 G414 copy" style="transform: matrix(1.208,0,0,1.207,926.866,310.02)" >
+		<tspan x="92.6" y="8.7" class="t10">G410</tspan><tspan  y="8.7" class="t11">
+</tspan>
+		<tspan x="0" y="16.9" class="t11">G414
+</tspan>
+	</text>
+	<text id="GC01 GS10 copy" style="transform: matrix(1.208,0,0,1.207,1133.347,411.445)" >
+		<tspan x="0" y="8.7" class="t11">GC01</tspan><tspan  y="8.7" class="t12">
+</tspan>
+		<tspan x="55.3" y="9.2" class="t12">GS10
+</tspan>
+	</text>
+	<text id="G404 copy" style="transform: matrix(1.208,0,0,1.207,1044.091,386.814)" >
+		<tspan x="0" y="0" class="t12">G404
+</tspan>
+	</text>
+	<text id="G402 copy" style="transform: matrix(1.208,0,0,1.207,1012.789,459.261)" >
+		<tspan x="0" y="0" class="t12">G402
+</tspan>
+	</text>
+	<text id="G431 copy" style="transform: matrix(1.208,0,0,1.207,196.036,103.982)" >
+		<tspan x="0" y="0" class="t12">G431
+</tspan>
+	</text>
+	<text id="GS40 copy" style="transform: matrix(1.208,0,0,1.207,286.754,721.808)" >
+		<tspan x="0" y="0" class="t12">GS40
+</tspan>
+	</text>
+	<text id="GS30 copy" style="transform: matrix(1.208,0,0,1.207,149.373,103.982)" >
+		<tspan x="0" y="0" class="t12">GS30
+</tspan>
+	</text>
+	<text id="GC47 copy" style="transform: matrix(1.208,0,0,1.207,428.483,568.8)" >
+		<tspan x="0" y="0" class="t12">GC47
+</tspan>
+	</text>
+	<text id="G436 copy" style="transform: matrix(1.208,0,0,1.207,48.8,271.479)" >
+		<tspan x="0" y="0" class="t12">G436
+</tspan>
+	</text>
+	<text id="G434 copy" style="transform: matrix(1.208,0,0,1.207,171.69,244.819)" >
+		<tspan x="0" y="0" class="t12">G434
+</tspan>
+	</text>
+	<text id="G444 copy" style="transform: matrix(1.208,0,0,1.207,260.379,435.498)" >
+		<tspan x="0" y="0" class="t12">G444
+</tspan>
+	</text>
+	<text id="G444A copy" style="transform: matrix(1.208,0,0,1.207,187.051,411.736)" >
+		<tspan x="0" y="0" class="t12">G444A
+</tspan>
+	</text>
+	<text id="G421A copy" style="transform: matrix(1.208,0,0,1.207,476.306,130.063)" >
+		<tspan x="0" y="0" class="t12">G421A
+</tspan>
+	</text>
+	<text id="G440 copy" style="transform: matrix(1.208,0,0,1.207,290.522,304.515)" >
+		<tspan x="0" y="0" class="t12">G440
+</tspan>
+	</text>
+	<text id="G442 copy" style="transform: matrix(1.208,0,0,1.207,290.522,375.802)" >
+		<tspan x="0" y="0" class="t12">G442
+</tspan>
+	</text>
+	<text id="G446B copy" style="transform: matrix(1.208,0,0,1.207,200.963,676.601)" >
+		<tspan x="0" y="0" class="t12">G446B
+</tspan>
+	</text>
+	<text id="G433 copy" style="transform: matrix(1.208,0,0,1.207,102.13,92.97)" >
+		<tspan x="0" y="0" class="t12">G433
+</tspan>
+	</text>
+	<text id="G425 copy" style="transform: matrix(1.208,0,0,1.207,427.903,158.462)" >
+		<tspan x="0" y="0" class="t12">G425
+</tspan>
+	</text>
+	<text id="GE30 copy" style="transform: matrix(1.208,0,0,1.207,101.26,146.291)" >
+		<tspan x="0" y="0" class="t12">GE30
+</tspan>
+	</text>
+	<text id="G429A copy" style="transform: matrix(1.208,0,0,1.207,238.062,105.141)" >
+		<tspan x="0" y="0" class="t12">G429A
+</tspan>
+	</text>
+	<text id="G418 copy" style="transform: matrix(1.208,0,0,1.207,719.477,299.878)" >
+		<tspan x="0" y="0" class="t12">G418
+</tspan>
+	</text>
+	<text id="G430 copy" style="transform: matrix(1.208,0,0,1.207,290.522,245.398)" >
+		<tspan x="0" y="0" class="t12">G430
+</tspan>
+	</text>
+	<text id="G446C copy" style="transform: matrix(1.208,0,0,1.207,275.161,676.601)" >
+		<tspan x="0" y="0" class="t12">G446C
+</tspan>
+	</text>
+	<text id="G438 copy" style="transform: matrix(1.208,0,0,1.207,4.166,199.612)" >
+		<tspan x="0" y="0" class="t12">G438
+</tspan>
+	</text>
+	<text id="G401 copy" style="transform: matrix(1.208,0,0,1.207,1239.439,167.735)" >
+		<tspan x="0" y="0" class="t12">G401
+</tspan>
+	</text>
+	<text id="G421B GE10 copy" style="transform: matrix(1.208,0,0,1.207,476.473,44.575)" >
+		<tspan x="0" y="8.7" class="t12">G421B</tspan><tspan  y="8.7" class="t13">
+</tspan>
+		<tspan x="596.3" y="23.6" class="t13">GE10
+</tspan>
+	</text>
+	<text id="G444B copy" style="transform: matrix(1.208,0,0,1.207,236.323,387.394)" >
+		<tspan x="0" y="0" class="t13">G444B
+</tspan>
+	</text>
+	<text id="G405 copy" style="transform: matrix(1.208,0,0,1.207,1239.439,109.778)" >
+		<tspan x="0" y="0" class="t13">G405
+</tspan>
+	</text>
+	<text id="G433A copy" style="transform: matrix(1.208,0,0,1.207,97.203,48.343)" >
+		<tspan x="0" y="0" class="t13">G433A
+</tspan>
+	</text>
+	<text id="G403 copy" style="transform: matrix(1.208,0,0,1.207,1239.439,138.177)" >
+		<tspan x="0" y="0" class="t13">G403
+</tspan>
+	</text>
+	<text id="G446A copy" style="transform: matrix(1.208,0,0,1.207,180.095,557.209)" >
+		<tspan x="0" y="0" class="t13">G446A
+</tspan>
+	</text>
+	<text id="GC10A copy" style="transform: matrix(1.208,0,0,1.207,1271.321,396.667)" >
+		<tspan x="0" y="0" class="t13">GC10A
+</tspan>
+	</text>
+	<text id="G418A copy" style="transform: matrix(1.208,0,0,1.207,718.027,356.097)" >
+		<tspan x="0" y="0" class="t13">G418A
+</tspan>
+	</text>
+	<text id="G445B copy" style="transform: matrix(1.208,0,0,1.207,373.125,397.246)" >
+		<tspan x="0" y="0" class="t13">G445B
+</tspan>
+	</text>
+	<text id="G445A copy" style="transform: matrix(1.208,0,0,1.207,465.872,397.246)" >
+		<tspan x="0" y="0" class="t13">G445A
+</tspan>
+	</text>
+	<text id="G425A copy" style="transform: matrix(1.208,0,0,1.207,375.443,158.462)" >
+		<tspan x="0" y="0" class="t13">G425A
+</tspan>
+	</text>
+	<text id="G447 copy" style="transform: matrix(1.208,0,0,1.207,373.994,534.026)" >
+		<tspan x="0" y="0" class="t13">G447
+</tspan>
+	</text>
+	<text id="GC01B copy" style="transform: matrix(1.208,0,0,1.207,1027.86,418.691)" >
+		<tspan x="0" y="0" class="t13">GC01B
+</tspan>
+	</text>
+</svg>

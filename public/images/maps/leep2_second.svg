@@ -1,0 +1,301 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 739" width="1500" height="739">
+	<title>New Project</title>
+	<style>
+		tspan { white-space:pre } 
+		.s0 { fill: #beffe8;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3.8 } 
+		.s1 { fill: #ffaa00;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3.8 } 
+		.s2 { fill: #ffffbe;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3.8 } 
+		.s3 { fill: #e1e1e1;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3.8 } 
+		.s4 { fill: #b6fcba;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3.8 } 
+		.s5 { fill: #fcd4f0;stroke: #6e6e6e;stroke-linecap: round;stroke-linejoin: round;stroke-width: 3.8 } 
+		.t6 { font-size: 9px;fill: #000000;font-family: "Arial" } 
+		.t7 { font-size: 9px;line-height: 4px;fill: #000000;font-family: "Arial" } 
+		.t8 { font-size: 9px;line-height: 10px;fill: #000000;font-family: "Arial" } 
+	</style>
+	<path id="Path 2" fill-rule="evenodd" class="s0" d="m0.3 310.5v-103.2h66.2v95.6h-33.1v7.6z"/>
+	<path id="Path 3" fill-rule="evenodd" class="s0" d="m102.9 207.3v62.5h-36.4v-62.5z"/>
+	<path id="Path 4" fill-rule="evenodd" class="s1" d="m234.9 441.3v33.1h-22.3v-33.1z"/>
+	<path id="Path 5" fill-rule="evenodd" class="s1" d="m291.3 445.1v27.7h-27.7v-27.7z"/>
+	<path id="Path 6" fill-rule="evenodd" class="s1" d="m63.3 340.9v71.1h-32.1v-71.1z"/>
+	<path id="Path 7" fill-rule="evenodd" class="s1" d="m541.1 383.2v33.7h-34.8v-33.7z"/>
+	<path id="Path 8" fill-rule="evenodd" class="s1" d="m541.1 416.9v33.1h-30.9v-33.1z"/>
+	<path id="Path 9" fill-rule="evenodd" class="s1" d="m1180.2 86.8v23.9l-46.2-0.6v-23.3l-18.4-0.5z"/>
+	<path id="Path 10" fill-rule="evenodd" class="s1" d="m839.2 461.4v34.2h-8.1v-34.2z"/>
+	<path id="Path 11" fill-rule="evenodd" class="s2" d="m364.1 250.2l8.7-34.2 55.4-8.7h19l53.2 8.2 3.2 34.7v16.8l-3.8 41.3-57.5 4.9h-12.5l-59.2-6-6.5-40.2z"/>
+	<path id="Path 12" fill-rule="evenodd" class="s2" d="m372.8 350.6l66.2-5.9 66.8 7.6 0.5 30.9-0.5 33.7-3.3 27.1-65.1 6-64.6-6.5-7.6-48.3z"/>
+	<path id="Path 13" fill-rule="evenodd" class="s2" d="m639.9 383.2v33.1h-98.8v-33.1z"/>
+	<path id="Path 14" fill-rule="evenodd" class="s2" d="m500.4 215.5v-28.8l75.5 9.2v-10.3l57 9.8h9.2l54.8-8.7v9.8l58.1-9.3v8.2h49.4l-4.8 63.5 4.3 52.1h-303.5l3.2-44v-16.8z"/>
+	<path id="Path 15" fill-rule="evenodd" class="s2" d="m1500 180.2v54.3h-45.1v-54.3z"/>
+	<path id="Path 16" fill-rule="evenodd" class="s2" d="m1500 116.1v64.1h-45.1v-64.1z"/>
+	<path id="Path 17" fill-rule="evenodd" class="s2" d="m950 86.8v43.4h-35.3v-43.4z"/>
+	<path id="Path 18" fill-rule="evenodd" class="s2" d="m986.3 86.8v43.4h-36.3v-43.4z"/>
+	<path id="Path 19" fill-rule="evenodd" class="s2" d="m986.3 86.8h35.9l0.5 43.4h-36.4z"/>
+	<path id="Path 20" fill-rule="evenodd" class="s2" d="m1022.2 86.8h36.4v43.4h-35.9z"/>
+	<path id="Path 21" fill-rule="evenodd" class="s2" d="m1058.6 86.8l51-0.5h6v43.9h-6-51z"/>
+	<path id="Path 22" fill-rule="evenodd" class="s2" d="m1115.6 111.2h17.3v17.9h1.1v-17.9l69-0.5v47.8h-69v-28.3h-18.4z"/>
+	<path id="Path 23" fill-rule="evenodd" class="s2" d="m1454.9 234.5h-320.9v-76h69v-71.7h297v29.3h-45.1z"/>
+	<path id="Path 24" fill-rule="evenodd" class="s2" d="m1072.7 159l61.3-0.5v76h-218.8l-0.5-104.3h158z"/>
+	<path id="Path 25" fill-rule="evenodd" class="s2" d="m263.6 508.6h10.9l0.5 35.3h-11.4z"/>
+	<path id="Path 26" fill-rule="evenodd" class="s2" d="m193.1 299.1v10.3h-26.1v-10.3z"/>
+	<path id="Path 27" fill-rule="evenodd" class="s3" d="m224 679.6v33.2h-62.4v-33.2z"/>
+	<path id="Path 28" fill-rule="evenodd" class="s3" d="m102.9 269.8v38h-36.4v-38z"/>
+	<path id="Path 29" fill-rule="evenodd" class="s3" d="m134.4 243.7v66.8h-31.5v-66.8z"/>
+	<path id="Path 30" fill-rule="evenodd" class="s3" d="m838.7 432.1h32l4.3 17.4-4.3 0.5 2.7 14.7 11.9 43.9-10.8 2.7v21.2l-35.8 0.6z"/>
+	<path id="Path 31" fill-rule="evenodd" class="s3" d="m838.7 222.5h31.4l-0.5 28.8h-31.5z"/>
+	<path id="Path 32" fill-rule="evenodd" class="s3" d="m1203 86.8v23.9h-22.8v-23.9z"/>
+	<path id="Path 33" fill-rule="evenodd" class="s3" d="m1058 234.5v80.9h-72.7v-80.9z"/>
+	<path id="Path 34" fill-rule="evenodd" class="s3" d="m1134 158.5l-61.3 0.5v-28.8h61.3z"/>
+	<path id="Path 35" fill-rule="evenodd" class="s3" d="m1500 86.8v29.3h-45.1v-29.3z"/>
+	<path id="Path 36" fill-rule="evenodd" class="s3" d="m134.4 299.1h32.6v10.3h26.1 141.7v-2.7h29.3l6.5 0.5 59.2 6h12.5l57.5-4.9 0.6 2.7v40.7l-61.4-7-66.2 5.9h-7.6v-7h-77.1v9.8h-10.3-42.9v-2.8h-35.9-32v-9.2h-66.8v8.7h-36.9v-9.2h-32.1v-30.4h2.2v-7.6h33.1v4.9h36.4v2.7h31.5z"/>
+	<path id="Path 37" fill-rule="evenodd" class="s3" d="m224 679.6v-34.2h9.8v-136.8h-8.2v-34.2h9.3v-121h42.9v25.5h-14.2v93.9h10.9v35.8h-10.9v136.8h11.4v34.2 31l0.6 2.2h-51.6v-2.2z"/>
+	<path id="Path 38" fill-rule="evenodd" class="s3" d="m802.8 385.9h-31.5v-9.2h-102.6v9.2h-28.8v-2.7h-133.6l-0.5-30.9-5.4-0.6v-40.7h63l0.5 25.5 19 4.9 17.4 3.3 15.7 1.6 13.6 1.1 12.5 1.1 17.4 0.5 11.4-1.1 12.5-0.5 12.4-1.6 12-1.7 13.6-2.7 9.7-2.2 9.3-2.1v-26.1h61.9z"/>
+	<path id="Path 39" fill-rule="evenodd" class="s3" d="m909.8 251.8l1.1 126.5h-22.3v8.7h-22.3v-8.7h-24.9l0.5-127h27.7l0.5-17.4v-11.4h-28.2l0.6-71.6 72.7-0.6v37.5 46.1l70.1 0.6v17.3z"/>
+	<path id="Path 40" fill-rule="evenodd" class="s3" d="m803.9 29.3v71.1h-30.9v-71.1z"/>
+	<path id="Path 41" fill-rule="evenodd" class="s3" d="m803.9 100.4v89h-30.9v-89z"/>
+	<path id="Path 42" fill-rule="evenodd" class="s3" d="m801.7 533.1v-53.8h-5.4v-30.4l6.5 0.6 1.1-298.6h38.6l-0.6 71.6h-3.2l-0.6 28.8h3.8l-0.5 127h-9.3v63.6l2.8-0.6v3.8h4.3v16.3h-8.1v71.7z"/>
+	<path id="Path 43" fill-rule="evenodd" class="s3" d="m842.5 150.9h-38.6v-124.9l38.6 0.5z"/>
+	<path id="Path 44" fill-rule="evenodd" class="s4" d="m364.1 207.3v99.4h-29.3v2.7h-141.7v-10.3h-58.7v-91.8z"/>
+	<path id="Path 45" fill-rule="evenodd" class="s4" d="m639.9 416.3v-30.4h28.8v-9.2h102.6v9.2h31.5v63.6l-162.9-0.6z"/>
+	<path id="Path 46" fill-rule="evenodd" class="s4" d="m706.7 533.1v-84.2h89.6v30.4h5.4v48.3 5.5h-39.1v-5.5h-6.5v5.5z"/>
+	<path id="Path 47" fill-rule="evenodd" class="s4" d="m866.3 378.3v29.4h-34.2v-29.4z"/>
+	<path id="Path 48" fill-rule="evenodd" class="s4" d="m866.3 387h22.3v-8.7h22.3v21.8l39.6 47.7-2.7 3.3-2.7 3.2-3.3 2.8-2.7 2.1-3.8 2.7-3.3 2.2-4.8 3.3-4.9 2.7-4.4 2.7-4.9 2.2-5.4 2.7-4.3 2.2-5.5 2.1-5.4 1.1-4.9 1.6-4.9 0.6-3.2 0.5-6-21.1-2.7-14.7 4.3-0.5-4.3-17.4h-38.6v-24.4h34.2z"/>
+	<path id="Path 49" fill-rule="evenodd" class="s4" d="m563.4 311h177v26.1l-9.3 2.1-9.7 2.2-13.6 2.7-12 1.7-12.4 1.6-12.5 0.5-11.4 1.1-17.4-0.5-12.5-1.1-13.6-1.1-15.7-1.6-17.4-3.3-19-4.9z"/>
+	<path id="Path 50" fill-rule="evenodd" class="s4" d="m134.4 207.3v36.4h-31.5v-36.4z"/>
+	<path id="Path 51" fill-rule="evenodd" class="s5" d="m224 679.6h-95l0.5-205.2h96.1v34.2h8.2v34.8h-31v67.8h31v34.2h-9.8z"/>
+	<path id="Path 52" fill-rule="evenodd" class="s5" d="m233.8 543.4v67.8h-31v-67.8z"/>
+	<path id="Path 53" fill-rule="evenodd" class="s5" d="m274 475.5l82.5-0.5 0.5 204.1-82 0.5v-34.2h-11.4v-34.2h28.8v-67.3h-18.4v-35.3z"/>
+	<path id="Path 54" fill-rule="evenodd" class="s5" d="m277.8 378.9v-25.5h10.3v-9.8h77.1v101.5h-72.8v-66.2z"/>
+	<path id="Path 55" fill-rule="evenodd" class="s5" d="m100.2 374.5l99.4-0.5h35.3v67.3h-105.4v5.4h-66.2v-96.6h36.9z"/>
+	<path id="Path 56" fill-rule="evenodd" class="s5" d="m167 341.4v33.1h-66.8v-33.1z"/>
+	<path id="Path 57" fill-rule="evenodd" class="s5" d="m234.9 374l-67.9 0.5v-23.9h67.9v2.8z"/>
+	<path id="Path 58" fill-rule="evenodd" class="s5" d="m263.6 543.9h29.4l-0.6 67.3h-28.8z"/>
+	<path id="Path 59" fill-rule="evenodd" class="s5" d="m292.4 378.9v66.2h-28.8v-66.2z"/>
+	<text id="2300" style="transform: matrix(1.131,0,0,1.131,1317.288,164.423)" >
+		<tspan x="0" y="0" class="t6">2300
+</tspan>
+	</text>
+	<text id="2415 2429" style="transform: matrix(1.131,0,0,1.131,237.484,248.95)" >
+		<tspan x="357" y="6.5" class="t6">2415</tspan><tspan  y="6.5" class="t7">
+</tspan>
+		<tspan x="0" y="10.4" class="t7">2429
+</tspan>
+	</text>
+	<text id="2330" style="transform: matrix(1.131,0,0,1.131,1012.677,186.138)" >
+		<tspan x="0" y="0" class="t7">2330
+</tspan>
+	</text>
+	<text id="2444" style="transform: matrix(1.131,0,0,1.131,154.229,580.819)" >
+		<tspan x="0" y="0" class="t7">2444
+</tspan>
+	</text>
+	<text id="2C30" style="transform: matrix(1.131,0,0,1.131,253.322,331.633)" >
+		<tspan x="0" y="0" class="t7">2C30
+</tspan>
+	</text>
+	<text id="2401" style="transform: matrix(1.131,0,0,1.131,863.901,272.458)" >
+		<tspan x="0" y="0" class="t7">2401
+</tspan>
+	</text>
+	<text id="2445" style="transform: matrix(1.131,0,0,1.131,312.778,581.905)" >
+		<tspan x="0" y="0" class="t7">2445
+</tspan>
+	</text>
+	<text id="2C20" style="transform: matrix(1.131,0,0,1.131,642.095,370.721)" >
+		<tspan x="0" y="0" class="t7">2C20
+</tspan>
+	</text>
+	<text id="2420" style="transform: matrix(1.131,0,0,1.131,424.632,401.122)" >
+		<tspan x="0" y="0" class="t7">2420
+</tspan>
+	</text>
+	<text id="2425" style="transform: matrix(1.131,0,0,1.131,422.46,263.771)" >
+		<tspan x="0" y="0" class="t7">2425
+</tspan>
+	</text>
+	<text id="2430" style="transform: matrix(1.131,0,0,1.131,137.396,411.437)" >
+		<tspan x="0" y="0" class="t7">2430
+</tspan>
+	</text>
+	<text id="2C10" style="transform: matrix(1.131,0,0,1.131,809.875,337.061)" >
+		<tspan x="0" y="0" class="t7">2C10
+</tspan>
+	</text>
+	<text id="2C40" style="transform: matrix(1.131,0,0,1.131,236.49,547.16)" >
+		<tspan x="0" y="0" class="t7">2C40
+</tspan>
+	</text>
+	<text id="2410" style="transform: matrix(1.131,0,0,1.131,709.695,418.495)" >
+		<tspan x="0" y="0" class="t7">2410
+</tspan>
+	</text>
+	<text id="2441" style="transform: matrix(1.131,0,0,1.131,317.122,396.236)" >
+		<tspan x="0" y="0" class="t7">2441
+</tspan>
+	</text>
+	<text id="2404" style="transform: matrix(1.131,0,0,1.131,742.817,494.5)" >
+		<tspan x="0" y="0" class="t7">2404
+</tspan>
+	</text>
+	<text id="2435" style="transform: matrix(1.131,0,0,1.131,21.742,260.514)" >
+		<tspan x="0" y="0" class="t7">2435
+</tspan>
+	</text>
+	<text id="2400" style="transform: matrix(1.131,0,0,1.131,889.964,434.239)" >
+		<tspan x="0" y="0" class="t7">2400
+</tspan>
+	</text>
+	<text id="2413" style="transform: matrix(1.131,0,0,1.131,640.737,333.261)" >
+		<tspan x="0" y="0" class="t7">2413
+</tspan>
+	</text>
+	<text id="2C13" style="transform: matrix(1.131,0,0,1.131,810.418,92.218)" >
+		<tspan x="0" y="0" class="t7">2C13
+</tspan>
+	</text>
+	<text id="2310" style="transform: matrix(1.131,0,0,1.131,1157.109,137.278)" >
+		<tspan x="0" y="0" class="t7">2310
+</tspan>
+	</text>
+	<text id="2S10" style="transform: matrix(1.131,0,0,1.131,845.44,486.356)" >
+		<tspan x="0" y="0" class="t7">2S10
+</tspan>
+	</text>
+	<text id="2416" style="transform: matrix(1.131,0,0,1.131,578.838,403.837)" >
+		<tspan x="0" y="0" class="t7">2416
+</tspan>
+	</text>
+	<text id="2342" style="transform: matrix(1.131,0,0,1.131,777.025,148.679)" >
+		<tspan x="0" y="0" class="t7">2342
+</tspan>
+	</text>
+	<text id="2320" style="transform: matrix(1.131,0,0,1.131,1075.12,112.305)" >
+		<tspan x="0" y="0" class="t7">2320
+</tspan>
+	</text>
+	<text id="2436" style="transform: matrix(1.131,0,0,1.131,35.316,379.95)" >
+		<tspan x="0" y="0" class="t7">2436
+</tspan>
+	</text>
+	<text id="2300B" style="transform: matrix(1.131,0,0,1.131,1462.534,151.936)" >
+		<tspan x="0" y="0" class="t7">2300B
+</tspan>
+	</text>
+	<text id="2340" style="transform: matrix(1.131,0,0,1.131,777.025,68.331)" >
+		<tspan x="0" y="0" class="t7">2340
+</tspan>
+	</text>
+	<text id="2434" style="transform: matrix(1.131,0,0,1.131,121.65,361.492)" >
+		<tspan x="0" y="0" class="t7">2434
+</tspan>
+	</text>
+	<text id="2446" style="transform: matrix(1.131,0,0,1.131,206.898,580.819)" >
+		<tspan x="0" y="0" class="t7">2446
+</tspan>
+	</text>
+	<text id="2S30" style="transform: matrix(1.131,0,0,1.131,106.447,281.144)" >
+		<tspan x="0" y="0" class="t7">2S30
+</tspan>
+	</text>
+	<text id="2S40" style="transform: matrix(1.131,0,0,1.131,180.292,699.712)" >
+		<tspan x="0" y="0" class="t7">2S40
+</tspan>
+	</text>
+	<text id="2447" style="transform: matrix(1.131,0,0,1.131,266.625,581.362)" >
+		<tspan x="0" y="0" class="t7">2447
+</tspan>
+	</text>
+	<text id="2440" style="transform: matrix(1.131,0,0,1.131,266.625,415.781)" >
+		<tspan x="0" y="0" class="t7">2440
+</tspan>
+	</text>
+	<text id="2300C" style="transform: matrix(1.131,0,0,1.131,1462.263,211.111)" >
+		<tspan x="0" y="0" class="t7">2300C
+</tspan>
+	</text>
+	<text id="2435A" style="transform: matrix(1.131,0,0,1.131,69.253,242.056)" >
+		<tspan x="0" y="0" class="t7">2435A
+</tspan>
+	</text>
+	<text id="2S06" style="transform: matrix(1.131,0,0,1.131,1090.866,148.136)" >
+		<tspan x="0" y="0" class="t7">2S06
+</tspan>
+	</text>
+	<text id="2432" style="transform: matrix(1.131,0,0,1.131,188.979,365.835)" >
+		<tspan x="0" y="0" class="t7">2432
+</tspan>
+	</text>
+	<text id="2326" style="transform: matrix(1.131,0,0,1.131,956.207,112.305)" >
+		<tspan x="0" y="0" class="t7">2326
+</tspan>
+	</text>
+	<text id="2324" style="transform: matrix(1.131,0,0,1.131,992.587,112.305)" >
+		<tspan x="0" y="0" class="t7">2324
+</tspan>
+	</text>
+	<text id="2322" style="transform: matrix(1.131,0,0,1.131,1028.966,112.305)" >
+		<tspan x="0" y="0" class="t7">2322
+</tspan>
+	</text>
+	<text id="2328" style="transform: matrix(1.131,0,0,1.131,920.914,112.305)" >
+		<tspan x="0" y="0" class="t7">2328
+</tspan>
+	</text>
+	<text id="2E30" style="transform: matrix(1.131,0,0,1.131,72.239,292.545)" >
+		<tspan x="0" y="0" class="t7">2E30
+</tspan>
+	</text>
+	<text id="2S07" style="transform: matrix(1.131,0,0,1.131,1465.521,105.248)" >
+		<tspan x="0" y="0" class="t7">2S07
+</tspan>
+	</text>
+	<text id="2418" style="transform: matrix(1.131,0,0,1.131,512.051,403.837)" >
+		<tspan x="0" y="0" class="t7">2418
+</tspan>
+	</text>
+	<text id="2429A 2E10" style="transform: matrix(1.131,0,0,1.131,104.019,221.805)" >
+		<tspan x="0" y="6.5" class="t7">2429A</tspan><tspan  y="6.5" class="t8">
+</tspan>
+		<tspan x="654" y="16.6" class="t8">2E10
+</tspan>
+	</text>
+	<text id="2310A" style="transform: matrix(1.131,0,0,1.131,1141.634,101.99)" >
+		<tspan x="0" y="0" class="t8">2310A
+</tspan>
+	</text>
+	<text id="2418A" style="transform: matrix(1.131,0,0,1.131,510.694,436.953)" >
+		<tspan x="0" y="0" class="t8">2418A
+</tspan>
+	</text>
+	<text id="2443" style="transform: matrix(1.131,0,0,1.131,266.082,463.012)" >
+		<tspan x="0" y="0" class="t8">2443
+</tspan>
+	</text>
+	<text id="2400A" style="transform: matrix(1.131,0,0,1.131,834.309,396.779)" >
+		<tspan x="0" y="0" class="t8">2400A
+</tspan>
+	</text>
+	<text id="Exterior Balcony" style="transform: matrix(1.131,0,0,1.131,983.356,278.429)" >
+		<tspan x="0" y="0" class="t8">Exterior Balcony
+</tspan>
+	</text>
+	<text id="2442" style="transform: matrix(1.131,0,0,1.131,212.327,461.383)" >
+		<tspan x="0" y="0" class="t8">2442
+</tspan>
+	</text>
+	<text id="2E03" style="transform: matrix(1.131,0,0,1.131,1179.371,102.533)" >
+		<tspan x="0" y="0" class="t8">2E03
+</tspan>
+	</text>
+	<text id="2449" style="transform: matrix(1.131,0,0,1.131,257.395,529.787)" >
+		<tspan x="0" y="0" class="t8">2449
+</tspan>
+	</text>
+	<text id="2408" style="transform: matrix(1.131,0,0,1.131,822.092,482.013)" >
+		<tspan x="0" y="0" class="t8">2408
+</tspan>
+	</text>
+	<text id="2431" style="transform: matrix(1.131,0,0,1.131,168.346,308.288)" >
+		<tspan x="0" y="0" class="t8">2431
+</tspan>
+	</text>
+</svg>

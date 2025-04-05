@@ -1,5 +1,5 @@
 import ScheduleGrid from "@/components/ScheduleGrid";
-import BeginnerWorkshops from "@/components/BeginnerWorkshops";
+// import BeginnerWorkshops from "@/components/BeginnerWorkshops";
 import { prisma } from "@/lib/prisma";
 import { Event } from "@prisma/client";
 
@@ -38,9 +38,9 @@ export default async function SchedulePage() {
   const cutoffDate = new Date("2025-04-04T00:00:00.000Z");
 
   // Filter out beginner workshops
-  const beginnerWorkshops = formattedEvents.filter(
-    (ev) => new Date(ev.startDate) < cutoffDate
-  );
+  // const beginnerWorkshops = formattedEvents.filter(
+  //   (ev) => new Date(ev.startDate) < cutoffDate
+  // );
 
   // Filter out the rest (main schedule)
   const mainScheduleEvents = formattedEvents.filter(
@@ -56,8 +56,8 @@ export default async function SchedulePage() {
   return (
     <div className="container mx-auto py-4">
       {/* Pass only the main schedule events to the big schedule */}
-      <BeginnerWorkshops schedule={beginnerWorkshops} />
-      <hr className="my-8" />
+      {/* <BeginnerWorkshops schedule={beginnerWorkshops} /> */}
+      {/* <hr className="my-8" /> */}
 
       <ScheduleGrid schedule={mainScheduleEvents} />
       {/* Pass only the "beginner" events to the simpler layout */}
