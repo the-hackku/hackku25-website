@@ -29,6 +29,6 @@
     "scripts/fromsheets.js",
     "app/reimbursement",
     "app/reimbursement"
-  ],
+, "scripts/zipResumes.js"  ],
   "exclude": ["node_modules"]
 }

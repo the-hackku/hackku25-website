@@ -1,13 +1,8 @@
 /* app/profile/page.tsx */
 import { redirect } from "next/navigation";
-import LocalDateTime from "@/components/localDateTime";
+// import LocalDateTime from "@/components/localDateTime";
 import QrCodeComponent from "@/components/UserQRCode";
-import {
-  Tabs,
-  // TabsList,
-  // TabsTrigger,
-  TabsContent,
-} from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress"; // Make sure this is at the top
 import Link from "next/link";
@@ -17,7 +12,7 @@ import {
   IconLogout,
   IconUserFilled,
   // IconHistory,
-  IconCheck,
+  // IconCheck,
   IconLock,
   // IconEdit,
 } from "@tabler/icons-react";
@@ -101,6 +96,37 @@ export default async function ProfilePage() {
     DARK_FAIRY: "LEEP2 Room 2328 🧚",
   };
 
+  // Get top 10 users by check-in count
+  const topUsers = allUserCheckins
+    .map((u) => ({
+      id: u.id,
+      checkinCount: u.checkinsAsUser.length,
+    }))
+    .sort((a, b) => b.checkinCount - a.checkinCount)
+    .slice(0, 10);
+
+  // Get participant info for those top users
+  const topUserDetails = await prisma.user.findMany({
+    where: {
+      id: { in: topUsers.map((u) => u.id) },
+    },
+    include: {
+      ParticipantInfo: true,
+    },
+  });
+
+  const leaderboard = topUsers.map((u, index) => {
+    const userInfo = topUserDetails.find((info) => info.id === u.id);
+    const name = userInfo?.ParticipantInfo
+      ? `${userInfo.ParticipantInfo.firstName} ${userInfo.ParticipantInfo.lastName}`
+      : userInfo?.email ?? "Anonymous";
+    return {
+      rank: index + 1,
+      name,
+      checkins: u.checkinCount,
+    };
+  });
+
   // Participant info
   const participant = userSession.ParticipantInfo;
   const fullName = participant
@@ -140,18 +166,15 @@ export default async function ProfilePage() {
 
         <CardContent className="p-2 md:p-4 space-y-4">
           <Tabs defaultValue="profileInfo" className="w-full">
-            {/* <div className="flex justify-center mb-6">
+            <div className="flex justify-center mb-6">
               <TabsList aria-label="Profile sections">
                 <TabsTrigger value="profileInfo">
                   <IconUser size={16} className="mr-2" />
                   Profile
                 </TabsTrigger>
-                <TabsTrigger value="checkins">
-                  <IconHistory size={16} className="mr-2" />
-                  Check-ins
-                </TabsTrigger>
+                <TabsTrigger value="checkins">Leaderboard</TabsTrigger>
               </TabsList>
-            </div> */}
+            </div>
 
             <TabsContent value="profileInfo">
               {/* Check-in Level + Progress */}
@@ -440,37 +463,25 @@ export default async function ProfilePage() {
             </TabsContent>
 
             <TabsContent value="checkins">
-              <div className="space-y-4 pb-4">
-                <h3 className="text-lg font-bold mb-4">Recent Check-Ins</h3>
-                {checkIns.length > 0 ? (
-                  <ul className="space-y-2">
-                    {checkIns.map((checkIn) => (
-                      <li
-                        key={checkIn.id}
-                        className="p-3 border rounded-md shadow-sm bg-white hover:bg-gray-50 transition-colors"
-                      >
-                        <div className="flex items-center gap-3">
-                          <div className="flex-shrink-0 text-green-600">
-                            <IconCheck size={20} />
-                          </div>
-                          <div>
-                            <p className="font-medium">{checkIn.event.name}</p>
-                            <p className="text-sm text-muted-foreground">
-                              <LocalDateTime
-                                showTime
-                                dateString={checkIn.createdAt.toString()}
-                              />
-                              {checkIn.event.location &&
-                                ` ${checkIn.event.location}`}
-                            </p>
-                          </div>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>No check-ins yet.</p>
-                )}
+              <div className="mb-6">
+                <h3 className="text-lg font-bold mb-4">
+                  🏆 Top 10 Check-In Leaderboard
+                </h3>
+                <ul className="space-y-2">
+                  {leaderboard.map((user) => (
+                    <li
+                      key={user.rank}
+                      className="flex justify-between items-center p-3 border rounded-md bg-white shadow-sm"
+                    >
+                      <span>
+                        #{user.rank} - {user.name}
+                      </span>
+                      <span className="font-semibold">
+                        {user.checkins} check-ins
+                      </span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             </TabsContent>
           </Tabs>

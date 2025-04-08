@@ -32,6 +32,7 @@ interface ExtendedUser extends User {
   ParticipantInfo?: ParticipantInfo | null;
   checkinsAsUser?: Checkin[];
 }
+
 interface User {
   id: string;
   email: string;

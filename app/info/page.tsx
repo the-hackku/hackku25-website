@@ -495,8 +495,14 @@ export default function HackKUInfoPage() {
           </p>
           <p className="font-medium">Prizes:</p>
           <ul className="list-disc list-inside ml-6 mb-6">
-            <li>Keychron K3 Mechanical Keyboard</li>
-            <li>Logitech Bluetooth Computer Speakers with Subwoofer</li>
+            <li>
+              <b>1st Place</b>: Keychron K3 Mechanical Keyboard and Logitech
+              Bluetooth Computer Speakers with Subwoofer
+            </li>
+            <li>
+              <b>2nd Place</b>: Keychron K3 Mechanical Keyboard and Logitech
+              Bluetooth Computer Speakers with Subwoofer
+            </li>
           </ul>
           {/* Ripple */}
           <h3 className="text-lg font-semibold mt-4 mb-1">
@@ -993,6 +999,33 @@ export default function HackKUInfoPage() {
                 target="_blank"
               >
                 Deep Learning Slides
+              </Link>
+            </p>
+            <p>
+              <Link
+                href="https://docs.google.com/presentation/d/1RJNW17w4BIYRUkFPHy9NzkpWtSAShK1a/edit#slide=id.p1"
+                className="underline text-blue-600 hover:text-blue-800 transition-colors"
+                target="_blank"
+              >
+                Arduino 101 Slides
+              </Link>
+            </p>
+            <p>
+              <Link
+                href="https://docs.google.com/presentation/d/1AveBkrW2aHg120iPJiDdVAqSUFxOr43J_oasujKxELM/edit#slide=id.g17fcb9d1cb3_0_4149"
+                className="underline text-blue-600 hover:text-blue-800 transition-colors"
+                target="_blank"
+              >
+                APIs Workshop Slides
+              </Link>
+            </p>
+            <p>
+              <Link
+                href="https://docs.google.com/presentation/d/1ErblOpkiyxrWbs9ScEU-BU7-DYvkts7nhMC9WSu-PxQ/edit#slide=id.g26e6ee47073_1_111"
+                className="underline text-blue-600 hover:text-blue-800 transition-colors"
+                target="_blank"
+              >
+                Exploring Hardware Designs Workshop Slides
               </Link>
             </p>
           </div>

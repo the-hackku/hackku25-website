@@ -391,7 +391,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
     "SPONSOR",
     "ACTIVITIES",
   ]);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [timezoneMode, setTimezoneMode] = useState<"local" | "central">(
     "central"
@@ -411,7 +411,7 @@ const ScheduleGrid = ({ schedule }: ScheduleGridProps) => {
   const days = Object.keys(groupedEvents).sort();
 
   const [selectedDay, setSelectedDay] = useState<string>(
-    days.length > 0 ? days[1] : "" // Use the first day if available
+    "All" // Default to "All"
   );
 
   useEffect(() => {
